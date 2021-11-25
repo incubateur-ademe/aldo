@@ -1,7 +1,5 @@
 # Fiche produit : Aldo
 
-
-
 ## Le drame
 
 L'urgence de la lutte contre le réchauffement climatique n'est plus à présenter. La combustion de carburants fossiles est bien sûr la cause principale du réchauffement. Mais un autre sujet s'avère clef, et probablement moins médiatisé : l'évolution du stock de carbone dans les sols. 
