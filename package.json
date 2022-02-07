@@ -1,0 +1,30 @@
+{
+  "name": "aldo",
+  "version": "1.0.0",
+  "description": "Calculez le carbone stocké et ses flux sur votre territoire",
+  "main": "index.js",
+  "scripts": {
+    "checkHTML": "site-validator --verbose --url",
+    "checkHTMLLocal": "site-validator --verbose --local --url http://localhost:8080",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/datagir/aldo"
+  },
+  "author": "helen.root@beta.gouv.fr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/datagir/aldo/issues"
+  },
+  "homepage": "https://github.com/datagir/aldo#readme",
+  "dependencies": {
+    "@gouvfr/dsfr": "^1.2.1",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
