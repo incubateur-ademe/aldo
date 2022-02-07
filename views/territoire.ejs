@@ -1,0 +1,28 @@
+<%- include('partials/header') -%>
+<main role="main" id="contenu">
+  <div class="fr-container fr-py-6w fr-px-2w">
+
+    <% if (epci) { %>
+      <h1><%= epci.nom %></h1>
+
+      <p>SIREN : <%= epci.code %></p>
+      <p>Population : <%= epci.populationTotale %></p>
+
+      <section class="fr-accordion">
+        <h3 class="fr-accordion__title">
+            <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-81"><%= epci.membres.length %> communes</button>
+        </h3>
+        <div class="fr-collapse" id="accordion-81">
+          <ul>
+              <% for( let index = 0; index < epci.membres.length; index++ ) { %>
+                <li><%= epci.membres[index].nom %> </li>
+              <% } %>
+          </ul>
+        </div>
+      </section>
+    <% } else { %>
+      <h1>Aucun EPCI trouvé</h1>
+    <% } %>
+  </div>
+</main>
+<%- include('partials/footer') -%>

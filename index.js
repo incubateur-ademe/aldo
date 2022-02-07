@@ -23,8 +23,18 @@ app.use(function(req, res, next){
   next()
 })
 
+const epcis = require('@etalab/decoupage-administratif/data/epci.json')
+
 app.get('/', (req, res) => {
-  res.render('landing')
+  res.render('landing', { epcis })
+})
+
+app.get('/territoire',(req,res)=>{
+  const epci = epcis.find(e => e.nom === req.query.epci)
+  res.render('territoire', { 
+    pageTitle: `${epci.nom}`,
+    epci
+  })
 })
 
 app.get('/ressources', (req, res) => {
