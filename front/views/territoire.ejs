@@ -7,7 +7,6 @@
 
       <p>SIREN : <%= epci.code %></p>
       <p>Population : <%= epci.populationTotale %></p>
-      <p>Total stocks de carbone : <%= summary.total %> tC</p>
 
       <section class="fr-accordion">
         <h3 class="fr-accordion__title">
@@ -21,6 +20,12 @@
           </ul>
         </div>
       </section>
+
+      <ul>
+        <% for( let index = 0; index < summary.stocks.length; index++ ) { %>
+          <li><%= summary.stocks[index].groundType %> : <%= summary.stocks[index].value %> tC </li>
+        <% } %>
+      </ul>
     <% } else { %>
       <h1>Aucun EPCI trouvé</h1>
     <% } %>
