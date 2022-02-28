@@ -3,7 +3,8 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const rootFolder = path.join(__dirname, '../')
-const stocksSummary = require(path.join(rootFolder, './calculations/stocks/summary'))
+// TODO: add back
+// const stocksSummary = require(path.join(rootFolder, './calculations/stocks/summary'))
 const { epcisList } = require(path.join(rootFolder, './calculations/epcis'))
 
 router.get('/', (req, res) => {
@@ -12,12 +13,13 @@ router.get('/', (req, res) => {
 
 router.get('/territoire', (req,res)=>{
   const epciName = req.query.epci
-  const summary = stocksSummary({ epcis: [epciName] })
+  // const summary = stocksSummary({ epcis: [epciName] })
   const epci = summary.locations[0]
   res.render('territoire', { 
     pageTitle: `${epci.nom}`,
     epci,
-    summary,
+    // TODO: make this an actual variable
+    summary: 50,
   })
 })
 

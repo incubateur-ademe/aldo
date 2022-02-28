@@ -4,7 +4,6 @@ const path = require('path')
 const appName = `Aldo`
 const appDescription = "Calculez le carbone stocké et ses flux sur votre territoire"
 const appRepo = 'https://github.com/datagir/aldo'
-const port = process.env.PORT || 8080
 
 const app = express()
 
@@ -26,6 +25,4 @@ app.use(function(req, res, next){
 const frontEndViews = require('./front/routes')
 app.use('/', frontEndViews)
 
-module.exports = app.listen(port, () => {
-  console.log(`${appName} listening at http://localhost:${port}`)
-})
+module.exports = app

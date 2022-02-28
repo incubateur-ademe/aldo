@@ -2,12 +2,11 @@
   "name": "aldo",
   "version": "1.0.0",
   "description": "Calculez le carbone stocké et ses flux sur votre territoire",
-  "main": "index.js",
   "scripts": {
     "checkHTML": "site-validator --verbose --url",
     "checkHTMLLocal": "site-validator --verbose --local --url http://localhost:8080",
-    "dev": "nodemon index.js",
-    "start": "node index.js",
+    "dev": "nodemon server.js",
+    "start": "node server.js",
     "test": "jest"
   },
   "repository": {
@@ -23,6 +22,7 @@
   "dependencies": {
     "@etalab/decoupage-administratif": "^0.9.0-0",
     "@gouvfr/dsfr": "^1.2.1",
+    "csvtojson": "^2.0.10",
     "ejs": "^3.1.5",
     "express": "^4.17.1"
   },

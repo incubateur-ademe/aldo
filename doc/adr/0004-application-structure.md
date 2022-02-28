@@ -40,15 +40,13 @@ Aldo
     > stocks/
       > __tests__/
     > epcis/
-  > aggregatedData/
+  > data/
     > index.js
-    > tmpFiles/
+    > dataByEpci/
   ... (autres dossiers et fichiers hors de cette décision)
 ```
 
 Où `index.js` va importer les routes de `front` (qui pourrait être remplacé par un `api` à l'avenir), et `front/routes/` va appeler des fonctions de `calculations/` (à l'avenir, on aura `flux/` ainsi que `stocks/`) pour récevoir les données nécessaires pour chaque page du site. `calculations/` n'a pas une idée de si ces fontions seront utilisées pour un site web, un API, ou quelque chose d'autre.
-
-Quand on a des données brutes, on peut créer un autre dossier à la racine du projet nommé `data/`, et `/aggregatedData` va importer des méthodes de `data/`. On va aussi supprimer `aggregatedData/tmpFiles/` car ce dossier sera utilisé pour sauvegarder les données du tableur déjà traitées.
 
 Dans le structure au-dessus, chaque ligne à la racine du projet est que 'consciente' de la ligne précedente. C'est-a-dire que `index.js` ne peut que référencer `front/` directement, et `front/` ne peut que référencer `calculations/` directement, etc. Dans un dossier, les fichiers peuvent référencer l'un et l'autre avec prudence (par exemple, on espère que `epcis/` n'aura pas besoin d'utiliser `stocks/`, mais c'est possible que `stocks/` aurait besoin de `epcis/`).
 
@@ -56,6 +54,6 @@ Dans le structure au-dessus, chaque ligne à la racine du projet est que 'consci
 
 C'est possible qu'il y aura trop de logique dans `calculations/` - je dois étre prudente de la direction de dépendances et le structure internel de ce dossier.
 
-Je sais pas si il y aura besoin de référencer directement `data/` sans `aggregatedData/`, si oui ça change les régles de référencement.
+Quand on a les données brutes, peut-être on voudrait restructurer le dossier `data/`, pour séparer la logique d'aggregation des données brutes.
 
 J'aime pas trop le nom `calculations/` - il me semble trop spécifique avec l'inclusion de `epcis/`, mais je veux éviter le nom `controllers/` car, comme décrit, les fonctions dedans ne sont pas conscientes de la notion de présentation.
