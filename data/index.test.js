@@ -21,6 +21,10 @@ test('throws useful error when attempting to get area for ground type without ty
   }
 })
 
+// TODO: biomass hors forêts getter
+// TODO: Ask about source of that data, and why many ground types don't have values, others appear to be constant.
 // test('returns biomass carbon density (as tC/ha) given valid ground type and EPCI SIREN', () => {
 //   expect(getBiomassCarbonDensity({epci: "200000172"}, "prairies zones arborées")).toBe(57)
 // })
+
+// TODO: litière

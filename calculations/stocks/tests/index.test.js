@@ -16,3 +16,5 @@
 test('Dummy test', () => {
   expect(50).toBe(50)
 })
+
+// TODO: mock getters from /data to test calculations for various land types
