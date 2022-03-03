@@ -1,16 +1,16 @@
-const { getCarbonDensity, getArea } = require("./index")
+const { getCarbonDensity, getArea, getBiomassCarbonDensity } = require("./index")
 
 
 test('returns ground carbon density (as tC/ha) given valid ground type and EPCI SIREN', async () => {
-  expect(await getCarbonDensity({epci: "200000172"}, "cultures")).toBe(54.63)
+  expect(await getCarbonDensity({epci: "200000172"}, "cultures")).toBe(54.63076734)
 })
 
 test('returns area in hectares (ha) for ground type "cultures" and valid EPCI SIREN', async () => {
   expect(await getArea({epci: "200000172"}, "cultures")).toBe(1740.7313534999998)
 })
 
-test('returns area in hectares (ha) for ground type "prairies" and valid EPCI SIREN', async () => {
-  expect(await getArea({epci: "200000172"}, "prairies")).toBe(2599.15354877)
+test('returns area in hectares (ha) for ground type "prairies zones herbacées" and valid EPCI SIREN', async () => {
+  expect(await getArea({epci: "200000172"}, "prairies zones herbacées")).toBe(2522.1652952)
 })
 
 test('throws useful error when attempting to get area for ground type without type to CLC type mapping', async () => {
@@ -21,10 +21,9 @@ test('throws useful error when attempting to get area for ground type without ty
   }
 })
 
-// TODO: biomass hors forêts getter
 // TODO: Ask about source of that data, and why many ground types don't have values, others appear to be constant.
-// test('returns biomass carbon density (as tC/ha) given valid ground type and EPCI SIREN', () => {
-//   expect(getBiomassCarbonDensity({epci: "200000172"}, "prairies zones arborées")).toBe(57)
-// })
+test('returns biomass carbon density (as tC/ha) given valid ground type and EPCI SIREN', async () => {
+  expect(await getBiomassCarbonDensity({epci: "200000172"}, "prairies zones arborées")).toBe(57)
+})
 
 // TODO: litière

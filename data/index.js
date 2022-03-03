@@ -3,9 +3,9 @@ const csv = require('csvtojson')
 // Gets the carbon area density of a given ground type.
 async function getCarbonDensity(location, groundType) {
   const csvFilePath = './data/dataByEpci/ground.csv'
-  const groundDataByEpci = await csv().fromFile(csvFilePath)
-  const groundData = groundDataByEpci.find(data => data.siren === location.epci)
-  return parseFloat(groundData[groundType])
+  const dataByEpci = await csv().fromFile(csvFilePath)
+  const data = dataByEpci.find(data => data.siren === location.epci)
+  return parseFloat(data[groundType]) || 0
 }
 
 // Gets the area in hectares (ha) of a given ground type in a location.
@@ -19,18 +19,19 @@ async function getArea(location, groundType) {
   const aldoTypeToClcCodes = {
     "cultures": ["211", "212", "213", "241", "242", "243", "244"],
     "prairies": ["231", "321", "322", "323"],
-    "prairies herbacées": ["231", "321"],
-    "prairies arbustive": ["322"],
-    "prairies arborée": ["323"],
+    "prairies zones herbacées": ["231", "321"],
+    "prairies zones arbustives": ["322"],
+    "prairies zones arborées": ["323"],
     "forêts": ["311", "312", "313", "324"],
     "forêts feuillus": ["311", "324"],
     "forêts conifères": ["312"],
     "forêts mixte": ["313"],
     "vignes": ["221"],
     "vergers": ["222", "223"],
+    "sols arborés": ["141"], // aka "sols artificiels arborés et buissonants" in stocks_c tab
+    "sols artificiels non-arborés": ["111", "112", "121", "122", "123", "124", "131", "132", "133", "142"],
     "sols artificiels imperméabilisés": ["111", "121", "122", "123", "124", "131", "132", "133", "142"],
     "sols artificialisés": ["112"],
-    "sols arborés": ["141"], // aka "sols artificiels arborés et buissonants" in stocks_c tab
     // TODO: ask about logic F39: area sols arbustifs stocks_c tab.
     "zones humides": ["411", "412", "421", "422", "423", "511", "512", "521", "522", "523"]
   }
@@ -52,7 +53,16 @@ async function getArea(location, groundType) {
   return totalArea
 }
 
+async function getBiomassCarbonDensity(location, groundType) {
+  const csvFilePath = './data/dataByEpci/biomass-hors-forets.csv'
+  const dataByEpci = await csv().fromFile(csvFilePath)
+  const data = dataByEpci.find(data => data.siren === location.epci)
+  // NB: all stocks are integers, but flux has decimals
+  return parseInt(data[groundType], 10) || 0
+}
+
 module.exports = {
   getCarbonDensity,
   getArea,
+  getBiomassCarbonDensity,
 }
