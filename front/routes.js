@@ -22,6 +22,7 @@ router.get('/territoire', async (req,res)=>{
   const stocksTotal = Object.values(stocks).reduce((a, b) => a + b, 0)
   res.render('territoire', {
     pageTitle: `${epci.nom || "EPCI pas trouvé"}`,
+    epcis: epcisList,
     epci,
     groundTypes: GroundTypes,
     stocks,
