@@ -51,8 +51,8 @@ async function getStocksSolsArtificiels(location) {
     areaShrubby = estimatedPortionGreen * (areaWithoutTrees + areaWithTrees) - areaWithTrees
   }
 
-  let cDensityImpermeable = await getCarbonDensity(location, "sols artificiels imperméables")
-  cDensityImpermeable += await getBiomassCarbonDensity(location, "sols artificiels imperméables")
+  let cDensityImpermeable = await getCarbonDensity(location, "sols artificiels imperméabilisés")
+  cDensityImpermeable += await getBiomassCarbonDensity(location, "sols artificiels imperméabilisés")
   const stocksImpermeable = areaImpermeable * cDensityImpermeable
 
   let cDensityShrubby = await getCarbonDensity(location, "sols artificiels enherbés")

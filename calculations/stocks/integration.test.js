@@ -7,7 +7,7 @@ test('returns stocks for a valid EPCI', async () => {
     "zones humides": 6813.237073875,
     vergers: 0,
     vignes: 0,
-    "sols artificiels": 67419.87841,
+    "sols artificiels": 67419.8784202608,
     // haies
     // forêts
     // produits bois
