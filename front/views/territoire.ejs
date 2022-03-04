@@ -2,7 +2,7 @@
 <main role="main" id="contenu">
   <div class="fr-container fr-py-6w fr-px-2w">
 
-    <% if (epci) { %>
+    <% if (epci.code) { %>
       <h1><%= epci.nom %></h1>
 
       <p>SIREN : <%= epci.code %></p>
@@ -14,6 +14,7 @@
         </h3>
         <div class="fr-collapse" id="accordion-81">
           <ul>
+            <!-- TODO: split across columns -->
               <% for( let index = 0; index < epci.membres.length; index++ ) { %>
                 <li><%= epci.membres[index].nom %> </li>
               <% } %>
@@ -21,11 +22,31 @@
         </div>
       </section>
 
-      <ul>
-        <% for( let index = 0; index < summary.stocks.length; index++ ) { %>
-          <li><%= summary.stocks[index].groundType %> : <%= summary.stocks[index].value %> tC </li>
-        <% } %>
-      </ul>
+      <div class="fr-table fr-table--no-scroll fr-my-3w">
+        <table>
+            <caption>Stocks de carbone</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Type de sol</th>
+                    <th scope="col">Stocks carbone (tC)</th>
+                </tr>
+            </thead>
+            <tbody>
+              <% for( let index = 0; index < groundTypes.length; index++ ) { %>
+                <tr>
+                  <td><%= groundTypes[index].name %></td>
+                  <td>
+                    <% if (stocks[groundTypes[index].stocksId] !== undefined) { %>
+                      <%= formatNumber(stocks[groundTypes[index].stocksId]) %>
+                    <% } else { %>
+                      <i>à venir</i>
+                    <% } %>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+        </table>
+      </div>
     <% } else { %>
       <h1>Aucun EPCI trouvé</h1>
     <% } %>

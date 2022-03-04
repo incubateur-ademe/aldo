@@ -3,23 +3,35 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const rootFolder = path.join(__dirname, '../')
-// TODO: add back
-// const stocksSummary = require(path.join(rootFolder, './calculations/stocks/summary'))
-const { epcisList } = require(path.join(rootFolder, './calculations/epcis'))
+const { epcisList, getEpci } = require(path.join(rootFolder, './calculations/epcis'))
+const { getStocks } = require('../calculations/stocks')
+const { GroundTypes } = require('../calculations/constants')
 
 router.get('/', (req, res) => {
   res.render('landing', { epcis: epcisList })
 })
 
-router.get('/territoire', (req,res)=>{
-  const epciName = req.query.epci
-  // const summary = stocksSummary({ epcis: [epciName] })
-  const epci = summary.locations[0]
-  res.render('territoire', { 
-    pageTitle: `${epci.nom}`,
+router.get('/territoire', async (req,res)=>{
+  const epci = getEpci(req.query.epci) || {}
+  let stocks = {};
+  if (epci.code) {
+    stocks = await getStocks({epci: epci.code})
+  } else {
+    res.status(404)
+  }
+  const stocksTotal = Object.values(stocks).reduce((a, b) => a + b, 0)
+  res.render('territoire', {
+    pageTitle: `${epci.nom || "EPCI pas trouvé"}`,
     epci,
-    // TODO: make this an actual variable
-    summary: 50,
+    groundTypes: GroundTypes,
+    stocks,
+    formatNumber(number) {
+      return Math.round(number).toLocaleString()
+    },
+    // TODO: use once have all stocks calculations in place
+    // percent(number) {
+    //   return (Math.round(number/stocksTotal*1000)/10).toLocaleString()
+    // },
   })
 })
 
