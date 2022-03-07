@@ -3,16 +3,16 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const rootFolder = path.join(__dirname, '../')
-const { epcisList, getEpci } = require(path.join(rootFolder, './calculations/epcis'))
-const { getStocks } = require('../calculations/stocks')
-const { GroundTypes } = require('../calculations/constants')
+const { epciList, getEpci } = require(path.join(rootFolder, './calculations/epcis'))
+const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
+const { GroundTypes } = require(path.join(rootFolder, './calculations/constants'))
 
-router.get('/', (req, res) => {
-  res.render('landing', { epcis: epcisList })
+router.get('/', async (req, res) => {
+  res.render('landing', { epcis: await epciList() })
 })
 
 router.get('/territoire', async (req,res)=>{
-  const epci = getEpci(req.query.epci) || {}
+  const epci = await getEpci(req.query.epci) || {}
   let stocks = {};
   if (epci.code) {
     stocks = await getStocks({epci: epci.code})
@@ -22,7 +22,7 @@ router.get('/territoire', async (req,res)=>{
   const stocksTotal = Object.values(stocks).reduce((a, b) => a + b, 0)
   res.render('territoire', {
     pageTitle: `${epci.nom || "EPCI pas trouvé"}`,
-    epcis: epcisList,
+    epcis: await epciList(),
     epci,
     groundTypes: GroundTypes,
     stocks,

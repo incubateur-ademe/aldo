@@ -1,5 +1,4 @@
-const { getCarbonDensity, getArea, getBiomassCarbonDensity } = require("./index")
-
+const { getCarbonDensity, getArea, getBiomassCarbonDensity, epciList } = require("./index")
 
 test('returns ground carbon density (as tC/ha) given valid ground type and EPCI SIREN', async () => {
   expect(await getCarbonDensity({epci: "200000172"}, "cultures")).toBe(54.63076734)
@@ -27,3 +26,8 @@ test('returns biomass carbon density (as tC/ha) given valid ground type and EPCI
 })
 
 // TODO: litière
+
+test('returns EPCI list', async () => {
+  const list = await epciList()
+  expect(list.length).toBe(1249)
+})

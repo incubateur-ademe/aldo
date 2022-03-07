@@ -61,8 +61,14 @@ async function getBiomassCarbonDensity(location, groundType) {
   return parseInt(data[groundType], 10) || 0
 }
 
+async function epciList() {
+  const csvFilePath = './data/dataByEpci/epci.csv'
+  return await csv().fromFile(csvFilePath)
+}
+
 module.exports = {
   getCarbonDensity,
   getArea,
   getBiomassCarbonDensity,
+  epciList,
 }

@@ -1,4 +1,5 @@
 const { getStocks } = require("./index")
+const { getEpci } = require("../epcis")
 
 test('returns stocks for a valid EPCI', async () => {
   expect(await getStocks({epci: '200000172'})).toEqual({
@@ -12,4 +13,10 @@ test('returns stocks for a valid EPCI', async () => {
     // forêts
     // produits bois
   })
+})
+
+test('returns EPCI information for name and other info where present', async () => {
+  const info = await getEpci("CC Faucigny-Glières")
+  expect(info.code).toBe("200000172")
+  expect(info.membres).toBeDefined()
 })

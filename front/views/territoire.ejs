@@ -8,19 +8,23 @@
       <p>SIREN : <%= epci.code %></p>
       <p>Population : <%= epci.populationTotale %></p>
 
-      <section class="fr-accordion">
-        <h3 class="fr-accordion__title">
-            <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-81"><%= epci.membres.length %> communes</button>
-        </h3>
-        <div class="fr-collapse" id="accordion-81">
-          <ul>
-            <!-- TODO: split across columns -->
-              <% for( let index = 0; index < epci.membres.length; index++ ) { %>
-                <li><%= epci.membres[index].nom %> </li>
-              <% } %>
-          </ul>
-        </div>
-      </section>
+      <% if (epci.membres) { %>
+        <section class="fr-accordion">
+          <h3 class="fr-accordion__title">
+              <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-81"><%= epci.membres.length %> communes</button>
+          </h3>
+          <div class="fr-collapse" id="accordion-81">
+            <ul>
+              <!-- TODO: split across columns -->
+                <% for( let index = 0; index < epci.membres.length; index++ ) { %>
+                  <li><%= epci.membres[index].nom %> </li>
+                <% } %>
+            </ul>
+          </div>
+        </section>
+      <% } else { %>
+        <p><%= epci.nombreCommunes %> communes</p>
+      <% } %>
 
       <div class="fr-table fr-table--no-scroll fr-my-3w">
         <table>
