@@ -43,11 +43,7 @@
                 <tr>
                   <td><%= groundTypes[index].name %></td>
                   <td>
-                    <% if (stocks[groundTypes[index].stocksId] !== undefined) { %>
-                      <%= formatNumber(stocks[groundTypes[index].stocksId]) %>
-                    <% } else { %>
-                      <i>à venir</i>
-                    <% } %>
+                    <%= formatNumber(stocks[groundTypes[index].stocksId]) %>
                   </td>
                 </tr>
               <% } %>

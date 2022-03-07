@@ -10,10 +10,12 @@ test('returns stocks for a valid EPCI', async () => {
     vignes: 0,
     "sols artificiels": 67419.8784202608,
     haies: 5085.895944561377,
-    // forêts
+    "forêts": 1127615.0067169224,
     "produits bois": 49170.62093925741,
   })
 })
+
+// TODO: test bois récolte calculation option
 
 test('returns EPCI information for name and other info where present', async () => {
   const info = await getEpci("CC Faucigny-Glières")

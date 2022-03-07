@@ -1,4 +1,4 @@
-const { getCarbonDensity, getArea, getBiomassCarbonDensity, epciList, getPopulationTotal, getFranceStocksWoodProducts } = require("./index")
+const { getCarbonDensity, getArea, getBiomassCarbonDensity, epciList, getPopulationTotal, getFranceStocksWoodProducts, getForestLitterCarbonDensity } = require("./index")
 // TODO: mock data sources?
 
 test('returns ground carbon density (as tC/ha) given valid ground type and EPCI SIREN', async () => {
@@ -34,6 +34,10 @@ test('returns area of haies (as ha) given valid EPCI SIREN', async () => {
   expect(await getArea({epci: "249500513"}, "haies")).toBe(33.79485686)
 })
 
+test('returns area of poplars (as ha) given valid EPCI SIREN', async () => {
+  expect(await getArea({epci: "249500513"}, "forêt peupleraie")).toBe(212.4)
+})
+
 test('returns population total for EPCIs in system', async () => {
   expect(getPopulationTotal(await epciList())).toBe(65705495)
 })
@@ -43,6 +47,22 @@ test('returns stocks of produits bois for France', () => {
     bo: 177419001,
     bi: 258680001,
   })
+})
+
+test('returns forest litter carbon density (tC/ha) for valid forest subtype', () => {
+  expect(getForestLitterCarbonDensity("feuillu")).toBe(9)
+})
+
+test('throws error when attempting to get forest litter carbon density for invalid forest subtype', () => {
+  try {
+    getForestLitterCarbonDensity("invalid")
+  } catch (error) {
+    expect(error.message).toBe("No forest litter carbon density found for forest subtype 'invalid'")
+  }
+})
+
+test('returns biomass carbon density (as tC/ha) for poplar groves', async () => {
+  expect(await getBiomassCarbonDensity({epci: "200000172"}, "forêt peupleraie")).toBe(51.79684346)
 })
 
 test('returns EPCI list', async () => {

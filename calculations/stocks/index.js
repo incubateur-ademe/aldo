@@ -1,4 +1,4 @@
-const { getArea, getCarbonDensity, getBiomassCarbonDensity, getPopulationTotal, getFranceStocksWoodProducts, epciList } = require("../../data")
+const { getArea, getCarbonDensity, getBiomassCarbonDensity, getPopulationTotal, getFranceStocksWoodProducts, epciList, getForestLitterCarbonDensity } = require("../../data")
 const { getEpci } = require("../epcis")
 
 async function getStocksByKeyword(location, keyword) {
@@ -73,6 +73,20 @@ async function getStocksHaies(location) {
   return carbonDensity * area
 }
 
+async function getStocksForests(location) {
+  const subtypes = ["forêt feuillu", "forêt conifere", "forêt mixte", "forêt peupleraie"]
+  let stocks = 0
+  for (let subtype of subtypes) {
+    const area = await getArea(location, subtype)
+    let carbonDensity = await getCarbonDensity(location, "forêts")
+    carbonDensity += await getBiomassCarbonDensity(location, subtype)
+    subtype = subtype.replace("forêt ", "") // TODO: standardise keys across functions
+    carbonDensity += await getForestLitterCarbonDensity(subtype)
+    stocks += carbonDensity * area
+  }
+  return stocks
+}
+
 function co2ToCarbon(co2) {
   return co2 * 12/44
 }
@@ -100,6 +114,7 @@ async function getStocks(location, options) {
     vignes: await getStocksByKeyword(location, "vignes"),
     "sols artificiels": await getStocksSolsArtificiels(location),
     "produits bois": await getStocksWoodProducts(originalLocation, options?.woodCalculation || "consommation"),
+    "forêts": await getStocksForests(location),
     haies: await getStocksHaies(location),
   }
 }

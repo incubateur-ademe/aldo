@@ -16,6 +16,8 @@ async function getCarbonDensity(location, groundType) {
 async function getArea(location, groundType) {
   if (groundType === "haies") {
     return await getAreaHaies(location)
+  } else if (groundType === "forêt peupleraie") {
+    return await getAreaPoplars(location)
   }
   // consider making this a separate json file for isolation
   // TODO: make more standardised keys?
@@ -25,10 +27,10 @@ async function getArea(location, groundType) {
     "prairies zones herbacées": ["231", "321"],
     "prairies zones arbustives": ["322"],
     "prairies zones arborées": ["323"],
-    "forêts": ["311", "312", "313", "324"],
-    "forêts feuillus": ["311", "324"],
-    "forêts conifères": ["312"],
-    "forêts mixte": ["313"],
+    "forêt": ["311", "312", "313", "324"],
+    "forêt feuillu": ["311", "324"],
+    "forêt conifere": ["312"],
+    "forêt mixte": ["313"],
     "vignes": ["221"],
     "vergers": ["222", "223"],
     "sols arborés": ["141"], // aka "sols artificiels arborés et buissonants" in stocks_c tab
@@ -53,6 +55,10 @@ async function getArea(location, groundType) {
       totalArea += parseFloat(area)
     }
   }
+  // forests are a bit more complicated
+  if (groundType === "forêt feuillu") {
+    totalArea -= await getAreaPoplars(location)
+  }
   return totalArea
 }
 
@@ -66,8 +72,18 @@ async function getAreaHaies(location) {
   return parseFloat(data[0].area)
 }
 
+// TODO: ask why not using IGN for all forest areas
+async function getAreaPoplars(location) {
+  const csvFilePath = './data/dataByEpci/ign19.csv'
+  const dataByEpci = await csv().fromFile(csvFilePath)
+  const data = dataByEpci.find(data => data.siren === location.epci)
+  return parseFloat(data.peupleraies)
+}
+
 async function getBiomassCarbonDensity(location, groundType) {
-  if (groundType.startsWith("forêt")) {
+  if (groundType === "forêt peupleraie") {
+    return await getPoplarBiomassCarbonDensity(location)
+  } else if (groundType.startsWith("forêt")) {
     return await getForestBiomassCarbonDensity(location, groundType.split(" ")[1])
   }
   const csvFilePath = './data/dataByEpci/biomass-hors-forets.csv'
@@ -85,6 +101,13 @@ async function getForestBiomassCarbonDensity(location, forestType) {
     throw new Error(`No biomass data found for forest type '${forestType}' and epci '${location.epci}'`)
   }
   return parseFloat(data.stock)
+}
+
+async function getPoplarBiomassCarbonDensity(location) {
+  const csvFilePath = './data/dataByEpci/biomasse-forets-peupleraies.csv'
+  const dataByEpci = await csv().fromFile(csvFilePath)
+  const data = dataByEpci.find(data => data.siren === location.epci)
+  return parseFloat(data?.carbonDensity)
 }
 
 async function epciList() {
@@ -107,6 +130,14 @@ function getFranceStocksWoodProducts() {
   }
 }
 
+function getForestLitterCarbonDensity(subtype) {
+  const subtypes = ["feuillu", "mixte", "conifere", "peupleraie"]
+  if (subtypes.indexOf(subtype) === -1) {
+    throw new Error(`No forest litter carbon density found for forest subtype '${subtype}'`)
+  }
+  return 9 // TODO: follow up on source of this data
+}
+
 module.exports = {
   getCarbonDensity,
   getArea,
@@ -115,4 +146,5 @@ module.exports = {
   getForestBiomassCarbonDensity,
   getPopulationTotal,
   getFranceStocksWoodProducts,
+  getForestLitterCarbonDensity,
 }
