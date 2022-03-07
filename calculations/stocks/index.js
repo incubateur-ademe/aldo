@@ -66,6 +66,7 @@ async function getStocksSolsArtificiels(location) {
 }
 
 async function getStocksHaies(location) {
+  // TODO: ask more about this calculation - reusing forest carbon density?
   const carbonDensity = await getBiomassCarbonDensity(location, "forêt mixte")
   const area = await getArea(location, "haies")
   return carbonDensity * area
