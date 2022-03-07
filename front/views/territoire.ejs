@@ -6,7 +6,7 @@
       <h1><%= epci.nom %></h1>
 
       <p>SIREN : <%= epci.code %></p>
-      <p>Population : <%= epci.populationTotale %></p>
+      <p>Population : <%= formatNumber(epci.populationTotale) %></p>
 
       <% if (epci.membres) { %>
         <section class="fr-accordion">

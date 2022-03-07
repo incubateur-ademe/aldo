@@ -103,6 +103,7 @@ function getFranceStocksWoodProducts() {
   return {
     bo: 177419001,
     bi: 258680001,
+    // TODO: ask about BE, which is present in other places but not these stats
   }
 }
 

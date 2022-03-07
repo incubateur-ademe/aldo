@@ -27,7 +27,7 @@ router.get('/territoire', async (req,res)=>{
     groundTypes: GroundTypes,
     stocks,
     formatNumber(number) {
-      return Math.round(number).toLocaleString()
+      return Math.round(number).toLocaleString("fr-FR")
     },
     // TODO: use once have all stocks calculations in place
     // percent(number) {
