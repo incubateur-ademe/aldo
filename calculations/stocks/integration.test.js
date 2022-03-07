@@ -9,7 +9,7 @@ test('returns stocks for a valid EPCI', async () => {
     vergers: 0,
     vignes: 0,
     "sols artificiels": 67419.8784202608,
-    // haies
+    haies: 5085.895944561377,
     // forêts
     // produits bois
   })

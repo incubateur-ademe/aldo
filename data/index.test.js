@@ -25,6 +25,13 @@ test('returns biomass carbon density (as tC/ha) given valid ground type and EPCI
   expect(await getBiomassCarbonDensity({epci: "200000172"}, "prairies zones arborées")).toBe(57)
 })
 
+test('returns forest biomass carbon density (as tC/ha) given valid forest type and EPCI SIREN', async () => {
+  expect(await getBiomassCarbonDensity({epci: "200000172"}, "forêt mixte")).toBe(82.4445416)
+})
+
+test('returns area of haies (as ha) given valid EPCI SIREN', async () => {
+  expect(await getArea({epci: "249500513"}, "haies")).toBe(33.79485686)
+})
 // TODO: litière
 
 test('returns EPCI list', async () => {

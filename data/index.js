@@ -14,6 +14,9 @@ async function getCarbonDensity(location, groundType) {
 // NB: in the lookup the type names for ground data and the more specific biomass data
 // are placed on the same level, so some CLC codes are used in two types.
 async function getArea(location, groundType) {
+  if (groundType === "haies") {
+    return await getAreaHaies(location)
+  }
   // consider making this a separate json file for isolation
   // TODO: make more standardised keys?
   const aldoTypeToClcCodes = {
@@ -53,12 +56,35 @@ async function getArea(location, groundType) {
   return totalArea
 }
 
+async function getAreaHaies(location) {
+  const csvFilePath = './data/dataByEpci/surface-haies.csv'
+  const dataByEpci = await csv().fromFile(csvFilePath)
+  const data = dataByEpci.filter(data => data.siren === location.epci)
+  if(data.length > 1) {
+    console.log("WARNING: more than one haies surface area for siren: ", location.epci)
+  }
+  return parseFloat(data[0].area)
+}
+
 async function getBiomassCarbonDensity(location, groundType) {
+  if (groundType.startsWith("forêt")) {
+    return await getForestBiomassCarbonDensity(location, groundType.split(" ")[1])
+  }
   const csvFilePath = './data/dataByEpci/biomass-hors-forets.csv'
   const dataByEpci = await csv().fromFile(csvFilePath)
   const data = dataByEpci.find(data => data.siren === location.epci)
   // NB: all stocks are integers, but flux has decimals
   return parseInt(data[groundType], 10) || 0
+}
+
+async function getForestBiomassCarbonDensity(location, forestType) {
+  const csvFilePath = './data/dataByEpci/biomass-forets.csv'
+  const dataByEpci = await csv().fromFile(csvFilePath)
+  const data = dataByEpci.find(data => data.siren === location.epci && data.type.toLowerCase() === forestType)
+  if (!data) {
+    throw new Error(`No biomass data found for forest type '${forestType}' and epci '${location.epci}'`)
+  }
+  return parseFloat(data.stock)
 }
 
 async function epciList() {
@@ -71,4 +97,5 @@ module.exports = {
   getArea,
   getBiomassCarbonDensity,
   epciList,
+  getForestBiomassCarbonDensity,
 }

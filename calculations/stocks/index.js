@@ -65,6 +65,12 @@ async function getStocksSolsArtificiels(location) {
   return stocksImpermeable + stocksShrubby + stocksTrees
 }
 
+async function getStocksHaies(location) {
+  const carbonDensity = await getBiomassCarbonDensity(location, "forêt mixte")
+  const area = await getArea(location, "haies")
+  return carbonDensity * area
+}
+
 // TODO: put in check for if the locations given are valid and findable?
 // Or maybe put this error throwing at the lowest level and let them bubble up
 async function getStocks(location) {
@@ -75,6 +81,7 @@ async function getStocks(location) {
     vergers: await getStocksByKeyword(location, "vergers"),
     vignes: await getStocksByKeyword(location, "vignes"),
     "sols artificiels": await getStocksSolsArtificiels(location),
+    haies: await getStocksHaies(location),
   }
 }
 
