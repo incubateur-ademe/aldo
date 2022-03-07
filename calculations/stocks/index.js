@@ -1,4 +1,5 @@
-const { getArea, getCarbonDensity, getBiomassCarbonDensity } = require("../../data")
+const { getArea, getCarbonDensity, getBiomassCarbonDensity, getPopulationTotal, getFranceStocksWoodProducts, epciList } = require("../../data")
+const { getEpci } = require("../epcis")
 
 async function getStocksByKeyword(location, keyword) {
   return await getArea(location, keyword) * (await getCarbonDensity(location, keyword) + await getBiomassCarbonDensity(location, keyword))
@@ -72,9 +73,25 @@ async function getStocksHaies(location) {
   return carbonDensity * area
 }
 
+function co2ToCarbon(co2) {
+  return co2 * 12/44
+}
+
+async function getStocksWoodProducts(location, calculationMethod) {
+  if (calculationMethod === "consommation") {
+    const popTotal = await getPopulationTotal(await epciList())
+    const epciPop = location.epci.populationTotale
+    const proportion = epciPop / popTotal
+    const franceStocks = getFranceStocksWoodProducts()
+    return co2ToCarbon((franceStocks.bi + franceStocks.bo) * proportion)
+  }
+}
+
 // TODO: put in check for if the locations given are valid and findable?
 // Or maybe put this error throwing at the lowest level and let them bubble up
-async function getStocks(location) {
+async function getStocks(location, options) {
+  const originalLocation = location
+  location = {epci: location.epci.code} // TODO: change the other APIs to use whole EPCI object like stocks wood products?
   return {
     cultures: await getStocksByKeyword(location, "cultures"),
     prairies: await getStocksPrairies(location),
@@ -82,6 +99,7 @@ async function getStocks(location) {
     vergers: await getStocksByKeyword(location, "vergers"),
     vignes: await getStocksByKeyword(location, "vignes"),
     "sols artificiels": await getStocksSolsArtificiels(location),
+    "produits bois": await getStocksWoodProducts(originalLocation, options?.woodCalculation || "consommation"),
     haies: await getStocksHaies(location),
   }
 }

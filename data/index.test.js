@@ -1,4 +1,5 @@
-const { getCarbonDensity, getArea, getBiomassCarbonDensity, epciList } = require("./index")
+const { getCarbonDensity, getArea, getBiomassCarbonDensity, epciList, getPopulationTotal, getFranceStocksWoodProducts } = require("./index")
+// TODO: mock data sources?
 
 test('returns ground carbon density (as tC/ha) given valid ground type and EPCI SIREN', async () => {
   expect(await getCarbonDensity({epci: "200000172"}, "cultures")).toBe(54.63076734)
@@ -32,9 +33,19 @@ test('returns forest biomass carbon density (as tC/ha) given valid forest type a
 test('returns area of haies (as ha) given valid EPCI SIREN', async () => {
   expect(await getArea({epci: "249500513"}, "haies")).toBe(33.79485686)
 })
-// TODO: litière
+
+test('returns population total for EPCIs in system', async () => {
+  expect(getPopulationTotal(await epciList())).toBe(65705495)
+})
+
+test('returns stocks of produits bois for France', () => {
+  expect(getFranceStocksWoodProducts()).toStrictEqual({
+    bo: 177419001,
+    bi: 258680001,
+  })
+})
 
 test('returns EPCI list', async () => {
   const list = await epciList()
-  expect(list.length).toBe(1249)
+  expect(list.length).toBe(1248)
 })

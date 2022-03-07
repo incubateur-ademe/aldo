@@ -89,7 +89,21 @@ async function getForestBiomassCarbonDensity(location, forestType) {
 
 async function epciList() {
   const csvFilePath = './data/dataByEpci/epci.csv'
-  return await csv().fromFile(csvFilePath)
+  let epcis = await csv().fromFile(csvFilePath)
+  epcis.map(epci => epci.populationTotale = parseInt(epci.populationTotale), 10)
+  return epcis
+}
+
+function getPopulationTotal(epcis) {
+  return epcis.reduce((total, epci) => total + epci.populationTotale, 0)
+}
+
+// source: CITEPA 2016
+function getFranceStocksWoodProducts() {
+  return {
+    bo: 177419001,
+    bi: 258680001,
+  }
 }
 
 module.exports = {
@@ -98,4 +112,6 @@ module.exports = {
   getBiomassCarbonDensity,
   epciList,
   getForestBiomassCarbonDensity,
+  getPopulationTotal,
+  getFranceStocksWoodProducts,
 }

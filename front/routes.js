@@ -15,7 +15,7 @@ router.get('/territoire', async (req,res)=>{
   const epci = await getEpci(req.query.epci) || {}
   let stocks = {};
   if (epci.code) {
-    stocks = await getStocks({epci: epci.code})
+    stocks = await getStocks({epci})
   } else {
     res.status(404)
   }
