@@ -128,7 +128,7 @@ async function getStocksWoodProducts(location, calculationMethod) {
 async function getStocks(location, options) {
   const originalLocation = location
   location = {epci: location.epci.code} // TODO: change the other APIs to use whole EPCI object like stocks wood products?
-  return {
+  let stocks = {
     cultures: await getStocksByKeyword(location, "cultures"),
     prairies: await getStocksPrairies(location),
     "zones humides": await getStocksByKeyword(location, "zones humides"),
@@ -139,6 +139,11 @@ async function getStocks(location, options) {
     "forêts": await getStocksForests(location),
     haies: await getStocksHaies(location),
   }
+  const stocksTotal = Object.values(stocks).reduce((a, b) => a + b.stock, 0)
+  for(const key of Object.keys(stocks)) {
+    stocks[key].stockPercentage = Math.round(stocks[key].stock/stocksTotal*1000)/10
+  }
+  return stocks
 }
 
 module.exports = {

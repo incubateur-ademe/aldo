@@ -37,6 +37,7 @@
                     <th scope="col">Type de sol</th>
                     <th scope="col">Surface (ha)</th>
                     <th scope="col">Stocks carbone (tC)</th>
+                    <th scope="col">Stocks proportion</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,6 +53,13 @@
                   </td>
                   <td>
                     <%= formatNumber(stocks[groundTypes[index].stocksId].stock) %>
+                  </td>
+                  <td>
+                    <% if (stocks[groundTypes[index].stocksId].stockPercentage > 10) { %>
+                      <b><%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %</b>
+                    <% } else { %>
+                      <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
+                    <% } %>
                   </td>
                 </tr>
               <% } %>

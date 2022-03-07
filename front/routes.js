@@ -19,7 +19,6 @@ router.get('/territoire', async (req,res)=>{
   } else {
     res.status(404)
   }
-  const stocksTotal = Object.values(stocks).reduce((a, b) => a + b, 0)
   res.render('territoire', {
     pageTitle: `${epci.nom || "EPCI pas trouvé"}`,
     epcis: await epciList(),
@@ -29,10 +28,6 @@ router.get('/territoire', async (req,res)=>{
     formatNumber(number) {
       return Math.round(number).toLocaleString("fr-FR")
     },
-    // TODO: use once have all stocks calculations in place
-    // percent(number) {
-    //   return (Math.round(number/stocksTotal*1000)/10).toLocaleString()
-    // },
   })
 })
 
