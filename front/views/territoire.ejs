@@ -15,10 +15,13 @@
           </h3>
           <div class="fr-collapse" id="accordion-81">
             <ul>
-              <!-- TODO: split across columns -->
+              <div class="fr-grid-row">
                 <% for( let index = 0; index < epci.membres.length; index++ ) { %>
-                  <li><%= epci.membres[index].nom %> </li>
+                  <div class="fr-col-12 fr-sm-col-6 fr-col-md-4">
+                    <li><%= epci.membres[index].nom %> </li>
+                  </div>
                 <% } %>
+              </div>
             </ul>
           </div>
         </section>
