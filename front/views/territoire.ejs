@@ -35,6 +35,7 @@
             <thead>
                 <tr>
                     <th scope="col">Type de sol</th>
+                    <th scope="col">Surface (ha)</th>
                     <th scope="col">Stocks carbone (tC)</th>
                 </tr>
             </thead>
@@ -43,7 +44,14 @@
                 <tr>
                   <td><%= groundTypes[index].name %></td>
                   <td>
-                    <%= formatNumber(stocks[groundTypes[index].stocksId]) %>
+                    <% if (stocks[groundTypes[index].stocksId].area !== undefined) { %>
+                      <%= formatNumber(stocks[groundTypes[index].stocksId].area) %>
+                    <% } else { %>
+                      <i>Pas applicable</i>
+                    <% } %>
+                  </td>
+                  <td>
+                    <%= formatNumber(stocks[groundTypes[index].stocksId].stock) %>
                   </td>
                 </tr>
               <% } %>
