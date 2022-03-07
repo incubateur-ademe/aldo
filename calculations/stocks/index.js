@@ -1,19 +1,19 @@
-const { getArea, getCarbonDensity, getBiomassCarbonDensity, getPopulationTotal, getFranceStocksWoodProducts, epciList, getForestLitterCarbonDensity } = require("../../data")
+const { getArea, getCarbonDensity, getBiomassCarbonDensity, getPopulationTotal, getFranceStocksWoodProducts, epciList, getForestLitterCarbonDensity } = require('../../data')
 
-async function getStocksByKeyword(location, keyword) {
+async function getStocksByKeyword (location, keyword) {
   const area = await getArea(location, keyword)
   return {
     stock: area * (await getCarbonDensity(location, keyword) + await getBiomassCarbonDensity(location, keyword)),
-    area,
+    area
   }
 }
 
-async function getStocksPrairies(location) {
-  const groundCarbonType = "prairies"
+async function getStocksPrairies (location) {
+  const groundCarbonType = 'prairies'
   const biomassTypes = [
-    "prairies zones arborées",
-    "prairies zones herbacées",
-    "prairies zones arbustives",
+    'prairies zones arborées',
+    'prairies zones herbacées',
+    'prairies zones arbustives'
   ]
   let stock = 0
   let area = 0
@@ -25,19 +25,19 @@ async function getStocksPrairies(location) {
   }
   return {
     stock,
-    area,
+    area
   }
 }
 
-async function getStocksSolsArtificiels(location) {
+async function getStocksSolsArtificiels (location) {
   // there are three different types of arificial ground to consider:
   // * impermeable
   // * with trees
   // * with other greenery (shrubbery, grass etc)
 
   // start by estimating the area taken by each
-  const areaWithoutTrees = await getArea(location, "sols artificiels non-arborés")
-  const areaWithTrees = await getArea(location, "sols arborés")
+  const areaWithoutTrees = await getArea(location, 'sols artificiels non-arborés')
+  const areaWithTrees = await getArea(location, 'sols arborés')
   const totalArea = areaWithoutTrees + areaWithTrees
 
   // TODO: are there sources to cite for these estimates?
@@ -46,7 +46,7 @@ async function getStocksSolsArtificiels(location) {
 
   // TODO: ask why proportion of areaWithTrees in both cases is important
   let areaImpermeable = 0
-  if(areaWithTrees < 0.2 * totalArea) {
+  if (areaWithTrees < 0.2 * totalArea) {
     areaImpermeable = estimatedPortionImpermeable * totalArea
   } else {
     // TODO: ask why subtracting areaWithTrees here
@@ -54,65 +54,65 @@ async function getStocksSolsArtificiels(location) {
   }
 
   let areaShrubby = 0
-  if(areaWithTrees < 0.2 * (areaImpermeable + areaWithTrees)) {
+  if (areaWithTrees < 0.2 * (areaImpermeable + areaWithTrees)) {
     // TODO: ask why areaWithTrees included when running the % estimate and then subtracted,
     // instead of just leaving it out
     areaShrubby = estimatedPortionGreen * (areaWithoutTrees + areaWithTrees) - areaWithTrees
   }
 
-  let cDensityImpermeable = await getCarbonDensity(location, "sols artificiels imperméabilisés")
-  cDensityImpermeable += await getBiomassCarbonDensity(location, "sols artificiels imperméabilisés")
+  let cDensityImpermeable = await getCarbonDensity(location, 'sols artificiels imperméabilisés')
+  cDensityImpermeable += await getBiomassCarbonDensity(location, 'sols artificiels imperméabilisés')
   const stocksImpermeable = areaImpermeable * cDensityImpermeable
 
-  let cDensityShrubby = await getCarbonDensity(location, "sols artificiels enherbés")
-  cDensityShrubby += await getBiomassCarbonDensity(location, "sols artificiels arbustifs")
+  let cDensityShrubby = await getCarbonDensity(location, 'sols artificiels enherbés')
+  cDensityShrubby += await getBiomassCarbonDensity(location, 'sols artificiels arbustifs')
   const stocksShrubby = areaShrubby * cDensityShrubby
 
-  let cDensityTrees = await getCarbonDensity(location, "sols artificiels arborés et buissonants")
-  cDensityTrees += await getBiomassCarbonDensity(location, "sols artificiels arborés et buissonants")
+  let cDensityTrees = await getCarbonDensity(location, 'sols artificiels arborés et buissonants')
+  cDensityTrees += await getBiomassCarbonDensity(location, 'sols artificiels arborés et buissonants')
   const stocksTrees = areaWithTrees * cDensityTrees
 
   return {
     stock: stocksImpermeable + stocksShrubby + stocksTrees,
-    area: totalArea,
+    area: totalArea
   }
 }
 
-async function getStocksHaies(location) {
+async function getStocksHaies (location) {
   // TODO: ask more about this calculation - reusing forest carbon density?
-  const carbonDensity = await getBiomassCarbonDensity(location, "forêt mixte")
-  const area = await getArea(location, "haies")
+  const carbonDensity = await getBiomassCarbonDensity(location, 'forêt mixte')
+  const area = await getArea(location, 'haies')
   return {
     stock: carbonDensity * area,
-    area,
+    area
   }
 }
 
-async function getStocksForests(location) {
-  const subtypes = ["forêt feuillu", "forêt conifere", "forêt mixte", "forêt peupleraie"]
+async function getStocksForests (location) {
+  const subtypes = ['forêt feuillu', 'forêt conifere', 'forêt mixte', 'forêt peupleraie']
   let stock = 0
   let area = 0
   for (let subtype of subtypes) {
     const subarea = await getArea(location, subtype)
-    let carbonDensity = await getCarbonDensity(location, "forêts")
+    let carbonDensity = await getCarbonDensity(location, 'forêts')
     carbonDensity += await getBiomassCarbonDensity(location, subtype)
-    subtype = subtype.replace("forêt ", "") // TODO: standardise keys across functions
+    subtype = subtype.replace('forêt ', '') // TODO: standardise keys across functions
     carbonDensity += await getForestLitterCarbonDensity(subtype)
     stock += carbonDensity * subarea
     area += subarea
   }
   return {
     stock,
-    area,
+    area
   }
 }
 
-function co2ToCarbon(co2) {
-  return co2 * 12/44
+function co2ToCarbon (co2) {
+  return co2 * 12 / 44
 }
 
-async function getStocksWoodProducts(location, calculationMethod) {
-  if (calculationMethod === "consommation") {
+async function getStocksWoodProducts (location, calculationMethod) {
+  if (calculationMethod === 'consommation') {
     const popTotal = await getPopulationTotal(await epciList())
     const epciPop = location.epci.populationTotale
     const proportion = epciPop / popTotal
@@ -125,27 +125,27 @@ async function getStocksWoodProducts(location, calculationMethod) {
 
 // TODO: put in check for if the locations given are valid and findable?
 // Or maybe put this error throwing at the lowest level and let them bubble up
-async function getStocks(location, options) {
+async function getStocks (location, options) {
   const originalLocation = location
-  location = {epci: location.epci.code} // TODO: change the other APIs to use whole EPCI object like stocks wood products?
-  let stocks = {
-    cultures: await getStocksByKeyword(location, "cultures"),
+  location = { epci: location.epci.code } // TODO: change the other APIs to use whole EPCI object like stocks wood products?
+  const stocks = {
+    cultures: await getStocksByKeyword(location, 'cultures'),
     prairies: await getStocksPrairies(location),
-    "zones humides": await getStocksByKeyword(location, "zones humides"),
-    vergers: await getStocksByKeyword(location, "vergers"),
-    vignes: await getStocksByKeyword(location, "vignes"),
-    "sols artificiels": await getStocksSolsArtificiels(location),
-    "produits bois": await getStocksWoodProducts(originalLocation, options?.woodCalculation || "consommation"),
-    "forêts": await getStocksForests(location),
-    haies: await getStocksHaies(location),
+    'zones humides': await getStocksByKeyword(location, 'zones humides'),
+    vergers: await getStocksByKeyword(location, 'vergers'),
+    vignes: await getStocksByKeyword(location, 'vignes'),
+    'sols artificiels': await getStocksSolsArtificiels(location),
+    'produits bois': await getStocksWoodProducts(originalLocation, options?.woodCalculation || 'consommation'),
+    forêts: await getStocksForests(location),
+    haies: await getStocksHaies(location)
   }
   const stocksTotal = Object.values(stocks).reduce((a, b) => a + b.stock, 0)
-  for(const key of Object.keys(stocks)) {
-    stocks[key].stockPercentage = Math.round(stocks[key].stock/stocksTotal*1000)/10
+  for (const key of Object.keys(stocks)) {
+    stocks[key].stockPercentage = Math.round(stocks[key].stock / stocksTotal * 1000) / 10
   }
   return stocks
 }
 
 module.exports = {
-  getStocks,
+  getStocks
 }

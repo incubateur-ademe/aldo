@@ -11,23 +11,23 @@ router.get('/', async (req, res) => {
   res.render('landing', { epcis: await epciList() })
 })
 
-router.get('/territoire', async (req,res)=>{
+router.get('/territoire', async (req, res) => {
   const epci = await getEpci(req.query.epci) || {}
-  let stocks = {};
+  let stocks = {}
   if (epci.code) {
-    stocks = await getStocks({epci})
+    stocks = await getStocks({ epci })
   } else {
     res.status(404)
   }
   res.render('territoire', {
-    pageTitle: `${epci.nom || "EPCI pas trouvé"}`,
+    pageTitle: `${epci.nom || 'EPCI pas trouvé'}`,
     epcis: await epciList(),
     epci,
     groundTypes: GroundTypes,
     stocks,
-    formatNumber(number) {
-      return Math.round(number).toLocaleString("fr-FR")
-    },
+    formatNumber (number) {
+      return Math.round(number).toLocaleString('fr-FR')
+    }
   })
 })
 
@@ -75,8 +75,8 @@ router.get('/typography', (req, res) => {
 
 router.get('/mentions-legales', (req, res) => {
   res.render('legalNotice', {
-    pageTitle: "Mentions légales",
-    contactEmail: 'mon-produit@beta.gouv.fr',
+    pageTitle: 'Mentions légales',
+    contactEmail: 'mon-produit@beta.gouv.fr'
   })
 })
 

@@ -1,11 +1,11 @@
-const { epciList } = require("../data/index")
+const { epciList } = require('../data/index')
 const epcis = require('@etalab/decoupage-administratif/data/epci.json')
 
-async function getEpci(name) {
+async function getEpci (name) {
   const aldoList = await epciList()
-  let epci = aldoList.find(epci => epci.nom === name)
+  const epci = aldoList.find(epci => epci.nom === name)
   const officialEpci = epcis.find(e => e.code === epci.code)
-  if (officialEpci && epci.nombreCommunes == officialEpci.membres.length) {
+  if (officialEpci && parseInt(epci.nombreCommunes, 10) === officialEpci.membres.length) {
     epci.membres = officialEpci.membres
   }
   return epci
@@ -13,5 +13,5 @@ async function getEpci(name) {
 
 module.exports = {
   getEpci,
-  epciList,
+  epciList
 }
