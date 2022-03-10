@@ -31,53 +31,24 @@ router.get('/territoire', async (req, res) => {
   })
 })
 
-router.get('/ressources', (req, res) => {
-  res.render('ressources', {
-    pageTitle: 'Ressources'
-  })
-})
+// TODO: complete and add the following back in
+// router.get('/contact', (req, res) => {
+//   res.render('contact', {
+//     pageTitle: 'Contact'
+//   })
+// })
 
-router.get('/formulaire', (req, res) => {
-  res.render('form', {
-    pageTitle: 'Formulaire'
-  })
-})
+// router.get('/accessibilite', (req, res) => {
+//   res.render('accessibilite', {
+//     pageTitle: 'Accessibilité'
+//   })
+// })
 
-router.get('/contact', (req, res) => {
-  res.render('contact', {
-    pageTitle: 'Contact'
-  })
-})
-
-router.get('/accessibilite', (req, res) => {
-  res.render('accessibilite', {
-    pageTitle: 'Accessibilité'
-  })
-})
-
-router.get('/components', (req, res) => {
-  res.render('components', {
-    pageTitle: 'Composants'
-  })
-})
-
-router.get('/colors', (req, res) => {
-  res.render('colors', {
-    pageTitle: 'Couleurs'
-  })
-})
-
-router.get('/typography', (req, res) => {
-  res.render('typography', {
-    pageTitle: 'Typographie'
-  })
-})
-
-router.get('/mentions-legales', (req, res) => {
-  res.render('legalNotice', {
-    pageTitle: 'Mentions légales',
-    contactEmail: 'mon-produit@beta.gouv.fr'
-  })
-})
+// router.get('/mentions-legales', (req, res) => {
+//   res.render('legalNotice', {
+//     pageTitle: 'Mentions légales',
+//     contactEmail: 'mon-produit@beta.gouv.fr'
+//   })
+// })
 
 module.exports = router
