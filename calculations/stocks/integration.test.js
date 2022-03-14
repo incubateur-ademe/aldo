@@ -2,6 +2,7 @@ const { getStocks } = require('./index')
 const { getEpci } = require('../epcis')
 
 test('returns stocks for a valid EPCI', async () => {
+  // TODO: fix this test
   expect(await getStocks({ epci: await getEpci('CC Faucigny-Glières') }, { woodCalculation: 'consommation' })).toEqual({
     cultures: {
       stock: 95097.48957450179,
@@ -46,6 +47,12 @@ test('returns stocks for a valid EPCI', async () => {
     'produits bois': {
       stock: 49170.62093925741,
       stockPercentage: 3.1
+    },
+    byReservoir: {
+      'Sol (30 cm)': 981595.3856786463,
+      Litière: 58112.45285939999,
+      'Biomasse sur pied': 505383.557438139,
+      'Matériaux bois': 177980 * 12 / 44
     }
   })
 })

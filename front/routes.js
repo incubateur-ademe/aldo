@@ -8,7 +8,9 @@ const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { GroundTypes } = require(path.join(rootFolder, './calculations/constants'))
 
 router.get('/', async (req, res) => {
-  res.render('landing', { epcis: await epciList() })
+  res.render('landing', {
+    epcis: await epciList()
+  })
 })
 
 router.get('/territoire', async (req, res) => {
@@ -19,12 +21,76 @@ router.get('/territoire', async (req, res) => {
   } else {
     res.status(404)
   }
+  // TODO: add at least 4 more colours
+  const chartBackgroundColors = [
+    '#C9FCAC', // green-bourgeon-950
+    '#E9EDFE', // blue-ecume-950
+    '#FEE7FC', // purple-glycine-950
+    '#F7EBE5' // brown-caramel-950
+  ]
+  const chartBorderColors = [
+    '#68A532', // green-bourgeon-main-640
+    '#465F9D', // blue-ecume-main-400
+    '#A55A80', // purple-glycine-main-494
+    '#C08C65' // brown-caramel-main-648
+  ]
   res.render('territoire', {
     pageTitle: `${epci.nom || 'EPCI pas trouvé'}`,
     epcis: await epciList(),
     epci,
     groundTypes: GroundTypes,
     stocks,
+    charts: {
+      reservoir: {
+        title: 'Répartition du stock par reservoir',
+        data: JSON.stringify({
+          type: 'pie',
+          data: {
+            labels: Object.keys(stocks.byReservoir),
+            datasets: [{
+              label: 'Répartition du stock par reservoir',
+              // TODO: use a mapping for key to display name instead
+              data: Object.keys(stocks.byReservoir).map(key => stocks.byReservoir[key]),
+              backgroundColor: chartBackgroundColors,
+              borderColor: chartBorderColors,
+              borderWidth: 2
+            }]
+          }
+          // optional options object
+        })
+      },
+      density: {
+        title: 'Stocks de référence par unité de surface',
+        data: JSON.stringify({
+          type: 'bar',
+          data: {
+            labels: Object.keys(stocks.byDensity),
+            datasets: [{
+              label: 'Stocks de référence (tC/ha)',
+              data: Object.keys(stocks.byDensity).map(key => stocks.byDensity[key]),
+              backgroundColor: chartBackgroundColors,
+              borderColor: chartBorderColors,
+              borderWidth: 2
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                title: {
+                  text: 'Stocks de référence (tC/ha)',
+                  display: true
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: false
+              }
+            }
+          }
+        })
+      }
+    },
     formatNumber (number) {
       return Math.round(number).toLocaleString('fr-FR')
     }
