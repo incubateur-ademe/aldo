@@ -75,7 +75,7 @@
               <li>
                 <section class="fr-accordion">
                   <h3 class="fr-accordion__title">
-                    <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-chart-<%= keyIdx %>">
+                    <button class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>" aria-controls="accordion-chart-<%= keyIdx %>">
                       <%= charts[Object.keys(charts)[keyIdx]].title %>
                     </button>
                   </h3>
