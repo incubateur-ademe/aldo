@@ -135,7 +135,7 @@ function getForestLitterCarbonDensity (subtype) {
   if (subtypes.indexOf(subtype) === -1) {
     throw new Error(`No forest litter carbon density found for forest subtype '${subtype}'`)
   }
-  return 9 // TODO: follow up on source of this data
+  return 9 // TODO: ask follow up on source of this data
 }
 
 module.exports = {

@@ -25,7 +25,7 @@ async function getStocksPrairies (location) {
   let area = 0
   let groundStock = 0
   let biomassStock = 0
-  let totalDensity = 0
+  let densities = {}
   for (const biomassType of biomassTypes) {
     const subarea = await getArea(location, biomassType)
     const groundDensity = await getCarbonDensity(location, groundCarbonType)
@@ -33,14 +33,14 @@ async function getStocksPrairies (location) {
     const biomassDensity = await getBiomassCarbonDensity(location, biomassType)
     biomassStock += biomassDensity * subarea
     area += subarea
-    totalDensity += groundDensity + biomassDensity
+    densities[biomassType] = groundDensity + biomassDensity
   }
   return {
     stock: groundStock + biomassStock,
     area,
     groundStock,
     biomassStock,
-    totalDensity
+    densities
   }
 }
 
@@ -55,7 +55,7 @@ async function getStocksSolsArtificiels (location) {
   const areaWithTrees = await getArea(location, 'sols arborés')
   const totalArea = areaWithoutTrees + areaWithTrees
 
-  // TODO: are there sources to cite for these estimates?
+  // TODO: ask are there sources to cite for these estimates?
   const estimatedPortionImpermeable = 0.8
   const estimatedPortionGreen = 0.2
 
@@ -77,32 +77,32 @@ async function getStocksSolsArtificiels (location) {
 
   let groundStock = 0
   let biomassStock = 0
-  let totalDensity = 0
+  let densities = {}
 
   let groundDensity = await getCarbonDensity(location, 'sols artificiels imperméabilisés')
   groundStock += groundDensity * areaImpermeable
   let biomassDensity = await getBiomassCarbonDensity(location, 'sols artificiels imperméabilisés')
   biomassStock += biomassDensity * areaImpermeable
-  totalDensity += groundDensity + biomassDensity
+  densities['sols artificiels imperméabilisés'] = groundDensity + biomassDensity
 
   groundDensity = await getCarbonDensity(location, 'sols artificiels enherbés')
   groundStock += groundDensity * areaShrubby
   biomassDensity = await getBiomassCarbonDensity(location, 'sols artificiels arbustifs')
   biomassStock += biomassDensity * areaShrubby
-  totalDensity += groundDensity + biomassDensity
+  densities['sols artificiels arbustifs'] = groundDensity + biomassDensity
 
   groundDensity = await getCarbonDensity(location, 'sols artificiels arborés et buissonants')
   groundStock += groundDensity * areaWithTrees
   biomassDensity = await getBiomassCarbonDensity(location, 'sols artificiels arborés et buissonants')
   biomassStock += biomassDensity * areaWithTrees
-  totalDensity += groundDensity + biomassDensity
+  densities['sols artificiels arborés et buissonants'] = groundDensity + biomassDensity
 
   return {
     stock: groundStock + biomassStock,
     area: totalArea,
     groundStock,
     biomassStock,
-    totalDensity
+    densities
   }
 }
 
@@ -125,21 +125,22 @@ async function getStocksForests (location) {
   let biomassStock = 0
   let forestLitterStock = 0
   let area = 0
-  const forestGroundDensity = await getCarbonDensity(location, 'forêts')
-  const groundDensity = forestGroundDensity
+  const groundDensity = await getCarbonDensity(location, 'forêts')
   let biomassDensity = 0
   let forestLitterDensity = 0
-  for (let subtype of subtypes) {
+  let densities = {}
+  for (const subtype of subtypes) {
     const subarea = await getArea(location, subtype)
-    groundStock += forestGroundDensity * subarea
+    groundStock += groundDensity * subarea
     const subtypeBiomassDensity = await getBiomassCarbonDensity(location, subtype)
     biomassStock += subtypeBiomassDensity * subarea
     biomassDensity += subtypeBiomassDensity
-    subtype = subtype.replace('forêt ', '') // TODO: standardise keys across functions
-    const subtypeForestLitterDensity = await getForestLitterCarbonDensity(subtype)
+    // TODO: standardise keys across functions (so don't have to run replace on subtype here)
+    const subtypeForestLitterDensity = await getForestLitterCarbonDensity(subtype.replace('forêt ', ''))
     forestLitterStock += subtypeForestLitterDensity * subarea
     forestLitterDensity += subtypeForestLitterDensity
     area += subarea
+    densities[subtype] = groundDensity + subtypeBiomassDensity + subtypeForestLitterDensity
   }
   return {
     stock: groundStock + biomassStock + forestLitterStock,
@@ -147,7 +148,7 @@ async function getStocksForests (location) {
     groundStock,
     biomassStock,
     forestLitterStock,
-    totalDensity: groundDensity + biomassDensity + forestLitterDensity
+    densities,
   }
 }
 
@@ -199,8 +200,10 @@ async function getStocks (location, options) {
   }
   stocks.byDensity = {}
   groundTypes.forEach(key => {
-    if (key !== 'produits bois') {
+    if (key !== 'produits bois' && stocks[key].hasOwnProperty('totalDensity')) {
       stocks.byDensity[key] = stocks[key].totalDensity || 0
+    } else if(stocks[key].densities) {
+      Object.assign(stocks.byDensity, stocks[key].densities)
     }
   })
   return stocks
