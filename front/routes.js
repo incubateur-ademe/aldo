@@ -27,7 +27,7 @@ router.get('/territoire', async (req, res) => {
     pageTitle: `${epci.nom || 'EPCI pas trouvé'}`,
     epcis: await epciList(),
     epci,
-    groundTypes: GroundTypes,
+    groundTypes: GroundTypes.filter(type => !type.parentType),
     stocks,
     charts: {
       reservoir: {
@@ -53,7 +53,7 @@ router.get('/territoire', async (req, res) => {
         data: JSON.stringify({
           type: 'bar',
           data: {
-            labels: Object.keys(stocks.byDensity),
+            labels: Object.keys(stocks.byDensity).map(key => GroundTypes.find(k => k.stocksId === key)?.name),
             datasets: [{
               label: 'Stocks de référence (tC/ha)',
               data: Object.keys(stocks.byDensity).map(key => stocks.byDensity[key]),
