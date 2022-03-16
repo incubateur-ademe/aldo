@@ -28,11 +28,11 @@
       <% } else { %>
         <p><%= epci.nombreCommunes %> communes</p>
       <% } %>
-      <div class="fr-grid-row">
+      <div class="fr-grid-row fr-mt-3w">
         <div class="fr-col-12 fr-col-md-6">
-          <div class="fr-table fr-table--no-scroll fr-my-3w">
+          <div class="fr-table fr-table--no-scroll">
             <table>
-                <caption>Stocks de carbone</caption>
+                <caption class="fr-h2">Stocks de carbone</caption>
                 <thead>
                     <tr>
                         <th scope="col">Type de sol</th>
@@ -68,18 +68,18 @@
             </table>
           </div>
         </div>
-        <div class="fr-col-12 fr-col-md-6 fr-pt-9w">
-          <!-- TODO: title? -->
+        <div class="fr-col-12 fr-col-sm-10 fr-col-md-6 fr-pt-6w">
           <!-- TODO: test a11y of these charts -->
+          <h3>Résultats graphiques</h3>
           <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
             <% for (let keyIdx = 0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
               <li>
                 <section class="fr-accordion">
-                  <h3 class="fr-accordion__title">
+                  <h4 class="fr-accordion__title">
                     <button class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>" aria-controls="accordion-chart-<%= keyIdx %>">
                       <%= charts[Object.keys(charts)[keyIdx]].title %>
                     </button>
-                  </h3>
+                  </h4>
                   <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
                     <canvas id="chart-<%= Object.keys(charts)[keyIdx] %>" width="400" height="400"></canvas>
                   </div>

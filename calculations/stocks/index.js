@@ -70,8 +70,6 @@ async function getStocksSolsArtificiels (location) {
 
   let areaShrubby = 0
   if (areaWithTrees < 0.2 * (areaImpermeable + areaWithTrees)) {
-    // TODO: ask why areaWithTrees included when running the % estimate and then subtracted,
-    // instead of just leaving it out
     areaShrubby = estimatedPortionGreen * (areaWithoutTrees + areaWithTrees) - areaWithTrees
   }
 
