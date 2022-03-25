@@ -23,6 +23,14 @@ router.get('/territoire', async (req, res) => {
   }
   const chartBackgroundColors = Object.values(Colours).map(c => c['950'])
   const chartBorderColors = Object.values(Colours).map(c => c.main)
+  const stocksPercentageLabels = []
+  const stocksPercentageValues = []
+  Object.keys(stocks).forEach(key => {
+    if (stocks[key].stockPercentage >= 0) {
+      stocksPercentageLabels.push(GroundTypes.find(gt => gt.stocksId === key).name)
+      stocksPercentageValues.push(stocks[key].stockPercentage)
+    }
+  })
   res.render('territoire', {
     pageTitle: `${epci.nom || 'EPCI pas trouvé'}`,
     epcis: await epciList(),
@@ -30,6 +38,24 @@ router.get('/territoire', async (req, res) => {
     groundTypes: GroundTypes.filter(type => !type.parentType),
     stocks,
     charts: {
+      groundType: {
+        // TODO: ask why produits bois is not included, and why forest is level 2 but prairies level 1
+        title: 'Répartition des stocks de carbone par occupation du sol',
+        data: JSON.stringify({
+          type: 'pie',
+          data: {
+            labels: stocksPercentageLabels.map(key => '% ' + key),
+            datasets: [{
+              label: 'Répartition des stocks de carbone par occupation du sol',
+              // TODO: use a mapping for key to display name instead
+              data: stocksPercentageValues,
+              backgroundColor: chartBackgroundColors,
+              borderColor: chartBorderColors,
+              borderWidth: 2
+            }]
+          }
+        })
+      },
       reservoir: {
         title: 'Répartition du stock par reservoir',
         data: JSON.stringify({
