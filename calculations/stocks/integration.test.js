@@ -43,13 +43,13 @@ test('returns stocks by ground type for a valid EPCI', () => {
 // chart data tests
 test('returns stocks by reservoir for a valid EPCI', () => {
   const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { woodCalculation: 'consommation' })
-  expect(stocks.byReservoir).toEqual({
-    'Sol (30 cm)': 981595.3856786463,
-    Litière: 58112.45285939999,
-    'Biomasse sur pied': 505383.557438139,
+  expect(stocks.percentageByReservoir).toEqual({
+    'Sol (30 cm)': 61.6,
+    Litière: 3.6,
+    'Biomasse sur pied': 31.7,
     // NB: this number is different to the spreadsheet because the graphic for the spreadsheet doesn't take into
     // account the change in woodCalculation value
-    'Matériaux bois': 49170.62093925741
+    'Matériaux bois': 3.1
   })
 })
 

@@ -166,6 +166,10 @@ function getStocksWoodProducts (location, calculationMethod) {
   }
 }
 
+function asPercentage (value, total) {
+  return Math.round(value / total * 1000) / 10
+}
+
 // TODO: put in check for if the locations given are valid and findable?
 // Or maybe put this error throwing at the lowest level and let them bubble up
 function getStocks (location, options) {
@@ -185,16 +189,16 @@ function getStocks (location, options) {
   const groundTypes = Object.keys(stocks)
   const stocksTotal = Object.values(stocks).reduce((a, b) => a + b.stock, 0)
   for (const key of Object.keys(stocks)) {
-    stocks[key].stockPercentage = Math.round(stocks[key].stock / stocksTotal * 1000) / 10
+    stocks[key].stockPercentage = asPercentage(stocks[key].stock, stocksTotal)
   }
   const groundStock = Object.values(stocks).reduce((acc, cur) => acc + (cur.groundStock || 0), 0)
   const biomassStock = Object.values(stocks).reduce((acc, cur) => acc + (cur.biomassStock || 0), 0)
   const forestLitterStock = Object.values(stocks).reduce((acc, cur) => acc + (cur.forestLitterStock || 0), 0)
-  stocks.byReservoir = {
-    'Sol (30 cm)': groundStock,
-    'Biomasse sur pied': biomassStock,
-    Litière: forestLitterStock,
-    'Matériaux bois': stocks['produits bois'].stock
+  stocks.percentageByReservoir = {
+    'Sol (30 cm)': asPercentage(groundStock, stocksTotal),
+    'Biomasse sur pied': asPercentage(biomassStock, stocksTotal),
+    Litière: asPercentage(forestLitterStock, stocksTotal),
+    'Matériaux bois': asPercentage(stocks['produits bois'].stock, stocksTotal)
   }
   stocks.byDensity = {}
   groundTypes.forEach(key => {

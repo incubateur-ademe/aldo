@@ -35,17 +35,17 @@ router.get('/territoire', async (req, res) => {
         data: JSON.stringify({
           type: 'pie',
           data: {
-            labels: Object.keys(stocks.byReservoir),
+            // ideally would put % into tooltip label but can't get the override function to work
+            labels: Object.keys(stocks.percentageByReservoir).map(key => '% ' + key),
             datasets: [{
               label: 'Répartition du stock par reservoir',
               // TODO: use a mapping for key to display name instead
-              data: Object.keys(stocks.byReservoir).map(key => stocks.byReservoir[key]),
+              data: Object.keys(stocks.percentageByReservoir).map(key => stocks.percentageByReservoir[key]),
               backgroundColor: chartBackgroundColors,
               borderColor: chartBorderColors,
               borderWidth: 2
             }]
           }
-          // optional options object
         })
       },
       density: {
