@@ -1,9 +1,8 @@
-const csv = require('csvtojson')
 
 // Gets the carbon area density of a given ground type.
-async function getCarbonDensity (location, groundType) {
-  const csvFilePath = './data/dataByEpci/ground.csv'
-  const dataByEpci = await csv().fromFile(csvFilePath)
+function getCarbonDensity (location, groundType) {
+  const csvFilePath = './dataByEpci/ground.csv'
+  const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)
   return parseFloat(data[groundType]) || 0
 }
@@ -13,11 +12,11 @@ async function getCarbonDensity (location, groundType) {
 // so a mapping is used and the sum of ha of all matching CLC types is returned.
 // NB: in the lookup the type names for ground data and the more specific biomass data
 // are placed on the same level, so some CLC codes are used in two types.
-async function getArea (location, groundType) {
+function getArea (location, groundType) {
   if (groundType === 'haies') {
-    return await getAreaHaies(location)
+    return getAreaHaies(location)
   } else if (groundType === 'forêt peupleraie') {
-    return await getAreaPoplars(location)
+    return getAreaPoplars(location)
   }
   // consider making this a separate json file for isolation
   // TODO: make more standardised keys?
@@ -44,8 +43,8 @@ async function getArea (location, groundType) {
   if (!clcCodes) {
     throw new Error(`No CLC code mapping found for ground type '${groundType}'`)
   }
-  const csvFilePath = './data/dataByEpci/clc18.csv'
-  const areasByClcType = await csv().fromFile(csvFilePath)
+  const csvFilePath = './dataByEpci/clc18.csv'
+  const areasByClcType = require(csvFilePath + '.json')
   const areaForSiren = areasByClcType.find(data => data.siren === location.epci)
   let totalArea = 0
   for (const clcCode of clcCodes) {
@@ -57,14 +56,14 @@ async function getArea (location, groundType) {
   }
   // forests are a bit more complicated
   if (groundType === 'forêt feuillu') {
-    totalArea -= await getAreaPoplars(location)
+    totalArea -= getAreaPoplars(location)
   }
   return totalArea
 }
 
-async function getAreaHaies (location) {
-  const csvFilePath = './data/dataByEpci/surface-haies.csv'
-  const dataByEpci = await csv().fromFile(csvFilePath)
+function getAreaHaies (location) {
+  const csvFilePath = './dataByEpci/surface-haies.csv'
+  const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.filter(data => data.siren === location.epci)
   if (data.length > 1) {
     console.log('WARNING: more than one haies surface area for siren: ', location.epci)
@@ -73,29 +72,29 @@ async function getAreaHaies (location) {
 }
 
 // TODO: ask why not using IGN for all forest areas
-async function getAreaPoplars (location) {
-  const csvFilePath = './data/dataByEpci/ign19.csv'
-  const dataByEpci = await csv().fromFile(csvFilePath)
+function getAreaPoplars (location) {
+  const csvFilePath = './dataByEpci/ign19.csv'
+  const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)
   return parseFloat(data.peupleraies)
 }
 
-async function getBiomassCarbonDensity (location, groundType) {
+function getBiomassCarbonDensity (location, groundType) {
   if (groundType === 'forêt peupleraie') {
-    return await getPoplarBiomassCarbonDensity(location)
+    return getPoplarBiomassCarbonDensity(location)
   } else if (groundType.startsWith('forêt')) {
-    return await getForestBiomassCarbonDensity(location, groundType.split(' ')[1])
+    return getForestBiomassCarbonDensity(location, groundType.split(' ')[1])
   }
-  const csvFilePath = './data/dataByEpci/biomass-hors-forets.csv'
-  const dataByEpci = await csv().fromFile(csvFilePath)
+  const csvFilePath = './dataByEpci/biomass-hors-forets.csv'
+  const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)
   // NB: all stocks are integers, but flux has decimals
   return parseInt(data[groundType], 10) || 0
 }
 
-async function getForestBiomassCarbonDensity (location, forestType) {
-  const csvFilePath = './data/dataByEpci/biomass-forets.csv'
-  const dataByEpci = await csv().fromFile(csvFilePath)
+function getForestBiomassCarbonDensity (location, forestType) {
+  const csvFilePath = './dataByEpci/biomass-forets.csv'
+  const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci && data.type.toLowerCase() === forestType)
   if (!data) {
     throw new Error(`No biomass data found for forest type '${forestType}' and epci '${location.epci}'`)
@@ -103,16 +102,16 @@ async function getForestBiomassCarbonDensity (location, forestType) {
   return parseFloat(data.stock)
 }
 
-async function getPoplarBiomassCarbonDensity (location) {
-  const csvFilePath = './data/dataByEpci/biomasse-forets-peupleraies.csv'
-  const dataByEpci = await csv().fromFile(csvFilePath)
+function getPoplarBiomassCarbonDensity (location) {
+  const csvFilePath = './dataByEpci/biomasse-forets-peupleraies.csv'
+  const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)
   return parseFloat(data?.carbonDensity)
 }
 
-async function epciList () {
-  const csvFilePath = './data/dataByEpci/epci.csv'
-  const epcis = await csv().fromFile(csvFilePath)
+function epciList () {
+  const csvFilePath = './dataByEpci/epci.csv'
+  const epcis = require(csvFilePath + '.json')
   epcis.forEach(epci => { epci.populationTotale = parseInt(epci.populationTotale) }, 10)
   return epcis
 }

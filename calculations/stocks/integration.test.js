@@ -1,8 +1,8 @@
 const { getStocks } = require('./index')
 const { getEpci } = require('../epcis')
 
-test('returns stocks by ground type for a valid EPCI', async () => {
-  const stocks = await getStocks({ epci: await getEpci('CC Faucigny-Glières') }, { woodCalculation: 'consommation' })
+test('returns stocks by ground type for a valid EPCI', () => {
+  const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { woodCalculation: 'consommation' })
 
   expect(stocks.cultures.stock).toEqual(95097.48957450179)
   expect(stocks.cultures.stockPercentage).toEqual(6)
@@ -41,8 +41,8 @@ test('returns stocks by ground type for a valid EPCI', async () => {
 })
 
 // chart data tests
-test('returns stocks by reservoir for a valid EPCI', async () => {
-  const stocks = await getStocks({ epci: await getEpci('CC Faucigny-Glières') }, { woodCalculation: 'consommation' })
+test('returns stocks by reservoir for a valid EPCI', () => {
+  const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { woodCalculation: 'consommation' })
   expect(stocks.byReservoir).toEqual({
     'Sol (30 cm)': 981595.3856786463,
     Litière: 58112.45285939999,
@@ -53,8 +53,8 @@ test('returns stocks by reservoir for a valid EPCI', async () => {
   })
 })
 
-test('returns carbon density by ground type for a valid EPCI', async () => {
-  const stocks = await getStocks({ epci: await getEpci('CC Faucigny-Glières') }, { woodCalculation: 'consommation' })
+test('returns carbon density by ground type for a valid EPCI', () => {
+  const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { woodCalculation: 'consommation' })
   expect(stocks.byDensity).toEqual({
     cultures: 54.63076734,
     'prairies zones herbacées': 93.30767341,
@@ -76,8 +76,8 @@ test('returns carbon density by ground type for a valid EPCI', async () => {
 
 // TODO: test bois récolte calculation option (for stock and byReservoir)
 
-test('returns EPCI information for name and other info where present', async () => {
-  const info = await getEpci('CC Faucigny-Glières')
+test('returns EPCI information for name and other info where present', () => {
+  const info = getEpci('CC Faucigny-Glières')
   expect(info.code).toBe('200000172')
   expect(info.membres).toBeDefined()
   expect(info.populationTotale).toBe(27164)

@@ -5,8 +5,9 @@
   "scripts": {
     "checkHTML": "site-validator --verbose --url",
     "checkHTMLLocal": "site-validator --verbose --local --url http://localhost:8080",
+    "csvtojson": "sh csvtojson.sh",
     "dev": "nodemon server.js",
-    "start": "node server.js",
+    "start": "npm run csvtojson && node server.js",
     "test": "jest"
   },
   "repository": {
