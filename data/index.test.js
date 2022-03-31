@@ -1,4 +1,14 @@
-const { getCarbonDensity, getArea, getBiomassCarbonDensity, epciList, getPopulationTotal, getFranceStocksWoodProducts, getForestLitterCarbonDensity } = require('./index')
+const {
+  getCarbonDensity,
+  getArea,
+  getBiomassCarbonDensity,
+  epciList,
+  getPopulationTotal,
+  getFranceStocksWoodProducts,
+  getAnnualWoodProductsHarvest,
+  getAnnualFranceWoodProductsHarvest,
+  getForestLitterCarbonDensity
+} = require('./index')
 // TODO: mock data sources?
 
 test('returns ground carbon density (as tC/ha) given valid ground type and EPCI SIREN', () => {
@@ -46,6 +56,32 @@ test('returns stocks of produits bois for France', () => {
   expect(getFranceStocksWoodProducts()).toStrictEqual({
     bo: 177419001,
     bi: 258680001
+  })
+})
+
+test('returns stocks of produits bois for France by composition and category', () => {
+  expect(getAnnualFranceWoodProductsHarvest()).toStrictEqual({
+    feuillus: {
+      bo: 15462933.6725767,
+      bi: 6835439.59931826
+    },
+    coniferes: {
+      bo: 4642351.6311988,
+      bi: 4351545.84347542
+    }
+  })
+})
+
+test('returns stocks of produits bois for location by composition and category', () => {
+  expect(getAnnualWoodProductsHarvest({ epci: '200000172' })).toStrictEqual({
+    feuillus: {
+      bo: 393.017426088703,
+      bi: 214.082662991407
+    },
+    coniferes: {
+      bo: 15745.2607908564,
+      bi: 1324.09871367348
+    }
   })
 })
 

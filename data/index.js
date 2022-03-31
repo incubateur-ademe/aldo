@@ -120,12 +120,36 @@ function getPopulationTotal (epcis) {
   return epcis.reduce((total, epci) => total + epci.populationTotale, 0)
 }
 
-// source: CITEPA 2016
+// source: CITEPA 2016 in tCO2
 function getFranceStocksWoodProducts () {
   return {
     bo: 177419001,
     bi: 258680001
     // TODO: ask about BE, which is present in other places but not these stats
+  }
+}
+
+function getAnnualFranceWoodProductsHarvest () {
+  return getAnnualWoodProductsHarvest({ epci: "FRANCE" })
+}
+
+function getAnnualWoodProductsHarvest (location) {
+  const csvFilePath = './dataByEpci/produits-bois.csv'
+  const dataByEpci = require(csvFilePath + '.json')
+  const data = dataByEpci.filter(data => data.siren === location.epci)
+  function getValue(composition, category) {
+    const val = data.find((d) => d.composition === composition)[category]
+    return parseFloat(val)
+  }
+  return {
+    feuillus: {
+      bo: getValue("feuillus", "recolteBo"),
+      bi: getValue("feuillus", "recolteBi")
+    },
+    coniferes: {
+      bo: getValue("coniferes", "recolteBo"),
+      bi: getValue("coniferes", "recolteBi")
+    }
   }
 }
 
@@ -145,5 +169,7 @@ module.exports = {
   getForestBiomassCarbonDensity,
   getPopulationTotal,
   getFranceStocksWoodProducts,
-  getForestLitterCarbonDensity
+  getForestLitterCarbonDensity,
+  getAnnualWoodProductsHarvest,
+  getAnnualFranceWoodProductsHarvest
 }

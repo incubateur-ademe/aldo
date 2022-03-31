@@ -2,7 +2,7 @@ const { getStocks } = require('./index')
 const { getEpci } = require('../epcis')
 
 test('returns stocks by ground type for a valid EPCI', () => {
-  const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { woodCalculation: 'consommation' })
+  const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') })
 
   expect(stocks.cultures.stock).toEqual(95097.48957450179)
   expect(stocks.cultures.stockPercentage).toEqual(6)
@@ -35,9 +35,20 @@ test('returns stocks by ground type for a valid EPCI', () => {
   expect(stocks.forêts.stock).toEqual(1127615.0067169226)
   expect(stocks.forêts.stockPercentage).toEqual(70.7)
   expect(stocks.forêts.area).toEqual(6456.9392066)
+})
+
+test('returns correct wood stocks for consumption calculation type', () => {
+  const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { woodCalculation: 'consommation' })
 
   expect(stocks['produits bois'].stock).toEqual(49170.62093925741)
   expect(stocks['produits bois'].stockPercentage).toEqual(3.1)
+})
+
+test('returns correct wood stocks for harvest calculation type', () => {
+  const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { woodCalculation: 'récolte' })
+
+  expect(stocks['produits bois'].stock).toEqual(48539.99762795377)
+  expect(stocks['produits bois'].stockPercentage).toEqual(3)
 })
 
 // chart data tests

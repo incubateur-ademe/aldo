@@ -1,4 +1,5 @@
-const { getArea, getCarbonDensity, getBiomassCarbonDensity, getPopulationTotal, getFranceStocksWoodProducts, epciList, getForestLitterCarbonDensity } = require('../../data')
+const { getArea, getCarbonDensity, getBiomassCarbonDensity, getForestLitterCarbonDensity } = require('../../data')
+const { getStocksWoodProducts } = require('./woodProducts')
 
 function getStocksByKeyword (location, keyword) {
   const area = getArea(location, keyword)
@@ -150,22 +151,6 @@ function getStocksForests (location) {
   }
 }
 
-function co2ToCarbon (co2) {
-  return co2 * 12 / 44
-}
-
-function getStocksWoodProducts (location, calculationMethod) {
-  if (calculationMethod === 'consommation') {
-    const popTotal = getPopulationTotal(epciList())
-    const epciPop = location.epci.populationTotale
-    const proportion = epciPop / popTotal
-    const franceStocks = getFranceStocksWoodProducts()
-    return {
-      stock: co2ToCarbon((franceStocks.bi + franceStocks.bo) * proportion)
-    }
-  }
-}
-
 function asPercentage (value, total) {
   return Math.round(value / total * 1000) / 10
 }
@@ -182,7 +167,7 @@ function getStocks (location, options) {
     vergers: getStocksByKeyword(location, 'vergers'),
     vignes: getStocksByKeyword(location, 'vignes'),
     'sols artificiels': getStocksSolsArtificiels(location),
-    'produits bois': getStocksWoodProducts(originalLocation, options?.woodCalculation || 'consommation'),
+    'produits bois': getStocksWoodProducts(originalLocation, options?.woodCalculation),
     forêts: getStocksForests(location),
     haies: getStocksHaies(location)
   }
