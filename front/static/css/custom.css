@@ -19,4 +19,14 @@ span.tofill::after {
 }
 span.tofill::before {
   content: "[";
-}  
+}
+/* ADEME logo */
+.fr-header__operator {
+  max-width: 5.8rem;
+  padding-top: 1.2em;
+}
+.fr-footer__logo {
+  max-width: 6.5rem;
+  padding-top: 0.2rem;
+  margin-left: 2rem;
+}
