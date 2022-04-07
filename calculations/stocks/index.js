@@ -25,6 +25,8 @@ function getStocksByKeyword (location, keyword, options) {
     area,
     groundStock,
     biomassStock,
+    groundDensity,
+    biomassDensity,
     totalDensity: groundDensity + biomassDensity
   }
 }

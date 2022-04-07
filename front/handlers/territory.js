@@ -6,7 +6,8 @@ const { GroundTypes, Colours } = require(path.join(rootFolder, './calculations/c
 
 async function territoryHandler (req, res) {
   const epci = await getEpci(req.query.epci) || {}
-  let stocks = {}
+  const epcis = await epciList()
+  let stocks;
   if (epci.code) {
     const areaOverrides = {}
     Object.keys(req.query).filter(key => key.startsWith('surface_')).forEach(key => {
@@ -20,17 +21,28 @@ async function territoryHandler (req, res) {
     stocks = await getStocks({ epci }, options)
   } else {
     res.status(404)
+    res.render('404', {
+      epcis
+    })
+    return
   }
   res.render('territoire', {
-    pageTitle: `${epci.nom || 'EPCI pas trouvé'}`,
-    epcis: await epciList(),
+    pageTitle: `${epci.nom}`,
+    epcis,
     epci,
     groundTypes: GroundTypes.filter(type => !type.parentType),
     stocks,
-    charts: charts(stocks),
+    charts: stocks && charts(stocks),
     formatNumber (number) {
       return Math.round(number).toLocaleString('fr-FR')
-    }
+    },
+    round (number) {
+      return Math.round(number)
+    },
+    pascalCase (text) {
+      return text.replace(/ /g, '_')
+    },
+    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides']
   })
 }
 

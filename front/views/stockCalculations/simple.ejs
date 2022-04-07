@@ -1,0 +1,42 @@
+<p class="fr-text--sm fr-mb-1w">Comment est-ce que c'est calculé&nbsp;?</p>
+<p>Stocks de référence par unité de surface par réservoir&nbsp;:</p>
+<p class="fr-container formula fr-my-2w">
+  <span class="captioned-value fr-col-3">
+    <span class="v fr-text--lg"><%= round(stocks[groundTypes[index].stocksId].groundDensity) %> tC/ha</span>
+    <span class="c fr-text--sm">sol (30 cm)</span>
+  </span>
+  <span class="fr-col-1" style="text-align: center;">+</span>
+  <span class="captioned-value fr-col-3">
+    <span class="v fr-text--lg"><%= round(stocks[groundTypes[index].stocksId].biomassDensity) %> tC/ha</span>
+    <span class="c fr-text--sm">biomasse</span>
+  </span>
+  <span class="fr-col-1" style="text-align: center;">≈</span>
+  <span class="captioned-value fr-col-3">
+    <span class="v fr-text--lg"><%= round(stocks[groundTypes[index].stocksId].totalDensity) %> tC/ha</span>
+    <span class="c fr-text--sm">total</span>
+  </span>
+</p>
+<p>Stocks&nbsp;:</p>
+<p class="fr-container formula fr-my-2w">
+  <span class="captioned-value fr-col-3">
+    <span class="v fr-text--lg"><%= round(stocks[groundTypes[index].stocksId].totalDensity) %> tC/ha</span>
+    <span class="c fr-text--sm">total</span>
+  </span>
+  <span class="fr-col-1" style="text-align: center;">x</span>
+  <span class="captioned-value fr-col-3">
+    <input
+      class="fr-input fr-text--lg"
+      type="number"
+      inputmode="numeric"
+      value="<%= round(stocks[groundTypes[index].stocksId].area) %>"
+      id="surface-<%= index %>"
+      name="surface_<%= pascalCase(groundTypes[index].stocksId) %>"
+    >
+    <label class="fr-label fr-text--sm" for="surface-<%= index %>">surface (ha)</label>
+  </span>
+  <span class="fr-col-1" style="text-align: center;">≈</span>
+  <span class="fr-col-3 fr-text--lg"><%= round(stocks[groundTypes[index].stocksId].stock) %> tC</span>
+</p>
+<button class="fr-btn">
+  Mettre à jour le surface
+</button

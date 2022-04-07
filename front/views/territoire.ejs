@@ -29,37 +29,52 @@
         <p><%= epci.nombreCommunes %> communes</p>
       <% } %>
       <div class="fr-grid-row fr-mt-3w">
-        <div class="fr-col-12 fr-col-md-6">
-          <div class="fr-table fr-table--no-scroll">
+        <div class="fr-col-12 fr-col-md-6 fr-pr-md-1w">
+          
+          <form action="/territoire" method="GET" class="fr-table fr-table--no-scroll">
+            <input type="hidden" name="epci" value="<%= epci.nom %>" />
             <table>
                 <caption class="fr-h2">Stocks de carbone</caption>
                 <thead>
-                    <tr>
-                        <th scope="col">Type de sol</th>
+                    <tr class="expandable-row-header stocks-row">
+                        <th scope="col">Occupation du sol</th>
                         <th scope="col">Surface (ha)</th>
                         <th scope="col">Stocks carbone (tC)</th>
                         <th scope="col">Stocks proportion</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
                   <% for( let index = 0; index < groundTypes.length; index++ ) { %>
-                    <tr>
-                      <td><%= groundTypes[index].name %></td>
-                      <td>
+                    <tr class="expandable-row stocks-row">
+                      <td onClick='toggleRow(this)'><%= groundTypes[index].name %></td>
+                      <td onClick='toggleRow(this)' style="text-align: right;">
                         <% if (stocks[groundTypes[index].stocksId].area !== undefined) { %>
                           <%= formatNumber(stocks[groundTypes[index].stocksId].area) %>
                         <% } else { %>
                           <i>Pas applicable</i>
                         <% } %>
                       </td>
-                      <td>
+                      <td onClick='toggleRow(this)' style="text-align: right;">
                         <%= formatNumber(stocks[groundTypes[index].stocksId].stock) %>
                       </td>
-                      <td>
+                      <td onClick='toggleRow(this)' style="text-align: right;">
                         <% if (stocks[groundTypes[index].stocksId].stockPercentage > 10) { %>
                           <b><%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %</b>
                         <% } else { %>
                           <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
+                        <% } %>
+                      </td>
+                      <td onClick='toggleRow(this)'>
+                        <button onClick='toggleRow(this)'>
+                          <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
+                        </button>
+                      </td>
+                      <td class='expanded-row-content hide-row'>
+                        <% if (simpleStocks.indexOf(groundTypes[index].stocksId) > -1) { %>
+                          <%- include('stockCalculations/simple', {index}) -%>
+                        <% } else { %>
+                          <p><i>À venir</i></p>
                         <% } %>
                       </td>
                     </tr>
@@ -67,7 +82,7 @@
                 </tbody>
             </table>
           </div>
-        </div>
+        </form>
         <div class="fr-col-12 fr-col-sm-10 fr-col-md-6 fr-pt-6w">
           <!-- TODO: test a11y of these charts -->
           <h3>Résultats graphiques</h3>
@@ -96,6 +111,15 @@
 </main>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+  // thanks to https://github.com/chhikaradi1993/Expandable-table-row
+  const toggleRow = (element) => {
+    if (element.nodeName === "BUTTON") {
+      element = element.parentElement;
+    }
+    element.parentElement.getElementsByClassName('expanded-row-content')[0].classList.toggle('hide-row');
+    event.stopPropagation();
+  }
+
   const groundTypeCtx = document.getElementById('chart-groundType');
   const groundTypeChartData = JSON.parse(`<%- charts.groundType.data %>`);
   new Chart(groundTypeCtx, groundTypeChartData);
