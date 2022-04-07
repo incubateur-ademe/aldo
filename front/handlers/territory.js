@@ -45,6 +45,7 @@ function charts (stocks) {
       stocksPercentageValues.push(stocks[key].stockPercentage)
     }
   })
+  const stocksDensityLabels = Object.keys(stocks.byDensity).map(key => GroundTypes.find(k => k.stocksId === key)?.name)
   return {
     groundType: {
       // TODO: ask why produits bois is not included, and why forest is level 2 but prairies level 1
@@ -57,8 +58,8 @@ function charts (stocks) {
             label: 'Répartition des stocks de carbone par occupation du sol',
             // TODO: use a mapping for key to display name instead
             data: stocksPercentageValues,
-            backgroundColor: chartBackgroundColors,
-            borderColor: chartBorderColors,
+            backgroundColor: getColours(stocksPercentageLabels, '950'),
+            borderColor: getColours(stocksPercentageLabels, 'main'),
             borderWidth: 2
           }]
         }
@@ -87,12 +88,12 @@ function charts (stocks) {
       data: JSON.stringify({
         type: 'bar',
         data: {
-          labels: Object.keys(stocks.byDensity).map(key => GroundTypes.find(k => k.stocksId === key)?.name),
+          labels: stocksDensityLabels,
           datasets: [{
             label: 'Stocks de référence (tC/ha)',
             data: Object.keys(stocks.byDensity).map(key => stocks.byDensity[key]),
-            backgroundColor: chartBackgroundColors,
-            borderColor: chartBorderColors,
+            backgroundColor: getColours(stocksDensityLabels, '950'),
+            borderColor: getColours(stocksDensityLabels, 'main'),
             borderWidth: 2
           }]
         },
@@ -114,6 +115,13 @@ function charts (stocks) {
       })
     }
   }
+}
+
+function getColours(groundTypeLabels, colorType) {
+  return groundTypeLabels.map(type => {
+    const colorKey = GroundTypes.find(gt => gt.name == type).color || 'opera'
+    return Colours[colorKey][colorType]
+  })
 }
 
 module.exports = {

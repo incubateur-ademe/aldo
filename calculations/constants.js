@@ -2,89 +2,108 @@ module.exports = {
   GroundTypes: [
     {
       stocksId: 'cultures',
-      name: 'Cultures'
+      name: 'Cultures',
+      color: 'terre'
     },
     {
       stocksId: 'prairies',
-      name: 'Prairies'
+      name: 'Prairies',
+      color: 'tournesol'
     },
     {
       stocksId: 'prairies zones arborées',
       name: 'Prairies zones arborées',
       parentType: 'prairies',
+      color: 'tournesol'
     },
     {
       stocksId: 'prairies zones herbacées',
       name: 'Prairies zones herbacées',
       parentType: 'prairies',
+      color: 'tournesol'
     },
     {
       stocksId: 'prairies zones arbustives',
       name: 'Prairies zones arbustives',
       parentType: 'prairies',
+      color: 'tournesol'
     },
     {
       stocksId: 'zones humides',
-      name: 'Zones humides'
+      name: 'Zones humides',
+      color: 'cumulus'
     },
     {
       stocksId: 'vergers',
-      name: 'Vergers'
+      name: 'Vergers',
+      color: 'glycine'
     },
     {
       stocksId: 'vignes',
-      name: 'Vignes'
+      name: 'Vignes',
+      color: 'tuile'
     },
     {
       stocksId: 'sols artificiels',
-      name: 'Sols artificiels'
+      name: 'Sols artificiels',
+      color: 'gris'
     },
     {
       stocksId: 'sols artificiels imperméabilisés',
       name: 'Sols artificiels imperméabilisés',
-      parentType: 'sols artificiels'
+      parentType: 'sols artificiels',
+      color: 'gris'
     },
     {
       stocksId: 'sols artificiels arbustifs',
       name: 'Sols artificiels arbustifs',
-      parentType: 'sols artificiels'
+      parentType: 'sols artificiels',
+      color: 'gris'
     },
     {
       stocksId: 'sols artificiels arborés et buissonants',
       name: 'Sols artificiels arborés et buissonants',
-      parentType: 'sols artificiels'
+      parentType: 'sols artificiels',
+      color: 'gris'
     },
     {
       stocksId: 'forêts',
-      name: 'Forêts'
+      name: 'Forêts',
+      color: 'bourgeon'
     },
     {
       stocksId: 'forêt mixte',
       name: 'Forêt mixte',
-      parentType: 'forêts'
+      parentType: 'forêts',
+      color: 'bourgeon'
     },
     {
       stocksId: 'forêt feuillu',
       name: 'Forêt feuillu',
-      parentType: 'forêts'
+      parentType: 'forêts',
+      color: 'bourgeon'
     },
     {
       stocksId: 'forêt conifere',
       name: 'Forêt conifere',
-      parentType: 'forêts'
+      parentType: 'forêts',
+      color: 'bourgeon'
     },
     {
       stocksId: 'forêt peupleraie',
       name: 'Forêt peupleraie',
-      parentType: 'forêts'
+      parentType: 'forêts',
+      color: 'bourgeon'
     },
     {
       stocksId: 'produits bois',
-      name: 'Produits bois'
+      name: 'Produits bois',
+      color: 'opera'
     },
     {
       stocksId: 'haies',
-      name: 'Haies'
+      name: 'Haies',
+      color: 'moutard'
     }
   ],
   Colours: {
@@ -147,6 +166,10 @@ module.exports = {
     moutard: { // yellow
       main: '#C3992A',
       '950': '#feebd0',
+    },
+    gris: { // grey
+      main: '#7b7b7b',
+      '950': '#eeeeee'
     }
   }
 }
