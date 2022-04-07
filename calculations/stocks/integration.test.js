@@ -9,7 +9,7 @@ test('returns stocks by ground type for a valid EPCI', () => {
   expect(stocks.cultures.area).toEqual(1740.7313534999998)
 
   expect(stocks.prairies.stock).toEqual(243059.8882460637)
-  expect(stocks.prairies.stockPercentage).toEqual(15.2)
+  expect(stocks.prairies.stockPercentage).toEqual(15.3)
   expect(stocks.prairies.area).toEqual(2599.15354877)
 
   expect(stocks['zones humides'].stock).toEqual(6813.237073875)
@@ -33,7 +33,7 @@ test('returns stocks by ground type for a valid EPCI', () => {
   expect(stocks.haies.area).toEqual(61.68869213)
 
   expect(stocks.forêts.stock).toEqual(1127615.0067169226)
-  expect(stocks.forêts.stockPercentage).toEqual(70.7)
+  expect(stocks.forêts.stockPercentage).toEqual(70.8)
   expect(stocks.forêts.area).toEqual(6456.9392066)
 })
 
@@ -49,6 +49,21 @@ test('returns correct wood stocks for harvest calculation type', () => {
 
   expect(stocks['produits bois'].stock).toEqual(48539.99762795377)
   expect(stocks['produits bois'].stockPercentage).toEqual(3)
+  // TODO: test percentageByReservoir here or below
+})
+
+test('returns stocks according to provided area overrides', () => {
+  const area = {
+    cultures: 0,
+    'prairies zones herbacées': 10,
+    'prairies zones arbustives': 20,
+    'prairies zones arborées': 30
+  }
+  const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { area })
+  expect(stocks.cultures.stock).toEqual(0)
+  expect(stocks.prairies.stock).toEqual(7448.4604046)
+  // test that if area is not given, our area data is used
+  expect(stocks['zones humides'].stock).toEqual(6813.237073875)
 })
 
 // chart data tests
@@ -84,8 +99,6 @@ test('returns carbon density by ground type for a valid EPCI', () => {
     haies: 82.4445416
   })
 })
-
-// TODO: test bois récolte calculation option (for stock and byReservoir)
 
 test('returns EPCI information for name and other info where present', () => {
   const info = getEpci('CC Faucigny-Glières')

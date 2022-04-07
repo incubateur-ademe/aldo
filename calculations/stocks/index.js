@@ -1,8 +1,21 @@
-const { getArea, getCarbonDensity, getBiomassCarbonDensity, getForestLitterCarbonDensity } = require('../../data')
+const {
+  getArea: getAreaData,
+  getCarbonDensity,
+  getBiomassCarbonDensity,
+  getForestLitterCarbonDensity
+} = require('../../data')
 const { getStocksWoodProducts } = require('./woodProducts')
 
-function getStocksByKeyword (location, keyword) {
-  const area = getArea(location, keyword)
+function getArea (location, key, overrides) {
+  if (overrides && (overrides[key] || overrides[key] === 0)) {
+    return overrides[key]
+  } else {
+    return getAreaData(location, key)
+  }
+}
+
+function getStocksByKeyword (location, keyword, options) {
+  const area = getArea(location, keyword, options.area)
   const groundDensity = getCarbonDensity(location, keyword)
   const groundStock = groundDensity * area
   const biomassDensity = getBiomassCarbonDensity(location, keyword)
@@ -16,7 +29,7 @@ function getStocksByKeyword (location, keyword) {
   }
 }
 
-function getStocksPrairies (location) {
+function getStocksPrairies (location, options) {
   const groundCarbonType = 'prairies'
   const biomassTypes = [
     'prairies zones arborées',
@@ -28,7 +41,7 @@ function getStocksPrairies (location) {
   let biomassStock = 0
   const densities = {}
   for (const biomassType of biomassTypes) {
-    const subarea = getArea(location, biomassType)
+    const subarea = getArea(location, biomassType, options.area)
     const groundDensity = getCarbonDensity(location, groundCarbonType)
     groundStock += groundDensity * subarea
     const biomassDensity = getBiomassCarbonDensity(location, biomassType)
@@ -45,15 +58,15 @@ function getStocksPrairies (location) {
   }
 }
 
-function getStocksSolsArtificiels (location) {
+function getStocksSolsArtificiels (location, options) {
   // there are three different types of arificial ground to consider:
   // * impermeable
   // * with trees
   // * with other greenery (shrubbery, grass etc)
 
   // start by estimating the area taken by each
-  const areaWithoutTrees = getArea(location, 'sols artificiels non-arborés')
-  const areaWithTrees = getArea(location, 'sols arborés')
+  const areaWithoutTrees = getArea(location, 'sols artificiels non-arborés', options.area)
+  const areaWithTrees = getArea(location, 'sols arborés', options.area)
   const totalArea = areaWithoutTrees + areaWithTrees
 
   // TODO: ask are there sources to cite for these estimates?
@@ -105,10 +118,10 @@ function getStocksSolsArtificiels (location) {
   }
 }
 
-function getStocksHaies (location) {
+function getStocksHaies (location, options) {
   // TODO: ask more about this calculation - reusing forest carbon density?
   const carbonDensity = getBiomassCarbonDensity(location, 'forêt mixte')
-  const area = getArea(location, 'haies')
+  const area = getArea(location, 'haies', options.area)
   const stock = carbonDensity * area
   return {
     stock,
@@ -118,7 +131,7 @@ function getStocksHaies (location) {
   }
 }
 
-function getStocksForests (location) {
+function getStocksForests (location, options) {
   const subtypes = ['forêt feuillu', 'forêt conifere', 'forêt mixte', 'forêt peupleraie']
   let groundStock = 0
   let biomassStock = 0
@@ -129,7 +142,7 @@ function getStocksForests (location) {
   let forestLitterDensity = 0
   const densities = {}
   for (const subtype of subtypes) {
-    const subarea = getArea(location, subtype)
+    const subarea = getArea(location, subtype, options.area)
     groundStock += groundDensity * subarea
     const subtypeBiomassDensity = getBiomassCarbonDensity(location, subtype)
     biomassStock += subtypeBiomassDensity * subarea
@@ -160,16 +173,17 @@ function asPercentage (value, total) {
 function getStocks (location, options) {
   const originalLocation = location
   location = { epci: location.epci.code } // TODO: change the other APIs to use whole EPCI object like stocks wood products?
+  options = options || {}
   const stocks = {
-    cultures: getStocksByKeyword(location, 'cultures'),
-    prairies: getStocksPrairies(location),
-    'zones humides': getStocksByKeyword(location, 'zones humides'),
-    vergers: getStocksByKeyword(location, 'vergers'),
-    vignes: getStocksByKeyword(location, 'vignes'),
-    'sols artificiels': getStocksSolsArtificiels(location),
-    'produits bois': getStocksWoodProducts(originalLocation, options?.woodCalculation),
-    forêts: getStocksForests(location),
-    haies: getStocksHaies(location)
+    cultures: getStocksByKeyword(location, 'cultures', options),
+    prairies: getStocksPrairies(location, options),
+    'zones humides': getStocksByKeyword(location, 'zones humides', options),
+    vergers: getStocksByKeyword(location, 'vergers', options),
+    vignes: getStocksByKeyword(location, 'vignes', options),
+    'sols artificiels': getStocksSolsArtificiels(location, options),
+    'produits bois': getStocksWoodProducts(originalLocation, options?.woodCalculation, options),
+    forêts: getStocksForests(location, options),
+    haies: getStocksHaies(location, options)
   }
   const groundTypes = Object.keys(stocks)
   const stocksTotal = Object.values(stocks).reduce((a, b) => a + b.stock, 0)
