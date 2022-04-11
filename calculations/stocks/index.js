@@ -20,7 +20,7 @@ function getStocksByKeyword (location, keyword, options) {
   const groundStock = groundDensity * area
   const biomassDensity = getBiomassCarbonDensity(location, keyword)
   const biomassStock = biomassDensity * area
-  return {
+  const stocks = {
     stock: groundStock + biomassStock,
     area,
     groundStock,
@@ -29,6 +29,14 @@ function getStocksByKeyword (location, keyword, options) {
     biomassDensity,
     totalDensity: groundDensity + biomassDensity
   }
+  if (options.getLitter) {
+    const forestLitterDensity = getForestLitterCarbonDensity(keyword.replace('forêt ', ''))
+    stocks.forestLitterDensity = forestLitterDensity
+    stocks.totalDensity += forestLitterDensity
+    stocks.forestLitterStock = forestLitterDensity * area
+    stocks.stock += stocks.forestLitterStock
+  }
+  return stocks
 }
 
 function getSubStocksByKeyword (location, keyword, parent, options) {
@@ -44,13 +52,17 @@ function getStocksPrairies (subStocks) {
     stock: 0,
     area: 0,
     groundStock: 0,
-    biomassStock: 0
+    biomassStock: 0,
+    forestLitterStock: 0
   }
   for (const subType of Object.keys(subStocks)) {
     stocks.stock += subStocks[subType].stock
     stocks.area += subStocks[subType].area
     stocks.groundStock += subStocks[subType].groundStock
     stocks.biomassStock += subStocks[subType].biomassStock
+    if (subStocks[subType].forestLitterStock) {
+      stocks.forestLitterStock += subStocks[subType].forestLitterStock
+    }
   }
   return stocks
 }
@@ -130,39 +142,6 @@ function getStocksHaies (location, options) {
   }
 }
 
-function getStocksForests (location, options) {
-  const subtypes = ['forêt feuillu', 'forêt conifere', 'forêt mixte', 'forêt peupleraie']
-  let groundStock = 0
-  let biomassStock = 0
-  let forestLitterStock = 0
-  let area = 0
-  const groundDensity = getCarbonDensity(location, 'forêts')
-  let biomassDensity = 0
-  let forestLitterDensity = 0
-  const densities = {}
-  for (const subtype of subtypes) {
-    const subarea = getArea(location, subtype, options.area)
-    groundStock += groundDensity * subarea
-    const subtypeBiomassDensity = getBiomassCarbonDensity(location, subtype)
-    biomassStock += subtypeBiomassDensity * subarea
-    biomassDensity += subtypeBiomassDensity
-    // TODO: standardise keys across functions (so don't have to run replace on subtype here)
-    const subtypeForestLitterDensity = getForestLitterCarbonDensity(subtype.replace('forêt ', ''))
-    forestLitterStock += subtypeForestLitterDensity * subarea
-    forestLitterDensity += subtypeForestLitterDensity
-    area += subarea
-    densities[subtype] = groundDensity + subtypeBiomassDensity + subtypeForestLitterDensity
-  }
-  return {
-    stock: groundStock + biomassStock + forestLitterStock,
-    area,
-    groundStock,
-    biomassStock,
-    forestLitterStock,
-    densities
-  }
-}
-
 function asPercentage (value, total) {
   return Math.round(value / total * 1000) / 10
 }
@@ -173,25 +152,36 @@ function getStocks (location, options) {
   const originalLocation = location
   location = { epci: location.epci.code } // TODO: change the other APIs to use whole EPCI object like stocks wood products?
   options = options || {}
-
-  const prairieChildren = ['prairies zones arbustives', 'prairies zones herbacées', 'prairies zones arborées']
-  const prairiesSubtypes = {}
-  prairieChildren.forEach((c) => {
-    prairiesSubtypes[c] = getSubStocksByKeyword(location, c, 'prairies', options)
-  })
   const stocks = {
     cultures: getStocksByKeyword(location, 'cultures', options),
-    prairies: getStocksPrairies(prairiesSubtypes),
     'zones humides': getStocksByKeyword(location, 'zones humides', options),
     vergers: getStocksByKeyword(location, 'vergers', options),
     vignes: getStocksByKeyword(location, 'vignes', options),
     'sols artificiels': getStocksSolsArtificiels(location, options),
     'produits bois': getStocksWoodProducts(originalLocation, options?.woodCalculation, options),
-    forêts: getStocksForests(location, options),
     haies: getStocksHaies(location, options)
   }
+
+  // extra steps for ground types that are grouped together
+  // prairies
+  const prairieChildren = ['prairies zones arbustives', 'prairies zones herbacées', 'prairies zones arborées']
+  const prairiesSubtypes = {}
+  prairieChildren.forEach((c) => {
+    prairiesSubtypes[c] = getSubStocksByKeyword(location, c, 'prairies', options)
+  })
   Object.assign(stocks, prairiesSubtypes)
+  stocks.prairies = getStocksPrairies(prairiesSubtypes)
   stocks.prairies.children = prairieChildren
+  // forests
+  const forestChildren = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
+  const forestSubtypes = {}
+  options.getLitter = true
+  forestChildren.forEach((c) => {
+    forestSubtypes[c] = getSubStocksByKeyword(location, c, 'forêts', options)
+  })
+  Object.assign(stocks, forestSubtypes)
+  stocks.forêts = getStocksPrairies(forestSubtypes)
+  stocks.forêts.children = forestChildren
 
   // extra data prep for display - TODO: consider whether this is better handled by the handler
   // -- percentages by level 1 ground type

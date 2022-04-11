@@ -77,24 +77,28 @@ module.exports = {
     {
       stocksId: 'forêt mixte',
       name: 'Forêt mixte',
+      shortName: 'Mixte',
       parentType: 'forêts',
       color: 'bourgeon'
     },
     {
       stocksId: 'forêt feuillu',
       name: 'Forêt feuillu',
+      shortName: 'Feuillu',
       parentType: 'forêts',
       color: 'bourgeon'
     },
     {
       stocksId: 'forêt conifere',
-      name: 'Forêt conifere',
+      name: 'Forêt conifère',
+      shortName: 'Conifère',
       parentType: 'forêts',
       color: 'bourgeon'
     },
     {
       stocksId: 'forêt peupleraie',
       name: 'Forêt peupleraie',
+      shortName: 'Peupleraie',
       parentType: 'forêts',
       color: 'bourgeon'
     },

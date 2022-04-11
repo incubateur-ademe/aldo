@@ -45,9 +45,29 @@ test('returns stocks by ground type for a valid EPCI', () => {
   expect(stocks.haies.stockPercentage).toEqual(0.3)
   expect(stocks.haies.area).toEqual(61.68869213)
 
-  expect(stocks.forêts.stock).toEqual(1127615.0067169226)
+  expect(stocks.forêts.stock).toEqual(1127615.0067169224)
   expect(stocks.forêts.stockPercentage).toEqual(70.8)
   expect(stocks.forêts.area).toEqual(6456.9392066)
+
+  expect(stocks['forêt mixte'].parent).toEqual('forêts')
+  expect(stocks['forêt mixte'].area).toEqual(2762.462366)
+  expect(stocks['forêt mixte'].totalDensity).toEqual(180.01374969)
+  expect(stocks['forêt mixte'].stock).toEqual(497281.2088811692)
+
+  expect(stocks['forêt feuillu'].parent).toEqual('forêts')
+  expect(stocks['forêt feuillu'].area).toEqual(951.8722256)
+  expect(stocks['forêt feuillu'].totalDensity).toEqual(180.47012302000002)
+  expect(stocks['forêt feuillu'].stock).toEqual(171784.49765335317)
+
+  expect(stocks['forêt conifere'].parent).toEqual('forêts')
+  expect(stocks['forêt conifere'].area).toEqual(2742.504615)
+  expect(stocks['forêt conifere'].totalDensity).toEqual(167.19547565)
+  expect(stocks['forêt conifere'].stock).toEqual(458534.36357724515)
+
+  expect(stocks['forêt peupleraie'].parent).toEqual('forêts')
+  expect(stocks['forêt peupleraie'].area).toEqual(0.1)
+  expect(stocks['forêt peupleraie'].totalDensity).toEqual(149.36605155)
+  expect(stocks['forêt peupleraie'].stock).toEqual(14.936605155)
 })
 
 test('returns correct wood stocks for consumption calculation type', () => {
