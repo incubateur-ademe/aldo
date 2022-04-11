@@ -7,7 +7,7 @@ const { GroundTypes, Colours } = require(path.join(rootFolder, './calculations/c
 async function territoryHandler (req, res) {
   const epci = await getEpci(req.query.epci) || {}
   const epcis = await epciList()
-  let stocks;
+  let stocks
   if (epci.code) {
     const areaOverrides = {}
     Object.keys(req.query).filter(key => key.startsWith('surface_')).forEach(key => {
@@ -42,7 +42,7 @@ async function territoryHandler (req, res) {
     pascalCase (text) {
       return text.replace(/ /g, '_')
     },
-    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides']
+    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides', 'haies']
   })
 }
 
@@ -129,7 +129,7 @@ function charts (stocks) {
   }
 }
 
-function getColours(groundTypeLabels, colorType) {
+function getColours (groundTypeLabels, colorType) {
   return groundTypeLabels.map(type => {
     const colorKey = GroundTypes.find(gt => gt.name == type).color || 'opera'
     return Colours[colorKey][colorType]

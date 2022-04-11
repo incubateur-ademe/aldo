@@ -128,6 +128,8 @@ function getStocksHaies (location, options) {
   return {
     stock,
     area,
+    biomassDensity: carbonDensity,
+    groundDensity: 0,
     biomassStock: stock,
     totalDensity: carbonDensity
   }
