@@ -71,8 +71,11 @@
                         </button>
                       </td>
                       <td class='expanded-row-content hide-row'>
+                        <!-- TODO: reset input values if URL doesn't contain the relevant query value -->
                         <% if (simpleStocks.indexOf(groundTypes[index].stocksId) > -1) { %>
-                          <%- include('stockCalculations/simple', {index}) -%>
+                          <%- include('stockCalculations/simple', {index, stock: stocks[groundTypes[index].stocksId] }) -%>
+                        <% } else if (stocks[groundTypes[index].stocksId].children) { %>
+                          <%- include('stockCalculations/subTypes', {index}) -%>
                         <% } else { %>
                           <p><i>À venir</i></p>
                         <% } %>
@@ -81,6 +84,7 @@
                   <% } %>
                 </tbody>
             </table>
+            <!-- TODO: reset stocks areas button -->
           </div>
         </form>
         <div class="fr-col-12 fr-col-sm-10 fr-col-md-6 fr-pt-6w">

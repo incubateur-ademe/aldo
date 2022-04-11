@@ -1,0 +1,63 @@
+<p class="fr-text--sm fr-mb-1w">Comment est-ce que c'est calculé&nbsp;?</p>
+<p>Stocks de référence par unité de surface par réservoir&nbsp;:</p>
+<ul class="fr-my-2w">
+  <% for( const subtype of stocks[groundTypes[index].stocksId].children ) { %>
+    <li class="fr-my-1w">
+      <p class="formula">
+        <span class="fr-col-2 fr-text--sm fr-mr-2w fr-mt-2w">
+          <%= allGroundTypes.find((g) => g.stocksId === subtype).shortName %>&nbsp;:&nbsp;
+        </span>
+        <span class="captioned-value fr-col-2">
+          <span class="v fr-text--lg"><%= round(stocks[subtype].groundDensity) %> tC/ha</span>
+          <span class="c fr-text--sm">sol (30 cm)</span>
+        </span>
+        <span class="fr-col-1" style="text-align: center;">+</span>
+        <span class="captioned-value fr-col-3">
+          <span class="v fr-text--lg"><%= round(stocks[subtype].biomassDensity) %> tC/ha</span>
+          <span class="c fr-text--sm">biomasse</span>
+        </span>
+        <span class="fr-col-1" style="text-align: center;">≈</span>
+        <span class="captioned-value fr-col-2">
+          <span class="v fr-text--lg"><%= round(stocks[subtype].totalDensity) %> tC/ha</span>
+          <span class="c fr-text--sm">total</span>
+        </span>
+      </p>
+    </li>
+  <% } %>
+</ul>
+<p>Stocks&nbsp;:</p>
+<ul class="fr-my-2w">
+  <% for( const subtype of stocks[groundTypes[index].stocksId].children ) { %>
+    <li class="fr-my-1w">
+      <p class="formula">
+        <span class="fr-col-2 fr-text--sm fr-mr-2w fr-mt-2w">
+          <%= allGroundTypes.find((g) => g.stocksId === subtype).shortName %>&nbsp;:&nbsp;
+        </span>
+        <span class="captioned-value fr-col-2">
+          <span class="v fr-text--lg"><%= round(stocks[subtype].totalDensity) %></span>
+          <span class="c fr-text--sm">total (tC/ha)</span>
+        </span>
+        <span class="fr-col-1" style="text-align: center;">x</span>
+        <span class="captioned-value fr-col-3">
+          <input
+            class="fr-input fr-text--lg"
+            type="number"
+            inputmode="numeric"
+            value="<%= round(stocks[subtype].area) %>"
+            id="surface-<%= index %>"
+            name="surface_<%= pascalCase(allGroundTypes.find((g) => g.stocksId === subtype).stocksId) %>"
+          >
+          <label class="fr-label fr-text--sm" for="surface-<%= index %>">surface (ha)</label>
+        </span>
+        <span class="fr-col-1" style="text-align: center;">≈</span>
+        <span class="captioned-value fr-col-2">
+          <span class="v fr-text--lg"><%= round(stocks[subtype].stock) %></span>
+          <span class="c fr-text--sm">total (tC)</span>
+        </span>
+      </p>
+    </li>
+  <% } %> 
+</ul>
+<button class="fr-btn" type="submit">
+  Mettre à jour le surface
+</button>

@@ -12,6 +12,19 @@ test('returns stocks by ground type for a valid EPCI', () => {
   expect(stocks.prairies.stockPercentage).toEqual(15.3)
   expect(stocks.prairies.area).toEqual(2599.15354877)
 
+  expect(stocks['prairies zones herbacées'].parent).toEqual('prairies')
+  expect(stocks['prairies zones herbacées'].area).toEqual(2522.1652952)
+  expect(stocks['prairies zones herbacées'].totalDensity).toEqual(93.30767341)
+  // not adding stock tests for prairie subtypes because spreadsheet does something marginally different
+
+  expect(stocks['prairies zones arbustives'].parent).toEqual('prairies')
+  expect(stocks['prairies zones arbustives'].area).toEqual(76.98825357)
+  expect(stocks['prairies zones arbustives'].totalDensity).toEqual(100.30767341)
+
+  expect(stocks['prairies zones arborées'].parent).toEqual('prairies')
+  expect(stocks['prairies zones arborées'].area).toEqual(0)
+  expect(stocks['prairies zones arborées'].totalDensity).toEqual(150.30767341)
+
   expect(stocks['zones humides'].stock).toEqual(6813.237073875)
   expect(stocks['zones humides'].stockPercentage).toEqual(0.4)
   expect(stocks['zones humides'].area).toEqual(54.505896590999996)

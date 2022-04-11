@@ -31,6 +31,7 @@ async function territoryHandler (req, res) {
     epcis,
     epci,
     groundTypes: GroundTypes.filter(type => !type.parentType),
+    allGroundTypes: GroundTypes,
     stocks,
     charts: stocks && charts(stocks),
     formatNumber (number) {
@@ -131,7 +132,7 @@ function charts (stocks) {
 
 function getColours (groundTypeLabels, colorType) {
   return groundTypeLabels.map(type => {
-    const colorKey = GroundTypes.find(gt => gt.name == type).color || 'opera'
+    const colorKey = GroundTypes.find(gt => gt.name === type).color || 'opera'
     return Colours[colorKey][colorType]
   })
 }
