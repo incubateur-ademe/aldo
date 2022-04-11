@@ -75,7 +75,7 @@
                         <% if (simpleStocks.indexOf(groundTypes[index].stocksId) > -1) { %>
                           <%- include('stockCalculations/simple', {index, stock: stocks[groundTypes[index].stocksId] }) -%>
                         <% } else if (stocks[groundTypes[index].stocksId].children) { %>
-                          <%- include('stockCalculations/subTypes', {index}) -%>
+                          <%- include('stockCalculations/subtypes', {index}) -%>
                         <% } else { %>
                           <p><i>À venir</i></p>
                         <% } %>
