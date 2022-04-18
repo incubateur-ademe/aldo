@@ -4,7 +4,7 @@
   <% for( const subtype of stocks[groundTypes[index].stocksId].children ) { %>
     <li class="fr-my-1w">
       <p class="formula">
-        <span class="fr-col-2 fr-text--sm fr-mr-2w fr-mt-2w">
+        <span class="fr-col-2 fr-text--sm fr-mr-2w hyphenate">
           <%= allGroundTypes.find((g) => g.stocksId === subtype).shortName %>&nbsp;:&nbsp;
         </span>
         <span class="captioned-value fr-col-2">
@@ -30,7 +30,7 @@
   <% for( const subtype of stocks[groundTypes[index].stocksId].children ) { %>
     <li class="fr-my-1w">
       <p class="formula">
-        <span class="fr-col-2 fr-text--sm fr-mr-2w fr-mt-2w">
+        <span class="fr-col-2 fr-text--sm fr-mr-2w hyphenate">
           <%= allGroundTypes.find((g) => g.stocksId === subtype).shortName %>&nbsp;:&nbsp;
         </span>
         <span class="captioned-value fr-col-2">

@@ -39,7 +39,19 @@ test('returns stocks by ground type for a valid EPCI', () => {
 
   expect(stocks['sols artificiels'].stock).toEqual(67419.87842026078)
   expect(stocks['sols artificiels'].stockPercentage).toEqual(4.2)
-  expect(stocks['sols artificiels'].area).toEqual(1530.1300535000003)
+  expect(stocks['sols artificiels'].area).toEqual(1530.1300535000005)
+
+  expect(stocks['sols artificiels imperméabilisés'].area).toEqual(1224.1040428000003)
+  expect(stocks['sols artificiels imperméabilisés'].totalDensity).toEqual(30)
+  expect(stocks['sols artificiels imperméabilisés'].stock).toEqual(36723.12128400001)
+
+  expect(stocks['sols artificiels arbustifs'].area).toEqual(306.0260107000001)
+  expect(stocks['sols artificiels arbustifs'].totalDensity).toEqual(100.30767341)
+  expect(stocks['sols artificiels arbustifs'].stock).toEqual(30696.757136260774)
+
+  expect(stocks['sols artificiels arborés et buissonants'].area).toEqual(0)
+  expect(stocks['sols artificiels arborés et buissonants'].totalDensity).toEqual(145.56920809000002)
+  expect(stocks['sols artificiels arborés et buissonants'].stock).toEqual(0)
 
   expect(stocks.haies.stock).toEqual(5085.895944561377)
   expect(stocks.haies.stockPercentage).toEqual(0.3)
@@ -86,13 +98,13 @@ test('returns correct wood stocks for harvest calculation type', () => {
 })
 
 test('returns stocks according to provided area overrides', () => {
-  const area = {
+  const areas = {
     cultures: 0,
     'prairies zones herbacées': 10,
     'prairies zones arbustives': 20,
     'prairies zones arborées': 30
   }
-  const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { area })
+  const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { areas })
   expect(stocks.cultures.stock).toEqual(0)
   expect(stocks.prairies.stock).toEqual(7448.4604046)
   // test that if area is not given, our area data is used

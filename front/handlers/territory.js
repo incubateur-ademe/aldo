@@ -15,7 +15,7 @@ async function territoryHandler (req, res) {
       areaOverrides[groundType] = parseFloat(req.query[key])
     })
     const options = {
-      area: areaOverrides,
+      areas: areaOverrides,
       woodCalculation: req.query['répartition_produits_bois'] || 'récolte'
     }
     stocks = await getStocks({ epci }, options)

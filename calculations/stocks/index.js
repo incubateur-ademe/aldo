@@ -15,7 +15,7 @@ function getArea (location, key, overrides) {
 }
 
 function getStocksByKeyword (location, keyword, options) {
-  const area = getArea(location, keyword, options.area)
+  const area = getArea(location, keyword, options.areas)
   const groundDensity = getCarbonDensity(location, options.groundKeyword || keyword)
   const groundStock = groundDensity * area
   const biomassDensity = getBiomassCarbonDensity(location, keyword)
@@ -41,7 +41,6 @@ function getStocksByKeyword (location, keyword, options) {
 
 function getSubStocksByKeyword (location, keyword, parent, options) {
   options = JSON.parse(JSON.stringify(options))
-  options.groundKeyword = parent
   const stocks = getStocksByKeyword(location, keyword, options)
   stocks.parent = parent
   return stocks
@@ -67,15 +66,26 @@ function getStocksPrairies (subStocks) {
   return stocks
 }
 
-function getStocksSolsArtificiels (location, options) {
+function getAreasSolsArtificiels (location, options) {
+  const impermeableKey = 'sols artificiels imperméabilisés'
+  const shrubbyKey = 'sols artificiels arbustifs'
+  const treeKey = 'sols artificiels arborés et buissonants'
+  if (options.areas[impermeableKey] || options.areas[impermeableKey] === 0) {
+    const areas = {}
+    areas[impermeableKey] = options.areas[impermeableKey]
+    areas[shrubbyKey] = options.areas[shrubbyKey]
+    areas[treeKey] = options.areas[treeKey]
+    areas.totalArea = areas[impermeableKey] + areas[shrubbyKey] + areas[treeKey]
+    return areas
+  }
   // there are three different types of arificial ground to consider:
   // * impermeable
   // * with trees
   // * with other greenery (shrubbery, grass etc)
 
   // start by estimating the area taken by each
-  const areaWithoutTrees = getArea(location, 'sols artificiels non-arborés', options.area)
-  const areaWithTrees = getArea(location, 'sols arborés', options.area)
+  const areaWithoutTrees = getArea(location, 'sols artificiels non-arborés', {})
+  const areaWithTrees = getArea(location, 'sols arborés', {})
   const totalArea = areaWithoutTrees + areaWithTrees
 
   // TODO: ask are there sources to cite for these estimates?
@@ -96,41 +106,17 @@ function getStocksSolsArtificiels (location, options) {
     areaShrubby = estimatedPortionGreen * (areaWithoutTrees + areaWithTrees) - areaWithTrees
   }
 
-  let groundStock = 0
-  let biomassStock = 0
-  const densities = {}
-
-  let groundDensity = getCarbonDensity(location, 'sols artificiels imperméabilisés')
-  groundStock += groundDensity * areaImpermeable
-  let biomassDensity = getBiomassCarbonDensity(location, 'sols artificiels imperméabilisés')
-  biomassStock += biomassDensity * areaImpermeable
-  densities['sols artificiels imperméabilisés'] = groundDensity + biomassDensity
-
-  groundDensity = getCarbonDensity(location, 'sols artificiels enherbés')
-  groundStock += groundDensity * areaShrubby
-  biomassDensity = getBiomassCarbonDensity(location, 'sols artificiels arbustifs')
-  biomassStock += biomassDensity * areaShrubby
-  densities['sols artificiels arbustifs'] = groundDensity + biomassDensity
-
-  groundDensity = getCarbonDensity(location, 'sols artificiels arborés et buissonants')
-  groundStock += groundDensity * areaWithTrees
-  biomassDensity = getBiomassCarbonDensity(location, 'sols artificiels arborés et buissonants')
-  biomassStock += biomassDensity * areaWithTrees
-  densities['sols artificiels arborés et buissonants'] = groundDensity + biomassDensity
-
-  return {
-    stock: groundStock + biomassStock,
-    area: totalArea,
-    groundStock,
-    biomassStock,
-    densities
-  }
+  const areas = { area: totalArea }
+  areas[impermeableKey] = areaImpermeable
+  areas[shrubbyKey] = areaShrubby
+  areas[treeKey] = areaWithTrees
+  return areas
 }
 
 function getStocksHaies (location, options) {
   // TODO: ask more about this calculation - reusing forest carbon density?
   const carbonDensity = getBiomassCarbonDensity(location, 'forêt mixte')
-  const area = getArea(location, 'haies', options.area)
+  const area = getArea(location, 'haies', options.areas)
   const stock = carbonDensity * area
   return {
     stock,
@@ -152,12 +138,12 @@ function getStocks (location, options) {
   const originalLocation = location
   location = { epci: location.epci.code } // TODO: change the other APIs to use whole EPCI object like stocks wood products?
   options = options || {}
+  options.areas = options.areas || {}
   const stocks = {
     cultures: getStocksByKeyword(location, 'cultures', options),
     'zones humides': getStocksByKeyword(location, 'zones humides', options),
     vergers: getStocksByKeyword(location, 'vergers', options),
     vignes: getStocksByKeyword(location, 'vignes', options),
-    'sols artificiels': getStocksSolsArtificiels(location, options),
     'produits bois': getStocksWoodProducts(originalLocation, options?.woodCalculation, options),
     haies: getStocksHaies(location, options)
   }
@@ -167,7 +153,10 @@ function getStocks (location, options) {
   const prairieChildren = ['prairies zones arbustives', 'prairies zones herbacées', 'prairies zones arborées']
   const prairiesSubtypes = {}
   prairieChildren.forEach((c) => {
-    prairiesSubtypes[c] = getSubStocksByKeyword(location, c, 'prairies', options)
+    prairiesSubtypes[c] = getSubStocksByKeyword(location, c, 'prairies', {
+      areas: options.areas,
+      groundKeyword: 'prairies'
+    })
   })
   Object.assign(stocks, prairiesSubtypes)
   stocks.prairies = getStocksPrairies(prairiesSubtypes)
@@ -175,13 +164,29 @@ function getStocks (location, options) {
   // forests
   const forestChildren = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
   const forestSubtypes = {}
-  options.getLitter = true
   forestChildren.forEach((c) => {
-    forestSubtypes[c] = getSubStocksByKeyword(location, c, 'forêts', options)
+    forestSubtypes[c] = getSubStocksByKeyword(location, c, 'forêts', {
+      areas: options.areas,
+      groundKeyword: 'forêts',
+      getLitter: true
+    })
   })
   Object.assign(stocks, forestSubtypes)
   stocks.forêts = getStocksPrairies(forestSubtypes)
   stocks.forêts.children = forestChildren
+  // sols artificiels
+  Object.assign(options.areas, getAreasSolsArtificiels(location, options))
+  const solArtChildren = ['sols artificiels imperméabilisés', 'sols artificiels arbustifs', 'sols artificiels arborés et buissonants']
+  const solArtSubtypes = {}
+  solArtChildren.forEach((c) => {
+    solArtSubtypes[c] = getSubStocksByKeyword(location, c, 'sols artificiels', {
+      areas: options.areas,
+      groundKeyword: c.endsWith('arbustifs') ? 'sols artificiels enherbés' : undefined
+    })
+  })
+  Object.assign(stocks, solArtSubtypes)
+  stocks['sols artificiels'] = getStocksPrairies(solArtSubtypes)
+  stocks['sols artificiels'].children = solArtChildren
 
   // extra data prep for display - TODO: consider whether this is better handled by the handler
   // -- percentages by level 1 ground type

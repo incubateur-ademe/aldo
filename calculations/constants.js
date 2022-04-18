@@ -54,18 +54,21 @@ module.exports = {
     {
       stocksId: 'sols artificiels imperméabilisés',
       name: 'Sols artificiels imperméabilisés',
+      shortName: 'Imperméabilisés',
       parentType: 'sols artificiels',
       color: 'gris'
     },
     {
       stocksId: 'sols artificiels arbustifs',
       name: 'Sols artificiels arbustifs',
+      shortName: 'Arbustifs',
       parentType: 'sols artificiels',
       color: 'gris'
     },
     {
       stocksId: 'sols artificiels arborés et buissonants',
       name: 'Sols artificiels arborés et buissonants',
+      shortName: 'Arborés et buissonants',
       parentType: 'sols artificiels',
       color: 'gris'
     },

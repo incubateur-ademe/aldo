@@ -60,9 +60,15 @@ tr.expandable-row:hover {
 
 .formula {
   display: flex;
+  align-items: center;
 }
 
 .captioned-value {
   display: flex;
   flex-direction: column;
+}
+
+.hyphenate {
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
