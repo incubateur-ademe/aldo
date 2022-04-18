@@ -8,6 +8,7 @@ async function territoryHandler (req, res) {
   const epci = await getEpci(req.query.epci) || {}
   const epcis = await epciList()
   let stocks
+  const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
   if (epci.code) {
     const areaOverrides = {}
     Object.keys(req.query).filter(key => key.startsWith('surface_')).forEach(key => {
@@ -16,7 +17,7 @@ async function territoryHandler (req, res) {
     })
     const options = {
       areas: areaOverrides,
-      woodCalculation: req.query['répartition_produits_bois'] || 'récolte'
+      woodCalculation
     }
     stocks = await getStocks({ epci }, options)
   } else {
@@ -43,7 +44,8 @@ async function territoryHandler (req, res) {
     pascalCase (text) {
       return text.replace(/ /g, '_')
     },
-    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides', 'haies']
+    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides', 'haies'],
+    woodCalculation
   })
 }
 

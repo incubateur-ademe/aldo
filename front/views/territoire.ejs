@@ -76,8 +76,8 @@
                           <%- include('stockCalculations/simple', {index, stock: stocks[groundTypes[index].stocksId] }) -%>
                         <% } else if (stocks[groundTypes[index].stocksId].children) { %>
                           <%- include('stockCalculations/subtypes', {index}) -%>
-                        <% } else { %>
-                          <p><i>À venir</i></p>
+                        <% } else if (groundTypes[index].stocksId === 'produits bois') { %>
+                          <%- include('stockCalculations/wood', {index}) -%>
                         <% } %>
                       </td>
                     </tr>

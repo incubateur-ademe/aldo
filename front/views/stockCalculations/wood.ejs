@@ -1,0 +1,32 @@
+<div class="fr-form-group">
+  <fieldset class="fr-fieldset">
+    <legend class="fr-fieldset__legend fr-text--regular" id='radio-legend'>
+      Choix de l'hypothèse sur la répartition du produit bois :
+    </legend>
+    <div class="fr-fieldset__content">
+      <div class="fr-radio-group">
+        <input
+          type="radio"
+          id="recolte"
+          name="répartition_produits_bois"
+          value="récolte"
+          <% if (woodCalculation === 'récolte') { %> checked <% } %>
+        >
+        <label class="fr-label" for="recolte">Récolte</label>
+      </div>
+      <div class="fr-radio-group">
+        <input
+          type="radio"
+          id="consommation"
+          name="répartition_produits_bois"
+          value="consommation"
+          <% if (woodCalculation === 'consommation') { %> checked <% } %>
+        >
+        <label class="fr-label" for="consommation">Consommation</label>
+      </div>
+    </div>
+  </fieldset>
+</div>
+<button class="fr-btn" type="submit">
+  Mettre à jour le calcul
+</button>
