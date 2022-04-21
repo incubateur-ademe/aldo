@@ -27,11 +27,19 @@ async function territoryHandler (req, res) {
     })
     return
   }
+  const groundTypes = GroundTypes.filter(type => !type.parentType)
+  groundTypes.sort((a, b) => {
+    const stockA = stocks[a.stocksId].stock
+    const stockB = stocks[b.stocksId].stock
+    if (stockA < stockB) return 1
+    else if (stockA === stockB) return 0
+    else return -1
+  })
   res.render('territoire', {
     pageTitle: `${epci.nom}`,
     epcis,
     epci,
-    groundTypes: GroundTypes.filter(type => !type.parentType),
+    groundTypes,
     allGroundTypes: GroundTypes,
     stocks,
     charts: stocks && charts(stocks),
