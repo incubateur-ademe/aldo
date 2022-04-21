@@ -72,3 +72,21 @@ tr.expandable-row:hover {
   overflow-wrap: break-word;
   hyphens: auto;
 }
+
+@media print {
+  header {
+    display: none;
+  }
+
+  .no-print {
+    display: none;
+  }
+
+  footer {
+    display: none;
+  }
+
+  .fr-collapse {
+    display: block;
+  }
+}

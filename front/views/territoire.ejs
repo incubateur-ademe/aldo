@@ -1,139 +1,163 @@
 <%- include('partials/search-header') -%>
-<main role="main" id="contenu">
-  <div class="fr-container fr-py-6w fr-px-2w">
+  <main role="main" id="contenu">
+    <div class="fr-container fr-py-6w fr-px-2w">
 
-    <% if (epci.code) { %>
-      <h1><%= epci.nom %></h1>
-
-      <p>SIREN : <%= epci.code %></p>
-      <p>Population : <%= formatNumber(epci.populationTotale) %></p>
-
-      <% if (epci.membres) { %>
-        <section class="fr-accordion">
-          <h3 class="fr-accordion__title">
-              <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-communes"><%= epci.membres.length %> communes</button>
-          </h3>
-          <div class="fr-collapse" id="accordion-communes">
-            <ul>
-              <div class="fr-grid-row">
-                <% for( let index = 0; index < epci.membres.length; index++ ) { %>
-                  <div class="fr-col-12 fr-sm-col-6 fr-col-md-4">
-                    <li><%= epci.membres[index].nom %> </li>
-                  </div>
-                <% } %>
-              </div>
-            </ul>
-          </div>
-        </section>
-      <% } else { %>
-        <p><%= epci.nombreCommunes %> communes</p>
-      <% } %>
-      <div class="fr-grid-row fr-mt-3w">
-        <div class="fr-col-12 fr-col-md-6 fr-pr-md-1w">
-          
-          <form action="/territoire" method="GET" class="fr-table fr-table--no-scroll">
-            <input type="hidden" name="epci" value="<%= epci.nom %>" />
-            <table>
-                <caption class="fr-h2">Stocks de carbone</caption>
-                <thead>
-                    <tr class="expandable-row-header stocks-row">
-                        <th scope="col">Occupation du sol</th>
-                        <th scope="col">Surface (ha)</th>
-                        <th scope="col">Stocks carbone (tC)</th>
-                        <th scope="col">Stocks proportion</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                  <% for( let index = 0; index < groundTypes.length; index++ ) { %>
-                    <tr class="expandable-row stocks-row">
-                      <td onClick='toggleRow(this)'><%= groundTypes[index].name %></td>
-                      <td onClick='toggleRow(this)' style="text-align: right;">
-                        <% if (stocks[groundTypes[index].stocksId].area !== undefined) { %>
-                          <%= formatNumber(stocks[groundTypes[index].stocksId].area) %>
-                        <% } else { %>
-                          <i>Pas applicable</i>
-                        <% } %>
-                      </td>
-                      <td onClick='toggleRow(this)' style="text-align: right;">
-                        <%= formatNumber(stocks[groundTypes[index].stocksId].stock) %>
-                      </td>
-                      <td onClick='toggleRow(this)' style="text-align: right;">
-                        <% if (stocks[groundTypes[index].stocksId].stockPercentage > 10) { %>
-                          <b><%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %</b>
-                        <% } else { %>
-                          <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
-                        <% } %>
-                      </td>
-                      <td onClick='toggleRow(this)'>
-                        <button onClick='toggleRow(this)' type="button">
-                          <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
-                        </button>
-                      </td>
-                      <td class='expanded-row-content hide-row'>
-                        <!-- TODO: reset input values if URL doesn't contain the relevant query value -->
-                        <% if (simpleStocks.indexOf(groundTypes[index].stocksId) > -1) { %>
-                          <%- include('stockCalculations/simple', {index, stock: stocks[groundTypes[index].stocksId] }) -%>
-                        <% } else if (stocks[groundTypes[index].stocksId].children) { %>
-                          <%- include('stockCalculations/subtypes', {index}) -%>
-                        <% } else if (groundTypes[index].stocksId === 'produits bois') { %>
-                          <%- include('stockCalculations/wood', {index}) -%>
-                        <% } %>
-                      </td>
-                    </tr>
-                  <% } %>
-                </tbody>
-            </table>
-            <!-- TODO: reset stocks areas button -->
-          </div>
-        </form>
-        <div class="fr-col-12 fr-col-sm-10 fr-col-md-6 fr-pt-6w">
-          <!-- TODO: test a11y of these charts -->
-          <h3>Résultats graphiques</h3>
-          <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
-            <% for (let keyIdx = 0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
-              <li>
-                <section class="fr-accordion">
-                  <h4 class="fr-accordion__title">
-                    <button class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>" aria-controls="accordion-chart-<%= keyIdx %>">
-                      <%= charts[Object.keys(charts)[keyIdx]].title %>
-                    </button>
-                  </h4>
-                  <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
-                    <canvas id="chart-<%= Object.keys(charts)[keyIdx] %>" width="400" height="400"></canvas>
-                  </div>
-                </section>
-              </li>
-            <% } %>
-          </ul>
-        </div>
+      <div class="fr-grid-row fr-grid-row--right no-print">
+        <button onclick="window.print()" class="fr-btn fr-btn--secondary">
+          Imprimer cette page
+        </button>
       </div>
-    <% } else { %>
-      <h1>Aucun EPCI trouvé</h1>
-    <% } %>
-  </div>
-</main>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  // thanks to https://github.com/chhikaradi1993/Expandable-table-row
-  const toggleRow = (element) => {
-    if (element.nodeName === "BUTTON") {
-      element = element.parentElement;
+
+      <% if (epci.code) { %>
+        <h1>
+          <%= epci.nom %>
+        </h1>
+
+        <p>
+          SIREN : <%= epci.code %>
+        </p>
+        <p>
+          Population : <%= formatNumber(epci.populationTotale) %>
+        </p>
+
+        <% if (epci.membres) { %>
+          <section class="fr-accordion">
+            <h3 class="fr-accordion__title">
+              <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-communes">
+                <%= epci.membres.length %> communes
+              </button>
+            </h3>
+            <div class="fr-collapse" id="accordion-communes">
+              <ul>
+                <div class="fr-grid-row">
+                  <% for( let index=0; index < epci.membres.length; index++ ) { %>
+                    <div class="fr-col-12 fr-sm-col-6 fr-col-md-4">
+                      <li>
+                        <%= epci.membres[index].nom %>
+                      </li>
+                    </div>
+                    <% } %>
+                </div>
+              </ul>
+            </div>
+          </section>
+          <% } else { %>
+            <p>
+              <%= epci.nombreCommunes %> communes
+            </p>
+            <% } %>
+              <div class="fr-grid-row fr-mt-3w">
+                <div class="fr-col-12 fr-col-md-6 fr-pr-md-1w">
+
+                  <form action="/territoire" method="GET" class="fr-table fr-table--no-scroll">
+                    <input type="hidden" name="epci" value="<%= epci.nom %>" />
+                    <table>
+                      <caption class="fr-h2">Stocks de carbone</caption>
+                      <thead>
+                        <tr class="expandable-row-header stocks-row">
+                          <th scope="col">Occupation du sol</th>
+                          <th scope="col">Surface (ha)</th>
+                          <th scope="col">Stocks carbone (tC)</th>
+                          <th scope="col">Stocks proportion</th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% for( let index=0; index < groundTypes.length; index++ ) { %>
+                          <tr class="expandable-row stocks-row">
+                            <td onClick='toggleRow(this)'>
+                              <%= groundTypes[index].name %>
+                            </td>
+                            <td onClick='toggleRow(this)' style="text-align: right;">
+                              <% if (stocks[groundTypes[index].stocksId].area !==undefined) { %>
+                                <%= formatNumber(stocks[groundTypes[index].stocksId].area) %>
+                                  <% } else { %>
+                                    <i>Pas applicable</i>
+                                    <% } %>
+                            </td>
+                            <td onClick='toggleRow(this)' style="text-align: right;">
+                              <%= formatNumber(stocks[groundTypes[index].stocksId].stock) %>
+                            </td>
+                            <td onClick='toggleRow(this)' style="text-align: right;">
+                              <% if (stocks[groundTypes[index].stocksId].stockPercentage> 10) { %>
+                                <b>
+                                  <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
+                                </b>
+                                <% } else { %>
+                                  <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
+                                    <% } %>
+                            </td>
+                            <td onClick='toggleRow(this)'>
+                              <button onClick='toggleRow(this)' type="button">
+                                <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
+                              </button>
+                            </td>
+                            <td class='expanded-row-content hide-row'>
+                              <!-- TODO: reset input values if URL doesn't contain the relevant query value -->
+                              <% if (simpleStocks.indexOf(groundTypes[index].stocksId)> -1) { %>
+                                <%- include('stockCalculations/simple', {index, stock:
+                                  stocks[groundTypes[index].stocksId] }) -%>
+                                  <% } else if (stocks[groundTypes[index].stocksId].children) { %>
+                                    <%- include('stockCalculations/subtypes', {index}) -%>
+                                      <% } else if (groundTypes[index].stocksId==='produits bois' ) { %>
+                                        <%- include('stockCalculations/wood', {index}) -%>
+                                          <% } %>
+                            </td>
+                          </tr>
+                          <% } %>
+                      </tbody>
+                    </table>
+                    <!-- TODO: reset stocks areas button -->
+                </div>
+                </form>
+                <div class="fr-col-12 fr-col-sm-10 fr-col-md-6 fr-pt-6w">
+                  <!-- TODO: test a11y of these charts -->
+                  <h3>Résultats graphiques</h3>
+                  <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
+                    <% for (let keyIdx=0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
+                      <li>
+                        <section class="fr-accordion">
+                          <h4 class="fr-accordion__title">
+                            <button class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
+                              aria-controls="accordion-chart-<%= keyIdx %>">
+                              <%= charts[Object.keys(charts)[keyIdx]].title %>
+                            </button>
+                          </h4>
+                          <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
+                            <canvas id="chart-<%= Object.keys(charts)[keyIdx] %>" width="400" height="400"></canvas>
+                          </div>
+                        </section>
+                      </li>
+                      <% } %>
+                  </ul>
+                </div>
+              </div>
+              <% } else { %>
+                <h1>Aucun EPCI trouvé</h1>
+                <% } %>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // thanks to https://github.com/chhikaradi1993/Expandable-table-row
+    const toggleRow = (element) => {
+      if (element.nodeName === "BUTTON") {
+        element = element.parentElement;
+      }
+      element.parentElement.getElementsByClassName('expanded-row-content')[0].classList.toggle('hide-row');
+      event.stopPropagation();
     }
-    element.parentElement.getElementsByClassName('expanded-row-content')[0].classList.toggle('hide-row');
-    event.stopPropagation();
-  }
 
-  const groundTypeCtx = document.getElementById('chart-groundType');
-  const groundTypeChartData = JSON.parse(`<%- charts.groundType.data %>`);
-  new Chart(groundTypeCtx, groundTypeChartData);
+    const groundTypeCtx = document.getElementById('chart-groundType');
+    const groundTypeChartData = JSON.parse(`<%- charts.groundType.data %>`);
+    new Chart(groundTypeCtx, groundTypeChartData);
 
-  const ctx = document.getElementById('chart-reservoir');
-  const chartData = JSON.parse(`<%- charts.reservoir.data %>`);
-  new Chart(ctx, chartData);
+    const ctx = document.getElementById('chart-reservoir');
+    const chartData = JSON.parse(`<%- charts.reservoir.data %>`);
+    new Chart(ctx, chartData);
 
-  const densityCtx = document.getElementById('chart-density');
-  const densityChartData = JSON.parse(`<%- charts.density.data %>`);
-  new Chart(densityCtx, densityChartData);
-</script>
-<%- include('partials/footer') -%>
+    const densityCtx = document.getElementById('chart-density');
+    const densityChartData = JSON.parse(`<%- charts.density.data %>`);
+    new Chart(densityCtx, densityChartData);
+  </script>
+  <%- include('partials/footer') -%>
