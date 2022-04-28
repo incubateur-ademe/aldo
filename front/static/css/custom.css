@@ -22,7 +22,7 @@ span.tofill::before {
 }
 /* ADEME logo */
 .fr-header__operator {
-  max-width: 5.8rem;
+  width: 5.8rem;
   padding-top: 1.2em;
 }
 .fr-footer__logo {
