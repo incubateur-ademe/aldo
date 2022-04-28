@@ -113,33 +113,37 @@ module.exports = {
     {
       stocksId: 'haies',
       name: 'Haies',
-      color: 'moutard'
+      color: 'emeraude'
     }
   ],
   Colours: {
+    terre: { // orange
+      main: '#E4794A',
+      950: '#fee9e5'
+    },
     bourgeon: { // green
       main: '#68A532',
       950: '#C9FCAC'
-    },
-    ecume: { // blue
-      main: '#465F9D',
-      950: '#E9EDFE'
     },
     glycine: { // purple
       main: '#A55A80',
       950: '#FEE7FC'
     },
+    opera: { // brown
+      main: '#BD987A',
+      950: '#f7ece4'
+    },
     caramel: { // brown
       main: '#C08C65',
       950: '#F7EBE5'
     },
+    ecume: { // blue
+      main: '#465F9D',
+      950: '#E9EDFE'
+    },
     verveine: { // green
       main: '#B7A73F',
       950: '#fceeac'
-    },
-    terre: { // orange
-      main: '#E4794A',
-      950: '#fee9e5'
     },
     emeraude: { // green
       main: '#00A95F',
@@ -164,10 +168,6 @@ module.exports = {
     tuile: { // pink
       main: '#CE614A',
       950: '#fee9e7'
-    },
-    opera: { // brown
-      main: '#BD987A',
-      950: '#f7ece4'
     },
     cumulus: { // blue
       main: '#417DC4',

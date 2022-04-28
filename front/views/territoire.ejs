@@ -22,11 +22,11 @@
 
         <% if (epci.membres) { %>
           <section class="fr-accordion">
-            <h3 class="fr-accordion__title">
+            <p class="fr-accordion__title">
               <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-communes">
                 <%= epci.membres.length %> communes
               </button>
-            </h3>
+            </p>
             <div class="fr-collapse" id="accordion-communes">
               <ul>
                 <div class="fr-grid-row">
@@ -52,14 +52,14 @@
                   <form action="/territoire" method="GET" class="fr-table fr-table--no-scroll">
                     <input type="hidden" name="epci" value="<%= epci.nom %>" />
                     <table>
-                      <caption class="fr-h2">Stocks de carbone</caption>
+                      <caption><h2>Stocks de carbone</h2></caption>
                       <thead>
                         <tr class="expandable-row-header stocks-row">
                           <th scope="col">Occupation du sol</th>
                           <th scope="col">Surface (ha)</th>
                           <th scope="col">Stocks carbone (tC)</th>
                           <th scope="col">Stocks proportion</th>
-                          <th scope="col"></th>
+                          <td scope="col"></td>
                         </tr>
                       </thead>
                       <tbody>
