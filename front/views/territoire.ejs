@@ -156,5 +156,13 @@
     const densityCtx = document.getElementById('chart-density');
     const densityChartData = JSON.parse(`<%- charts.density.data %>`);
     new Chart(densityCtx, densityChartData);
+
+    const groundAndLitterCtx = document.getElementById('chart-groundAndLitter');
+    const groundAndLitterChartData = JSON.parse(`<%- charts.groundAndLitter.data %>`);
+    new Chart(groundAndLitterCtx, groundAndLitterChartData);
+
+    const biomassCtx = document.getElementById('chart-biomass');
+    const biomassChartData = JSON.parse(`<%- charts.biomass.data %>`);
+    new Chart(biomassCtx, biomassChartData);
   </script>
   <%- include('partials/footer') -%>

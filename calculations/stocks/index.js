@@ -192,8 +192,15 @@ function getStocks (location, options) {
   // -- percentages by level 1 ground type
   const parentTypes = Object.keys(stocks).filter((s) => !stocks[s].parent)
   const stocksTotal = parentTypes.reduce((a, b) => a + stocks[b].stock, 0)
+  const groundAndLitterStocksTotal = parentTypes.reduce((a, b) => {
+    return a + (stocks[b].groundStock || 0) + (stocks[b].forestLitterStock || 0)
+  }, 0)
+  const biomassStocksTotal = parentTypes.reduce((a, b) => a + (stocks[b].biomassStock || 0), 0)
   for (const key of parentTypes) {
     stocks[key].stockPercentage = asPercentage(stocks[key].stock, stocksTotal)
+    const groundAndLitter = stocks[key].groundStock + (stocks[key].forestLitterStock || 0)
+    stocks[key].groundAndLitterStockPercentage = asPercentage(groundAndLitter, groundAndLitterStocksTotal)
+    stocks[key].biomassStockPercentage = asPercentage(stocks[key].biomassStock, biomassStocksTotal)
   }
   // -- percentage stock by reservoir
   const groundStock = parentTypes.reduce((acc, cur) => acc + (stocks[cur].groundStock || 0), 0)

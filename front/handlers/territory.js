@@ -62,32 +62,19 @@ function charts (stocks) {
   const chartBorderColors = Object.values(Colours).map(c => c.main)
   const stocksPercentageLabels = []
   const stocksPercentageValues = []
+  const groundAndLitterStocksValues = []
+  const biomassStocksValues = []
   Object.keys(stocks).forEach(key => {
     if (stocks[key].stockPercentage >= 0) {
       stocksPercentageLabels.push(GroundTypes.find(gt => gt.stocksId === key).name)
       stocksPercentageValues.push(stocks[key].stockPercentage)
+      groundAndLitterStocksValues.push(stocks[key].groundAndLitterStockPercentage)
+      biomassStocksValues.push(stocks[key].biomassStockPercentage)
     }
   })
   const stocksDensityLabels = Object.keys(stocks.byDensity).map(key => GroundTypes.find(k => k.stocksId === key)?.name)
   return {
-    groundType: {
-      // TODO: ask why produits bois is not included, and why forest is level 2 but prairies level 1
-      title: 'Répartition des stocks de carbone par occupation du sol',
-      data: JSON.stringify({
-        type: 'pie',
-        data: {
-          labels: stocksPercentageLabels.map(key => '% ' + key),
-          datasets: [{
-            label: 'Répartition des stocks de carbone par occupation du sol',
-            // TODO: use a mapping for key to display name instead
-            data: stocksPercentageValues,
-            backgroundColor: getColours(stocksPercentageLabels, '950'),
-            borderColor: getColours(stocksPercentageLabels, 'main'),
-            borderWidth: 2
-          }]
-        }
-      })
-    },
+    groundType: pieChart('Répartition des stocks de carbone par occupation du sol', stocksPercentageLabels, stocksPercentageValues),
     reservoir: {
       title: 'Répartition du stock par reservoir',
       data: JSON.stringify({
@@ -136,7 +123,9 @@ function charts (stocks) {
           }
         }
       })
-    }
+    },
+    groundAndLitter: pieChart('Répartition des stocks de carbone dans les sols et litière par occupation du sol', stocksPercentageLabels, groundAndLitterStocksValues),
+    biomass: pieChart('Répartition des stocks de carbone dans la biomasse par occupation du sol', stocksPercentageLabels, biomassStocksValues)
   }
 }
 
@@ -145,6 +134,25 @@ function getColours (groundTypeLabels, colorType) {
     const colorKey = GroundTypes.find(gt => gt.name === type).color || 'opera'
     return Colours[colorKey][colorType]
   })
+}
+
+function pieChart (title, labels, values) {
+  return {
+    title,
+    data: JSON.stringify({
+      type: 'pie',
+      data: {
+        labels: labels.map(key => '% ' + key),
+        datasets: [{
+          label: title,
+          data: values,
+          backgroundColor: getColours(labels, '950'),
+          borderColor: getColours(labels, 'main'),
+          borderWidth: 2
+        }]
+      }
+    })
+  }
 }
 
 module.exports = {
