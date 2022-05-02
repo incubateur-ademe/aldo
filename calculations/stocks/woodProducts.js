@@ -1,10 +1,9 @@
 const {
-  getPopulationTotal,
   getFranceStocksWoodProducts,
   getAnnualWoodProductsHarvest,
-  getAnnualFranceWoodProductsHarvest,
-  epciList
-} = require('../../data')
+  getAnnualFranceWoodProductsHarvest
+} = require('../../data/stocks')
+const { epciList, getPopulationTotal } = require('../../data')
 
 function co2ToCarbon (co2) {
   return co2 * 12 / 44
@@ -26,7 +25,7 @@ function getStocksByHarvest (location) {
   const franceAnnualWoodProductsHarvest = getAnnualFranceWoodProductsHarvest()
   const franceStocksByCategory = getFranceStocksWoodProducts()
 
-  function stockByProportionHarvest(composition, category) {
+  function stockByProportionHarvest (composition, category) {
     const franceHarvestCategoryTotal = franceAnnualWoodProductsHarvest.feuillus[category] + franceAnnualWoodProductsHarvest.coniferes[category]
     const proportionHarvest = localAnnualWoodProductsHarvest[composition][category] / franceHarvestCategoryTotal
     const franceStocksForCategory = franceStocksByCategory[category]

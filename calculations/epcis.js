@@ -1,4 +1,4 @@
-const { epciList } = require('../data/index')
+const { epciList } = require('../data')
 const epcis = require('@etalab/decoupage-administratif/data/epci.json')
 
 function getEpci (name) {

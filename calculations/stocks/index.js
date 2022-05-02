@@ -3,7 +3,7 @@ const {
   getCarbonDensity,
   getBiomassCarbonDensity,
   getForestLitterCarbonDensity
-} = require('../../data')
+} = require('../../data/stocks')
 const { getStocksWoodProducts } = require('./woodProducts')
 
 function getArea (location, key, overrides) {

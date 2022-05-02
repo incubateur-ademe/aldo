@@ -2,13 +2,11 @@ const {
   getCarbonDensity,
   getArea,
   getBiomassCarbonDensity,
-  epciList,
-  getPopulationTotal,
   getFranceStocksWoodProducts,
   getAnnualWoodProductsHarvest,
   getAnnualFranceWoodProductsHarvest,
   getForestLitterCarbonDensity
-} = require('./index')
+} = require('../stocks')
 // TODO: mock data sources?
 
 test('returns ground carbon density (as tC/ha) given valid ground type and EPCI SIREN', () => {
@@ -46,10 +44,6 @@ test('returns area of haies (as ha) given valid EPCI SIREN', () => {
 
 test('returns area of poplars (as ha) given valid EPCI SIREN', () => {
   expect(getArea({ epci: '249500513' }, 'forêt peupleraie')).toBe(212.4)
-})
-
-test('returns population total for EPCIs in system', () => {
-  expect(getPopulationTotal(epciList())).toBe(65705495)
 })
 
 test('returns stocks of produits bois for France', () => {
@@ -99,9 +93,4 @@ test('throws error when attempting to get forest litter carbon density for inval
 
 test('returns biomass carbon density (as tC/ha) for poplar groves', () => {
   expect(getBiomassCarbonDensity({ epci: '200000172' }, 'forêt peupleraie')).toBe(51.79684346)
-})
-
-test('returns EPCI list', () => {
-  const list = epciList()
-  expect(list.length).toBe(1248)
 })
