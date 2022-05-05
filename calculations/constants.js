@@ -3,48 +3,63 @@ module.exports = {
     {
       stocksId: 'cultures',
       name: 'Cultures',
-      color: 'terre'
+      color: 'terre',
+      fluxId: 'cult',
+      clcCodes: ['211', '212', '213', '241', '242', '243', '244']
     },
     {
       stocksId: 'prairies',
       name: 'Prairies',
-      color: 'tournesol'
+      color: 'tournesol',
+      clcCodes: ['231', '321', '322', '323']
     },
     {
       stocksId: 'prairies zones arborées',
       name: 'Prairies zones arborées',
       shortName: 'Arborées',
       parentType: 'prairies',
-      color: 'tournesol'
+      fluxId: 'prai',
+      color: 'tournesol',
+      clcCodes: ['323']
     },
     {
       stocksId: 'prairies zones herbacées',
       name: 'Prairies zones herbacées',
       shortName: 'Herbacées',
       parentType: 'prairies',
-      color: 'tournesol'
+      fluxId: 'prai',
+      color: 'tournesol',
+      clcCodes: ['231', '321']
     },
     {
       stocksId: 'prairies zones arbustives',
       name: 'Prairies zones arbustives',
       shortName: 'Arbustives',
       parentType: 'prairies',
-      color: 'tournesol'
+      fluxId: 'prai',
+      color: 'tournesol',
+      clcCodes: ['322']
     },
     {
       stocksId: 'zones humides',
       name: 'Zones humides',
-      color: 'cumulus'
+      color: 'cumulus',
+      fluxId: 'zh',
+      clcCodes: ['411', '412', '421', '422', '423', '511', '512', '521', '522', '523']
     },
     {
       stocksId: 'vergers',
       name: 'Vergers',
-      color: 'glycine'
+      color: 'glycine',
+      fluxId: 'verg',
+      clcCodes: ['222', '223']
     },
     {
       stocksId: 'vignes',
       name: 'Vignes',
-      color: 'tuile'
+      color: 'tuile',
+      fluxId: 'vign',
+      clcCodes: ['221']
     },
     {
       stocksId: 'sols artificiels',
@@ -56,47 +71,59 @@ module.exports = {
       name: 'Sols artificiels imperméabilisés',
       shortName: 'Imperméabilisés',
       parentType: 'sols artificiels',
-      color: 'gris'
+      color: 'gris',
+      fluxId: 'art_imp',
+      clcCodes: ['111', '121', '122', '123', '124', '131', '132', '133', '142']
     },
     {
       stocksId: 'sols artificiels arbustifs',
       name: 'Sols artificiels arbustifs',
+      // sometimes referred to as "sols artificiels enherbés" in spreadsheet
       shortName: 'Arbustifs',
       parentType: 'sols artificiels',
-      color: 'gris'
+      color: 'gris',
+      // fluxId: 'art_enh'
+      fluxId: 'prai'
     },
     {
       stocksId: 'sols artificiels arborés et buissonants',
       name: 'Sols artificiels arborés et buissonants',
       shortName: 'Arborés et buissonants',
       parentType: 'sols artificiels',
-      color: 'gris'
+      color: 'gris',
+      // fluxId: 'art_arb' TODO: check why this and art_enh aren't used
+      fluxId: 'for'
     },
     {
       stocksId: 'forêts',
       name: 'Forêts',
-      color: 'bourgeon'
+      color: 'bourgeon',
+      fluxId: 'for',
+      clcCodes: ['311', '312', '313', '324']
     },
     {
       stocksId: 'forêt mixte',
       name: 'Forêt mixte',
       shortName: 'Mixte',
       parentType: 'forêts',
-      color: 'bourgeon'
+      color: 'bourgeon',
+      clcCodes: ['313']
     },
     {
       stocksId: 'forêt feuillu',
       name: 'Forêt feuillu',
       shortName: 'Feuillu',
       parentType: 'forêts',
-      color: 'bourgeon'
+      color: 'bourgeon',
+      clcCodes: ['311', '324']
     },
     {
       stocksId: 'forêt conifere',
       name: 'Forêt conifère',
       shortName: 'Conifère',
       parentType: 'forêts',
-      color: 'bourgeon'
+      color: 'bourgeon',
+      clcCodes: ['312']
     },
     {
       stocksId: 'forêt peupleraie',

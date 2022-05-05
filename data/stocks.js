@@ -18,7 +18,7 @@ function getArea (location, groundType) {
   } else if (groundType === 'forêt peupleraie') {
     return getAreaPoplars(location)
   }
-  // consider making this a separate json file for isolation
+  // consider using clcCodes in constants file
   // TODO: make more standardised keys?
   const aldoTypeToClcCodes = {
     cultures: ['211', '212', '213', '241', '242', '243', '244'],
