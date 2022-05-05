@@ -11,9 +11,20 @@ test('returns carbon flux in tC/(ha.year) for ground for given area and from -> 
 
 test('returns all carbon flux in tc/(ha.year) for ground cultures', () => {
   const fluxes = getAllAnnualFluxes({ epci: '200007177' })
+  const groundFluxes = fluxes.filter(f => f.reservoir === 'ground')
   // expect(fluxes.length).toBe(87) TODO
-  const cultureFluxes = fluxes.filter(f => f.to === 'cultures')
-  expect(cultureFluxes.length).toBe(9)
+  const cultureFluxes = groundFluxes.filter(f => f.to === 'cultures')
+  expect(cultureFluxes.length).toBe(7)
+  expect(fluxes[0]).toHaveProperty('from')
+  expect(fluxes[0]).toHaveProperty('to')
+  expect(fluxes[0]).toHaveProperty('flux')
+})
+
+test('returns all carbon flux in tc/(ha.year) for biomass cultures', () => {
+  const fluxes = getAllAnnualFluxes({ epci: '200007177' })
+  const biomassFlux = fluxes.filter(f => f.reservoir === 'biomass')
+  const cultureFluxes = biomassFlux.filter(f => f.to === 'cultures')
+  expect(cultureFluxes.length).toBe(6)
   expect(fluxes[0]).toHaveProperty('from')
   expect(fluxes[0]).toHaveProperty('to')
   expect(fluxes[0]).toHaveProperty('flux')

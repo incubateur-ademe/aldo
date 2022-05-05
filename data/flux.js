@@ -13,7 +13,7 @@ function getAnnualGroundCarbonFlux (location, from, to) {
   const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)
   const dataValue = data[getGroundCarbonFluxKey(from, to)]
-  if (dataValue || dataValue === 0) {
+  if (dataValue || dataValue === '0') {
     return parseFloat(dataValue)
   }
 }
@@ -27,21 +27,39 @@ function getForestLitterFlux (from, to) {
   }
 }
 
+function getBiomassFlux (location, from, to) {
+  const csvFilePath = './dataByEpci/biomass-hors-forets.csv'
+  const dataByEpci = require(csvFilePath + '.json')
+  const data = dataByEpci.find(data => data.siren === location.epci)
+  const key = `${from} vers ${to}`
+  const dataValue = data[key]
+  if (dataValue || dataValue === '0') {
+    return parseFloat(dataValue)
+  }
+}
+
 // returns all known fluxes for from - to combinations
+// TODO: could make more efficient by opening all the files and finding the location data once
 function getAllAnnualFluxes (location, options) {
-  const allTypesWithFluxId = GroundTypes.filter(gt => !!gt.fluxId).map(gt => gt.stocksId)
   const fluxes = []
-  for (const from of allTypesWithFluxId) {
-    for (const to of allTypesWithFluxId) {
-      const groundFlux = getAnnualGroundCarbonFlux(location, from, to)
-      if (groundFlux !== undefined) {
-        fluxes.push({
-          from,
-          to,
-          flux: groundFlux,
-          reservoir: 'ground',
-          gas: 'C'
-        })
+  for (const fromGt of GroundTypes) {
+    const from = fromGt.stocksId
+    for (const toGt of GroundTypes) {
+      const to = toGt.stocksId
+      if (from === to) {
+        continue
+      }
+      if (fromGt.fluxId && toGt.fluxId) {
+        const groundFlux = getAnnualGroundCarbonFlux(location, from, to)
+        if (groundFlux !== undefined) {
+          fluxes.push({
+            from,
+            to,
+            flux: groundFlux,
+            reservoir: 'ground',
+            gas: 'C'
+          })
+        }
       }
       const litterFlux = getForestLitterFlux(location, from, to)
       if (litterFlux !== undefined) {
@@ -52,6 +70,19 @@ function getAllAnnualFluxes (location, options) {
           reservoir: 'litter',
           gas: 'C'
         })
+      }
+      const ignoreBiomass = ['prairies', 'haies', 'forêts']
+      if (!ignoreBiomass.includes(from) && !ignoreBiomass.includes(to)) {
+        const biomassFlux = getBiomassFlux(location, from, to)
+        if (biomassFlux !== undefined) {
+          fluxes.push({
+            from,
+            to,
+            flux: biomassFlux,
+            reservoir: 'biomass',
+            gas: 'C'
+          })
+        }
       }
     }
   }
