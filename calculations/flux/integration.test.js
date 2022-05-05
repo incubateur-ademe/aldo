@@ -31,9 +31,22 @@ test('returns expected flux for each prairies -> cultures N2O changes', () => {
   const culturesFlux = allFlux.filter(f => f.to === 'cultures')
   const prairies = culturesFlux.filter(f => f.from.startsWith('prairies'))
   const n2oPrairies = prairies.filter(f => f.gas === 'N2O')
-  // TODO: the table uses positive values for N2O emission, but negative values for C emission.
-  // chose one direction for simplicity
-  expect(n2oPrairies[0].value + n2oPrairies[1].value).toBeCloseTo(0.9, 2)
+  expect(n2oPrairies[0].value + n2oPrairies[1].value).toBeCloseTo(-0.9, 2)
 })
 
 // TODO: add a forest litter value test if find EPCI with numbers !== 0
+
+test('returns all relevant carbon emissions for cultures', () => {
+  const allFlux = getAnnualFluxes({ epci: '200007177' })
+  const culturesFlux = allFlux.filter(f => f.to === 'cultures')
+  const cFlux = culturesFlux.filter(f => f.gas === 'C')
+  const cSum = cFlux.reduce((sum, f) => sum + f.value, 0)
+  expect(cSum).toBeCloseTo(-663.9, 1)
+})
+
+test('returns all relevant carbon and N20 emissions for cultures', () => {
+  const allFlux = getAnnualFluxes({ epci: '200007177' })
+  const culturesFlux = allFlux.filter(f => f.to === 'cultures')
+  const cSum = culturesFlux.reduce((sum, f) => sum + f.co2e, 0)
+  expect(cSum).toBeCloseTo(-2702.5, 1)
+})
