@@ -1,5 +1,5 @@
 const {
-  getAnnualGroundCarbonFluxes,
+  getAllAnnualFluxes,
   getAnnualSurfaceChange
 } = require('../../data/flux')
 
@@ -17,22 +17,19 @@ function multiplier (from) {
 }
 
 function getAnnualFluxes (location, options) {
-  const allGroundFluxes = getAnnualGroundCarbonFluxes(location, options)
-  const allFluxes = []
-  for (const flux of allGroundFluxes) {
+  const allFluxes = getAllAnnualFluxes(location, options)
+  allFluxes.forEach((flux) => {
     const area = getAnnualSurfaceChange(location, flux.from, flux.to)
-    const annualtC = flux.value * area * multiplier(flux.from)
-    allFluxes.push({
-      from: flux.from,
-      to: flux.to,
-      flux: flux.value,
-      gas: 'C',
-      reservoir: 'ground',
-      area,
-      value: annualtC,
-      co2e: convertToCo2e(annualtC)
-    })
-  }
+    flux.area = area
+    if (flux.reservoir === 'ground' && flux.gas === 'C') {
+      const annualtC = flux.flux * area * multiplier(flux.from)
+      flux.value = annualtC
+    } else {
+      const annualtC = flux.flux * area
+      flux.value = annualtC
+    }
+    flux.co2e = convertToCo2e(flux.value)
+  })
   return allFluxes
 }
 

@@ -19,7 +19,7 @@ test('returns expected number of entries for cultures litter changes', () => {
   const allFlux = getAnnualFluxes({ epci: '200007177' })
   const culturesFlux = allFlux.filter(f => f.to === 'cultures')
   const litter = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'litter')
-  expect(litter.length).toBe(1)
+  expect(litter.length).toBe(2)
 })
 
 test('returns expected number of entries for cultures n2o changes', () => {
@@ -47,3 +47,5 @@ test('returns expected flux for each prairies -> cultures N2O changes', () => {
   const n2oPrairies = prairies.filter(f => f.gas === 'N2O')
   expect(n2oPrairies[0].value + n2oPrairies[1].value + n2oPrairies[2].value).toBeCloseTo(0.9, 2)
 })
+
+// TODO: add a forest litter value test if find EPCI with numbers !== 0

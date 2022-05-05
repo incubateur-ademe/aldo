@@ -18,18 +18,39 @@ function getAnnualGroundCarbonFlux (location, from, to) {
   }
 }
 
+function getForestLitterFlux (from, to) {
+  const relevantTypes = ['forêts', 'sols artificiels arborés et buissonants']
+  if (relevantTypes.includes(from) && !relevantTypes.includes(to)) {
+    return -9
+  } else if (!relevantTypes.includes(from) && relevantTypes.includes(to)) {
+    return 9
+  }
+}
+
 // returns all known fluxes for from - to combinations
-function getAnnualGroundCarbonFluxes (location, options) {
+function getAllAnnualFluxes (location, options) {
   const allTypesWithFluxId = GroundTypes.filter(gt => !!gt.fluxId).map(gt => gt.stocksId)
   const fluxes = []
   for (const from of allTypesWithFluxId) {
     for (const to of allTypesWithFluxId) {
-      const value = getAnnualGroundCarbonFlux(location, from, to)
-      if (value !== undefined) {
+      const groundFlux = getAnnualGroundCarbonFlux(location, from, to)
+      if (groundFlux !== undefined) {
         fluxes.push({
           from,
           to,
-          value
+          flux: groundFlux,
+          reservoir: 'ground',
+          gas: 'C'
+        })
+      }
+      const litterFlux = getForestLitterFlux(location, from, to)
+      if (litterFlux !== undefined) {
+        fluxes.push({
+          from,
+          to,
+          flux: litterFlux,
+          reservoir: 'litter',
+          gas: 'C'
         })
       }
     }
@@ -61,6 +82,7 @@ function getAnnualSurfaceChange (location, from, to) {
 
 module.exports = {
   getAnnualGroundCarbonFlux,
-  getAnnualGroundCarbonFluxes,
+  getAllAnnualFluxes,
+  getForestLitterFlux,
   getAnnualSurfaceChange
 }
