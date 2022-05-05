@@ -2,6 +2,7 @@ const {
   getAllAnnualFluxes,
   getAnnualSurfaceChange
 } = require('../../data/flux')
+const { GroundTypes } = require('../constants')
 
 function convertCToCo2e (valueC) {
   return valueC * 44 / 12
@@ -57,7 +58,30 @@ function getAnnualFluxes (location, options) {
       })
     }
   })
-  return allFluxes
+  const summary = {}
+  GroundTypes.filter(gt => !gt.parentType).forEach((gt) => {
+    summary[gt.stocksId] = {
+      totalCarbonSequestration: 0,
+      totalSequestration: 0
+    }
+  })
+  allFluxes.forEach((flux) => {
+    let to = flux.to
+    const typeInfo = GroundTypes.find(gt => gt.stocksId === to)
+    if (typeInfo.parentType) {
+      to = typeInfo.parentType
+    }
+    if (flux.gas === 'C') {
+      summary[to].totalCarbonSequestration += flux.value
+      summary[to].totalSequestration += flux.co2e
+    } else {
+      summary[to].totalSequestration += flux.co2e
+    }
+  })
+  return {
+    allFlux: allFluxes,
+    summary
+  }
 }
 
 module.exports = {
