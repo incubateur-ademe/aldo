@@ -1,4 +1,5 @@
 const path = require('path')
+const { getAnnualFluxes } = require('../../calculations/flux')
 const rootFolder = path.join(__dirname, '../../')
 const { epciList, getEpci } = require(path.join(rootFolder, './calculations/epcis'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
@@ -7,7 +8,7 @@ const { GroundTypes, Colours } = require(path.join(rootFolder, './calculations/c
 async function territoryHandler (req, res) {
   const epci = await getEpci(req.query.epci) || {}
   const epcis = await epciList()
-  let stocks
+  let stocks, fluxSummary
   const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
   if (epci.code) {
     const areaOverrides = {}
@@ -20,6 +21,7 @@ async function territoryHandler (req, res) {
       woodCalculation
     }
     stocks = await getStocks({ epci }, options)
+    fluxSummary = getAnnualFluxes({ epci: epci.code }).summary
   } else {
     res.status(404)
     res.render('404', {
@@ -53,7 +55,8 @@ async function territoryHandler (req, res) {
       return text.replace(/ /g, '_')
     },
     simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides', 'haies'],
-    woodCalculation
+    woodCalculation,
+    fluxSummary
   })
 }
 

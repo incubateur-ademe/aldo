@@ -129,6 +129,31 @@
             </ul>
           </div>
         </div>
+        <div class="fr-grid-row fr-mt-3w">
+          <div class="fr-col-12 fr-col-md-6 fr-pr-md-1w fr-table fr-table--no-scroll">
+            <table>
+              <caption><h2>Flux de carbone</h2></caption>
+              <thead>
+                <tr>
+                  <th>Occupation du sol</th>
+                  <th>Sequestration tCO2e / an</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for( let index=0; index < groundTypes.length; index++ ) { %>
+                  <tr>
+                    <td>
+                      <%= groundTypes[index].name %>
+                    </td>
+                    <td>
+                      <%= formatNumber(fluxSummary[groundTypes[index].stocksId].totalSequestration) %>
+                    </td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
       <% } else { %>
         <h1>Aucun EPCI trouvé</h1>
       <% } %>
