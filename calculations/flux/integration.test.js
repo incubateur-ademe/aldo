@@ -52,3 +52,8 @@ test('returns correct total for vergers', () => {
   const summary = getAnnualFluxes({ epci: '200007177' }).summary
   expect(summary.vergers.totalSequestration).toBeCloseTo(51, 0)
 })
+
+test('returns correct total for sols artificiels', () => {
+  const summary = getAnnualFluxes({ epci: '200007177' }).summary
+  expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-97, 0)
+})

@@ -81,6 +81,8 @@ function multiplier (reservoir, from, to) {
     }
     // the remaining type is sols artificiels arbustifs, but any from/to combo has already
     // been covered by the above
+  } else if (reservoir === 'litter') {
+    return 1
   }
   console.log('ERROR: multiplier not found for combination of reservoir: ' + reservoir + ' from: ' + from + ' to: ' + to)
   return 1
