@@ -49,10 +49,10 @@ test('returns all relevant carbon and N20 emissions for cultures', () => {
 })
 
 test('returns correct total for vergers and vignes', () => {
-  let summary = getAnnualFluxes({ epci: '200007177' }).summary
+  const summary = getAnnualFluxes({ epci: '200007177' }).summary
   expect(summary.vergers.totalSequestration).toBeCloseTo(51, 0)
-  summary = getAnnualFluxes({ epci: '200040798' }).summary
-  // console.log(getAnnualFluxes({ epci: '200040798' }).allFlux.filter(f => f.to === 'vignes'))
+  // the following value is wrong in the spreadsheet, so my calculations break.
+  // summary = getAnnualFluxes({ epci: '200040798' }).summary
   // expect(summary.vignes.totalSequestration).toBeCloseTo(-99, 0)
 })
 
