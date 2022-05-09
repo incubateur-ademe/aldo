@@ -49,3 +49,17 @@ test('returns expected area change for sols artificiels', () => {
   expect(getAnnualSurfaceChange({ epci: '200007177' }, 'cultures', 'sols artificiels imperméabilisés')).toBeCloseTo(1.69, 2)
   expect(getAnnualSurfaceChange({ epci: '200007177' }, 'cultures', 'sols artificiels arbustifs')).toBeCloseTo(0.42, 2)
 })
+
+test('returns expected biomass flux for forests', () => {
+  const fluxes = getAllAnnualFluxes({ epci: '200007177' })
+  const biomassFlux = fluxes.filter(f => f.reservoir === 'biomass')
+  const forestFluxes = biomassFlux.filter(f => f.to.startsWith('forêt '))
+  expect(forestFluxes.length).toBe(4)
+})
+
+test('returns expected area change for forest types', () => {
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, undefined, 'forêt feuillu')).toBeCloseTo(2220, 0)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, undefined, 'forêt conifere')).toBeCloseTo(18, 0)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, undefined, 'forêt peupleraie')).toBeCloseTo(150, 0)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, undefined, 'forêt mixte')).toBeCloseTo(14, 0)
+})

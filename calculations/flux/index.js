@@ -30,7 +30,7 @@ function multiplier (reservoir, from, to) {
       return 1
     } else if (from === 'sols artificiels arborés et buissonants') {
       return multiplier
-    } else if (from.startsWith('forêt') || to.startsWith('forêt')) {
+    } else if (from === 'forêts' || to === 'forêts') {
       return multiplier
     } else if (from.startsWith('prairies') || to.startsWith('prairies')) {
       return multiplier
@@ -97,7 +97,9 @@ function getAnnualFluxes (location, options) {
   allFluxes.forEach((flux) => {
     const area = getAnnualSurfaceChange(location, flux.from, flux.to)
     flux.area = area
-    if (flux.reservoir === 'ground') {
+    if (flux.to.startsWith('forêt ')) {
+      flux.value = flux.flux * flux.area
+    } else if (flux.reservoir === 'ground') {
       const annualtC = flux.flux * area * multiplier(flux.reservoir, flux.from, flux.to)
       flux.value = annualtC
     } else {

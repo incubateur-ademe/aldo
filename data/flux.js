@@ -71,6 +71,28 @@ function getBiomassFlux (location, from, to) {
   }
 }
 
+function getForestBiomassFlux (location, to) {
+  let data
+  if (to === 'forêt peupleraie') {
+    const csvFilePath = './dataByEpci/biomasse-forets-peupleraies.csv'
+    const dataByEpci = require(csvFilePath + '.json')
+    data = dataByEpci.find(data => data.siren === location.epci)
+  } else {
+    const csvFilePath = './dataByEpci/biomass-forets.csv'
+    const dataByEpci = require(csvFilePath + '.json')
+    const forestType = to.split(' ')[1]
+    data = dataByEpci.find(data => data.siren === location.epci && data.type.toLowerCase() === forestType)
+  }
+  if (!data) {
+    console.log(`No biomass data found for forest type '${to}' and epci '${location.epci}'`)
+    return
+  }
+  const dataValue = data['BILAN_CARB (tC∙ha-1∙an-1)']
+  if (dataValue) {
+    return parseFloat(dataValue)
+  }
+}
+
 // returns all known fluxes for from - to combinations
 // TODO: could make more efficient by opening all the files and finding the location data once
 function getAllAnnualFluxes (location, options) {
@@ -119,10 +141,25 @@ function getAllAnnualFluxes (location, options) {
       }
     }
   }
+  const forestTypes = GroundTypes.filter(gt => gt.stocksId.startsWith('forêt '))
+  for (const fType of forestTypes) {
+    const biomassFlux = getForestBiomassFlux(location, fType.stocksId)
+    if (biomassFlux !== undefined) {
+      fluxes.push({
+        to: fType.stocksId,
+        flux: biomassFlux,
+        reservoir: 'biomass',
+        gas: 'C'
+      })
+    }
+  }
   return fluxes
 }
 
 function getAnnualSurfaceChange (location, from, to) {
+  if (to.startsWith('forêt ')) {
+    return getAnnualForestSurfaceChange(location, to)
+  }
   const csvFilePath = './dataByEpci/clc18-change.csv'
   const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)
@@ -147,6 +184,13 @@ function getAnnualSurfaceChange (location, from, to) {
     return solsArtificielsExceptions
   }
   return yearlyAreaChange
+}
+
+function getAnnualForestSurfaceChange (location, to) {
+  const csvFilePath = './dataByEpci/ign19.csv'
+  const dataByEpci = require(csvFilePath + '.json')
+  const data = dataByEpci.find(data => data.siren === location.epci)
+  return parseFloat(data[to.split(' ')[1] + 's'])
 }
 
 function getSolsArtificielsExceptions (location, from, to, clcAnnualChange) {

@@ -74,3 +74,12 @@ test('returns correct total for sols artificiels', () => {
   const summary = getAnnualFluxes({ epci: '200007177' }).summary
   expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-97, 0)
 })
+
+test('returns correct total for forests', () => {
+  const summary1 = getAnnualFluxes({ epci: '200007177' }).summary
+  expect(summary1.forêts.totalSequestration).toBeCloseTo(12151, 0)
+  const summary2 = getAnnualFluxes({ epci: '3' }).summary
+  expect(summary2.forêts.totalSequestration).toBeCloseTo(7202, 0)
+  const summary3 = getAnnualFluxes({ epci: '249500455' }).summary
+  expect(summary3.forêts.totalSequestration).toBeCloseTo(17424, 0)
+})
