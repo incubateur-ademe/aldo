@@ -61,7 +61,7 @@ function getAllAnnualFluxes (location, options) {
           })
         }
       }
-      const litterFlux = getForestLitterFlux(location, from, to)
+      const litterFlux = getForestLitterFlux(from, to)
       if (litterFlux !== undefined) {
         fluxes.push({
           from,

@@ -44,4 +44,6 @@ test('returns all relevant carbon emissions for cultures', () => {
 test('returns all relevant carbon and N20 emissions for cultures', () => {
   const summary = getAnnualFluxes({ epci: '200007177' }).summary
   expect(summary.cultures.totalSequestration).toBeCloseTo(-2702.5, 1)
+  const fluxes = getAnnualFluxes({ epci: '200000933' })
+  expect(fluxes.summary.cultures.totalSequestration).toBeCloseTo(-750, 0)
 })
