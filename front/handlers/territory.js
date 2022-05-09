@@ -46,7 +46,9 @@ async function territoryHandler (req, res) {
     stocks,
     charts: stocks && charts(stocks),
     formatNumber (number) {
-      return Math.round(number).toLocaleString('fr-FR')
+      const rounded = Math.round(number)
+      if (rounded === 0) return 0 // without this get "-0"
+      return rounded.toLocaleString('fr-FR')
     },
     round (number) {
       return Math.round(number)

@@ -137,6 +137,7 @@
                 <tr>
                   <th>Occupation du sol</th>
                   <th>Sequestration tCO2e / an</th>
+                  <td></td>
                 </tr>
               </thead>
               <tbody>
@@ -147,6 +148,17 @@
                     </td>
                     <td>
                       <%= formatNumber(fluxSummary[groundTypes[index].stocksId].totalSequestration) %>
+                    </td>
+                    <td>
+                      <% if (fluxSummary[groundTypes[index].stocksId].totalSequestration > -0.5 && fluxSummary[groundTypes[index].stocksId].totalSequestration < 0.5) { %>
+                        <!-- no change -->
+                      <% } else if (fluxSummary[groundTypes[index].stocksId].totalSequestration > 0) { %>
+                        <!-- colour = 'succès' -->
+                        <span style="color: #1f8d49;">séquestration</span>
+                      <% } else { %>
+                        <!-- rouge marianne -->
+                        <span style="color: #e1000f;">émission</span>
+                      <% } %>
                     </td>
                   </tr>
                 <% } %>
