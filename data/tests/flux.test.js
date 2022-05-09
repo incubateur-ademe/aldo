@@ -44,3 +44,8 @@ test('returns expected value for forest litter flux', () => {
   // TODO: ask if the following should be the case - the spreadsheet is malformed w/ repeated impermeabilise row
   expect(getForestLitterFlux('sols artificiels arborés et buissonants', 'cultures')).toBe(-9)
 })
+
+test('returns expected area change for sols artificiels', () => {
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, 'cultures', 'sols artificiels imperméabilisés')).toBeCloseTo(1.69, 2)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, 'cultures', 'sols artificiels arbustifs')).toBeCloseTo(0.42, 2)
+})

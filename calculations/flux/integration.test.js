@@ -70,8 +70,7 @@ test('returns correct total for zones humides', () => {
   expect(summary['zones humides'].totalSequestration).toBeCloseTo(416, 0)
 })
 
-// test('returns correct total for sols artificiels', () => {
-//   const summary = getAnnualFluxes({ epci: '200007177' }).summary
-//   console.log(getAnnualFluxes({ epci: '200007177' }).allFlux.filter(f => f.to.startsWith('sols artificiels') && f.reservoir === 'ground' && f.gas === 'C'))
-//   expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-97, 0)
-// })
+test('returns correct total for sols artificiels', () => {
+  const summary = getAnnualFluxes({ epci: '200007177' }).summary
+  expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-97, 0)
+})

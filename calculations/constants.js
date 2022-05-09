@@ -67,23 +67,23 @@ module.exports = {
       color: 'gris'
     },
     {
-      stocksId: 'sols artificiels imperméabilisés',
-      name: 'Sols artificiels imperméabilisés',
-      shortName: 'Imperméabilisés',
-      parentType: 'sols artificiels',
-      color: 'gris',
-      fluxId: 'art_imp',
-      clcCodes: ['111', '121', '122', '123', '124', '131', '132', '133', '142']
-    },
-    {
       stocksId: 'sols artificiels arbustifs',
       name: 'Sols artificiels arbustifs',
       // sometimes referred to as "sols artificiels enherbés" in spreadsheet
       shortName: 'Arbustifs',
       parentType: 'sols artificiels',
       color: 'gris',
-      // fluxId: 'art_enh'
-      fluxId: 'prai'
+      fluxId: 'art_enh',
+      clcCodes: ['112', '121', '122', '124', '131', '132', '133', '142']
+    },
+    {
+      stocksId: 'sols artificiels imperméabilisés',
+      name: 'Sols artificiels imperméabilisés',
+      shortName: 'Imperméabilisés',
+      parentType: 'sols artificiels',
+      color: 'gris',
+      fluxId: 'art_imp',
+      clcCodes: ['111', '112', '121', '122', '123', '124', '131', '132', '133', '142']
     },
     {
       stocksId: 'sols artificiels arborés et buissonants',
@@ -91,8 +91,8 @@ module.exports = {
       shortName: 'Arborés et buissonants',
       parentType: 'sols artificiels',
       color: 'gris',
-      // fluxId: 'art_arb' TODO: check why this and art_enh aren't used
-      fluxId: 'for'
+      fluxId: 'art_arb',
+      clcCodes: ['141']
     },
     {
       stocksId: 'forêts',

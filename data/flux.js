@@ -9,11 +9,44 @@ function getGroundCarbonFluxKey (from, to) {
 }
 
 function getAnnualGroundCarbonFlux (location, from, to) {
+  // to start, deal with some exceptions in flux lookups
+  if (from === 'sols artificiels arbustifs') {
+    if (to === 'zones humides') return
+    // could've chosen any prairie type, they have the same flux
+    return getAnnualGroundCarbonFlux(location, 'prairies zones arborées', to)
+  } else if (from === 'sols artificiels arborés et buissonants') {
+    return getAnnualGroundCarbonFlux(location, 'forêts', to)
+  }
+  // all vergers/vignes -> sols artificiels X use the flux for vergers/vignes -> cultures instead
+  if (to.startsWith('sols')) {
+    if (from === 'vergers' || from === 'vignes') {
+      return getAnnualGroundCarbonFlux(location, 'cultures', to)
+    }
+  }
+  if (to === 'sols artificiels imperméabilisés') {
+    if (from === 'zones humides') {
+      return getAnnualGroundCarbonFlux(location, from, 'cultures') + getAnnualGroundCarbonFlux(location, 'cultures', to)
+    }
+  } else if (to === 'sols artificiels arbustifs') {
+    if (from.startsWith('prairies')) {
+      return
+    } else if (from === 'zones humides') {
+      // could've chosen any prairie type, they have the same flux
+      return getAnnualGroundCarbonFlux(location, from, 'prairies zones arborées')
+    }
+  } else if (to === 'sols artificiels arborés et buissonants') {
+    if (from.startsWith('forêts')) {
+      return
+    } else if (from === 'zones humides') {
+      return getAnnualGroundCarbonFlux(location, from, 'forêts')
+    }
+  }
+  // normal flux value lookup
   const csvFilePath = './dataByEpci/ground.csv'
   const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)
   const dataValue = data[getGroundCarbonFluxKey(from, to)]
-  if (dataValue || dataValue === '0') {
+  if (dataValue) {
     return parseFloat(dataValue)
   }
 }
@@ -33,7 +66,7 @@ function getBiomassFlux (location, from, to) {
   const data = dataByEpci.find(data => data.siren === location.epci)
   const key = `${from} vers ${to}`
   const dataValue = data[key]
-  if (dataValue || dataValue === '0') {
+  if (dataValue) {
     return parseFloat(dataValue)
   }
 }
@@ -108,7 +141,36 @@ function getAnnualSurfaceChange (location, from, to) {
     }
   }
   const yearsBetweenStudies = 6
-  return totalAreaChange / yearsBetweenStudies
+  const yearlyAreaChange = totalAreaChange / yearsBetweenStudies
+  const solsArtificielsExceptions = getSolsArtificielsExceptions(location, from, to, yearlyAreaChange)
+  if (solsArtificielsExceptions !== undefined) {
+    return solsArtificielsExceptions
+  }
+  return yearlyAreaChange
+}
+
+function getSolsArtificielsExceptions (location, from, to, clcAnnualChange) {
+  if (to === 'sols artificiels imperméabilisés') {
+    if (from === 'sols artificiels arbustifs') {
+      return 0
+    }
+    const changeSolsArbores = getAnnualSurfaceChange(location, from, 'sols artificiels arborés et buissonants')
+    const changeArboresAndImpermeables = clcAnnualChange + changeSolsArbores
+    if (changeSolsArbores < 0.2 * (changeSolsArbores + changeArboresAndImpermeables * 0.8)) {
+      return changeArboresAndImpermeables * 0.8
+    } else {
+      return clcAnnualChange
+    }
+  } else if (to === 'sols artificiels arbustifs') {
+    const changeSolsArbores = getAnnualSurfaceChange(location, from, 'sols artificiels arborés et buissonants')
+    const changeSolsImpermeables = getAnnualSurfaceChange(location, from, 'sols artificiels imperméabilisés')
+    if (changeSolsArbores < 0.2 * (changeSolsImpermeables + changeSolsArbores)) {
+      return (clcAnnualChange + changeSolsArbores) * 0.2 - changeSolsArbores
+    } else {
+      return 0
+    }
+  }
+  // arborés follows logic of other ground types
 }
 
 module.exports = {
