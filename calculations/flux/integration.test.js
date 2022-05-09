@@ -56,6 +56,11 @@ test('returns correct total for vergers and vignes', () => {
   // expect(summary.vignes.totalSequestration).toBeCloseTo(-99, 0)
 })
 
+test('returns correct total for all prairies', () => {
+  const summary = getAnnualFluxes({ epci: '200015162' }).summary
+  expect(summary.prairies.totalSequestration).toBeCloseTo(-772, 0)
+})
+
 test('returns correct total for zones humides', () => {
   let summary = getAnnualFluxes({ epci: '200042992' }).summary
   expect(summary['zones humides'].totalSequestration).toBeCloseTo(3388, 0)

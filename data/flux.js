@@ -60,16 +60,16 @@ function getAllAnnualFluxes (location, options) {
             gas: 'C'
           })
         }
-      }
-      const litterFlux = getForestLitterFlux(from, to)
-      if (litterFlux !== undefined) {
-        fluxes.push({
-          from,
-          to,
-          flux: litterFlux,
-          reservoir: 'litter',
-          gas: 'C'
-        })
+        const litterFlux = getForestLitterFlux(from, to)
+        if (litterFlux !== undefined) {
+          fluxes.push({
+            from,
+            to,
+            flux: litterFlux,
+            reservoir: 'litter',
+            gas: 'C'
+          })
+        }
       }
       const ignoreBiomass = ['prairies', 'haies', 'forêts']
       if (!ignoreBiomass.includes(from) && !ignoreBiomass.includes(to)) {
