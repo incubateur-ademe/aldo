@@ -192,8 +192,8 @@ function fluxCharts (flux) {
     },
     groundType: {
       title:
-        'Stocks de référence par unité de surfaceFlux en milliers de tCO2eq/an de l\'EPCI,' +
-        ' par occupation du sol, Bases de changement CLC 2012-2018; Inventaire forestier 2012-2016',
+        'Flux en milliers de tCO2eq/an de l\'EPCI, par occupation du sol, ' +
+        'Bases de changement CLC 2012-2018; Inventaire forestier 2012-2016',
       data: JSON.stringify({
         type: 'bar',
         data: {
