@@ -134,26 +134,28 @@
             <table>
               <caption><h2>Flux de carbone</h2></caption>
               <thead>
-                <tr>
-                  <th>Occupation du sol finale</th>
-                  <th>Sequestration tCO2e / an</th>
-                  <td></td>
+                <tr class="expandable-row-header stocks-row">
+                  <th scope="col">Occupation du sol finale</th>
+                  <th scope="col">Sequestration tCO2e / an</th>
+                  <td scope="col"></td>
+                  <td scope="col"></td>
+                  <td scope="col"></td>
                 </tr>
               </thead>
               <tbody>
                 <% for( let index=0; index < sortedFluxKeys.length; index++ ) { %>
-                  <tr>
-                    <td>
+                  <tr class="expandable-row flux-row">
+                    <td onClick='toggleRow(this)'>
                       <%= sortedFluxKeys[index].name %>
                     </td>
-                    <td>
+                    <td onClick='toggleRow(this)'>
                       <% if (fluxSummary[sortedFluxKeys[index].stocksId]) { %>
                         <%= formatNumber(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) %>
                       <% } else { %>
                         <i>Pas de données</i>
                       <% } %>
                     </td>
-                    <td>
+                    <td onClick='toggleRow(this)'>
                       <% if (!fluxSummary[sortedFluxKeys[index].stocksId] || (fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration > -0.5 && fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration < 0.5)) { %>
                         <!-- no change -->
                       <% } else if (fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration > 0) { %>
@@ -163,6 +165,14 @@
                         <!-- rouge marianne -->
                         <span style="color: #e1000f;">émission</span>
                       <% } %>
+                    </td>
+                    <td onClick='toggleRow(this)'>
+                      <button onClick='toggleRow(this)' type="button">
+                        <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
+                      </button>
+                    </td>
+                    <td class='expanded-row-content hide-row'>
+                      <%- include('fluxCalculations/simple', {groundType: sortedFluxKeys[index].stocksId}) -%>
                     </td>
                   </tr>
                 <% } %>

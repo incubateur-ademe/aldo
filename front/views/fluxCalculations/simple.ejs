@@ -1,0 +1,10 @@
+<p class="fr-text--sm fr-mb-1w">Comment est-ce que c'est calculé&nbsp;?</p>
+<p>Flux :</p>
+<% if(fluxDetail[groundType]) { %>
+  <% for( const detail of fluxDetail[groundType] ) { %>
+    <p>Initial occupation du sol : <%= detail.from %></p>
+    <p>Changement du surface : <%= formatNumber(detail.area) %> ha en six ans</p>
+    <p>Reservoir : <%= detail.reservoir %></p>
+    <p>Flux : <%= formatNumber(detail.value) %> tC/an</p>
+  <% } %>
+<% } %>

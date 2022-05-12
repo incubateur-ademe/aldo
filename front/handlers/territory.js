@@ -9,6 +9,7 @@ async function territoryHandler (req, res) {
   const epci = await getEpci(req.query.epci) || {}
   const epcis = await epciList()
   let stocks, flux
+  const fluxDetail = {}
   const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
   if (epci.code) {
     const areaOverrides = {}
@@ -22,6 +23,14 @@ async function territoryHandler (req, res) {
     }
     stocks = await getStocks({ epci }, options)
     flux = getAnnualFluxes({ epci: epci.code })
+    flux.allFlux.forEach(f => {
+      if (!fluxDetail[f.to]) {
+        fluxDetail[f.to] = []
+      }
+      if (f.value !== 0) {
+        fluxDetail[f.to].push(f)
+      }
+    })
   } else {
     res.status(404)
     res.render('404', {
@@ -68,7 +77,8 @@ async function territoryHandler (req, res) {
     woodCalculation,
     fluxSummary: flux?.summary,
     sortedFluxKeys,
-    fluxCharts: fluxCharts(flux)
+    fluxCharts: fluxCharts(flux),
+    fluxDetail
   })
 }
 
