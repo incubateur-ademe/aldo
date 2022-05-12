@@ -8,7 +8,7 @@ const { GroundTypes, Colours } = require(path.join(rootFolder, './calculations/c
 async function territoryHandler (req, res) {
   const epci = await getEpci(req.query.epci) || {}
   const epcis = await epciList()
-  let stocks, fluxSummary
+  let stocks, flux
   const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
   if (epci.code) {
     const areaOverrides = {}
@@ -21,7 +21,7 @@ async function territoryHandler (req, res) {
       woodCalculation
     }
     stocks = await getStocks({ epci }, options)
-    fluxSummary = getAnnualFluxes({ epci: epci.code }).summary
+    flux = getAnnualFluxes({ epci: epci.code })
   } else {
     res.status(404)
     res.render('404', {
@@ -39,8 +39,8 @@ async function territoryHandler (req, res) {
   })
   const sortedFluxKeys = GroundTypes.filter(type => !type.parentType)
   sortedFluxKeys.sort((a, b) => {
-    const fluxA = Math.abs(fluxSummary[a.stocksId]?.totalSequestration || 0)
-    const fluxB = Math.abs(fluxSummary[b.stocksId]?.totalSequestration || 0)
+    const fluxA = Math.abs(flux.summary[a.stocksId]?.totalSequestration || 0)
+    const fluxB = Math.abs(flux.summary[b.stocksId]?.totalSequestration || 0)
     if (fluxA < fluxB) return 1
     else if (fluxA === fluxB) return 0
     else return -1
@@ -66,8 +66,9 @@ async function territoryHandler (req, res) {
     },
     simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides', 'haies'],
     woodCalculation,
-    fluxSummary,
-    sortedFluxKeys
+    fluxSummary: flux?.summary,
+    sortedFluxKeys,
+    fluxCharts: fluxCharts(flux)
   })
 }
 
@@ -140,6 +141,46 @@ function charts (stocks) {
     },
     groundAndLitter: pieChart('Répartition des stocks de carbone dans les sols et litière par occupation du sol', stocksPercentageLabels, groundAndLitterStocksValues),
     biomass: pieChart('Répartition des stocks de carbone dans la biomasse par occupation du sol', stocksPercentageLabels, biomassStocksValues)
+  }
+}
+
+function fluxCharts (flux) {
+  const keys = Object.keys(flux.summary).filter(k => flux.summary[k].totalSequestration !== undefined)
+  const labels = keys.map(key => GroundTypes.find(k => k.stocksId === key)?.name)
+  return {
+    groundType: {
+      title:
+        'Stocks de référence par unité de surfaceFlux en milliers de tCO2eq/an de l\'EPCI,' +
+        ' par occupation du sol, Bases de changement CLC 2012-2018; Inventaire forestier 2012-2016',
+      data: JSON.stringify({
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Flux (tCO2e/ha.an)',
+            data: keys.map(key => flux.summary[key].totalSequestration),
+            backgroundColor: getColours(labels, '950'),
+            borderColor: getColours(labels, 'main'),
+            borderWidth: 2
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              title: {
+                text: 'Flux (tCO2e/ha.an)',
+                display: true
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      })
+    }
   }
 }
 

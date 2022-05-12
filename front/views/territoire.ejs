@@ -169,7 +169,29 @@
               </tbody>
             </table>
           </div>
+          <div class="fr-col-12 fr-col-sm-10 fr-col-md-6 fr-pt-6w">
+            <!-- TODO: test a11y of these charts -->
+            <h3>Résultats graphiques</h3>
+            <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
+              <% for (let keyIdx=0; keyIdx < Object.keys(fluxCharts).length; keyIdx++) { %>
+                <li>
+                  <section class="fr-accordion">
+                    <h4 class="fr-accordion__title">
+                      <button class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
+                        aria-controls="accordion-flux-chart-<%= keyIdx %>">
+                        <%= fluxCharts[Object.keys(fluxCharts)[keyIdx]].title %>
+                      </button>
+                    </h4>
+                    <div class="fr-collapse" id="accordion-flux-chart-<%= keyIdx %>">
+                      <canvas id="fluxChart-<%= Object.keys(charts)[keyIdx] %>" width="400" height="400"></canvas>
+                    </div>
+                  </section>
+                </li>
+                <% } %>
+            </ul>
+          </div>
         </div>
+      </div>
       <% } else { %>
         <h1>Aucun EPCI trouvé</h1>
       <% } %>
@@ -205,5 +227,9 @@
     const biomassCtx = document.getElementById('chart-biomass');
     const biomassChartData = JSON.parse(`<%- charts.biomass.data %>`);
     new Chart(biomassCtx, biomassChartData);
+
+    const fluxCtx = document.getElementById('fluxChart-groundType');
+    const fluxChartData = JSON.parse(`<%- fluxCharts.groundType.data %>`);
+    new Chart(fluxCtx, fluxChartData);
   </script>
   <%- include('partials/footer') -%>
