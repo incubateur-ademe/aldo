@@ -183,7 +183,7 @@
                       </button>
                     </h4>
                     <div class="fr-collapse" id="accordion-flux-chart-<%= keyIdx %>">
-                      <canvas id="fluxChart-<%= Object.keys(charts)[keyIdx] %>" width="400" height="400"></canvas>
+                      <canvas id="fluxChart-<%= Object.keys(fluxCharts)[keyIdx] %>" width="400" height="400"></canvas>
                     </div>
                   </section>
                 </li>
@@ -228,8 +228,12 @@
     const biomassChartData = JSON.parse(`<%- charts.biomass.data %>`);
     new Chart(biomassCtx, biomassChartData);
 
-    const fluxCtx = document.getElementById('fluxChart-groundType');
-    const fluxChartData = JSON.parse(`<%- fluxCharts.groundType.data %>`);
-    new Chart(fluxCtx, fluxChartData);
+    const fluxReservoirCtx = document.getElementById('fluxChart-reservoir');
+    const fluxReservoirChartData = JSON.parse(`<%- fluxCharts.reservoir.data %>`);
+    new Chart(fluxReservoirCtx, fluxReservoirChartData);
+
+    const fluxGrountCtx = document.getElementById('fluxChart-groundType');
+    const fluxGroundChartData = JSON.parse(`<%- fluxCharts.groundType.data %>`);
+    new Chart(fluxGrountCtx, fluxGroundChartData);
   </script>
   <%- include('partials/footer') -%>

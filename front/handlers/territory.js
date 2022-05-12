@@ -145,9 +145,51 @@ function charts (stocks) {
 }
 
 function fluxCharts (flux) {
+  const chartBackgroundColors = Object.values(Colours).map(c => c['950'])
+  const chartBorderColors = Object.values(Colours).map(c => c.main)
   const keys = Object.keys(flux.summary).filter(k => flux.summary[k].totalSequestration !== undefined)
   const labels = keys.map(key => GroundTypes.find(k => k.stocksId === key)?.name)
+  const reservoirLabels = ['Sol et litière', 'Biomasse'] // produits bois
+  const reservoirData = [0, 0]
+  flux.allFlux.forEach(f => {
+    if (f.reservoir === 'ground' || f.reservoir === 'litter') {
+      reservoirData[0] += Math.round(f.co2e)
+    } else if (f.reservoir === 'biomass') {
+      reservoirData[1] += Math.round(f.co2e)
+    }
+  })
   return {
+    reservoir: {
+      title: 'Repartition des flux (tCO2e/an)',
+      data: JSON.stringify({
+        type: 'bar',
+        data: {
+          labels: reservoirLabels,
+          datasets: [{
+            label: 'Flux (tCO2e/ha)',
+            data: reservoirData,
+            backgroundColor: chartBackgroundColors,
+            borderColor: chartBorderColors,
+            borderWidth: 2
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              title: {
+                text: 'Flux (tCO2e/ha)',
+                display: true
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      })
+    },
     groundType: {
       title:
         'Stocks de référence par unité de surfaceFlux en milliers de tCO2eq/an de l\'EPCI,' +
@@ -155,10 +197,10 @@ function fluxCharts (flux) {
       data: JSON.stringify({
         type: 'bar',
         data: {
-          labels: labels,
+          labels,
           datasets: [{
             label: 'Flux (tCO2e/ha.an)',
-            data: keys.map(key => flux.summary[key].totalSequestration),
+            data: keys.map(key => Math.round(flux.summary[key].totalSequestration)),
             backgroundColor: getColours(labels, '950'),
             borderColor: getColours(labels, 'main'),
             borderWidth: 2
