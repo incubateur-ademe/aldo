@@ -141,18 +141,22 @@
                 </tr>
               </thead>
               <tbody>
-                <% for( let index=0; index < groundTypes.length; index++ ) { %>
+                <% for( let index=0; index < sortedFluxKeys.length; index++ ) { %>
                   <tr>
                     <td>
-                      <%= groundTypes[index].name %>
+                      <%= sortedFluxKeys[index].name %>
                     </td>
                     <td>
-                      <%= formatNumber(fluxSummary[groundTypes[index].stocksId].totalSequestration) %>
+                      <% if (fluxSummary[sortedFluxKeys[index].stocksId]) { %>
+                        <%= formatNumber(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) %>
+                      <% } else { %>
+                        <i>Pas de données</i>
+                      <% } %>
                     </td>
                     <td>
-                      <% if (fluxSummary[groundTypes[index].stocksId].totalSequestration > -0.5 && fluxSummary[groundTypes[index].stocksId].totalSequestration < 0.5) { %>
+                      <% if (!fluxSummary[sortedFluxKeys[index].stocksId] || (fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration > -0.5 && fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration < 0.5)) { %>
                         <!-- no change -->
-                      <% } else if (fluxSummary[groundTypes[index].stocksId].totalSequestration > 0) { %>
+                      <% } else if (fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration > 0) { %>
                         <!-- colour = 'succès' -->
                         <span style="color: #1f8d49;">séquestration</span>
                       <% } else { %>

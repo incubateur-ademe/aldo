@@ -128,17 +128,17 @@ function getAnnualFluxes (location, options) {
     }
   })
   const summary = {}
-  GroundTypes.filter(gt => !gt.parentType).forEach((gt) => {
-    summary[gt.stocksId] = {
-      totalCarbonSequestration: 0,
-      totalSequestration: 0
-    }
-  })
   allFluxes.forEach((flux) => {
     let to = flux.to
     const typeInfo = GroundTypes.find(gt => gt.stocksId === to)
     if (typeInfo.parentType) {
       to = typeInfo.parentType
+    }
+    if (!summary[to]) {
+      summary[to] = {
+        totalCarbonSequestration: 0,
+        totalSequestration: 0
+      }
     }
     if (flux.gas === 'C') {
       summary[to].totalCarbonSequestration += flux.value

@@ -37,6 +37,14 @@ async function territoryHandler (req, res) {
     else if (stockA === stockB) return 0
     else return -1
   })
+  const sortedFluxKeys = GroundTypes.filter(type => !type.parentType)
+  sortedFluxKeys.sort((a, b) => {
+    const fluxA = Math.abs(fluxSummary[a.stocksId]?.totalSequestration || 0)
+    const fluxB = Math.abs(fluxSummary[b.stocksId]?.totalSequestration || 0)
+    if (fluxA < fluxB) return 1
+    else if (fluxA === fluxB) return 0
+    else return -1
+  })
   res.render('territoire', {
     pageTitle: `${epci.nom}`,
     epcis,
@@ -58,7 +66,8 @@ async function territoryHandler (req, res) {
     },
     simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides', 'haies'],
     woodCalculation,
-    fluxSummary
+    fluxSummary,
+    sortedFluxKeys
   })
 }
 
