@@ -4,14 +4,14 @@ const { getAnnualFluxes } = require('./index')
 test('returns expected number of entries for cultures ground changes', () => {
   const allFlux = getAnnualFluxes({ epci: '200007177' }).allFlux
   const culturesFlux = allFlux.filter(f => f.to === 'cultures')
-  const cGround = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'ground')
+  const cGround = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'sol')
   expect(cGround.length).toBe(7)
 })
 
 test('returns expected number of entries for cultures litter changes', () => {
   const allFlux = getAnnualFluxes({ epci: '200007177' }).allFlux
   const culturesFlux = allFlux.filter(f => f.to === 'cultures')
-  const litter = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'litter')
+  const litter = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'litière')
   expect(litter.length).toBe(2)
 })
 
@@ -20,7 +20,7 @@ test('returns expected number of entries for cultures litter changes', () => {
 // data-dependent tests
 test('returns expected flux for each prairies -> cultures ground changes', () => {
   const allFlux = getAnnualFluxes({ epci: '200007177' }).allFlux
-  const culturesFlux = allFlux.filter(f => f.to === 'cultures' && f.reservoir === 'ground')
+  const culturesFlux = allFlux.filter(f => f.to === 'cultures' && f.reservoir === 'sol')
   const prairies = culturesFlux.filter(f => f.from.startsWith('prairies'))
   const cPrairies = prairies.filter(f => f.gas === 'C')
   expect(cPrairies[0].value + cPrairies[1].value + cPrairies[2].value).toBeCloseTo(-638.71, 2)

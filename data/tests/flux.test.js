@@ -11,7 +11,7 @@ test('returns carbon flux in tC/(ha.year) for ground for given area and from -> 
 
 test('returns all carbon flux in tc/(ha.year) for ground cultures', () => {
   const fluxes = getAllAnnualFluxes({ epci: '200007177' })
-  const groundFluxes = fluxes.filter(f => f.reservoir === 'ground')
+  const groundFluxes = fluxes.filter(f => f.reservoir === 'sol')
   // expect(fluxes.length).toBe(87) TODO
   const cultureFluxes = groundFluxes.filter(f => f.to === 'cultures')
   expect(cultureFluxes.length).toBe(7)
@@ -22,7 +22,7 @@ test('returns all carbon flux in tc/(ha.year) for ground cultures', () => {
 
 test('returns all carbon flux in tc/(ha.year) for biomass cultures', () => {
   const fluxes = getAllAnnualFluxes({ epci: '200007177' })
-  const biomassFlux = fluxes.filter(f => f.reservoir === 'biomass')
+  const biomassFlux = fluxes.filter(f => f.reservoir === 'biomasse')
   const cultureFluxes = biomassFlux.filter(f => f.to === 'cultures')
   expect(cultureFluxes.length).toBe(6)
   expect(fluxes[0]).toHaveProperty('from')
@@ -52,7 +52,7 @@ test('returns expected area change for sols artificiels', () => {
 
 test('returns expected biomass flux for forests', () => {
   const fluxes = getAllAnnualFluxes({ epci: '200007177' })
-  const biomassFlux = fluxes.filter(f => f.reservoir === 'biomass')
+  const biomassFlux = fluxes.filter(f => f.reservoir === 'biomasse')
   const forestFluxes = biomassFlux.filter(f => f.to.startsWith('forêt '))
   expect(forestFluxes.length).toBe(4)
 })

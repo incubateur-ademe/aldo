@@ -62,8 +62,9 @@ async function territoryHandler (req, res) {
     allGroundTypes: GroundTypes,
     stocks,
     charts: stocks && charts(stocks),
-    formatNumber (number) {
-      const rounded = Math.round(number)
+    formatNumber (number, sigFig = 0) {
+      const multiplier = Math.pow(10, sigFig)
+      const rounded = Math.round(number * multiplier) / multiplier
       if (rounded === 0) return 0 // without this get "-0"
       return rounded.toLocaleString('fr-FR')
     },
@@ -126,7 +127,7 @@ function charts (stocks) {
           labels: stocksDensityLabels,
           datasets: [{
             label: 'Stocks de référence (tC/ha)',
-            data: Object.keys(stocks.byDensity).map(key => stocks.byDensity[key]),
+            data: Object.keys(stocks.byDensity).map(key => Math.round(stocks.byDensity[key])),
             backgroundColor: getColours(stocksDensityLabels, '950'),
             borderColor: getColours(stocksDensityLabels, 'main'),
             borderWidth: 2
@@ -157,14 +158,16 @@ function charts (stocks) {
 function fluxCharts (flux) {
   const chartBackgroundColors = Object.values(Colours).map(c => c['950'])
   const chartBorderColors = Object.values(Colours).map(c => c.main)
-  const keys = Object.keys(flux.summary).filter(k => flux.summary[k].totalSequestration !== undefined)
+  // intentionally filtering out 0 as well as undefined to save horizontal space.
+  // since this data is also displayed in the table.
+  const keys = Object.keys(flux.summary).filter(k => !!flux.summary[k].totalSequestration)
   const labels = keys.map(key => GroundTypes.find(k => k.stocksId === key)?.name)
   const reservoirLabels = ['Sol et litière', 'Biomasse'] // produits bois
   const reservoirData = [0, 0]
   flux.allFlux.forEach(f => {
-    if (f.reservoir === 'ground' || f.reservoir === 'litter') {
+    if (f.reservoir === 'sol' || f.reservoir === 'litière') {
       reservoirData[0] += Math.round(f.co2e)
-    } else if (f.reservoir === 'biomass') {
+    } else if (f.reservoir === 'biomasse') {
       reservoirData[1] += Math.round(f.co2e)
     }
   })
@@ -195,6 +198,9 @@ function fluxCharts (flux) {
           plugins: {
             legend: {
               display: false
+            },
+            tooltip: {
+              intersect: false
             }
           }
         }
@@ -228,6 +234,9 @@ function fluxCharts (flux) {
           plugins: {
             legend: {
               display: false
+            },
+            tooltip: {
+              intersect: false
             }
           }
         }

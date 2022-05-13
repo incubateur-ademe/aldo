@@ -11,7 +11,8 @@ module.exports = {
       stocksId: 'prairies',
       name: 'Prairies',
       color: 'tournesol',
-      clcCodes: ['231', '321', '322', '323']
+      clcCodes: ['231', '321', '322', '323'],
+      hasChildren: true
     },
     {
       stocksId: 'prairies zones arborées',
@@ -64,7 +65,8 @@ module.exports = {
     {
       stocksId: 'sols artificiels',
       name: 'Sols artificiels',
-      color: 'gris'
+      color: 'gris',
+      hasChildren: true
     },
     {
       stocksId: 'sols artificiels arbustifs',
@@ -99,7 +101,8 @@ module.exports = {
       name: 'Forêts',
       color: 'bourgeon',
       fluxId: 'for',
-      clcCodes: ['311', '312', '313', '324']
+      clcCodes: ['311', '312', '313', '324'],
+      hasChildren: true
     },
     {
       stocksId: 'forêt mixte',

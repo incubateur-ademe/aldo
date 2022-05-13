@@ -130,7 +130,7 @@
           </div>
         </div>
         <div class="fr-grid-row fr-mt-3w">
-          <div class="fr-col-12 fr-col-md-6 fr-pr-md-1w fr-table fr-table--no-scroll">
+          <div class="fr-col-12 fr-col-md-7 fr-pr-md-1w fr-table fr-table--no-scroll">
             <table>
               <caption><h2>Flux de carbone</h2></caption>
               <thead>
@@ -156,7 +156,7 @@
                       <% } %>
                     </td>
                     <td onClick='toggleRow(this)'>
-                      <% if (!fluxSummary[sortedFluxKeys[index].stocksId] || (fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration > -0.5 && fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration < 0.5)) { %>
+                      <% if (!fluxSummary[sortedFluxKeys[index].stocksId] || Math.abs(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) < 0.5) { %>
                         <!-- no change -->
                       <% } else if (fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration > 0) { %>
                         <!-- colour = 'succès' -->
@@ -172,14 +172,22 @@
                       </button>
                     </td>
                     <td class='expanded-row-content hide-row'>
-                      <%- include('fluxCalculations/simple', {groundType: sortedFluxKeys[index].stocksId}) -%>
+                      <% if (!fluxSummary[sortedFluxKeys[index].stocksId]) { %>
+                        <p>Pas de données.</p>
+                      <% } else if (Math.abs(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) < 0.5) { %>
+                        <p>Aucun changement du sol enregistré.</p>
+                      <% } else if (!sortedFluxKeys[index].hasChildren) { %>
+                        <%- include('fluxCalculations/simple', { groundType: sortedFluxKeys[index].stocksId, to: sortedFluxKeys[index].name }) -%>
+                      <% } else { %>
+                        <p>À venir</p>
+                      <% } %>
                     </td>
                   </tr>
                 <% } %>
               </tbody>
             </table>
           </div>
-          <div class="fr-col-12 fr-col-sm-10 fr-col-md-6 fr-pt-6w">
+          <div class="fr-col-12 fr-col-sm-10 fr-col-md-5 fr-pt-6w">
             <!-- TODO: test a11y of these charts -->
             <h3>Résultats graphiques</h3>
             <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
@@ -208,6 +216,7 @@
     </div>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   <script>
     // thanks to https://github.com/chhikaradi1993/Expandable-table-row
     const toggleRow = (element) => {
@@ -217,6 +226,12 @@
       element.parentElement.getElementsByClassName('expanded-row-content')[0].classList.toggle('hide-row');
       event.stopPropagation();
     }
+
+    Chart.register(ChartDataLabels);
+    Chart.defaults.set('plugins.datalabels', {
+      anchor: 'end',
+      display: 'auto'
+    });
 
     const groundTypeCtx = document.getElementById('chart-groundType');
     const groundTypeChartData = JSON.parse(`<%- charts.groundType.data %>`);
