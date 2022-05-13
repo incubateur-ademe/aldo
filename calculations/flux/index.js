@@ -14,7 +14,7 @@ function convertN2oToCo2e (valueC) {
 
 function multiplier (reservoir, from, to) {
   const multiplier = 20
-  if (reservoir === 'ground') {
+  if (reservoir === 'sol') {
     // order of statements is important (see below)
     if (from === 'sols artificiels imperméabilisés') {
       return multiplier
@@ -39,7 +39,7 @@ function multiplier (reservoir, from, to) {
     } else if (to === 'cultures' || to === 'vergers' || to === 'vignes') {
       return 1
     }
-  } else if (reservoir === 'biomass') {
+  } else if (reservoir === 'biomasse') {
     // NB: the order here is very important, for example zones humides
     // always gives 20 except when going to sols imperméabilisés
     if (from === 'sols artificiels imperméabilisés') {
@@ -81,7 +81,7 @@ function multiplier (reservoir, from, to) {
     }
     // the remaining type is sols artificiels arbustifs, but any from/to combo has already
     // been covered by the above
-  } else if (reservoir === 'litter') {
+  } else if (reservoir === 'litière') {
     return 1
   }
   console.log('ERROR: multiplier not found for combination of reservoir: ' + reservoir + ' from: ' + from + ' to: ' + to)
@@ -99,19 +99,23 @@ function getAnnualFluxes (location, options) {
     flux.area = area
     if (flux.to.startsWith('forêt ')) {
       flux.value = flux.flux * flux.area
-    } else if (flux.reservoir === 'ground') {
-      const annualtC = flux.flux * area * multiplier(flux.reservoir, flux.from, flux.to)
+    } else if (flux.reservoir === 'sol') {
+      const m = multiplier(flux.reservoir, flux.from, flux.to)
+      flux.multiplier = m
+      const annualtC = flux.flux * area * m
       flux.value = annualtC
     } else {
-      const annualtC = flux.flux * area * multiplier(flux.reservoir, flux.from, flux.to)
+      const m = multiplier(flux.reservoir, flux.from, flux.to)
+      flux.multiplier = m
+      const annualtC = flux.flux * area * m
       flux.value = annualtC
     }
     flux.co2e = convertCToCo2e(flux.value)
   })
   // need to do a second pass because N2O calculation requires the sum of ground and litter values
-  const groundFluxes = allFluxes.filter(flux => flux.reservoir === 'ground')
+  const groundFluxes = allFluxes.filter(flux => flux.reservoir === 'sol')
   groundFluxes.forEach((groundFlux) => {
-    const litterFlux = allFluxes.find(flux => flux.reservoir === 'litter' && flux.from === groundFlux.from && flux.to === groundFlux.to) || {}
+    const litterFlux = allFluxes.find(flux => flux.reservoir === 'litière' && flux.from === groundFlux.from && flux.to === groundFlux.to) || {}
     const groundFluxValue = groundFlux.value || 0
     const litterFluxValue = litterFlux.value || 0
     if (groundFluxValue + litterFluxValue < 0) {
@@ -121,6 +125,7 @@ function getAnnualFluxes (location, options) {
         from: groundFlux.from,
         to: groundFlux.to,
         value: annualN2O,
+        reservoir: 'sol et litière',
         gas: 'N2O',
         co2e: convertN2oToCo2e(annualN2O)
         // flux and reservoir don't make much sense here

@@ -9,6 +9,7 @@ async function territoryHandler (req, res) {
   const epci = await getEpci(req.query.epci) || {}
   const epcis = await epciList()
   let stocks, flux
+  const fluxDetail = {}
   const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
   if (epci.code) {
     const areaOverrides = {}
@@ -22,6 +23,14 @@ async function territoryHandler (req, res) {
     }
     stocks = await getStocks({ epci }, options)
     flux = getAnnualFluxes({ epci: epci.code })
+    flux.allFlux.forEach(f => {
+      if (!fluxDetail[f.to]) {
+        fluxDetail[f.to] = []
+      }
+      if (f.value !== 0) {
+        fluxDetail[f.to].push(f)
+      }
+    })
   } else {
     res.status(404)
     res.render('404', {
@@ -53,8 +62,9 @@ async function territoryHandler (req, res) {
     allGroundTypes: GroundTypes,
     stocks,
     charts: stocks && charts(stocks),
-    formatNumber (number) {
-      const rounded = Math.round(number)
+    formatNumber (number, sigFig = 0) {
+      const multiplier = Math.pow(10, sigFig)
+      const rounded = Math.round(number * multiplier) / multiplier
       if (rounded === 0) return 0 // without this get "-0"
       return rounded.toLocaleString('fr-FR')
     },
@@ -68,7 +78,8 @@ async function territoryHandler (req, res) {
     woodCalculation,
     fluxSummary: flux?.summary,
     sortedFluxKeys,
-    fluxCharts: fluxCharts(flux)
+    fluxCharts: fluxCharts(flux),
+    fluxDetail
   })
 }
 
@@ -116,7 +127,7 @@ function charts (stocks) {
           labels: stocksDensityLabels,
           datasets: [{
             label: 'Stocks de référence (tC/ha)',
-            data: Object.keys(stocks.byDensity).map(key => stocks.byDensity[key]),
+            data: Object.keys(stocks.byDensity).map(key => Math.round(stocks.byDensity[key])),
             backgroundColor: getColours(stocksDensityLabels, '950'),
             borderColor: getColours(stocksDensityLabels, 'main'),
             borderWidth: 2
@@ -147,14 +158,16 @@ function charts (stocks) {
 function fluxCharts (flux) {
   const chartBackgroundColors = Object.values(Colours).map(c => c['950'])
   const chartBorderColors = Object.values(Colours).map(c => c.main)
-  const keys = Object.keys(flux.summary).filter(k => flux.summary[k].totalSequestration !== undefined)
+  // intentionally filtering out 0 as well as undefined to save horizontal space.
+  // since this data is also displayed in the table.
+  const keys = Object.keys(flux.summary).filter(k => !!flux.summary[k].totalSequestration)
   const labels = keys.map(key => GroundTypes.find(k => k.stocksId === key)?.name)
   const reservoirLabels = ['Sol et litière', 'Biomasse'] // produits bois
   const reservoirData = [0, 0]
   flux.allFlux.forEach(f => {
-    if (f.reservoir === 'ground' || f.reservoir === 'litter') {
+    if (f.reservoir === 'sol' || f.reservoir === 'litière') {
       reservoirData[0] += Math.round(f.co2e)
-    } else if (f.reservoir === 'biomass') {
+    } else if (f.reservoir === 'biomasse') {
       reservoirData[1] += Math.round(f.co2e)
     }
   })
@@ -185,6 +198,9 @@ function fluxCharts (flux) {
           plugins: {
             legend: {
               display: false
+            },
+            tooltip: {
+              intersect: false
             }
           }
         }
@@ -218,6 +234,9 @@ function fluxCharts (flux) {
           plugins: {
             legend: {
               display: false
+            },
+            tooltip: {
+              intersect: false
             }
           }
         }

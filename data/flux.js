@@ -111,7 +111,7 @@ function getAllAnnualFluxes (location, options) {
             from,
             to,
             flux: groundFlux,
-            reservoir: 'ground',
+            reservoir: 'sol',
             gas: 'C'
           })
         }
@@ -121,7 +121,7 @@ function getAllAnnualFluxes (location, options) {
             from,
             to,
             flux: litterFlux,
-            reservoir: 'litter',
+            reservoir: 'litière',
             gas: 'C'
           })
         }
@@ -134,7 +134,7 @@ function getAllAnnualFluxes (location, options) {
             from,
             to,
             flux: biomassFlux,
-            reservoir: 'biomass',
+            reservoir: 'biomasse',
             gas: 'C'
           })
         }
@@ -148,7 +148,7 @@ function getAllAnnualFluxes (location, options) {
       fluxes.push({
         to: fType.stocksId,
         flux: biomassFlux,
-        reservoir: 'biomass',
+        reservoir: 'biomasse',
         gas: 'C'
       })
     }

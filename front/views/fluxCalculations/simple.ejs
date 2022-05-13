@@ -1,0 +1,33 @@
+<p class="fr-text--sm fr-mb-1w">
+  Les flux annuels liés aux changements du surface vers <%= to.toLowerCase() %>&nbsp;:
+</p>
+<!-- TODO: what about editing the areas ? -->
+<table>
+  <thead>
+    <th>Sol initial</th>
+    <th>Reservoir</th>
+    <!-- TODO: account for fluxs that are tC/ha only -->
+    <th>Flux unitaire (tC/ha.an)</th>
+    <th>Surface changé (ha)</th>
+    <th>Multi- plicateur</th>
+    <th>Flux</th>
+    <th>Gas</th>
+    <th>Flux (tCO2e /an)</th>
+  </thead>
+  <tbody>
+    <% if(fluxDetail[groundType]) { %>
+      <% for( const detail of fluxDetail[groundType] ) { %>
+        <tr>
+          <td><%= detail.from %></td>
+          <td><%= detail.reservoir || '-' %></td>
+          <td><%= detail.flux !== undefined ? formatNumber(detail.flux, 1) : '-' %></td>
+          <td><%= detail.area !== undefined ? formatNumber(detail.area, 1) : '-' %></td>
+          <td><%= detail.multiplier !== undefined ? formatNumber(detail.multiplier, 1) : '-' %></td>
+          <td><%= formatNumber(detail.value, Math.abs(detail.value) < 1 ? 2 : 0) %></td>
+          <td>t<%= detail.gas %>/an</td>
+          <td><%= formatNumber(detail.co2e) %></td>
+        </tr>
+      <% } %>
+    <% } %>
+  </tbody>
+</table>
