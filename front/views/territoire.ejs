@@ -176,9 +176,8 @@
                           <p>Pas de données.</p>
                         <% } else if (Math.abs(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) < 0.5) { %>
                           <p>Aucun changement du sol enregistré.</p>
-                        <% } else if (sortedFluxKeys[index] === 'produits bois') { %>
-                          <p>Rien ici</p>
-                          <!-- TODO -->
+                        <% } else if (sortedFluxKeys[index].stocksId === 'produits bois') { %>
+                          <p>À venir</p>
                         <% } else if (!sortedFluxKeys[index].children) { %>
                           <p class="fr-text--sm fr-mb-1w">
                             Les flux annuels liés aux changements du surface vers <%= sortedFluxKeys[index].name.toLowerCase() %>&nbsp;:
