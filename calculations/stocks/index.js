@@ -5,6 +5,7 @@ const {
   getForestLitterCarbonDensity
 } = require('../../data/stocks')
 const { getStocksWoodProducts } = require('./woodProducts')
+const { GroundTypes } = require('../constants')
 
 function getArea (location, key, overrides) {
   if (overrides && (overrides[key] || overrides[key] === 0)) {
@@ -150,7 +151,7 @@ function getStocks (location, options) {
 
   // extra steps for ground types that are grouped together
   // prairies
-  const prairieChildren = ['prairies zones arbustives', 'prairies zones herbacées', 'prairies zones arborées']
+  const prairieChildren = GroundTypes.find(gt => gt.stocksId === 'prairies').children
   const prairiesSubtypes = {}
   prairieChildren.forEach((c) => {
     prairiesSubtypes[c] = getSubStocksByKeyword(location, c, 'prairies', {
@@ -162,7 +163,7 @@ function getStocks (location, options) {
   stocks.prairies = getStocksPrairies(prairiesSubtypes)
   stocks.prairies.children = prairieChildren
   // forests
-  const forestChildren = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
+  const forestChildren = GroundTypes.find(gt => gt.stocksId === 'forêts').children
   const forestSubtypes = {}
   forestChildren.forEach((c) => {
     forestSubtypes[c] = getSubStocksByKeyword(location, c, 'forêts', {
@@ -176,7 +177,7 @@ function getStocks (location, options) {
   stocks.forêts.children = forestChildren
   // sols artificiels
   Object.assign(options.areas, getAreasSolsArtificiels(location, options))
-  const solArtChildren = ['sols artificiels imperméabilisés', 'sols artificiels arbustifs', 'sols artificiels arborés et buissonants']
+  const solArtChildren = GroundTypes.find(gt => gt.stocksId === 'sols artificiels').children
   const solArtSubtypes = {}
   solArtChildren.forEach((c) => {
     solArtSubtypes[c] = getSubStocksByKeyword(location, c, 'sols artificiels', {

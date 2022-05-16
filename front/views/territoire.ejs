@@ -176,8 +176,20 @@
                         <p>Pas de données.</p>
                       <% } else if (Math.abs(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) < 0.5) { %>
                         <p>Aucun changement du sol enregistré.</p>
-                      <% } else if (!sortedFluxKeys[index].hasChildren) { %>
-                        <%- include('fluxCalculations/simple', { groundType: sortedFluxKeys[index].stocksId, to: sortedFluxKeys[index].name }) -%>
+                      <% } else if (!sortedFluxKeys[index].children) { %>
+                        <p class="fr-text--sm fr-mb-1w">
+                          Les flux annuels liés aux changements du surface vers <%= sortedFluxKeys[index].name.toLowerCase() %>&nbsp;:
+                        </p>
+                        <%- include('fluxCalculations/simple', { groundType: sortedFluxKeys[index].stocksId }) -%>
+                      <% } else if(sortedFluxKeys[index].stocksId !== 'forêts') { %>
+                        <!-- Prairies, sols artificiels -->
+                        <% for (const child of sortedFluxKeys[index].children) { %>
+                          <% if(!Math.abs(fluxSummary[child]?.totalSequestration) < 0.5) { %>
+                            <p class="fr-text--sm fr-mb-1w">Vers <%= child %></p>
+                            <%- include('fluxCalculations/simple', { groundType: child }) -%>
+                            <br/>
+                          <% } %>
+                        <% } %>
                       <% } else { %>
                         <p>À venir</p>
                       <% } %>

@@ -39,7 +39,7 @@ tr.stocks-row {
 
 tr.flux-row {
   display: grid;
-  grid-template-columns: 1fr repeat(2, 0.9fr) 0.5fr;
+  grid-template-columns: 1fr repeat(2, 0.9fr) 0.3fr;
   justify-content: flex-start;
 }
 

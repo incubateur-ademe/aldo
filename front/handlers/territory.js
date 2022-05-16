@@ -160,7 +160,10 @@ function fluxCharts (flux) {
   const chartBorderColors = Object.values(Colours).map(c => c.main)
   // intentionally filtering out 0 as well as undefined to save horizontal space.
   // since this data is also displayed in the table.
-  const keys = Object.keys(flux.summary).filter(k => !!flux.summary[k].totalSequestration)
+  const keys = Object.keys(flux.summary).filter(k => {
+    const hasParent = !!GroundTypes.find(gt => gt.stocksId === k).parentType
+    return !!flux.summary[k].totalSequestration && !hasParent
+  })
   const labels = keys.map(key => GroundTypes.find(k => k.stocksId === key)?.name)
   const reservoirLabels = ['Sol et litière', 'Biomasse'] // produits bois
   const reservoirData = [0, 0]
