@@ -45,186 +45,205 @@
             <%= epci.nombreCommunes %> communes
           </p>
         <% } %>
-        <form action="/territoire" method="GET" class="fr-mt-4w">
+        <form action="/territoire" method="GET" class="fr-tabs fr-mt-4w">
           <input type="hidden" name="epci" value="<%= epci.nom %>" />
-          <%- include('partials/wood-choice') -%>
-          <div class="fr-grid-row fr-mt-3w">
-            <div class="fr-table fr-table--no-scroll fr-col-12 fr-col-md-6 fr-pr-md-1w">
-              <table>
-                <caption><h2>Stocks de carbone</h2></caption>
-                <thead>
-                  <tr class="expandable-row-header stocks-row">
-                    <th scope="col">Occupation du sol</th>
-                    <th scope="col">Surface (ha)</th>
-                    <th scope="col">Stocks carbone (tC)</th>
-                    <th scope="col">Stocks proportion</th>
-                    <td scope="col"></td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for( let index=0; index < groundTypes.length; index++ ) { %>
-                    <tr class="expandable-row stocks-row">
-                      <td onClick='toggleRow(this)'>
-                        <%= groundTypes[index].name %>
-                      </td>
-                      <td onClick='toggleRow(this)' style="text-align: right;">
-                        <% if (stocks[groundTypes[index].stocksId].area !==undefined) { %>
-                          <%= formatNumber(stocks[groundTypes[index].stocksId].area) %>
-                            <% } else { %>
-                              <i>Pas applicable</i>
-                              <% } %>
-                      </td>
-                      <td onClick='toggleRow(this)' style="text-align: right;">
-                        <%= formatNumber(stocks[groundTypes[index].stocksId].stock) %>
-                      </td>
-                      <td onClick='toggleRow(this)' style="text-align: right;">
-                        <% if (stocks[groundTypes[index].stocksId].stockPercentage> 10) { %>
-                          <b>
-                            <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
-                          </b>
-                          <% } else { %>
-                            <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
-                              <% } %>
-                      </td>
-                      <td onClick='toggleRow(this)'>
-                        <button onClick='toggleRow(this)' type="button">
-                          <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
-                        </button>
-                      </td>
-                      <td class='expanded-row-content hide-row'>
-                        <!-- TODO: reset input values if URL doesn't contain the relevant query value -->
-                        <% if (simpleStocks.indexOf(groundTypes[index].stocksId)> -1) { %>
-                          <%- include('stockCalculations/simple', {index, stock: stocks[groundTypes[index].stocksId] }) -%>
-                        <% } else if (stocks[groundTypes[index].stocksId].children) { %>
-                          <%- include('stockCalculations/subtypes', {index}) -%>
-                        <% } else if (groundTypes[index].stocksId === 'produits bois' ) { %>
-                          <!-- TODO: wood state? -->
-                        <% } %>
-                      </td>
-                    </tr>
-                    <% } %>
-                </tbody>
-              </table>
-              <!-- TODO: reset stocks areas button -->
-            </div>
-            <div class="fr-col-12 fr-col-sm-10 fr-col-md-6 fr-pt-6w">
-              <!-- TODO: test a11y of these charts -->
-              <h3>Résultats graphiques</h3>
-              <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
-                <% for (let keyIdx=0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
-                  <li>
-                    <section class="fr-accordion">
-                      <h4 class="fr-accordion__title">
-                        <button class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
-                          aria-controls="accordion-chart-<%= keyIdx %>">
-                          <%= charts[Object.keys(charts)[keyIdx]].title %>
-                        </button>
-                      </h4>
-                      <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
-                        <canvas id="chart-<%= Object.keys(charts)[keyIdx] %>" width="400" height="400"></canvas>
-                      </div>
-                    </section>
-                  </li>
-                  <% } %>
-              </ul>
-            </div>
-          </div>
-          <div class="fr-grid-row fr-mt-3w">
-            <div class="fr-col-12 fr-col-md-7 fr-pr-md-1w fr-table fr-table--no-scroll">
-              <table>
-                <caption><h2>Flux de carbone</h2></caption>
-                <thead>
-                  <tr class="expandable-row-header stocks-row">
-                    <th scope="col">Occupation du sol finale</th>
-                    <th scope="col">Sequestration tCO2e / an</th>
-                    <td scope="col"></td>
-                    <td scope="col"></td>
-                    <td scope="col"></td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for( let index=0; index < sortedFluxKeys.length; index++ ) { %>
-                    <tr class="expandable-row flux-row">
-                      <td onClick='toggleRow(this)'>
-                        <%= sortedFluxKeys[index].name %>
-                      </td>
-                      <td onClick='toggleRow(this)' style="text-align: right;">
-                        <% if (fluxSummary[sortedFluxKeys[index].stocksId]) { %>
-                          <%= formatNumber(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) %>
-                        <% } else { %>
-                          <i>Pas de données</i>
-                        <% } %>
-                      </td>
-                      <td onClick='toggleRow(this)'>
-                        <% if (!fluxSummary[sortedFluxKeys[index].stocksId] || Math.abs(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) < 0.5) { %>
-                          <!-- no change -->
-                        <% } else if (fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration > 0) { %>
-                          <!-- colour = 'succès' -->
-                          <span style="color: #1f8d49;">séquestration</span>
-                        <% } else { %>
-                          <!-- rouge marianne -->
-                          <span style="color: #e1000f;">émission</span>
-                        <% } %>
-                      </td>
-                      <td onClick='toggleRow(this)'>
-                        <button onClick='toggleRow(this)' type="button">
-                          <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
-                        </button>
-                      </td>
-                      <td class='expanded-row-content hide-row'>
-                        <% if (!fluxSummary[sortedFluxKeys[index].stocksId]) { %>
-                          <p>Pas de données.</p>
-                        <% } else if (Math.abs(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) < 0.5) { %>
-                          <p>Aucun changement du sol enregistré.</p>
-                        <% } else if (sortedFluxKeys[index] === 'produits bois') { %>
-                          <p>Rien ici</p>
-                          <!-- TODO -->
-                        <% } else if (!sortedFluxKeys[index].children) { %>
-                          <p class="fr-text--sm fr-mb-1w">
-                            Les flux annuels liés aux changements du surface vers <%= sortedFluxKeys[index].name.toLowerCase() %>&nbsp;:
-                          </p>
-                          <%- include('fluxCalculations/simple', { groundType: sortedFluxKeys[index].stocksId }) -%>
-                        <% } else if(sortedFluxKeys[index].stocksId !== 'forêts') { %>
-                          <!-- Prairies, sols artificiels -->
-                          <% for (const child of sortedFluxKeys[index].children) { %>
-                            <% if(!Math.abs(fluxSummary[child]?.totalSequestration) < 0.5) { %>
-                              <p class="fr-text--sm fr-mb-1w">Vers <%= child %></p>
-                              <%- include('fluxCalculations/simple', { groundType: child }) -%>
-                              <br/>
+          <ul class="fr-tabs__list" role="tablist" aria-label="Données du territoire">
+            <li role="presentation">
+              <a href="#" id="tabpanel-stocks" class="fr-tabs__tab" tabindex="0" role="tab" aria-selected="true" aria-controls="tabpanel-stocks-panel" data-fr-js-tab-button="true">Stocks</a>
+            </li>
+            <li role="presentation">
+              <a href="#" id="tabpanel-flux" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="false" aria-controls="tabpanel-flux-panel" data-fr-js-tab-button="true">Flux</a>
+            </li>
+            <li role="presentation">
+              <a href="#" id="tabpanel-config" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="false" aria-controls="tabpanel-config-panel" data-fr-js-tab-button="true">Configuration</a>
+            </li>
+          </ul>
+          <!-- <form action="/territoire" method="GET">
+            <input type="hidden" name="epci" value="<%= epci.nom %>" /> -->
+            <div id="tabpanel-stocks-panel" class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-stocks" tabindex="0">
+              <div class="fr-grid-row fr-mt-3w">
+                <div class="fr-table fr-table--no-scroll fr-col-12 fr-col-md-6 fr-pr-md-1w">
+                  <table>
+                    <caption><h2>Stocks de carbone</h2></caption>
+                    <thead>
+                      <tr class="expandable-row-header stocks-row">
+                        <th scope="col">Occupation du sol</th>
+                        <th scope="col">Surface (ha)</th>
+                        <th scope="col">Stocks carbone (tC)</th>
+                        <th scope="col">Stocks proportion</th>
+                        <td scope="col"></td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for( let index=0; index < groundTypes.length; index++ ) { %>
+                        <tr class="expandable-row stocks-row">
+                          <td onClick='toggleRow(this)'>
+                            <%= groundTypes[index].name %>
+                          </td>
+                          <td onClick='toggleRow(this)' style="text-align: right;">
+                            <% if (stocks[groundTypes[index].stocksId].area !==undefined) { %>
+                              <%= formatNumber(stocks[groundTypes[index].stocksId].area) %>
+                                <% } else { %>
+                                  <i>Pas applicable</i>
+                                  <% } %>
+                          </td>
+                          <td onClick='toggleRow(this)' style="text-align: right;">
+                            <%= formatNumber(stocks[groundTypes[index].stocksId].stock) %>
+                          </td>
+                          <td onClick='toggleRow(this)' style="text-align: right;">
+                            <% if (stocks[groundTypes[index].stocksId].stockPercentage> 10) { %>
+                              <b>
+                                <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
+                              </b>
+                              <% } else { %>
+                                <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
+                                  <% } %>
+                          </td>
+                          <td onClick='toggleRow(this)'>
+                            <button onClick='toggleRow(this)' type="button">
+                              <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
+                            </button>
+                          </td>
+                          <td class='expanded-row-content hide-row'>
+                            <!-- TODO: reset input values if URL doesn't contain the relevant query value -->
+                            <% if (simpleStocks.indexOf(groundTypes[index].stocksId)> -1) { %>
+                              <%- include('stockCalculations/simple', {index, stock: stocks[groundTypes[index].stocksId] }) -%>
+                            <% } else if (stocks[groundTypes[index].stocksId].children) { %>
+                              <%- include('stockCalculations/subtypes', {index}) -%>
+                            <% } else if (groundTypes[index].stocksId === 'produits bois' ) { %>
+                              <!-- TODO: wood state? -->
                             <% } %>
-                          <% } %>
-                        <% } else { %>
-                          <p>À venir</p>
+                          </td>
+                        </tr>
                         <% } %>
-                      </td>
-                    </tr>
-                  <% } %>
-                </tbody>
-              </table>
+                    </tbody>
+                  </table>
+                  <!-- TODO: reset stocks areas button -->
+                </div>
+                <!-- TODO: test a11y of these charts -->
+                <div class="fr-col-12 fr-col-sm-10 fr-col-md-6 fr-pt-6w">
+                  <h3>Résultats graphiques</h3>
+                  <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
+                    <% for (let keyIdx=0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
+                      <li>
+                        <section class="fr-accordion">
+                          <h4 class="fr-accordion__title">
+                            <a href="#" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
+                              aria-controls="accordion-chart-<%= keyIdx %>">
+                              <%= charts[Object.keys(charts)[keyIdx]].title %>
+                            </a>
+                          </h4>
+                          <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
+                            <canvas id="chart-<%= Object.keys(charts)[keyIdx] %>" width="400" height="400"></canvas>
+                          </div>
+                        </section>
+                      </li>
+                      <% } %>
+                  </ul>
+                </div>
+              </div>
             </div>
-            <div class="fr-col-12 fr-col-sm-10 fr-col-md-5 fr-pt-6w">
-              <!-- TODO: test a11y of these charts -->
-              <h3>Résultats graphiques</h3>
-              <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
-                <% for (let keyIdx=0; keyIdx < Object.keys(fluxCharts).length; keyIdx++) { %>
-                  <li>
-                    <section class="fr-accordion">
-                      <h4 class="fr-accordion__title">
-                        <button class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
-                          aria-controls="accordion-flux-chart-<%= keyIdx %>">
-                          <%= fluxCharts[Object.keys(fluxCharts)[keyIdx]].title %>
-                        </button>
-                      </h4>
-                      <div class="fr-collapse" id="accordion-flux-chart-<%= keyIdx %>">
-                        <canvas id="fluxChart-<%= Object.keys(fluxCharts)[keyIdx] %>" width="400" height="500"></canvas>
-                      </div>
-                    </section>
-                  </li>
-                  <% } %>
-              </ul>
+            <div id="tabpanel-flux-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-flux" tabindex="0">
+              <div class="fr-grid-row fr-mt-3w">
+                <div class="fr-col-12 fr-col-md-7 fr-pr-md-1w fr-table fr-table--no-scroll">
+                  <table>
+                    <caption><h2>Flux de carbone</h2></caption>
+                    <thead>
+                      <tr class="expandable-row-header stocks-row">
+                        <th scope="col">Occupation du sol finale</th>
+                        <th scope="col">Sequestration tCO2e / an</th>
+                        <td scope="col"></td>
+                        <td scope="col"></td>
+                        <td scope="col"></td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for( let index=0; index < sortedFluxKeys.length; index++ ) { %>
+                        <tr class="expandable-row flux-row">
+                          <td onClick='toggleRow(this)'>
+                            <%= sortedFluxKeys[index].name %>
+                          </td>
+                          <td onClick='toggleRow(this)' style="text-align: right;">
+                            <% if (fluxSummary[sortedFluxKeys[index].stocksId]) { %>
+                              <%= formatNumber(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) %>
+                            <% } else { %>
+                              <i>Pas de données</i>
+                            <% } %>
+                          </td>
+                          <td onClick='toggleRow(this)'>
+                            <% if (!fluxSummary[sortedFluxKeys[index].stocksId] || Math.abs(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) < 0.5) { %>
+                              <!-- no change -->
+                            <% } else if (fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration > 0) { %>
+                              <!-- colour = 'succès' -->
+                              <span style="color: #1f8d49;">séquestration</span>
+                            <% } else { %>
+                              <!-- rouge marianne -->
+                              <span style="color: #e1000f;">émission</span>
+                            <% } %>
+                          </td>
+                          <td onClick='toggleRow(this)'>
+                            <button onClick='toggleRow(this)' type="button">
+                              <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
+                            </button>
+                          </td>
+                          <td class='expanded-row-content hide-row'>
+                            <% if (!fluxSummary[sortedFluxKeys[index].stocksId]) { %>
+                              <p>Pas de données.</p>
+                            <% } else if (Math.abs(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) < 0.5) { %>
+                              <p>Aucun changement du sol enregistré.</p>
+                            <% } else if (sortedFluxKeys[index] === 'produits bois') { %>
+                              <p>Rien ici</p>
+                              <!-- TODO -->
+                            <% } else if (!sortedFluxKeys[index].children) { %>
+                              <p class="fr-text--sm fr-mb-1w">
+                                Les flux annuels liés aux changements du surface vers <%= sortedFluxKeys[index].name.toLowerCase() %>&nbsp;:
+                              </p>
+                              <%- include('fluxCalculations/simple', { groundType: sortedFluxKeys[index].stocksId }) -%>
+                            <% } else if(sortedFluxKeys[index].stocksId !== 'forêts') { %>
+                              <!-- Prairies, sols artificiels -->
+                              <% for (const child of sortedFluxKeys[index].children) { %>
+                                <% if(!Math.abs(fluxSummary[child]?.totalSequestration) < 0.5) { %>
+                                  <p class="fr-text--sm fr-mb-1w">Vers <%= child %></p>
+                                  <%- include('fluxCalculations/simple', { groundType: child }) -%>
+                                  <br/>
+                                <% } %>
+                              <% } %>
+                            <% } else { %>
+                              <p>À venir</p>
+                            <% } %>
+                          </td>
+                        </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="fr-col-12 fr-col-sm-10 fr-col-md-5 fr-pt-6w">
+                  <h3>Résultats graphiques</h3>
+                  <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
+                    <% for (let keyIdx=0; keyIdx < Object.keys(fluxCharts).length; keyIdx++) { %>
+                      <li>
+                        <section class="fr-accordion">
+                          <h4 class="fr-accordion__title">
+                            <a href="#" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
+                              aria-controls="accordion-flux-chart-<%= keyIdx %>">
+                              <%= fluxCharts[Object.keys(fluxCharts)[keyIdx]].title %>
+                            </a>
+                          </h4>
+                          <div class="fr-collapse" id="accordion-flux-chart-<%= keyIdx %>">
+                            <canvas id="fluxChart-<%= Object.keys(fluxCharts)[keyIdx] %>" width="400" height="500"></canvas>
+                          </div>
+                        </section>
+                      </li>
+                      <% } %>
+                  </ul>
+                </div>
+              </div>
             </div>
-          </div>
-        </form>
+            <div id="tabpanel-config-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-config" tabindex="0">
+              <%- include('partials/wood-choice') -%>
+            </div>
+          <!-- </form> -->
+          </form>
       </div>
       <% } else { %>
         <h1>Aucun EPCI trouvé</h1>
