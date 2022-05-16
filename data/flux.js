@@ -217,9 +217,18 @@ function getSolsArtificielsExceptions (location, from, to, clcAnnualChange) {
   // arborés follows logic of other ground types
 }
 
+// source: TODO. In tCO2/an
+function getFranceFluxWoodProducts () {
+  return {
+    bo: 812000,
+    bi: 751000
+  }
+}
+
 module.exports = {
   getAnnualGroundCarbonFlux,
   getAllAnnualFluxes,
   getForestLitterFlux,
-  getAnnualSurfaceChange
+  getAnnualSurfaceChange,
+  getFranceFluxWoodProducts
 }

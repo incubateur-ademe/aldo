@@ -22,7 +22,7 @@ async function territoryHandler (req, res) {
       woodCalculation
     }
     stocks = await getStocks({ epci }, options)
-    flux = getAnnualFluxes({ epci: epci.code })
+    flux = getAnnualFluxes({ epci }, options)
     flux.allFlux.forEach(f => {
       if (!fluxDetail[f.to]) {
         fluxDetail[f.to] = []

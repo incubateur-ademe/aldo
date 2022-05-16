@@ -3,6 +3,7 @@ const {
   getAnnualSurfaceChange
 } = require('../../data/flux')
 const { GroundTypes } = require('../constants')
+const { getFluxWoodProducts } = require('./woodProducts')
 
 function convertCToCo2e (valueC) {
   return valueC * 44 / 12
@@ -93,6 +94,8 @@ function convertN2O (flux) {
 }
 
 function getAnnualFluxes (location, options) {
+  const originalLocation = location
+  location = { epci: location.epci.code } // TODO: change the other APIs to use whole EPCI object like stocks wood products?
   const allFluxes = getAllAnnualFluxes(location, options)
   allFluxes.forEach((flux) => {
     const area = getAnnualSurfaceChange(location, flux.from, flux.to)
@@ -164,6 +167,9 @@ function getAnnualFluxes (location, options) {
       }
     }
   })
+  summary['produits bois'] = {
+    totalSequestration: getFluxWoodProducts(originalLocation, options?.woodCalculation, options).flux
+  }
   return {
     allFlux: allFluxes,
     summary

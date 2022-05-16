@@ -1,9 +1,9 @@
 const { epciList } = require('../data')
 const epcis = require('@etalab/decoupage-administratif/data/epci.json')
 
-function getEpci (name) {
+function getEpci (name, bySiren = false) {
   const aldoList = epciList()
-  const epci = aldoList.find(epci => epci.nom === name)
+  const epci = aldoList.find(epci => bySiren ? epci.code === name : epci.nom === name)
   if (!epci) {
     return
   }
