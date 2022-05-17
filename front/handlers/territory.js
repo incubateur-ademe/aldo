@@ -11,11 +11,13 @@ async function territoryHandler (req, res) {
   let stocks, flux
   const fluxDetail = {}
   const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
+  let hasModifiedArea = false
   if (epci.code) {
     const areaOverrides = {}
     Object.keys(req.query).filter(key => key.startsWith('surface_')).forEach(key => {
       const groundType = key.split('surface_')[1].replace(/_/g, ' ')
       areaOverrides[groundType] = parseFloat(req.query[key])
+      hasModifiedArea = true
     })
     const options = {
       areas: areaOverrides,
@@ -79,7 +81,8 @@ async function territoryHandler (req, res) {
     fluxSummary: flux?.summary,
     sortedFluxKeys,
     fluxCharts: fluxCharts(flux),
-    fluxDetail
+    fluxDetail,
+    hasModifiedArea
   })
 }
 

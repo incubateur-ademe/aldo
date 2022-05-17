@@ -76,14 +76,14 @@
                     <% for( let index=0; index < groundTypes.length; index++ ) { %>
                       <tr class="expandable-row stocks-row">
                         <td onClick='toggleRow(this)'>
-                          <%= groundTypes[index].name %>
+                          <%= groundTypes[index].name %> <%= stocks[groundTypes[index].stocksId].areaModified ? '*' : '' %>
                         </td>
                         <td onClick='toggleRow(this)' style="text-align: right;">
                           <% if (stocks[groundTypes[index].stocksId].area !==undefined) { %>
                             <%= formatNumber(stocks[groundTypes[index].stocksId].area) %>
-                              <% } else { %>
-                                <i>Pas applicable</i>
-                                <% } %>
+                          <% } else { %>
+                            <i>Pas applicable</i>
+                          <% } %>
                         </td>
                         <td onClick='toggleRow(this)' style="text-align: right;">
                           <%= formatNumber(stocks[groundTypes[index].stocksId].stock) %>
@@ -93,9 +93,9 @@
                             <b>
                               <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
                             </b>
-                            <% } else { %>
-                              <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
-                                <% } %>
+                          <% } else { %>
+                            <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
+                          <% } %>
                         </td>
                         <td onClick='toggleRow(this)'>
                           <button onClick='toggleRow(this)' type="button">
@@ -116,6 +116,9 @@
                       <% } %>
                   </tbody>
                 </table>
+                <% if (hasModifiedArea) { %>
+                  <p class="fr-text--sm fr-mt-1w">* Surface modifiée</p>
+                <% } %>
                 <!-- TODO: reset stocks areas button -->
               </div>
               <!-- TODO: test a11y of these charts -->

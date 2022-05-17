@@ -233,6 +233,7 @@ function getStocks (location, options) {
   // -- density per level 2 ground type
   stocks.byDensity = {}
   const groundTypes = GroundTypes.map(gt => gt.stocksId)
+  const modifiedAreas = Object.keys(originalAreas)
   Object.keys(stocks).forEach(key => {
     if (key !== 'produits bois' && stocks[key].hasOwnProperty('totalDensity')) {
       stocks.byDensity[key] = stocks[key].totalDensity || 0
@@ -242,7 +243,9 @@ function getStocks (location, options) {
     if (groundTypes.indexOf(key) !== -1) {
       if (isNaN(originalAreas[key])) {
         stocks[key].originalArea = stocks[key].area
-        stocks[key].areaModified = false
+        const children = GroundTypes.find(gt => gt.stocksId === key).children
+        const hasModifiedChild = children?.some(child => modifiedAreas.includes(child))
+        stocks[key].areaModified = hasModifiedChild
       } else {
         stocks[key].originalArea = originalAreas[key]
         stocks[key].areaModified = true
