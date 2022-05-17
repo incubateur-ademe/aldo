@@ -43,6 +43,7 @@
             class="fr-input fr-text--lg"
             type="number"
             inputmode="numeric"
+            min="0"
             placeholder="<%= round(stocks[subtype].originalArea) %>"
             value="<%= stocks[subtype].areaModified ? round(stocks[subtype].area) : undefined %>"
             id="surface-<%= index %>"
