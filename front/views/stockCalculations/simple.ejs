@@ -28,7 +28,8 @@
       class="fr-input fr-text--lg"
       type="number"
       inputmode="numeric"
-      value="<%= round(stock.area) %>"
+      placeholder="<%= round(stock.originalArea) %>"
+      value="<%= stock.areaModified ? round(stock.area) : undefined %>"
       id="surface-<%= index %>"
       name="surface_<%= pascalCase(groundTypes[index].stocksId) %>"
     >

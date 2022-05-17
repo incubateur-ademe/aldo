@@ -43,7 +43,8 @@
             class="fr-input fr-text--lg"
             type="number"
             inputmode="numeric"
-            value="<%= round(stocks[subtype].area) %>"
+            placeholder="<%= round(stocks[subtype].originalArea) %>"
+            value="<%= stocks[subtype].areaModified ? round(stocks[subtype].area) : undefined %>"
             id="surface-<%= index %>"
             name="surface_<%= pascalCase(allGroundTypes.find((g) => g.stocksId === subtype).stocksId) %>"
           >

@@ -141,6 +141,19 @@ function getStocks (location, options) {
   location = { epci: location.epci.code } // TODO: change the other APIs to use whole EPCI object like stocks wood products?
   options = options || {}
   options.areas = options.areas || {}
+
+  const originalAreas = {}
+  Object.keys(options.areas).forEach(key => {
+    if (!isNaN(options.areas[key])) {
+      if (key.startsWith('sols artificiels')) {
+        const optionsWithoutAreas = JSON.parse(JSON.stringify(options))
+        optionsWithoutAreas.areas = {}
+        Object.assign(originalAreas, getAreasSolsArtificiels(location, optionsWithoutAreas))
+      } else {
+        originalAreas[key] = getAreaData(location, key)
+      }
+    }
+  })
   const stocks = {
     cultures: getStocksByKeyword(location, 'cultures', options),
     'zones humides': getStocksByKeyword(location, 'zones humides', options),
@@ -177,6 +190,9 @@ function getStocks (location, options) {
   stocks.forêts = getStocksPrairies(forestSubtypes)
   stocks.forêts.children = forestChildren
   // sols artificiels
+  // this is an overload of the use of options.areas but since all sols artificiels areas need to
+  // be calculated at once, this is a concise way of doing it and since it is the last time the
+  // object is used it works.
   Object.assign(options.areas, getAreasSolsArtificiels(location, options))
   const solArtChildren = GroundTypes.find(gt => gt.stocksId === 'sols artificiels').children
   const solArtSubtypes = {}
@@ -216,11 +232,21 @@ function getStocks (location, options) {
   }
   // -- density per level 2 ground type
   stocks.byDensity = {}
+  const groundTypes = GroundTypes.map(gt => gt.stocksId)
   Object.keys(stocks).forEach(key => {
     if (key !== 'produits bois' && stocks[key].hasOwnProperty('totalDensity')) {
       stocks.byDensity[key] = stocks[key].totalDensity || 0
     } else if (stocks[key].densities) {
       Object.assign(stocks.byDensity, stocks[key].densities)
+    }
+    if (groundTypes.indexOf(key) !== -1) {
+      if (isNaN(originalAreas[key])) {
+        stocks[key].originalArea = stocks[key].area
+        stocks[key].areaModified = false
+      } else {
+        stocks[key].originalArea = originalAreas[key]
+        stocks[key].areaModified = true
+      }
     }
   })
 
