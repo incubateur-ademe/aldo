@@ -68,46 +68,47 @@ function getStocksPrairies (subStocks) {
 }
 
 function getAreasSolsArtificiels (location, options) {
-  const impermeableKey = 'sols artificiels imperméabilisés'
-  const shrubbyKey = 'sols artificiels arbustifs'
-  const treeKey = 'sols artificiels arborés et buissonants'
-  if (options.areas[impermeableKey] || options.areas[impermeableKey] === 0) {
-    const areas = {}
-    areas[impermeableKey] = options.areas[impermeableKey]
-    areas[shrubbyKey] = options.areas[shrubbyKey]
-    areas[treeKey] = options.areas[treeKey]
-    areas.totalArea = areas[impermeableKey] + areas[shrubbyKey] + areas[treeKey]
-    return areas
-  }
   // there are three different types of arificial ground to consider:
   // * impermeable
   // * with trees
   // * with other greenery (shrubbery, grass etc)
+  const impermeableKey = 'sols artificiels imperméabilisés'
+  const shrubbyKey = 'sols artificiels arbustifs'
+  const treeKey = 'sols artificiels arborés et buissonants'
 
   // start by estimating the area taken by each
   const areaWithoutTrees = getArea(location, 'sols artificiels non-arborés', {})
-  const areaWithTrees = getArea(location, 'sols arborés', {})
+  let areaWithTrees = options.areas[treeKey]
+  if (isNaN(areaWithTrees)) {
+    areaWithTrees = getArea(location, 'sols arborés', {})
+  }
   const totalArea = areaWithoutTrees + areaWithTrees
 
   // TODO: ask are there sources to cite for these estimates?
   const estimatedPortionImpermeable = 0.8
   const estimatedPortionGreen = 0.2
 
-  // TODO: ask why proportion of areaWithTrees in both cases is important
-  let areaImpermeable = 0
-  if (areaWithTrees < 0.2 * totalArea) {
-    areaImpermeable = estimatedPortionImpermeable * totalArea
-  } else {
-    // TODO: ask why subtracting areaWithTrees here
-    areaImpermeable = areaWithoutTrees - areaWithTrees
+  let areaImpermeable = options.areas[impermeableKey]
+  if (isNaN(areaImpermeable)) {
+    // TODO: ask why proportion of areaWithTrees in both cases is important
+    if (areaWithTrees < 0.2 * totalArea) {
+      areaImpermeable = estimatedPortionImpermeable * totalArea
+    } else {
+      // TODO: ask why subtracting areaWithTrees here
+      areaImpermeable = areaWithoutTrees - areaWithTrees
+    }
   }
 
-  let areaShrubby = 0
-  if (areaWithTrees < 0.2 * (areaImpermeable + areaWithTrees)) {
-    areaShrubby = estimatedPortionGreen * (areaWithoutTrees + areaWithTrees) - areaWithTrees
+  let areaShrubby = options.areas[shrubbyKey]
+  if (isNaN(areaShrubby)) {
+    if (areaWithTrees < 0.2 * (areaImpermeable + areaWithTrees)) {
+      areaShrubby = estimatedPortionGreen * (areaWithoutTrees + areaWithTrees) - areaWithTrees
+    } else {
+      areaShrubby = 0
+    }
   }
 
-  const areas = { area: totalArea }
+  const areas = { area: areaImpermeable + areaShrubby + areaWithTrees }
   areas[impermeableKey] = areaImpermeable
   areas[shrubbyKey] = areaShrubby
   areas[treeKey] = areaWithTrees

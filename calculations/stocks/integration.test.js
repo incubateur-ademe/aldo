@@ -102,13 +102,16 @@ test('returns stocks according to provided area overrides', () => {
     cultures: 0,
     'prairies zones herbacées': 10,
     'prairies zones arbustives': 20,
-    'prairies zones arborées': 30
+    'prairies zones arborées': 30,
+    'sols artificiels arbustifs': 40
   }
   const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { areas })
   expect(stocks.cultures.stock).toEqual(0)
   expect(stocks.prairies.stock).toEqual(7448.4604046)
+  expect(stocks['sols artificiels arbustifs'].stock).toBeCloseTo(4012, 0)
   // test that if area is not given, our area data is used
   expect(stocks['zones humides'].stock).toEqual(6813.237073875)
+  expect(stocks['sols artificiels imperméabilisés'].stock).toBeCloseTo(36723, 0)
 })
 
 // chart data tests
