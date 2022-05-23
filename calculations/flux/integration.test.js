@@ -91,3 +91,8 @@ test('returns correct total for wood products', () => {
   const summary1 = getAnnualFluxes({ epci: getEpci('245700398', true) }, { woodCalculation: 'consommation' }).summary
   expect(summary1['produits bois'].totalSequestration).toBeCloseTo(787, 0)
 })
+
+test('option to modify split of sols artificiels', () => {
+  const stocks = getAnnualFluxes({ epci: getEpci('245700398', true) }, { proportionSolsImpermeables: 0.6 }).summary
+  expect(stocks['sols artificiels'].totalSequestration).toBeCloseTo(-66, 0)
+})

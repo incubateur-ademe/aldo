@@ -96,9 +96,10 @@ function convertN2O (flux) {
 function getAnnualFluxes (location, options) {
   const originalLocation = location
   location = { epci: location.epci.code } // TODO: change the other APIs to use whole EPCI object like stocks wood products?
+  options = options || {}
   const allFluxes = getAllAnnualFluxes(location, options)
   allFluxes.forEach((flux) => {
-    const area = getAnnualSurfaceChange(location, flux.from, flux.to)
+    const area = getAnnualSurfaceChange(location, options, flux.from, flux.to)
     flux.area = area
     if (flux.to.startsWith('forêt ')) {
       flux.value = flux.flux * flux.area

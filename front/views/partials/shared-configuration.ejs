@@ -1,0 +1,22 @@
+<div class="fr-form-group">
+  <p>Hypothèses de répartition des surfaces entre sols artificiels :</p>
+  <div class="fr-container formula">
+    <label class="fr-label fr-text--sm fr-col-2" for="répartition_art_imp">pourcentage imperméabilisés :</label>
+    <input
+      class="fr-input fr-text--lg fr-col-1 fr-mr-8w"
+      type="number"
+      inputmode="numeric"
+      min="0"
+      max="100"
+      placeholder="80"
+      value="<%= proportionSolsImpermeables * 100 %>"
+      id="répartition_art_imp"
+      name="répartition_art_imp"
+    >
+    <p class="fr-text--sm">enherbés : <b><%= 100 - (proportionSolsImpermeables || 0.8) * 100 %> %</b></p>
+  </div>
+  <%- include('./wood-choice') -%>
+</div>
+<button class="fr-btn" type="submit">
+  Mettre à jour le calcul
+</button>

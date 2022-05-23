@@ -164,7 +164,7 @@ function cToCo2e (valueC) {
   return valueC * 44 / 12
 }
 
-function getAnnualSurfaceChange (location, from, to) {
+function getAnnualSurfaceChange (location, options, from, to) {
   if (to.startsWith('forêt ')) {
     return getAnnualForestSurfaceChange(location, to)
   }
@@ -187,7 +187,7 @@ function getAnnualSurfaceChange (location, from, to) {
   }
   const yearsBetweenStudies = 6
   const yearlyAreaChange = totalAreaChange / yearsBetweenStudies
-  const solsArtificielsExceptions = getSolsArtificielsExceptions(location, from, to, yearlyAreaChange)
+  const solsArtificielsExceptions = getSolsArtificielsExceptions(location, options, from, to, yearlyAreaChange)
   if (solsArtificielsExceptions !== undefined) {
     return solsArtificielsExceptions
   }
@@ -201,23 +201,25 @@ function getAnnualForestSurfaceChange (location, to) {
   return parseFloat(data[to.split(' ')[1] + 's'])
 }
 
-function getSolsArtificielsExceptions (location, from, to, clcAnnualChange) {
+function getSolsArtificielsExceptions (location, options, from, to, clcAnnualChange) {
+  const estimatedPortionImpermeable = options.proportionSolsImpermeables || 0.8
+  const estimatedPortionGreen = 1 - estimatedPortionImpermeable
   if (to === 'sols artificiels imperméabilisés') {
     if (from === 'sols artificiels arbustifs') {
       return 0
     }
-    const changeSolsArbores = getAnnualSurfaceChange(location, from, 'sols artificiels arborés et buissonants')
+    const changeSolsArbores = getAnnualSurfaceChange(location, options, from, 'sols artificiels arborés et buissonants')
     const changeArboresAndImpermeables = clcAnnualChange + changeSolsArbores
-    if (changeSolsArbores < 0.2 * (changeSolsArbores + changeArboresAndImpermeables * 0.8)) {
-      return changeArboresAndImpermeables * 0.8
+    if (changeSolsArbores < 0.2 * (changeSolsArbores + changeArboresAndImpermeables * estimatedPortionImpermeable)) {
+      return changeArboresAndImpermeables * estimatedPortionImpermeable
     } else {
       return clcAnnualChange
     }
   } else if (to === 'sols artificiels arbustifs') {
-    const changeSolsArbores = getAnnualSurfaceChange(location, from, 'sols artificiels arborés et buissonants')
-    const changeSolsImpermeables = getAnnualSurfaceChange(location, from, 'sols artificiels imperméabilisés')
+    const changeSolsArbores = getAnnualSurfaceChange(location, options, from, 'sols artificiels arborés et buissonants')
+    const changeSolsImpermeables = getAnnualSurfaceChange(location, options, from, 'sols artificiels imperméabilisés')
     if (changeSolsArbores < 0.2 * (changeSolsImpermeables + changeSolsArbores)) {
-      return (clcAnnualChange + changeSolsArbores) * 0.2 - changeSolsArbores
+      return (clcAnnualChange + changeSolsArbores) * estimatedPortionGreen - changeSolsArbores
     } else {
       return 0
     }

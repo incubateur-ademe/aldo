@@ -11,6 +11,8 @@ async function territoryHandler (req, res) {
   let stocks, flux
   const fluxDetail = {}
   const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
+  let proportionSolsImpermeables = req.query['répartition_art_imp']
+  proportionSolsImpermeables = proportionSolsImpermeables ? (proportionSolsImpermeables / 100).toPrecision(2) : undefined
   let hasModifiedArea = false
   if (epci.code) {
     const areaOverrides = {}
@@ -21,7 +23,8 @@ async function territoryHandler (req, res) {
     })
     const options = {
       areas: areaOverrides,
-      woodCalculation
+      woodCalculation,
+      proportionSolsImpermeables
     }
     stocks = await getStocks({ epci }, options)
     flux = getAnnualFluxes({ epci }, options)
@@ -82,7 +85,8 @@ async function territoryHandler (req, res) {
     sortedFluxKeys,
     fluxCharts: fluxCharts(flux),
     fluxDetail,
-    hasModifiedArea
+    hasModifiedArea,
+    proportionSolsImpermeables
   })
 }
 

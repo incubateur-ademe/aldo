@@ -37,21 +37,21 @@ test('returns stocks by ground type for a valid EPCI', () => {
   expect(stocks.vignes.stockPercentage).toEqual(0)
   expect(stocks.vignes.area).toEqual(0)
 
-  expect(stocks['sols artificiels'].stock).toEqual(67419.87842026078)
-  expect(stocks['sols artificiels'].stockPercentage).toEqual(4.2)
-  expect(stocks['sols artificiels'].area).toEqual(1530.1300535000005)
+  expect(stocks['sols artificiels'].stock).toBeCloseTo(67419.88, 2)
+  expect(stocks['sols artificiels'].stockPercentage).toBeCloseTo(4.2, 1)
+  expect(stocks['sols artificiels'].area).toBeCloseTo(1530.13, 2)
 
-  expect(stocks['sols artificiels imperméabilisés'].area).toEqual(1224.1040428000003)
-  expect(stocks['sols artificiels imperméabilisés'].totalDensity).toEqual(30)
-  expect(stocks['sols artificiels imperméabilisés'].stock).toEqual(36723.12128400001)
+  expect(stocks['sols artificiels imperméabilisés'].area).toBeCloseTo(1224.10, 2)
+  expect(stocks['sols artificiels imperméabilisés'].totalDensity).toBeCloseTo(30, 2)
+  expect(stocks['sols artificiels imperméabilisés'].stock).toBeCloseTo(36723.12, 2)
 
-  expect(stocks['sols artificiels arbustifs'].area).toEqual(306.0260107000001)
-  expect(stocks['sols artificiels arbustifs'].totalDensity).toEqual(100.30767341)
-  expect(stocks['sols artificiels arbustifs'].stock).toEqual(30696.757136260774)
+  expect(stocks['sols artificiels arbustifs'].area).toBeCloseTo(306.03, 2)
+  expect(stocks['sols artificiels arbustifs'].totalDensity).toBeCloseTo(100.31, 2)
+  expect(stocks['sols artificiels arbustifs'].stock).toBeCloseTo(30696.76, 2)
 
-  expect(stocks['sols artificiels arborés et buissonants'].area).toEqual(0)
-  expect(stocks['sols artificiels arborés et buissonants'].totalDensity).toEqual(145.56920809000002)
-  expect(stocks['sols artificiels arborés et buissonants'].stock).toEqual(0)
+  expect(stocks['sols artificiels arborés et buissonants'].area).toBeCloseTo(0, 2)
+  expect(stocks['sols artificiels arborés et buissonants'].totalDensity).toBeCloseTo(145.57, 2)
+  expect(stocks['sols artificiels arborés et buissonants'].stock).toBeCloseTo(0, 2)
 
   expect(stocks.haies.stock).toEqual(5085.895944561377)
   expect(stocks.haies.stockPercentage).toEqual(0.3)
@@ -154,4 +154,9 @@ test('returns EPCI information for name and other info where present', () => {
   expect(info.code).toBe('200000172')
   expect(info.membres).toBeDefined()
   expect(info.populationTotale).toBe(27164)
+})
+
+test('option to modify split of sols artificiels', () => {
+  const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { proportionSolsImpermeables: 0.6 })
+  expect(stocks['sols artificiels'].stock).toBeCloseTo(88936, 0)
 })

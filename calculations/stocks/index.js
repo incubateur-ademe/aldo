@@ -85,8 +85,8 @@ function getAreasSolsArtificiels (location, options) {
   const totalArea = areaWithoutTrees + areaWithTrees
 
   // TODO: ask are there sources to cite for these estimates?
-  const estimatedPortionImpermeable = 0.8
-  const estimatedPortionGreen = 0.2
+  const estimatedPortionImpermeable = options.proportionSolsImpermeables || 0.8
+  const estimatedPortionGreen = 1 - estimatedPortionImpermeable
 
   let areaImpermeable = options.areas[impermeableKey]
   if (isNaN(areaImpermeable)) {

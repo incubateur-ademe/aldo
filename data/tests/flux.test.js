@@ -31,9 +31,9 @@ test('returns all carbon flux in tc/(ha.year) for biomass cultures', () => {
 })
 
 test('returns annual? change in surface area', () => {
-  expect(getAnnualSurfaceChange({ epci: '200007177' }, 'prairies zones arborées', 'cultures')).toBeCloseTo(0, 2)
-  expect(getAnnualSurfaceChange({ epci: '200007177' }, 'prairies zones arbustives', 'cultures')).toBeCloseTo(3.60, 2)
-  expect(getAnnualSurfaceChange({ epci: '200007177' }, 'prairies zones herbacées', 'cultures')).toBeCloseTo(39.57, 2)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, 'prairies zones arborées', 'cultures')).toBeCloseTo(0, 2)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, 'prairies zones arbustives', 'cultures')).toBeCloseTo(3.60, 2)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, 'prairies zones herbacées', 'cultures')).toBeCloseTo(39.57, 2)
 })
 
 test('returns expected value for forest litter flux', () => {
@@ -46,8 +46,8 @@ test('returns expected value for forest litter flux', () => {
 })
 
 test('returns expected area change for sols artificiels', () => {
-  expect(getAnnualSurfaceChange({ epci: '200007177' }, 'cultures', 'sols artificiels imperméabilisés')).toBeCloseTo(1.69, 2)
-  expect(getAnnualSurfaceChange({ epci: '200007177' }, 'cultures', 'sols artificiels arbustifs')).toBeCloseTo(0.42, 2)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, 'cultures', 'sols artificiels imperméabilisés')).toBeCloseTo(1.69, 2)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, 'cultures', 'sols artificiels arbustifs')).toBeCloseTo(0.42, 2)
 })
 
 test('returns expected biomass flux for forests', () => {
@@ -58,8 +58,8 @@ test('returns expected biomass flux for forests', () => {
 })
 
 test('returns expected area change for forest types', () => {
-  expect(getAnnualSurfaceChange({ epci: '200007177' }, undefined, 'forêt feuillu')).toBeCloseTo(2220, 0)
-  expect(getAnnualSurfaceChange({ epci: '200007177' }, undefined, 'forêt conifere')).toBeCloseTo(18, 0)
-  expect(getAnnualSurfaceChange({ epci: '200007177' }, undefined, 'forêt peupleraie')).toBeCloseTo(150, 0)
-  expect(getAnnualSurfaceChange({ epci: '200007177' }, undefined, 'forêt mixte')).toBeCloseTo(14, 0)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, undefined, 'forêt feuillu')).toBeCloseTo(2220, 0)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, undefined, 'forêt conifere')).toBeCloseTo(18, 0)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, undefined, 'forêt peupleraie')).toBeCloseTo(150, 0)
+  expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, undefined, 'forêt mixte')).toBeCloseTo(14, 0)
 })
