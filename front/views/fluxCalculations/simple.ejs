@@ -1,15 +1,14 @@
 <!-- TODO: what about editing the areas ? -->
 <table>
   <thead>
-    <th>Sol initial</th>
-    <th>Reservoir</th>
+    <th class="fr-text--xs">Occupation initiale</th>
+    <th class="fr-text--xs">Reservoir</th>
+    <th class="fr-text--xs">Gas</th>
     <!-- TODO: account for fluxs that are tC/ha only -->
-    <th>Flux unitaire (tC/ha.an)</th>
-    <th>Surface changé (ha)</th>
-    <th>Multi- plicateur</th>
-    <th>Flux</th>
-    <th>Gas</th>
-    <th>Flux (tCO2e /an)</th>
+    <th class="fr-text--xs">Flux unitaire (tCO2e /ha.an)</th>
+    <th class="fr-text--xs">Surface changé (ha)</th>
+    <th class="fr-text--xs">Multipli- cateur</th>
+    <th class="fr-text--xs">Flux (tCO2e /an)</th>
   </thead>
   <tbody>
     <% if(fluxDetail[groundType]) { %>
@@ -17,12 +16,11 @@
         <tr>
           <td><%= detail.from %></td>
           <td><%= detail.reservoir || '-' %></td>
-          <td><%= detail.flux !== undefined ? formatNumber(detail.flux, 1) : '-' %></td>
-          <td><%= detail.area !== undefined ? formatNumber(detail.area, 1) : '-' %></td>
-          <td><%= detail.multiplier !== undefined ? formatNumber(detail.multiplier, 1) : '-' %></td>
-          <td><%= formatNumber(detail.value, Math.abs(detail.value) < 1 ? 2 : 0) %></td>
-          <td>t<%= detail.gas %>/an</td>
-          <td><%= formatNumber(detail.co2e) %></td>
+          <td><%= detail.gas %></td>
+          <td style="text-align: right;"><%= detail.fluxEquivalent !== undefined ? formatNumber(detail.fluxEquivalent, 1) : '-' %></td>
+          <td style="text-align: right;"><%= detail.area !== undefined ? formatNumber(detail.area, 1) : '-' %></td>
+          <td style="text-align: right;"><%= detail.multiplier !== undefined ? formatNumber(detail.multiplier, 1) : '-' %></td>
+          <td style="text-align: right;"><%= formatNumber(detail.co2e) %></td>
         </tr>
       <% } %>
     <% } %>

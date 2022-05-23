@@ -111,6 +111,7 @@ function getAllAnnualFluxes (location, options) {
             from,
             to,
             flux: groundFlux,
+            fluxEquivalent: cToCo2e(groundFlux),
             reservoir: 'sol',
             gas: 'C'
           })
@@ -121,6 +122,7 @@ function getAllAnnualFluxes (location, options) {
             from,
             to,
             flux: litterFlux,
+            fluxEquivalent: cToCo2e(litterFlux),
             reservoir: 'litière',
             gas: 'C'
           })
@@ -134,6 +136,7 @@ function getAllAnnualFluxes (location, options) {
             from,
             to,
             flux: biomassFlux,
+            fluxEquivalent: cToCo2e(biomassFlux),
             reservoir: 'biomasse',
             gas: 'C'
           })
@@ -148,12 +151,17 @@ function getAllAnnualFluxes (location, options) {
       fluxes.push({
         to: fType.stocksId,
         flux: biomassFlux,
+        fluxEquivalent: cToCo2e(biomassFlux),
         reservoir: 'biomasse',
         gas: 'C'
       })
     }
   }
   return fluxes
+}
+
+function cToCo2e (valueC) {
+  return valueC * 44 / 12
 }
 
 function getAnnualSurfaceChange (location, from, to) {
