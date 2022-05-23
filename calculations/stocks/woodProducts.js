@@ -25,13 +25,18 @@ function getStocksByHarvest (location) {
   const franceAnnualWoodProductsHarvest = getAnnualFranceWoodProductsHarvest()
   const franceStocksByCategory = getFranceStocksWoodProducts()
 
+  function harvestTotal (data, category) {
+    return data.feuillus[category] + data.coniferes[category]
+  }
+  function portion (category) {
+    return harvestTotal(localAnnualWoodProductsHarvest, category) / harvestTotal(franceAnnualWoodProductsHarvest, category)
+  }
   function stockByProportionHarvest (composition, category) {
-    const franceHarvestCategoryTotal = franceAnnualWoodProductsHarvest.feuillus[category] + franceAnnualWoodProductsHarvest.coniferes[category]
+    const franceHarvestCategoryTotal = harvestTotal(franceAnnualWoodProductsHarvest, category)
     const proportionHarvest = localAnnualWoodProductsHarvest[composition][category] / franceHarvestCategoryTotal
     const franceStocksForCategory = franceStocksByCategory[category]
     return proportionHarvest * franceStocksForCategory
   }
-
   const feuillus = {
     bo: stockByProportionHarvest('feuillus', 'bo'),
     bi: stockByProportionHarvest('feuillus', 'bi')
@@ -41,9 +46,22 @@ function getStocksByHarvest (location) {
     bo: stockByProportionHarvest('coniferes', 'bo'),
     bi: stockByProportionHarvest('coniferes', 'bi')
   }
-  const totalStocks = feuillus.bo + feuillus.bi + coniferes.bo + coniferes.bi
+  function stock (category) {
+    return feuillus[category] + coniferes[category]
+  }
+  const totalStocks = stock('bo') + stock('bi')
   return {
-    stock: co2ToCarbon(totalStocks)
+    stock: co2ToCarbon(totalStocks),
+    boLocalHarvestTotal: harvestTotal(localAnnualWoodProductsHarvest, 'bo'),
+    biLocalHarvestTotal: harvestTotal(localAnnualWoodProductsHarvest, 'bi'),
+    boFranceHarvestTotal: harvestTotal(franceAnnualWoodProductsHarvest, 'bo'),
+    biFranceHarvestTotal: harvestTotal(franceAnnualWoodProductsHarvest, 'bi'),
+    boPortion: portion('bo'),
+    biPortion: portion('bi'),
+    boFranceStocksTotal: franceStocksByCategory.bo,
+    biFranceStocksTotal: franceStocksByCategory.bi,
+    boStock: stock('bo'),
+    biStock: stock('bi')
   }
 }
 

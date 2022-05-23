@@ -1,0 +1,21 @@
+<li class="fr-my-1w">
+  <p class="formula">
+    <span class="fr-col-1 fr-text--sm">
+      <%= category.toUpperCase() %>&nbsp;:&nbsp;
+    </span>
+    <span class="captioned-value fr-col-3">
+      <span class="v fr-text--lg"><%= (stock[`${category}Portion`] * 100).toPrecision(2) %></span>
+      <span class="c fr-text--sm">récolte (%)</span>
+    </span>
+    <span class="fr-col-1" style="text-align: center;">x</span>
+    <span class="captioned-value fr-col-4">
+      <span class="v fr-text--lg"><%= round(stock[`${category}FranceStocksTotal`]) %></span>
+      <span class="c fr-text--sm">Stocks France (tCO2)</span>
+    </span>
+    <span class="fr-col-1" style="text-align: center;">≈</span>
+    <span class="captioned-value fr-col-2">
+      <span class="v fr-text--lg"><%= round(stock[`${category}Stock`]) %></span>
+      <span class="c fr-text--sm">total (tCO2)</span>
+    </span>
+  </p>
+</li>

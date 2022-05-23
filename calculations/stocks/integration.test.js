@@ -94,6 +94,16 @@ test('returns correct wood stocks for harvest calculation type', () => {
 
   expect(stocks['produits bois'].stock).toEqual(48539.99762795377)
   expect(stocks['produits bois'].stockPercentage).toEqual(3)
+  expect(stocks['produits bois'].boLocalHarvestTotal).toBeCloseTo(16138, 0)
+  expect(stocks['produits bois'].biLocalHarvestTotal).toBeCloseTo(1538, 0)
+  expect(stocks['produits bois'].boFranceHarvestTotal).toBeCloseTo(20105285, 0)
+  expect(stocks['produits bois'].biFranceHarvestTotal).toBeCloseTo(11186985, 0)
+  expect(stocks['produits bois'].boPortion).toBeDefined()
+  expect(stocks['produits bois'].biPortion).toBeDefined()
+  expect(stocks['produits bois'].boFranceStocksTotal).toBeCloseTo(177419001, 0)
+  expect(stocks['produits bois'].biFranceStocksTotal).toBeCloseTo(258680001, 0)
+  expect(stocks['produits bois'].boStock).toBeCloseTo(142412, 0)
+  expect(stocks['produits bois'].biStock).toBeCloseTo(35568, 0)
   // TODO: test percentageByReservoir here or below
 })
 

@@ -1,0 +1,21 @@
+<p class="fr-text--sm fr-mb-1w">Comment est-ce que c'est calculé&nbsp;?</p>
+<% if (woodCalculation === 'récolte') { %>
+  <p class="fr-text--sm">Approche <b>production</b> : répartition selon récolte</p>
+  <p class="fr-text--xs">Vous pouvez changer l'approche dans l'onglet configuration.</p>
+  <p class="fr-mt-2w">Proportion récolte théorique&nbsp;:</p>
+  <ul class="fr-container">
+    <%- include('./wood-harvest-portion', { stock, category: 'bo' }) -%>
+    <%- include('./wood-harvest-portion', { stock, category: 'bi' }) -%>
+  </ul>
+  <p class="fr-text--xs">
+    Calcul ADEME considérant un taux de prélèvement égal à celui de la grande région écologique et
+    une répartition entre usage égal à celui de la région admnistrative.
+  </p>
+  <p class="fr-mt-2w">Stocks&nbsp;:</p>
+  <ul class="fr-container">
+    <%- include('./wood-harvest-stocks', { stock, category: 'bo' }) -%>
+    <%- include('./wood-harvest-stocks', { stock, category: 'bi' }) -%>
+  </ul>
+<% } else { %>
+  <p>À venir</p>
+<% } %>

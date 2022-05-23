@@ -109,7 +109,7 @@
                           <% } else if (stocks[groundTypes[index].stocksId].children) { %>
                             <%- include('stockCalculations/subtypes', {index}) -%>
                           <% } else if (groundTypes[index].stocksId === 'produits bois' ) { %>
-                            <!-- TODO: wood state? -->
+                            <%- include('stockCalculations/wood', {index, stock: stocks[groundTypes[index].stocksId], woodCalculation }) -%>
                           <% } %>
                         </td>
                       </tr>
