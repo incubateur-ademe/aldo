@@ -87,6 +87,13 @@ test('returns correct wood stocks for consumption calculation type', () => {
 
   expect(stocks['produits bois'].stock).toEqual(49170.62093925741)
   expect(stocks['produits bois'].stockPercentage).toEqual(3.1)
+  expect(stocks['produits bois'].localPopulation).toEqual(27164)
+  expect(stocks['produits bois'].francePopulation).toEqual(65705495)
+  expect(stocks['produits bois'].portionPopulation).toBeDefined()
+  expect(stocks['produits bois'].boFranceStocksTotal).toBeCloseTo(177419001, 0)
+  expect(stocks['produits bois'].biFranceStocksTotal).toBeCloseTo(258680001, 0)
+  expect(stocks['produits bois'].boStock).toBeCloseTo(73349, 0)
+  expect(stocks['produits bois'].biStock).toBeCloseTo(106944, 0)
 })
 
 test('returns correct wood stocks for harvest calculation type', () => {

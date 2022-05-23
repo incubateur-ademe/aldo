@@ -17,5 +17,27 @@
     <%- include('./wood-harvest-stocks', { stock, category: 'bi' }) -%>
   </ul>
 <% } else { %>
-  <p>À venir</p>
+  <p class="fr-text--sm">Approche <b>consommation</b> : répartition selon habitants</p>
+  <p class="fr-text--xs">Vous pouvez changer l'approche dans l'onglet configuration.</p>
+  <p class="fr-my-2w">Proportion habitants&nbsp;:</p>
+  <div class="fr-container">
+    <p class="formula">
+      <span class="captioned-value fr-col-4">
+        <span class="v fr-text--lg"><%= stock.localPopulation %></span>
+        <span class="c fr-text--sm">population local</span>
+      </span>
+      <span class="fr-col-1" style="text-align: center;">/</span>
+      <span class="captioned-value fr-col-4">
+        <span class="v fr-text--lg"><%= stock.francePopulation %></span>
+        <span class="c fr-text--sm">population France</span>
+      </span>
+      <span class="fr-col-1" style="text-align: center;">≈</span>
+      <span class="fr-col-3 v fr-text--lg"><%= (stock.portionPopulation * 100).toPrecision(2) %> %</span>
+    </p>
+  </div>
+  <p class="fr-mt-2w">Stocks&nbsp;:</p>
+  <ul class="fr-container">
+    <%- include('./wood-population-stocks', { stock, category: 'bo' }) -%>
+    <%- include('./wood-population-stocks', { stock, category: 'bi' }) -%>
+  </ul>
 <% } %>

@@ -14,8 +14,17 @@ function getStocksByConsumption (location) {
   const epciPop = location.epci.populationTotale
   const proportion = epciPop / popTotal
   const franceStocks = getFranceStocksWoodProducts()
+  const biStock = proportion * franceStocks.bi
+  const boStock = proportion * franceStocks.bo
   return {
-    stock: co2ToCarbon((franceStocks.bi + franceStocks.bo) * proportion)
+    stock: co2ToCarbon(biStock + boStock),
+    localPopulation: epciPop,
+    francePopulation: popTotal,
+    portionPopulation: proportion,
+    biFranceStocksTotal: franceStocks.bi,
+    boFranceStocksTotal: franceStocks.bo,
+    biStock,
+    boStock
   }
 }
 
