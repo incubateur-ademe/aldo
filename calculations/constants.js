@@ -20,6 +20,7 @@ module.exports = {
       shortName: 'Arborées',
       parentType: 'prairies',
       fluxId: 'prai',
+      altFluxId: 'prai_arbo',
       color: 'tournesol',
       clcCodes: ['323']
     },
@@ -29,6 +30,7 @@ module.exports = {
       shortName: 'Herbacées',
       parentType: 'prairies',
       fluxId: 'prai',
+      altFluxId: 'prai_herb',
       color: 'tournesol',
       clcCodes: ['231', '321']
     },
@@ -38,6 +40,7 @@ module.exports = {
       shortName: 'Arbustives',
       parentType: 'prairies',
       fluxId: 'prai',
+      altFluxId: 'prai_arbu',
       color: 'tournesol',
       clcCodes: ['322']
     },

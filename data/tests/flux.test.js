@@ -42,7 +42,7 @@ test('returns expected value for forest litter flux', () => {
   expect(getForestLitterFlux('zones humides', 'cultures')).toBeUndefined()
   expect(getForestLitterFlux('cultures', 'sols artificiels arborés et buissonants')).toBe(9)
   // TODO: ask if the following should be the case - the spreadsheet is malformed w/ repeated impermeabilise row
-  expect(getForestLitterFlux('sols artificiels arborés et buissonants', 'cultures')).toBe(-9)
+  expect(getForestLitterFlux('sols artificiels arborés et buissonants', 'cultures')).toBeUndefined()
 })
 
 test('returns expected area change for sols artificiels', () => {

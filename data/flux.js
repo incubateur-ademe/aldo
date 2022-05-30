@@ -52,10 +52,11 @@ function getAnnualGroundCarbonFlux (location, from, to) {
 }
 
 function getForestLitterFlux (from, to) {
-  const relevantTypes = ['forêts', 'sols artificiels arborés et buissonants']
-  if (relevantTypes.includes(from) && !relevantTypes.includes(to)) {
+  const fromTypes = ['forêts', 'sols artificiels arborés et buissonants', 'sols artificiels imperméabilisés']
+  const toTypes = ['forêts', 'sols artificiels arborés et buissonants']
+  if (from === 'forêts' && !toTypes.includes(to)) {
     return -9
-  } else if (!relevantTypes.includes(from) && relevantTypes.includes(to)) {
+  } else if (!fromTypes.includes(from) && toTypes.includes(to)) {
     return 9
   }
 }
@@ -64,7 +65,23 @@ function getBiomassFlux (location, from, to) {
   const csvFilePath = './dataByEpci/biomass-hors-forets.csv'
   const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)
-  const key = `${from} vers ${to}`
+  let key = `${from} vers ${to}`
+  // TODO: why is this done ? esp herbacés to imperméables
+  const keyReplacements = {
+    'prairies zones arbustives vers prairies zones arborées': 'prairies zones arbustives vers sols artificiels arborés et buissonants',
+    'prairies zones herbacées vers prairies zones arborées': 'prairies zones herbacées vers sols artificiels arborés et buissonants',
+    'prairies zones arborées vers prairies zones arbustives': 'prairies zones arborées vers sols artificiels arbustifs',
+    'prairies zones herbacées vers prairies zones arbustives': 'prairies zones herbacées vers sols artificiels arbustifs',
+    'prairies zones arborées vers prairies zones herbacées': 'prairies zones arborées vers sols artificiels imperméabilisés',
+    'prairies zones arbustives vers prairies zones herbacées': 'prairies zones arbustives vers sols artificiels imperméabilisés',
+    'sols artificiels arborés et buissonants vers sols artificiels arbustifs': 'sols artificiels arborés et buissonants vers prairies zones arbustives',
+    'sols artificiels arborés et buissonants vers sols artificiels imperméabilisés': 'sols artificiels arborés et buissonants vers prairies zones herbacées',
+    'sols artificiels arbustifs vers sols artificiels arborés et buissonants': 'sols artificiels arbustifs vers prairies zones arborées',
+    'sols artificiels arbustifs vers sols artificiels imperméabilisés': 'sols artificiels arbustifs vers prairies zones herbacées',
+    'sols artificiels imperméabilisés vers sols artificiels arborés et buissonants': 'sols artificiels arbustifs vers prairies zones arborées',
+    'sols artificiels imperméabilisés vers sols artificiels arbustifs': 'sols artificiels arbustifs vers prairies zones arbustives'
+  }
+  key = keyReplacements[key] || key
   const dataValue = data[key]
   if (dataValue) {
     return parseFloat(dataValue)

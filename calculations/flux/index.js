@@ -1,6 +1,6 @@
 const {
   getAllAnnualFluxes,
-  getAnnualSurfaceChange
+  getAnnualSurfaceChange: getAnnualSurfaceChangeData
 } = require('../../data/flux')
 const { GroundTypes } = require('../constants')
 const { getFluxWoodProducts } = require('./woodProducts')
@@ -11,6 +11,20 @@ function convertCToCo2e (valueC) {
 
 function convertN2oToCo2e (valueC) {
   return valueC * 298
+}
+
+function getAnnualSurfaceChange (location, options, from, to) {
+  const overrides = options.areaChanges || {}
+  if (from && overrides) {
+    // sometimes from isn't defined because of the special cases of forest biomass
+    const fromDetail = GroundTypes.find(ground => ground.stocksId === from)
+    const toDetail = GroundTypes.find(ground => ground.stocksId === to)
+    const key = `${fromDetail.altFluxId || fromDetail.fluxId}_${toDetail.altFluxId || toDetail.fluxId}`
+    if (overrides[key] || overrides[key] === 0) {
+      return overrides[key]
+    }
+  }
+  return getAnnualSurfaceChangeData(location, options, from, to)
 }
 
 function multiplier (reservoir, from, to) {
