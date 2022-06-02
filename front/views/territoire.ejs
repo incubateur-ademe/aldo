@@ -271,11 +271,11 @@
                             <% const toDetail = allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to) %>
                             <% let thisFlux = allFlux.filter(f => f.from === fromDetail.stocksId && f.to === toDetail.stocksId && f.gas === 'C') %>
                             <% thisFlux = thisFlux.length ? thisFlux[0] : undefined %>
-                            <!-- TODO: make it possible to up to 1 decimal place? -->
                             <input
                               class="fr-input fr-text--lg"
                               type="number"
                               inputmode="numeric"
+                              step="0.1"
                               min="0"
                               placeholder="<%= thisFlux?.originalArea ? formatNumber(thisFlux.originalArea, 1) : '-' %>"
                               value="<%= thisFlux?.areaModified ? formatNumber(thisFlux.area, 1) : '-' %>"
