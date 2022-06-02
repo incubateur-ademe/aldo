@@ -15,6 +15,7 @@ function getAnnualGroundCarbonFlux (location, from, to) {
     // could've chosen any prairie type, they have the same flux
     return getAnnualGroundCarbonFlux(location, 'prairies zones arborées', to)
   } else if (from === 'sols artificiels arborés et buissonants') {
+    if (to === 'zones humides' || to === 'forêts') return
     return getAnnualGroundCarbonFlux(location, 'forêts', to)
   }
   // all vergers/vignes -> sols artificiels X use the flux for vergers/vignes -> cultures instead
@@ -76,10 +77,10 @@ function getBiomassFlux (location, from, to) {
     'prairies zones arbustives vers prairies zones herbacées': 'prairies zones arbustives vers sols artificiels imperméabilisés',
     'sols artificiels arborés et buissonants vers sols artificiels arbustifs': 'sols artificiels arborés et buissonants vers prairies zones arbustives',
     'sols artificiels arborés et buissonants vers sols artificiels imperméabilisés': 'sols artificiels arborés et buissonants vers prairies zones herbacées',
-    'sols artificiels arbustifs vers sols artificiels arborés et buissonants': 'sols artificiels arbustifs vers prairies zones arborées',
-    'sols artificiels arbustifs vers sols artificiels imperméabilisés': 'sols artificiels arbustifs vers prairies zones herbacées',
-    'sols artificiels imperméabilisés vers sols artificiels arborés et buissonants': 'sols artificiels arbustifs vers prairies zones arborées',
-    'sols artificiels imperméabilisés vers sols artificiels arbustifs': 'sols artificiels arbustifs vers prairies zones arbustives'
+    'sols artificiels arbustifs vers sols artificiels arborés et buissonants': 'zones humides vers prairies zones arborées',
+    'sols artificiels arbustifs vers sols artificiels imperméabilisés': 'zones humides vers prairies zones herbacées',
+    'sols artificiels imperméabilisés vers sols artificiels arborés et buissonants': 'sols artificiels imperméabilisés vers prairies zones arborées',
+    'sols artificiels imperméabilisés vers sols artificiels arbustifs': 'sols artificiels imperméabilisés vers prairies zones arbustives'
   }
   key = keyReplacements[key] || key
   const dataValue = data[key]

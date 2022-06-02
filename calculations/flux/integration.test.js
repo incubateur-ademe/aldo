@@ -217,25 +217,14 @@ test('option to modify the areas changed', () => {
     art_imp_art_arb: 90,
     art_enh_art_arb: 100
   }
-  let flux = getAnnualFluxes({ epci: getEpci('200043974', true) }, { areaChanges })
-  // console.log('test', flux.allFlux.filter(f => f.to.startsWith('prairies') && f.reservoir === 'biomasse'))
-  // const sl = {}
-  // let total = 0
-  // flux.allFlux.forEach(f => {
-  //   if (f.to.startsWith('prairies') && f.gas === 'C' && f.reservoir === 'biomasse') {
-  //     sl[f.from] = sl[f.from] || 0
-  //     sl[f.from] += f.value
-  //   }
-  // })
-  // console.log('sl', sl)
-  // console.log('total', total)
-  flux = flux.summary
-  expect(flux.cultures.totalSequestration).toBeCloseTo(-57156, 0)
-  expect(flux.prairies.totalSequestration).toBeCloseTo(-5332, 0)
-  // expect(flux['zones humides'].totalSequestration).toBeCloseTo(1112, 0)
-  expect(flux.vergers.totalSequestration).toBeCloseTo(-14735, 0)
-  // expect(flux.vignes.totalSequestration).toBeCloseTo(-45250, 0)
-  // expect(flux['sols artificiels'].totalSequestration).toBeCloseTo(-53945, 0)
-  expect(flux['forêts'].totalSequestration).toBeCloseTo(-19010, 0)
-  expect(flux['produits bois'].totalSequestration).toBeCloseTo(14223, 0)
+  const flux = getAnnualFluxes({ epci: getEpci('200043974', true) }, { areaChanges })
+  const summary = flux.summary
+  expect(summary.cultures.totalSequestration).toBeCloseTo(-57156, 0)
+  expect(summary.prairies.totalSequestration).toBeCloseTo(-5332, 0)
+  expect(summary['zones humides'].totalSequestration).toBeCloseTo(1112, 0)
+  expect(summary.vergers.totalSequestration).toBeCloseTo(-14735, 0)
+  expect(summary.vignes.totalSequestration).toBeCloseTo(-43784, 0)
+  expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-66720, 0)
+  expect(summary['forêts'].totalSequestration).toBeCloseTo(-19010, 0)
+  expect(summary['produits bois'].totalSequestration).toBeCloseTo(14223, 0)
 })
