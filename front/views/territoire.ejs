@@ -74,27 +74,30 @@
                   </thead>
                   <tbody>
                     <% for( let index=0; index < groundTypes.length; index++ ) { %>
+                      <% const groundType = groundTypes[index] %>
+                      <% const thisStock = stocks[groundType.stocksId] %>
+                      <!-- TODO: make row blue if area modified -->
                       <tr class="expandable-row stocks-row">
                         <td onClick='toggleRow(this)'>
-                          <%= groundTypes[index].name %> <%= stocks[groundTypes[index].stocksId].areaModified ? '*' : '' %>
+                          <%= groundType.name %> <%= thisStock.areaModified ? '*' : '' %>
                         </td>
                         <td onClick='toggleRow(this)' style="text-align: right;">
-                          <% if (stocks[groundTypes[index].stocksId].area !==undefined) { %>
-                            <%= formatNumber(stocks[groundTypes[index].stocksId].area) %>
+                          <% if (thisStock.area !==undefined) { %>
+                            <%= formatNumber(thisStock.area) %>
                           <% } else { %>
                             <i>Pas applicable</i>
                           <% } %>
                         </td>
                         <td onClick='toggleRow(this)' style="text-align: right;">
-                          <%= formatNumber(stocks[groundTypes[index].stocksId].stock) %>
+                          <%= formatNumber(thisStock.stock) %>
                         </td>
                         <td onClick='toggleRow(this)' style="text-align: right;">
-                          <% if (stocks[groundTypes[index].stocksId].stockPercentage> 10) { %>
+                          <% if (thisStock.stockPercentage> 10) { %>
                             <b>
-                              <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
+                              <%= formatNumber(thisStock.stockPercentage) %> %
                             </b>
                           <% } else { %>
-                            <%= formatNumber(stocks[groundTypes[index].stocksId].stockPercentage) %> %
+                            <%= formatNumber(thisStock.stockPercentage) %> %
                           <% } %>
                         </td>
                         <td onClick='toggleRow(this)'>
@@ -105,11 +108,11 @@
                         <td class='expanded-row-content hide-row'>
                           <!-- TODO: reset input values if URL doesn't contain the relevant query value -->
                           <% if (simpleStocks.indexOf(groundTypes[index].stocksId)> -1) { %>
-                            <%- include('stockCalculations/simple', {index, stock: stocks[groundTypes[index].stocksId] }) -%>
-                          <% } else if (stocks[groundTypes[index].stocksId].children) { %>
+                            <%- include('stockCalculations/simple', {index, stock: thisStock }) -%>
+                          <% } else if (thisStock.children) { %>
                             <%- include('stockCalculations/subtypes', {index}) -%>
                           <% } else if (groundTypes[index].stocksId === 'produits bois' ) { %>
-                            <%- include('stockCalculations/wood', {index, stock: stocks[groundTypes[index].stocksId], woodCalculation }) -%>
+                            <%- include('stockCalculations/wood', {index, stock: thisStock, woodCalculation }) -%>
                           <% } %>
                         </td>
                       </tr>
@@ -161,21 +164,24 @@
                   </thead>
                   <tbody>
                     <% for( let index=0; index < sortedFluxKeys.length; index++ ) { %>
+                      <% const groundType = sortedFluxKeys[index] %>
+                      <% const thisFlux = fluxSummary[groundType.stocksId] %>
+                      <!-- TODO: make row blue if area modified -->
                       <tr class="expandable-row flux-row">
                         <td onClick='toggleRow(this)'>
-                          <%= sortedFluxKeys[index].name %>
+                          <%= groundType.name %> <%= thisFlux?.areaModified ? '*' : '' %>
                         </td>
                         <td onClick='toggleRow(this)' style="text-align: right;">
-                          <% if (fluxSummary[sortedFluxKeys[index].stocksId]) { %>
-                            <%= formatNumber(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) %>
+                          <% if (thisFlux) { %>
+                            <%= formatNumber(thisFlux.totalSequestration) %>
                           <% } else { %>
                             <i>Pas de données</i>
                           <% } %>
                         </td>
                         <td onClick='toggleRow(this)'>
-                          <% if (!fluxSummary[sortedFluxKeys[index].stocksId] || Math.abs(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) < 0.5) { %>
+                          <% if (!thisFlux || Math.abs(thisFlux.totalSequestration) < 0.5) { %>
                             <!-- no change -->
-                          <% } else if (fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration > 0) { %>
+                          <% } else if (thisFlux.totalSequestration > 0) { %>
                             <!-- colour = 'succès' -->
                             <span style="color: #1f8d49;">séquestration</span>
                           <% } else { %>
@@ -189,20 +195,20 @@
                           </button>
                         </td>
                         <td class='expanded-row-content hide-row'>
-                          <% if (!fluxSummary[sortedFluxKeys[index].stocksId]) { %>
+                          <% if (!thisFlux) { %>
                             <p>Pas de données.</p>
-                          <% } else if (Math.abs(fluxSummary[sortedFluxKeys[index].stocksId].totalSequestration) < 0.5) { %>
+                          <% } else if (Math.abs(thisFlux.totalSequestration) < 0.5) { %>
                             <p>Aucun changement du sol enregistré.</p>
-                          <% } else if (sortedFluxKeys[index] === 'produits bois') { %>
+                          <% } else if (groundType.stocksId === 'produits bois') { %>
                             <p>À venir</p>
-                          <% } else if (!sortedFluxKeys[index].children) { %>
+                          <% } else if (!groundType.children) { %>
                             <p class="fr-text--sm fr-mb-1w">
-                              Les flux annuels liés aux changements du surface vers <%= sortedFluxKeys[index].name.toLowerCase() %>&nbsp;:
+                              Les flux annuels liés aux changements du surface vers <%= groundType.name.toLowerCase() %>&nbsp;:
                             </p>
-                            <%- include('fluxCalculations/simple', { groundType: sortedFluxKeys[index].stocksId }) -%>
-                          <% } else if(sortedFluxKeys[index].stocksId !== 'forêts') { %>
+                            <%- include('fluxCalculations/simple', { groundType: groundType.stocksId }) -%>
+                          <% } else if(groundType.stocksId !== 'forêts') { %>
                             <!-- Prairies, sols artificiels -->
-                            <% for (const child of sortedFluxKeys[index].children) { %>
+                            <% for (const child of groundType.children) { %>
                               <% if(!Math.abs(fluxSummary[child]?.totalSequestration) < 0.5) { %>
                                 <p class="fr-text--sm fr-mb-1w">Vers <%= child %></p>
                                 <%- include('fluxCalculations/simple', { groundType: child }) -%>
@@ -217,6 +223,9 @@
                     <% } %>
                   </tbody>
                 </table>
+                <% if (hasModifiedAreaChange) { %>
+                  <p class="fr-text--sm fr-mt-1w">* Changement du surface modifiée</p>
+                <% } %>
                 <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/flux/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">Lire plus de nos méthodes de calcul</a></p>
               </div>
               <div class="fr-col-12 fr-col-sm-10 fr-col-md-5 fr-pt-6w">
@@ -239,6 +248,50 @@
                     <% } %>
                 </ul>
               </div>
+            </div>
+            <div class="fr-col-12 fr-pr-md-1w fr-table">
+              <table>
+                <caption><h2>Changements du surface (ha)</h2></caption>
+                <thead>
+                  <tr>
+                    <td></td>
+                    <% for( const to of fluxIds ) { %>
+                      <th scope="col" class="flux-surface-col"><%= allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to).name %></th>
+                    <% } %>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for( const from of fluxIds ) { %>
+                    <tr>
+                      <% const fromDetail = allGroundTypes.find(gt => gt.altFluxId === from || gt.fluxId === from) %>
+                      <td scope="row"><%= fromDetail.name %></td>
+                      <% for( const to of fluxIds ) { %>
+                        <td>
+                          <% if (from !== to) { %>
+                            <% const toDetail = allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to) %>
+                            <% let thisFlux = allFlux.filter(f => f.from === fromDetail.stocksId && f.to === toDetail.stocksId && f.gas === 'C') %>
+                            <% thisFlux = thisFlux.length ? thisFlux[0] : undefined %>
+                            <!-- TODO: make it possible to up to 1 decimal place? -->
+                            <input
+                              class="fr-input fr-text--lg"
+                              type="number"
+                              inputmode="numeric"
+                              min="0"
+                              placeholder="<%= thisFlux?.originalArea ? formatNumber(thisFlux.originalArea, 1) : '-' %>"
+                              value="<%= thisFlux?.areaModified ? formatNumber(thisFlux.area, 1) : '-' %>"
+                              id="change_<%= from %>_<%= to %>"
+                              name="change_<%= from %>_<%= to %>"
+                            >
+                          <% } %>
+                        </td>
+                      <% } %>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+              <button class="fr-btn fr-mt-2w" type="submit">
+                Mettre à jour les surfaces
+              </button>
             </div>
           </div>
           <div id="tabpanel-config-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-config" tabindex="0">

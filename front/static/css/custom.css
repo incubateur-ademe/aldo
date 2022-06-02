@@ -79,6 +79,10 @@ tr.expandable-row:hover {
   hyphens: auto;
 }
 
+th.flux-surface-col {
+  min-width: 9em;
+}
+
 @media print {
   header {
     display: none;

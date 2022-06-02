@@ -15,16 +15,28 @@ function convertN2oToCo2e (valueC) {
 
 function getAnnualSurfaceChange (location, options, from, to) {
   const overrides = options.areaChanges || {}
+  let area
+  let areaModified = false
   if (from && overrides) {
     // sometimes from isn't defined because of the special cases of forest biomass
     const fromDetail = GroundTypes.find(ground => ground.stocksId === from)
     const toDetail = GroundTypes.find(ground => ground.stocksId === to)
     const key = `${fromDetail.altFluxId || fromDetail.fluxId}_${toDetail.altFluxId || toDetail.fluxId}`
     if (overrides[key] || overrides[key] === 0) {
-      return overrides[key]
+      area = overrides[key]
     }
   }
-  return getAnnualSurfaceChangeData(location, options, from, to)
+  const originalArea = getAnnualSurfaceChangeData(location, options, from, to)
+  if (!area) {
+    area = originalArea
+  } else {
+    areaModified = true
+  }
+  return {
+    area,
+    originalArea,
+    areaModified
+  }
 }
 
 function multiplier (reservoir, from, to) {
@@ -113,8 +125,10 @@ function getAnnualFluxes (location, options) {
   options = options || {}
   const allFluxes = getAllAnnualFluxes(location, options)
   allFluxes.forEach((flux) => {
-    const area = getAnnualSurfaceChange(location, options, flux.from, flux.to)
+    const { area, areaModified, originalArea } = getAnnualSurfaceChange(location, options, flux.from, flux.to)
     flux.area = area
+    flux.areaModified = areaModified
+    flux.originalArea = originalArea
     if (flux.to.startsWith('forêt ')) {
       flux.value = flux.flux * flux.area
     } else if (flux.reservoir === 'sol') {
@@ -165,6 +179,9 @@ function getAnnualFluxes (location, options) {
     } else {
       summary[to].totalSequestration += flux.co2e
     }
+    if (flux.areaModified) {
+      summary[to].areaModified = flux.areaModified
+    }
     const typeInfo = GroundTypes.find(gt => gt.stocksId === to)
     if (typeInfo.parentType) {
       const parent = typeInfo.parentType
@@ -179,6 +196,9 @@ function getAnnualFluxes (location, options) {
         summary[parent].totalSequestration += flux.co2e
       } else {
         summary[parent].totalSequestration += flux.co2e
+      }
+      if (flux.areaModified) {
+        summary[parent].areaModified = flux.areaModified
       }
     }
   })

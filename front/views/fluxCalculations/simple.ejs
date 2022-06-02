@@ -18,7 +18,7 @@
           <td><%= detail.reservoir || '-' %></td>
           <td><%= detail.gas %></td>
           <td style="text-align: right;"><%= detail.fluxEquivalent !== undefined ? formatNumber(detail.fluxEquivalent, 1) : '-' %></td>
-          <td style="text-align: right;"><%= detail.area !== undefined ? formatNumber(detail.area, 1) : '-' %></td>
+          <td style="text-align: right;"><%= detail.area !== undefined ? formatNumber(detail.area, 1) : '-' %><%= detail.areaModified ? ' *' : '' %></td>
           <td style="text-align: right;"><%= detail.multiplier !== undefined ? formatNumber(detail.multiplier, 1) : '-' %></td>
           <td style="text-align: right;"><%= formatNumber(detail.co2e) %></td>
         </tr>

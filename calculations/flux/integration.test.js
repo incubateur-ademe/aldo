@@ -220,6 +220,10 @@ test('option to modify the areas changed', () => {
   const flux = getAnnualFluxes({ epci: getEpci('200043974', true) }, { areaChanges })
   const summary = flux.summary
   expect(summary.cultures.totalSequestration).toBeCloseTo(-57156, 0)
+  expect(summary.cultures.areaModified).toBe(true)
+  const culturesFlux = flux.allFlux.filter(f => f.to === 'cultures' && !!f.area)
+  expect(culturesFlux[0]).toHaveProperty('originalArea')
+  expect(culturesFlux[0].areaModified).toBe(true)
   expect(summary.prairies.totalSequestration).toBeCloseTo(-5332, 0)
   expect(summary['zones humides'].totalSequestration).toBeCloseTo(1112, 0)
   expect(summary.vergers.totalSequestration).toBeCloseTo(-14735, 0)

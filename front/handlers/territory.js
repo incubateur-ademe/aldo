@@ -14,15 +14,27 @@ async function territoryHandler (req, res) {
   let proportionSolsImpermeables = req.query['répartition_art_imp']
   proportionSolsImpermeables = proportionSolsImpermeables ? (proportionSolsImpermeables / 100).toPrecision(2) : undefined
   let hasModifiedArea = false
+  let hasModifiedAreaChange = false
   if (epci.code) {
     const areaOverrides = {}
     Object.keys(req.query).filter(key => key.startsWith('surface_')).forEach(key => {
       const groundType = key.split('surface_')[1].replace(/_/g, ' ')
       areaOverrides[groundType] = parseFloat(req.query[key])
-      hasModifiedArea = true
+      if (!isNaN(areaOverrides[groundType])) {
+        hasModifiedArea = true
+      }
+    })
+    const areaChangeOverrides = {}
+    Object.keys(req.query).filter(key => key.startsWith('change_')).forEach(key => {
+      const groundType = key.split('change_')[1]
+      areaChangeOverrides[groundType] = parseFloat(req.query[key])
+      if (!isNaN(areaChangeOverrides[groundType])) {
+        hasModifiedAreaChange = true
+      }
     })
     const options = {
       areas: areaOverrides,
+      areaChanges: areaChangeOverrides,
       woodCalculation,
       proportionSolsImpermeables
     }
@@ -59,6 +71,12 @@ async function territoryHandler (req, res) {
     else if (fluxA === fluxB) return 0
     else return -1
   })
+  const fluxIds = []
+  GroundTypes.forEach(gt => {
+    if (gt.altFluxId || gt.fluxId) {
+      fluxIds.push(gt.altFluxId || gt.fluxId)
+    }
+  })
   res.render('territoire', {
     pageTitle: `${epci.nom}`,
     epcis,
@@ -82,11 +100,14 @@ async function territoryHandler (req, res) {
     simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides', 'haies'],
     woodCalculation,
     fluxSummary: flux?.summary,
+    allFlux: flux?.allFlux,
     sortedFluxKeys,
     fluxCharts: fluxCharts(flux),
     fluxDetail,
     hasModifiedArea,
-    proportionSolsImpermeables
+    hasModifiedAreaChange,
+    proportionSolsImpermeables,
+    fluxIds
   })
 }
 
