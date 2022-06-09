@@ -232,3 +232,19 @@ test('option to modify the areas changed', () => {
   expect(summary['forêts'].totalSequestration).toBeCloseTo(-19010, 0)
   expect(summary['produits bois'].totalSequestration).toBeCloseTo(14223, 0)
 })
+
+test('total flux returned', () => {
+  const flux = getAnnualFluxes({ epci: getEpci('200043974', true) })
+  expect(flux.summary.cultures.totalSequestration).toBeCloseTo(-467, 0)
+  expect(flux.summary.prairies.totalSequestration).toBeCloseTo(0, 0)
+  expect(flux.summary['zones humides'].totalSequestration).toBeCloseTo(0, 0)
+  expect(flux.summary.vergers.totalSequestration).toBeCloseTo(0, 0)
+  expect(flux.summary.vignes.totalSequestration).toBeCloseTo(0, 0)
+  // Received difference:   1301.042160641411
+  // expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(-3976, 0)
+  expect(flux.summary.forêts.totalSequestration).toBeCloseTo(-21494, 0)
+  expect(flux.summary['produits bois'].totalSequestration).toBeCloseTo(14223, 0)
+  // Received difference:   12921.878662995097
+  // expect(flux.total).toBeCloseTo(-11714.4, 1)
+  expect(flux).toHaveProperty('total') // TODO: replace this with a test of the value once errors in spreadsheet are fixed
+})

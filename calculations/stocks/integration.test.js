@@ -177,3 +177,8 @@ test('option to modify split of sols artificiels', () => {
   const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { proportionSolsImpermeables: 0.6 })
   expect(stocks['sols artificiels'].stock).toBeCloseTo(88936, 0)
 })
+
+test('total stock returned', () => {
+  const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, {})
+  expect(stocks.total).toBeCloseTo(1593631, 0)
+})

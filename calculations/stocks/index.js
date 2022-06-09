@@ -252,7 +252,7 @@ function getStocks (location, options) {
       }
     }
   })
-
+  stocks.total = stocksTotal
   return stocks
 }
 

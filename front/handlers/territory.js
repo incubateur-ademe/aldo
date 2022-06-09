@@ -107,7 +107,9 @@ async function territoryHandler (req, res) {
     hasModifiedArea,
     hasModifiedAreaChange,
     proportionSolsImpermeables,
-    fluxIds
+    fluxIds,
+    stockTotal: stocks?.total,
+    fluxTotal: flux?.total
   })
 }
 

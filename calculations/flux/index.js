@@ -165,7 +165,10 @@ function getAnnualFluxes (location, options) {
     }
   })
   const summary = {}
+
+  let total = 0
   allFluxes.forEach((flux) => {
+    total += flux.co2e
     const to = flux.to
     if (!summary[to]) {
       summary[to] = {
@@ -207,7 +210,8 @@ function getAnnualFluxes (location, options) {
   }
   return {
     allFlux: allFluxes,
-    summary
+    summary,
+    total
   }
 }
 

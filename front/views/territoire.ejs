@@ -45,6 +45,16 @@
             <%= epci.nombreCommunes %> communes
           </p>
         <% } %>
+        <div class="fr-callout fr-my-3w">
+          <p class="fr-callout__text">
+            Un <%= fluxTotal > 0 ? "séquestration" : "émission" %>
+            de carbone de
+            <%= formatNumber(fluxTotal/1000, 1) %> ktCO<sub>2</sub>e / an
+            et un stock total de
+            <%= formatNumber(stockTotal/1000000, 1) %> MtC,
+            à préserver !
+          </p>
+        </div>
         <form action="/territoire" method="GET" class="fr-tabs fr-mt-4w">
           <input type="hidden" name="epci" value="<%= epci.nom %>" />
           <ul class="fr-tabs__list" role="tablist" aria-label="Données du territoire">
@@ -156,7 +166,7 @@
                   <thead>
                     <tr class="expandable-row-header stocks-row">
                       <th scope="col">Occupation du sol finale</th>
-                      <th scope="col">Sequestration tCO2e / an</th>
+                      <th scope="col">Sequestration tCO<sub>2</sub>e / an</th>
                       <td scope="col"></td>
                       <td scope="col"></td>
                       <td scope="col"></td>
