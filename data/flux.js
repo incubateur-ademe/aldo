@@ -48,7 +48,7 @@ function getAnnualGroundCarbonFlux (location, from, to) {
   const data = dataByEpci.find(data => data.siren === location.epci)
   const dataValue = data[getGroundCarbonFluxKey(from, to)]
   if (dataValue) {
-    return parseFloat(dataValue)
+    return parseFloat(dataValue) * multiplier('sol', from, to)
   }
 }
 
@@ -85,7 +85,7 @@ function getBiomassFlux (location, from, to) {
   key = keyReplacements[key] || key
   const dataValue = data[key]
   if (dataValue) {
-    return parseFloat(dataValue)
+    return parseFloat(dataValue) * multiplier('biomasse', from, to)
   }
 }
 
@@ -109,6 +109,81 @@ function getForestBiomassFlux (location, to) {
   if (dataValue) {
     return parseFloat(dataValue)
   }
+}
+
+// TODO: explainer for this
+function multiplier (reservoir, from, to) {
+  const multiplier = 20
+  if (reservoir === 'sol') {
+    // order of statements is important (see below)
+    if (from === 'sols artificiels imperméabilisés') {
+      return multiplier
+    } else if (to === 'sols artificiels imperméabilisés') {
+      return 1
+    } else if (from === 'zones humides' || to === 'zones humides') {
+      return 1
+    } else if (to === 'sols artificiels arborés et buissonants') {
+      return 1
+    } else if (from === 'sols artificiels arbustifs') {
+      return multiplier
+    } else if (to === 'sols artificiels arbustifs') {
+      return 1
+    } else if (from === 'sols artificiels arborés et buissonants') {
+      return multiplier
+    } else if (from === 'forêts' || to === 'forêts') {
+      return multiplier
+    } else if (from.startsWith('prairies') || to.startsWith('prairies')) {
+      return multiplier
+    } else if (from === 'cultures') {
+      return multiplier
+    } else if (to === 'cultures' || to === 'vergers' || to === 'vignes') {
+      return 1
+    }
+  } else if (reservoir === 'biomasse') {
+    // NB: the order here is very important, for example zones humides
+    // always gives 20 except when going to sols imperméabilisés
+    if (from === 'sols artificiels imperméabilisés') {
+      return multiplier
+    } else if (to === 'sols artificiels imperméabilisés') {
+      return 1
+    } else if (to === 'prairies zones arborées') {
+      return multiplier
+    } else if (from === 'prairies zones arborées') {
+      return 1
+    } else if (from === 'zones humides') {
+      return multiplier
+    } else if (to === 'zones humides') {
+      return 1
+    } else if (from === 'cultures') {
+      return multiplier
+    } else if (to === 'cultures') {
+      return 1
+    } else if (from === 'sols artificiels arborés et buissonants') {
+      return 1
+    } else if (to === 'sols artificiels arborés et buissonants') {
+      return multiplier
+    } else if (from === 'prairies zones herbacées') {
+      return multiplier
+    } else if (to === 'prairies zones herbacées') {
+      return 1
+    } else if (from === 'vergers') {
+      return 1
+    } else if (to === 'vergers') {
+      return multiplier
+    } else if (from === 'vignes') {
+      return multiplier
+    } else if (to === 'vignes') {
+      return 1
+    } else if (from === 'prairies zones arbustives') {
+      return 1
+    } else if (to === 'prairies zones arbustives') {
+      return multiplier
+    }
+    // the remaining type is sols artificiels arbustifs, but any from/to combo has already
+    // been covered by the above
+  }
+  console.log('ERROR: multiplier not found for combination of reservoir: ' + reservoir + ' from: ' + from + ' to: ' + to)
+  return 1
 }
 
 // returns all known fluxes for from - to combinations

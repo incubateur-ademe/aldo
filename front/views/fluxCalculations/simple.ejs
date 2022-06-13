@@ -3,11 +3,9 @@
     <th class="fr-text--xs">Occupation initiale</th>
     <th class="fr-text--xs">Reservoir</th>
     <th class="fr-text--xs">Gas</th>
-    <!-- TODO: account for fluxs that are tC/ha only -->
-    <th class="fr-text--xs">Flux unitaire (tCO<sub>2</sub>e /ha.an)</th>
-    <th class="fr-text--xs">Surface changé (ha)</th>
-    <th class="fr-text--xs">Multipli- cateur</th>
-    <th class="fr-text--xs">Flux (tCO<sub>2</sub>e /an)</th>
+    <th class="fr-text--xs">Flux unitaire (tCO<sub>2</sub>e/ha)</th>
+    <th class="fr-text--xs">Surface changé (ha/an)</th>
+    <th class="fr-text--xs">Flux (tCO<sub>2</sub>e/an)</th>
   </thead>
   <tbody>
     <% if(fluxDetail[groundType]) { %>
@@ -18,7 +16,6 @@
           <td><%= detail.gas %></td>
           <td style="text-align: right;"><%= detail.fluxEquivalent !== undefined ? formatNumber(detail.fluxEquivalent, 1) : '-' %></td>
           <td style="text-align: right;"><%= detail.area !== undefined ? formatNumber(detail.area, 1) : '-' %><%= detail.areaModified ? ' *' : '' %></td>
-          <td style="text-align: right;"><%= detail.multiplier !== undefined ? formatNumber(detail.multiplier, 1) : '-' %></td>
           <td style="text-align: right;"><%= formatNumber(detail.co2e) %></td>
         </tr>
       <% } %>

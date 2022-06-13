@@ -6,7 +6,7 @@ const {
 } = require('../flux')
 
 test('returns carbon flux in tC/(ha.year) for ground for given area and from -> to combination', () => {
-  expect(getAnnualGroundCarbonFlux({ epci: '200007177' }, 'prairies zones arborées', 'cultures')).toBeCloseTo(-0.7, 1)
+  expect(getAnnualGroundCarbonFlux({ epci: '200007177' }, 'prairies zones arborées', 'cultures')).toBeCloseTo(-14.8, 1)
 })
 
 test('returns all carbon flux in tc/(ha.year) for ground cultures', () => {

@@ -39,82 +39,6 @@ function getAnnualSurfaceChange (location, options, from, to) {
   }
 }
 
-function multiplier (reservoir, from, to) {
-  const multiplier = 20
-  if (reservoir === 'sol') {
-    // order of statements is important (see below)
-    if (from === 'sols artificiels imperméabilisés') {
-      return multiplier
-    } else if (to === 'sols artificiels imperméabilisés') {
-      return 1
-    } else if (from === 'zones humides' || to === 'zones humides') {
-      return 1
-    } else if (to === 'sols artificiels arborés et buissonants') {
-      return 1
-    } else if (from === 'sols artificiels arbustifs') {
-      return multiplier
-    } else if (to === 'sols artificiels arbustifs') {
-      return 1
-    } else if (from === 'sols artificiels arborés et buissonants') {
-      return multiplier
-    } else if (from === 'forêts' || to === 'forêts') {
-      return multiplier
-    } else if (from.startsWith('prairies') || to.startsWith('prairies')) {
-      return multiplier
-    } else if (from === 'cultures') {
-      return multiplier
-    } else if (to === 'cultures' || to === 'vergers' || to === 'vignes') {
-      return 1
-    }
-  } else if (reservoir === 'biomasse') {
-    // NB: the order here is very important, for example zones humides
-    // always gives 20 except when going to sols imperméabilisés
-    if (from === 'sols artificiels imperméabilisés') {
-      return multiplier
-    } else if (to === 'sols artificiels imperméabilisés') {
-      return 1
-    } else if (to === 'prairies zones arborées') {
-      return multiplier
-    } else if (from === 'prairies zones arborées') {
-      return 1
-    } else if (from === 'zones humides') {
-      return multiplier
-    } else if (to === 'zones humides') {
-      return 1
-    } else if (from === 'cultures') {
-      return multiplier
-    } else if (to === 'cultures') {
-      return 1
-    } else if (from === 'sols artificiels arborés et buissonants') {
-      return 1
-    } else if (to === 'sols artificiels arborés et buissonants') {
-      return multiplier
-    } else if (from === 'prairies zones herbacées') {
-      return multiplier
-    } else if (to === 'prairies zones herbacées') {
-      return 1
-    } else if (from === 'vergers') {
-      return 1
-    } else if (to === 'vergers') {
-      return multiplier
-    } else if (from === 'vignes') {
-      return multiplier
-    } else if (to === 'vignes') {
-      return 1
-    } else if (from === 'prairies zones arbustives') {
-      return 1
-    } else if (to === 'prairies zones arbustives') {
-      return multiplier
-    }
-    // the remaining type is sols artificiels arbustifs, but any from/to combo has already
-    // been covered by the above
-  } else if (reservoir === 'litière') {
-    return 1
-  }
-  console.log('ERROR: multiplier not found for combination of reservoir: ' + reservoir + ' from: ' + from + ' to: ' + to)
-  return 1
-}
-
 function convertN2O (flux) {
   return flux < 0 ? flux / 15 * 0.01 * 44 / 25 + flux / 15 * 0.3 * 0.0075 * 44 / 28 : undefined
 }
@@ -132,14 +56,10 @@ function getAnnualFluxes (location, options) {
     if (flux.to.startsWith('forêt ')) {
       flux.value = flux.flux * flux.area
     } else if (flux.reservoir === 'sol') {
-      const m = multiplier(flux.reservoir, flux.from, flux.to)
-      flux.multiplier = m
-      const annualtC = flux.flux * area * m
+      const annualtC = flux.flux * area
       flux.value = annualtC
     } else {
-      const m = multiplier(flux.reservoir, flux.from, flux.to)
-      flux.multiplier = m
-      const annualtC = flux.flux * area * m
+      const annualtC = flux.flux * area
       flux.value = annualtC
     }
     flux.co2e = convertCToCo2e(flux.value)
