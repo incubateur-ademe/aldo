@@ -4,18 +4,18 @@
       <%= category.toUpperCase() %>&nbsp;:&nbsp;
     </span>
     <span class="captioned-value fr-col-3">
-      <span class="v fr-text--lg"><%= formatNumber(stock.portionPopulation * 100, 2) %></span>
+      <span class="v fr-text--lg"><%= formatNumber(flux.localPortion * 100, 3) %></span>
       <span class="c fr-text--sm">population (%)</span>
     </span>
     <span class="fr-col-1" style="text-align: center;">x</span>
     <span class="captioned-value fr-col-4">
-      <span class="v fr-text--lg"><%= formatNumber(stock[`${category}FranceStocksTotal`]) %></span>
-      <span class="c fr-text--sm">Stocks France (tCO<sub>2</sub>)</span>
+      <span class="v fr-text--lg"><%= formatNumber(flux.franceSequestration) %></span>
+      <span class="c fr-text--sm">Puits France (tCO<sub>2</sub>/an)</span>
     </span>
     <span class="fr-col-1" style="text-align: center;">≈</span>
     <span class="captioned-value fr-col-3">
-      <span class="v fr-text--lg"><%= formatNumber(stock[`${category}Stock`]) %></span>
-      <span class="c fr-text--sm">total (tCO<sub>2</sub>)</span>
+      <span class="v fr-text--lg"><%= formatNumber(flux.co2e) %></span>
+      <span class="c fr-text--sm">total (tCO<sub>2</sub>/an)</span>
     </span>
   </p>
 </li>
