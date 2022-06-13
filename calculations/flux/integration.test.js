@@ -99,6 +99,28 @@ test('returns correct total for wood products', () => {
   expect(summary1['produits bois'].totalSequestration).toBeCloseTo(787, 0)
 })
 
+test('returns detail by wood product category, with different keys depending on calculation chosen', () => {
+  let flux = getAnnualFluxes({ epci: getEpci('200004802', true) })
+  let woodFluxes = flux.allFlux.filter(f => f.to === 'produits bois')
+  expect(woodFluxes.length).toBe(2) // for bo and bi
+  let bo = woodFluxes.find(f => f.category === 'bo')
+  expect(bo.localHarvest).toBeCloseTo(1507, 0)
+  expect(bo.franceHarvest).toBeCloseTo(20105285, 0)
+  expect(bo.localPortion).toBeCloseTo(0.000075, 6)
+  expect(bo).toHaveProperty('franceSequestration')
+  expect(bo.co2e).toBeCloseTo(61, 0)
+
+  flux = getAnnualFluxes({ epci: getEpci('200004802', true) }, { woodCalculation: 'consommation' })
+  woodFluxes = flux.allFlux.filter(f => f.to === 'produits bois')
+  expect(woodFluxes.length).toBe(2) // for bo and bi
+  bo = woodFluxes.find(f => f.category === 'bo')
+  expect(bo.localPopulation).toEqual(28039)
+  expect(bo.francePopulation).toEqual(65705495)
+  expect(bo.localPortion).toBeCloseTo(0.00043, 5)
+  expect(bo).toHaveProperty('franceSequestration')
+  expect(bo.co2e).toBeCloseTo(347, 0)
+})
+
 test('option to modify split of sols artificiels', () => {
   const flux = getAnnualFluxes({ epci: getEpci('245700398', true) }, { proportionSolsImpermeables: 0.6 }).summary
   expect(flux['sols artificiels'].totalSequestration).toBeCloseTo(-66, 0)

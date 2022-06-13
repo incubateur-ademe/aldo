@@ -57,3 +57,5 @@ Ce n'est pas idéal d'avoir deux formats de données differents dans le même pr
 En plus, je voudrais éviter des calculs sur le front au plus, alors j'imagine j'aurai besoin quand même de quelques aggregations selon l'affichage de données.
 
 Il y a des flux sans un `from` pour quelques données où `to` === `forêt`.
+
+C'est moins efficace de faire des `find` qu'un hash lookup, mais je ne pense pas qu'il y ait assez de données pour rencontrer ce problème. En plus les filtres/recherches sont souvents un peu differents alors je sais pas si on gagnerait beaucoup avec des shortcuts.

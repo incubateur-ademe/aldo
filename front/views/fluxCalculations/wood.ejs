@@ -1,0 +1,46 @@
+<% const boFlux = allFlux.find(f => f.category === 'bo') %>
+<% const biFlux = allFlux.find(f => f.category === 'bi') %>
+<p class="fr-text--sm fr-mb-1w">Comment est-ce que c'est calculé&nbsp;?</p>
+<% if (woodCalculation === 'récolte') { %>
+  <p class="fr-text--sm">Approche <b>production</b> : répartition selon récolte</p>
+  <p class="fr-text--xs">Vous pouvez changer l'approche dans l'onglet configuration.</p>
+  <p class="fr-mt-2w">Proportion récolte théorique&nbsp;:</p>
+  <ul class="fr-container">
+    <%- include('./wood-harvest-portion', { flux: boFlux, category: 'bo' }) -%>
+    <%- include('./wood-harvest-portion', { flux: biFlux, category: 'bi' }) -%>
+  </ul>
+  <p class="fr-text--xs">
+    Calcul ADEME considérant un taux de prélèvement égal à celui de la grande région écologique et
+    une répartition entre usage égal à celui de la région admnistrative.
+  </p>
+  <p class="fr-mt-2w">Flux&nbsp;:</p>
+  <ul class="fr-container">
+    <%- include('./wood-harvest-flux', { flux: boFlux, category: 'bo' }) -%>
+    <%- include('./wood-harvest-flux', { flux: biFlux, category: 'bi' }) -%>
+  </ul>
+<% } else { %>
+  <p class="fr-text--sm">Approche <b>consommation</b> : répartition selon habitants</p>
+  <p class="fr-text--xs">Vous pouvez changer l'approche dans l'onglet configuration.</p>
+  <p class="fr-my-2w">Proportion habitants&nbsp;:</p>
+  <div class="fr-container">
+    <p class="formula">
+      <span class="captioned-value fr-col-4">
+        <!-- could've used boFlux or biFlux since the population doesn't change -->
+        <span class="v fr-text--lg"><%= formatNumber(boFlux.localPopulation) %></span>
+        <span class="c fr-text--sm">population local</span>
+      </span>
+      <span class="fr-col-1" style="text-align: center;">/</span>
+      <span class="captioned-value fr-col-4">
+        <span class="v fr-text--lg"><%= formatNumber(boFlux.francePopulation) %></span>
+        <span class="c fr-text--sm">population France</span>
+      </span>
+      <span class="fr-col-1" style="text-align: center;">≈</span>
+      <span class="fr-col-3 v fr-text--lg"><%= formatNumber(boFlux.localPortion * 100, 3) %> %</span>
+    </p>
+  </div>
+  <p class="fr-mt-2w">Flux&nbsp;:</p>
+  <ul class="fr-container">
+    <%- include('./wood-population-flux', { flux: boFlux, category: 'bo' }) -%>
+    <%- include('./wood-population-flux', { flux: biFlux, category: 'bi' }) -%>
+  </ul>
+<% } %>

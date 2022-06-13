@@ -4,18 +4,18 @@
       <%= category.toUpperCase() %>&nbsp;:&nbsp;
     </span>
     <span class="captioned-value fr-col-3">
-      <span class="v fr-text--lg"><%= formatNumber(stock[`${category}LocalHarvestTotal`]) %></span>
+      <span class="v fr-text--lg"><%= formatNumber(flux.localHarvest) %></span>
       <span class="c fr-text--sm">local (m<sup>3</sup>/an)</span>
     </span>
     <span class="fr-col-1" style="text-align: center;">/</span>
     <span class="captioned-value fr-col-4">
-      <span class="v fr-text--lg"><%= formatNumber(stock[`${category}FranceHarvestTotal`]) %></span>
+      <span class="v fr-text--lg"><%= formatNumber(flux.franceHarvest) %></span>
       <span class="c fr-text--sm">France (m<sup>3</sup>/an)</span>
     </span>
     <span class="fr-col-1" style="text-align: center;">≈</span>
     <span class="captioned-value fr-col-3">
-      <span class="v fr-text--lg"><%= formatNumber(stock[`${category}Portion`] * 100, 2) %></span>
-      <span class="c fr-text--sm">récolte (%)</span>
+      <span class="v fr-text--lg"><%= formatNumber(flux.localPortion * 100, 3) %></span>
+      <span class="c fr-text--sm">récolte annuel (%)</span>
     </span>
   </p>
 </li>

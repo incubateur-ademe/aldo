@@ -210,7 +210,7 @@
                           <% } else if (Math.abs(thisFlux.totalSequestration) < 0.5) { %>
                             <p>Aucun changement du sol enregistré.</p>
                           <% } else if (groundType.stocksId === 'produits bois') { %>
-                            <p>À venir</p>
+                            <%- include('fluxCalculations/wood', { woodCalculation}) -%>
                           <% } else if (!groundType.children) { %>
                             <p class="fr-text--sm fr-mb-1w">
                               Les flux annuels liés aux changements du surface vers <%= groundType.name.toLowerCase() %>&nbsp;:

@@ -14,44 +14,73 @@ function getFluxByConsumption (location) {
   const epciPop = location.epci.populationTotale
   const proportion = epciPop / popTotal
   const franceFlux = getFranceFluxWoodProducts()
-  const value = (franceFlux.bi + franceFlux.bo) * proportion
-  return [{
-    to: 'produits bois',
-    gas: 'CO2',
-    value,
-    co2e: value
-  }]
+  const bo = franceFlux.bo * proportion
+  const bi = franceFlux.bi * proportion
+  return [
+    {
+      to: 'produits bois',
+      gas: 'CO2',
+      category: 'bo',
+      value: bo,
+      co2e: bo,
+      localPopulation: epciPop,
+      francePopulation: popTotal,
+      localPortion: proportion,
+      franceSequestration: franceFlux.bo
+    },
+    {
+      to: 'produits bois',
+      gas: 'CO2',
+      category: 'bi',
+      value: bi,
+      co2e: bi,
+      localPopulation: epciPop,
+      francePopulation: popTotal,
+      localPortion: proportion,
+      franceSequestration: franceFlux.bi
+    }
+  ]
 }
 
 function getFluxByHarvest (location) {
   location = { epci: location.epci.code } // see getFlux
-  const localAnnualWoodProductsHarvest = getAnnualWoodProductsHarvest(location)
-  const franceAnnualWoodProductsHarvest = getAnnualFranceWoodProductsHarvest()
-  const franceFluxByCategory = getFranceFluxWoodProducts()
+  const allLocalHarvest = getAnnualWoodProductsHarvest(location)
+  const allFranceHarvest = getAnnualFranceWoodProductsHarvest()
+  const franceSequestration = getFranceFluxWoodProducts()
 
-  function fluxByProportionHarvest (composition, category) {
-    const franceHarvestCategoryTotal = franceAnnualWoodProductsHarvest.feuillus[category] + franceAnnualWoodProductsHarvest.coniferes[category]
-    const proportionHarvest = localAnnualWoodProductsHarvest[composition][category] / franceHarvestCategoryTotal
-    const franceFluxForCategory = franceFluxByCategory[category]
-    return proportionHarvest * franceFluxForCategory
-  }
+  const franceHarvest = (category) => allFranceHarvest.coniferes[category] + allFranceHarvest.feuillus[category]
+  const localHarvest = (category) => allLocalHarvest.coniferes[category] + allLocalHarvest.feuillus[category]
 
-  const feuillus = {
-    bo: fluxByProportionHarvest('feuillus', 'bo'),
-    bi: fluxByProportionHarvest('feuillus', 'bi')
-  }
-  // NB: in table sometimes referred to as résineux
-  const coniferes = {
-    bo: fluxByProportionHarvest('coniferes', 'bo'),
-    bi: fluxByProportionHarvest('coniferes', 'bi')
-  }
-  const totalFlux = feuillus.bo + feuillus.bi + coniferes.bo + coniferes.bi
-  return [{
-    to: 'produits bois',
-    gas: 'CO2',
-    value: totalFlux,
-    co2e: totalFlux
-  }]
+  const boPortion = localHarvest('bo') / franceHarvest('bo')
+  const bo = boPortion * franceSequestration.bo
+
+  const biPortion = localHarvest('bi') / franceHarvest('bi')
+  const bi = biPortion * franceSequestration.bi
+
+  return [
+    {
+      to: 'produits bois',
+      gas: 'CO2',
+      category: 'bo',
+      value: bo,
+      co2e: bo,
+      localHarvest: localHarvest('bo'),
+      franceHarvest: franceHarvest('bo'),
+      localPortion: boPortion,
+      franceSequestration: franceSequestration.bo
+    },
+    {
+      to: 'produits bois',
+      gas: 'CO2',
+      category: 'bi',
+      value: bi,
+      co2e: bi,
+      localHarvest: localHarvest('bi'),
+      franceHarvest: franceHarvest('bi'),
+      localPortion: biPortion,
+      franceSequestration: franceSequestration.bi
+    }
+  ]
 }
 
 function getFluxWoodProducts (location, calculationMethod) {
