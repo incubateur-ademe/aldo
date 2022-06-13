@@ -213,14 +213,17 @@
                             <%- include('fluxCalculations/wood', { woodCalculation}) -%>
                           <% } else if (!groundType.children) { %>
                             <p class="fr-text--sm fr-mb-1w">
-                              Les flux annuels liés aux changements de surface vers <%= groundType.name.toLowerCase() %>&nbsp;:
+                              Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %>&nbsp;:
                             </p>
                             <%- include('fluxCalculations/simple', { groundType: groundType.stocksId }) -%>
                           <% } else if(groundType.stocksId !== 'forêts') { %>
+                            <p class="fr-text--sm fr-mb-1w">
+                              Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %> sont séparés par sous-type.
+                            </p>
                             <!-- Prairies, sols artificiels -->
                             <% for (const child of groundType.children) { %>
                               <% if(!Math.abs(fluxSummary[child]?.totalSequestration) < 0.5) { %>
-                                <p class="fr-text--sm fr-mb-1w">Vers <%= child %></p>
+                                <p class="fr-text--sm fr-mb-1w">Vers <%= child %>&nbsp;:</p>
                                 <%- include('fluxCalculations/simple', { groundType: child }) -%>
                                 <br/>
                               <% } %>
