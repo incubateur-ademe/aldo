@@ -210,7 +210,7 @@
                           <% } else if (Math.abs(thisFlux.totalSequestration) < 0.5) { %>
                             <p>Aucun changement du sol enregistré.</p>
                           <% } else if (groundType.stocksId === 'produits bois') { %>
-                            <%- include('fluxCalculations/wood', { woodCalculation}) -%>
+                            <%- include('fluxCalculations/wood', { woodCalculation }) -%>
                           <% } else if (!groundType.children) { %>
                             <p class="fr-text--sm fr-mb-1w">
                               Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %>&nbsp;:
@@ -228,8 +228,18 @@
                                 <br/>
                               <% } %>
                             <% } %>
-                          <% } else { %>
-                            <p>À venir</p>
+                          <% } else if(groundType.stocksId === 'forêts') { %>
+                            <% if(allFlux.some(f => f.to === 'forêts' && f.value !== 0)) { %>
+                              <p class="fr-text--sm fr-mb-1w">
+                                Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %>&nbsp;:
+                              </p>
+                              <%- include('fluxCalculations/simple', { groundType: groundType.stocksId }) -%>
+                            <% } else { %>
+                              <p class="fr-text--sm fr-mb-1w">
+                                Il n'y a aucun changement d'occupation du sol vers <%= groundType.name.toLowerCase() %>.
+                              </p>
+                            <% } %>
+                            <%- include('fluxCalculations/forest-biomass') -%>
                           <% } %>
                         </td>
                       </tr>
