@@ -47,7 +47,7 @@
         <% } %>
         <div class="fr-callout fr-my-3w">
           <p class="fr-callout__text">
-            Un <%= fluxTotal > 0 ? "séquestration" : "émission" %>
+            Une <%= fluxTotal > 0 ? "séquestration" : "émission" %>
             de carbone de
             <%= formatNumber(fluxTotal/1000, 1) %> ktCO<sub>2</sub>e / an
             et un stock total de
@@ -213,7 +213,7 @@
                             <%- include('fluxCalculations/wood', { woodCalculation}) -%>
                           <% } else if (!groundType.children) { %>
                             <p class="fr-text--sm fr-mb-1w">
-                              Les flux annuels liés aux changements du surface vers <%= groundType.name.toLowerCase() %>&nbsp;:
+                              Les flux annuels liés aux changements de surface vers <%= groundType.name.toLowerCase() %>&nbsp;:
                             </p>
                             <%- include('fluxCalculations/simple', { groundType: groundType.stocksId }) -%>
                           <% } else if(groundType.stocksId !== 'forêts') { %>
@@ -234,7 +234,7 @@
                   </tbody>
                 </table>
                 <% if (hasModifiedAreaChange) { %>
-                  <p class="fr-text--sm fr-mt-1w">* Changement du surface modifiée</p>
+                  <p class="fr-text--sm fr-mt-1w">* Changement de surface modifiée</p>
                 <% } %>
                 <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/flux/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">Lire plus de nos méthodes de calcul</a></p>
               </div>
@@ -261,7 +261,7 @@
             </div>
             <div class="fr-col-12 fr-pr-md-1w fr-table">
               <table>
-                <caption><h2>Changements du surface (ha)</h2></caption>
+                <caption><h2>Changements de surface (ha)</h2></caption>
                 <thead>
                   <tr>
                     <td></td>
