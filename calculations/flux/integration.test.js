@@ -266,7 +266,7 @@ test('total flux returned', () => {
   // expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(-3976, 0)
   expect(flux.summary.forêts.totalSequestration).toBeCloseTo(-21494, 0)
   expect(flux.summary['produits bois'].totalSequestration).toBeCloseTo(14223, 0)
-  // Received difference:   12921.878662995097
+  // Received difference:   1300.773231537636
   // expect(flux.total).toBeCloseTo(-11714.4, 1)
   expect(flux).toHaveProperty('total') // TODO: replace this with a test of the value once errors in spreadsheet are fixed
 })
