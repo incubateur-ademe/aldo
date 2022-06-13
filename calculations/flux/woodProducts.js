@@ -14,9 +14,13 @@ function getFluxByConsumption (location) {
   const epciPop = location.epci.populationTotale
   const proportion = epciPop / popTotal
   const franceFlux = getFranceFluxWoodProducts()
-  return {
-    flux: (franceFlux.bi + franceFlux.bo) * proportion
-  }
+  const value = (franceFlux.bi + franceFlux.bo) * proportion
+  return [{
+    to: 'produits bois',
+    gas: 'CO2',
+    value,
+    co2e: value
+  }]
 }
 
 function getFluxByHarvest (location) {
@@ -42,9 +46,12 @@ function getFluxByHarvest (location) {
     bi: fluxByProportionHarvest('coniferes', 'bi')
   }
   const totalFlux = feuillus.bo + feuillus.bi + coniferes.bo + coniferes.bi
-  return {
-    flux: totalFlux
-  }
+  return [{
+    to: 'produits bois',
+    gas: 'CO2',
+    value: totalFlux,
+    co2e: totalFlux
+  }]
 }
 
 function getFluxWoodProducts (location, calculationMethod) {

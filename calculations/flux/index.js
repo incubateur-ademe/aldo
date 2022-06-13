@@ -164,8 +164,10 @@ function getAnnualFluxes (location, options) {
       })
     }
   })
-  const summary = {}
+  const woodFluxes = getFluxWoodProducts(originalLocation, options?.woodCalculation, options)
+  allFluxes.push(...woodFluxes)
 
+  const summary = {}
   let total = 0
   allFluxes.forEach((flux) => {
     total += flux.co2e
@@ -205,9 +207,6 @@ function getAnnualFluxes (location, options) {
       }
     }
   })
-  summary['produits bois'] = {
-    totalSequestration: getFluxWoodProducts(originalLocation, options?.woodCalculation, options).flux
-  }
   return {
     allFlux: allFluxes,
     summary,
