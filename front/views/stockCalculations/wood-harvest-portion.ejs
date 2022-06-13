@@ -4,17 +4,17 @@
       <%= category.toUpperCase() %>&nbsp;:&nbsp;
     </span>
     <span class="captioned-value fr-col-3">
-      <span class="v fr-text--lg"><%= round(stock[`${category}LocalHarvestTotal`]) %></span>
+      <span class="v fr-text--lg"><%= formatNumber(stock[`${category}LocalHarvestTotal`]) %></span>
       <span class="c fr-text--sm">local (m3/an)</span>
     </span>
     <span class="fr-col-1" style="text-align: center;">/</span>
     <span class="captioned-value fr-col-4">
-      <span class="v fr-text--lg"><%= round(stock[`${category}FranceHarvestTotal`]) %></span>
+      <span class="v fr-text--lg"><%= formatNumber(stock[`${category}FranceHarvestTotal`]) %></span>
       <span class="c fr-text--sm">France (m3/an)</span>
     </span>
     <span class="fr-col-1" style="text-align: center;">≈</span>
     <span class="captioned-value fr-col-3">
-      <span class="v fr-text--lg"><%= (stock[`${category}Portion`] * 100).toPrecision(2) %></span>
+      <span class="v fr-text--lg"><%= formatNumber(stock[`${category}Portion`] * 100, 2) %></span>
       <span class="c fr-text--sm">récolte (%)</span>
     </span>
   </p>

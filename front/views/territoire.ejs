@@ -89,11 +89,11 @@
                       <!-- TODO: make row blue if area modified -->
                       <tr class="expandable-row stocks-row">
                         <td onClick='toggleRow(this)'>
-                          <%= groundType.name %> <%= thisStock.areaModified ? '*' : '' %>
+                          <%= groundType.name %>
                         </td>
                         <td onClick='toggleRow(this)' style="text-align: right;">
                           <% if (thisStock.area !==undefined) { %>
-                            <%= formatNumber(thisStock.area) %>
+                            <%= formatNumber(thisStock.area) %> <%= thisStock.areaModified ? '*' : '' %>
                           <% } else { %>
                             <i>Pas applicable</i>
                           <% } %>

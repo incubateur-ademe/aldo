@@ -23,16 +23,16 @@
   <div class="fr-container">
     <p class="formula">
       <span class="captioned-value fr-col-4">
-        <span class="v fr-text--lg"><%= stock.localPopulation %></span>
+        <span class="v fr-text--lg"><%= formatNumber(stock.localPopulation) %></span>
         <span class="c fr-text--sm">population local</span>
       </span>
       <span class="fr-col-1" style="text-align: center;">/</span>
       <span class="captioned-value fr-col-4">
-        <span class="v fr-text--lg"><%= stock.francePopulation %></span>
+        <span class="v fr-text--lg"><%= formatNumber(stock.francePopulation) %></span>
         <span class="c fr-text--sm">population France</span>
       </span>
       <span class="fr-col-1" style="text-align: center;">≈</span>
-      <span class="fr-col-3 v fr-text--lg"><%= (stock.portionPopulation * 100).toPrecision(2) %> %</span>
+      <span class="fr-col-3 v fr-text--lg"><%= formatNumber(stock.portionPopulation * 100, 2) %> %</span>
     </p>
   </div>
   <p class="fr-mt-2w">Stocks&nbsp;:</p>
