@@ -271,14 +271,34 @@ test('total flux returned', () => {
   expect(flux).toHaveProperty('total') // TODO: replace this with a test of the value once errors in spreadsheet are fixed
 })
 
-test('can define areas for agricultural practices for vineyards', () => {
-  // this EPCI has originally 17 tC/ha.an for vignes
+test('can define areas for agricultural practices', () => {
   const flux = getAnnualFluxes({ epci: getEpci('200015162', true) }, {
     agriculturalPracticesEstablishedAreas: {
-      vineyardsInterCoverCropping: 20
+      prairieExtension: 20,
+      prairieIntensification: 20,
+      cropsAgroforestry: 20,
+      prairiesAgroforestry: 20,
+      catchCrops: 20,
+      cropsHedges: 20,
+      prairiesHedges: 20,
+      grassyStrips: 20,
+      vineyardsInterCoverCropping: 20,
+      orchardsInterCoverCropping: 20,
+      directSowingContinuous: 20,
+      directSowingFiveYearWork: 20
     }
   })
-  expect(flux.summary.vignes.totalSequestration).toBeCloseTo(40, 0)
+  const summary = flux.summary
+  expect(summary.cultures.totalSequestration).toBeCloseTo(166, 0)
+  expect(summary.prairies.totalSequestration).toBeCloseTo(-681, 0)
+  expect(summary['zones humides'].totalSequestration).toBeCloseTo(0, 0)
+  expect(summary.vergers.totalSequestration).toBeCloseTo(36, 0)
+  expect(summary.vignes.totalSequestration).toBeCloseTo(40, 0)
+  expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-443, 0)
+  expect(summary['forêts'].totalSequestration).toBeCloseTo(123237, 0)
+  expect(summary['produits bois'].totalSequestration).toBeCloseTo(16, 0)
+  expect(flux.total / 1000).toBeCloseTo(122.4, 1)
+  // data format check
   const practiceFlux = flux.allFlux.find(f => f.practice === 'vineyardsInterCoverCropping')
   expect(practiceFlux.to).toEqual('vignes')
   expect(practiceFlux.reservoir).toEqual('sol')

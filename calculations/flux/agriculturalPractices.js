@@ -7,11 +7,34 @@ function getPracticeFlux (practice, reservoir) {
   if (reservoir === 'sol') {
     // ground flux unitaires
     return {
-      vineyardsInterCoverCropping: 0.32
+      prairieExtension: 0.14,
+      // prairieIntensification: 0.39, // currently not used in excel format
+      cropsAgroforestry: 0.3,
+      prairiesAgroforestry: 0.3,
+      catchCrops: 0.24,
+      cropsHedges: 0.06,
+      prairiesHedges: 0.1,
+      grassyStrips: 0.49,
+      vineyardsInterCoverCropping: 0.32,
+      orchardsInterCoverCropping: 0.49,
+      directSowingContinuous: 0.15,
+      directSowingFiveYearWork: 0.1
     }[practice]
   } else if (reservoir === 'biomasse') {
     // biomass flux unitaires
     return {
+      prairieExtension: 0,
+      // prairieIntensification: 0,
+      cropsAgroforestry: 0.7,
+      prairiesAgroforestry: 0.7,
+      catchCrops: 0,
+      cropsHedges: 0.09,
+      prairiesHedges: 0.15,
+      grassyStrips: 0,
+      vineyardsInterCoverCropping: 0,
+      orchardsInterCoverCropping: 0,
+      directSowingContinuous: 0,
+      directSowingFiveYearWork: 0
     }[practice]
   }
 }
