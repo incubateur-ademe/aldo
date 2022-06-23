@@ -116,6 +116,11 @@
     <% if (hasModifiedAreaChange) { %>
       <p class="fr-text--sm fr-mt-1w">* Changement de surface modifiée</p>
     <% } %>
+    <% if (Object.keys(agriculturalPracticeDetail).length) { %>
+      <p class="fr-text--sm fr-mt-1w">Ces flux comprisent ceux qui sont reliés a vos pratiques agricoles. Modifiez-les dans l'onglet « Pratiques agricoles ».</p>
+    <% } else { %>
+      <p class="fr-text--sm fr-mt-1w">Mettez à jour vos pratiques agricoles pour voir comment elles influencent les flux dans votre térritoire avec l'onglet « Pratiques agricoles ».</p>
+    <% } %>
     <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/flux/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">Lire plus de nos méthodes de calcul</a></p>
   </div>
   <div class="fr-col-12 fr-col-sm-10 fr-col-md-5 fr-pt-6w">
