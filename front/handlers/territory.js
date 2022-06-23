@@ -10,6 +10,7 @@ async function territoryHandler (req, res) {
   const epcis = await epciList()
   let stocks, flux
   const fluxDetail = {}
+  const agriculturalPracticeDetail = {}
   const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
   let proportionSolsImpermeables = req.query['répartition_art_imp']
   proportionSolsImpermeables = proportionSolsImpermeables ? (proportionSolsImpermeables / 100).toPrecision(2) : undefined
@@ -50,11 +51,18 @@ async function territoryHandler (req, res) {
     stocks = await getStocks({ epci }, options)
     flux = getAnnualFluxes({ epci }, options)
     flux.allFlux.forEach(f => {
-      if (!fluxDetail[f.to]) {
-        fluxDetail[f.to] = []
-      }
       if (f.value !== 0) {
-        fluxDetail[f.to].push(f)
+        if (f.practice) {
+          if (!agriculturalPracticeDetail[f.to]) {
+            agriculturalPracticeDetail[f.to] = []
+          }
+          agriculturalPracticeDetail[f.to].push(f)
+        } else {
+          if (!fluxDetail[f.to]) {
+            fluxDetail[f.to] = []
+          }
+          fluxDetail[f.to].push(f)
+        }
       }
     })
   } else {
@@ -120,7 +128,8 @@ async function territoryHandler (req, res) {
     stockTotal: stocks?.total,
     fluxTotal: flux?.total,
     agriculturalPractices: AgriculturalPractices,
-    agriculturalPracticesEstablishedAreas
+    agriculturalPracticesEstablishedAreas,
+    agriculturalPracticeDetail
   })
 }
 

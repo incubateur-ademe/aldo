@@ -16,6 +16,7 @@
           <% const groundType = sortedFluxKeys[index] %>
           <% const thisFlux = fluxSummary[groundType.stocksId] %>
           <!-- TODO: make row blue if area modified -->
+          <!-- TODO: display of agricultural practices fluxes -->
           <tr class="expandable-row flux-row">
             <td onClick='toggleRow(this)'>
               <%= groundType.name %> <%= thisFlux?.areaModified ? '*' : '' %>
@@ -44,6 +45,17 @@
               </button>
             </td>
             <td class='expanded-row-content hide-row'>
+              <%
+                const hasFluxFromAreaChange = allFlux.some(f => {
+                  // the startsWith handles the case of prairies and sols artificiels
+                  const relevantFlux = f.to === groundType.stocksId || f.to.startsWith(groundType.stocksId)
+                  return relevantFlux && f.value !== 0 && !f.practice
+                })
+                const hasFluxFromAgriculturalPractices = allFlux.some(f => {
+                  const relevantFlux = f.to === groundType.stocksId || f.to.startsWith(groundType.stocksId)
+                  return relevantFlux && f.value !== 0 && f.practice
+                })
+              %>
               <% if (!thisFlux) { %>
                 <p>Pas de données.</p>
               <% } else if (Math.abs(thisFlux.totalSequestration) < 0.5) { %>
@@ -51,24 +63,41 @@
               <% } else if (groundType.stocksId === 'produits bois') { %>
                 <%- include('fluxCalculations/wood', { woodCalculation }) -%>
               <% } else if (!groundType.children) { %>
-                <p class="fr-text--sm fr-mb-1w">
-                  Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %>&nbsp;:
-                </p>
-                <%- include('fluxCalculations/simple', { groundType: groundType.stocksId }) -%>
+                <% if (hasFluxFromAreaChange) { %>
+                  <p class="fr-text--sm fr-mb-1w">
+                    Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %>&nbsp;:
+                  </p>
+                  <%- include('fluxCalculations/simple', { groundType: groundType.stocksId }) -%>
+                  <br />
+                <% } %>
+                <% if (hasFluxFromAgriculturalPractices) { %>
+                  <p class="fr-text--sm fr-mb-1w fr-mt-2w">
+                    Les flux annuels liés aux pratiques agricoles mises en place il y a moins de 20 ans&nbsp;:
+                  </p>
+                  <%- include('fluxCalculations/agricultural-practices', { groundType: groundType.stocksId }) -%>
+                <% } %>
               <% } else if(groundType.stocksId !== 'forêts') { %>
-                <p class="fr-text--sm fr-mb-1w">
-                  Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %> sont séparés par sous-type.
-                </p>
-                <!-- Prairies, sols artificiels -->
-                <% for (const child of groundType.children) { %>
-                  <% if(!Math.abs(fluxSummary[child]?.totalSequestration) < 0.5) { %>
-                    <p class="fr-text--sm fr-mb-1w">Vers <%= child %>&nbsp;:</p>
-                    <%- include('fluxCalculations/simple', { groundType: child }) -%>
-                    <br/>
+                <% if (hasFluxFromAreaChange) { %>
+                  <p class="fr-text--sm fr-mb-1w">
+                    Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %> sont séparés par sous-type.
+                  </p>
+                  <!-- Prairies, sols artificiels -->
+                  <% for (const child of groundType.children) { %>
+                    <% if(!Math.abs(fluxSummary[child]?.totalSequestration) < 0.5) { %>
+                      <p class="fr-text--sm fr-mb-1w">Vers <%= child %>&nbsp;:</p>
+                      <%- include('fluxCalculations/simple', { groundType: child }) -%>
+                      <br/>
+                    <% } %>
                   <% } %>
                 <% } %>
+                <% if (hasFluxFromAgriculturalPractices) { %>
+                  <p class="fr-text--sm fr-mb-1w">
+                    Les flux annuels liés aux pratiques agricoles mises en place depuis moins de 20 ans&nbsp;:
+                  </p>
+                  <%- include('fluxCalculations/agricultural-practices', { groundType: groundType.stocksId }) -%>
+                <% } %>
               <% } else if(groundType.stocksId === 'forêts') { %>
-                <% if(allFlux.some(f => f.to === 'forêts' && f.value !== 0)) { %>
+                <% if(hasFluxFromAreaChange) { %>
                   <p class="fr-text--sm fr-mb-1w">
                     Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %>&nbsp;:
                   </p>

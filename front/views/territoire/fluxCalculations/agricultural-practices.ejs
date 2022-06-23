@@ -1,0 +1,22 @@
+<table>
+  <thead>
+    <th class="fr-text--xs">Pratique agricole</th>
+    <th class="fr-text--xs">Reservoir</th>
+    <th class="fr-text--xs">Flux unitaire (tCO<sub>2</sub>e/ha)</th>
+    <th class="fr-text--xs">Surface implanté (ha/an)</th>
+    <th class="fr-text--xs">Flux (tCO<sub>2</sub>e/an)</th>
+  </thead>
+  <tbody>
+    <% if(agriculturalPracticeDetail[groundType]) { %>
+      <% for( const detail of agriculturalPracticeDetail[groundType] ) { %>
+        <tr>
+          <td><%= agriculturalPractices.find(ap => ap.id === detail.practice).name %></td>
+          <td><%= detail.reservoir %></td>
+          <td style="text-align: right;"><%= formatNumber(detail.fluxEquivalent, 1) %></td>
+          <td style="text-align: right;"><%= formatNumber(detail.area, 1) %> *</td>
+          <td style="text-align: right;"><%= formatNumber(detail.co2e) %></td>
+        </tr>
+      <% } %>
+    <% } %>
+  </tbody>
+</table>
