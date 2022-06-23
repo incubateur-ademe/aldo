@@ -22,4 +22,4 @@ Pour rendre le processus encore plus rapide, je vais utiliser les [adr-tools](ht
 
 Voyez l'article de Michael Nygard au-dessus.
 
-Pour l'instant, les `adr-tools` ne soutiennent pas des autres langues. Je vais laisser les headings générés par `adr-tools new`, mais j'écrirai le reste du texte en français, en suivant les conseils de [standards de qualité logicielle de beta.gouv.fr](https://doc.incubateur.net/communaute/gerer-sa-startup-detat-ou-de-territoires-au-quotidien/je-fais-des-choix-technologique/standards-de-qualite-beta.gouv.fr#standards-de-qualite-logicielle).
+Pour l'instant, les `adr-tools` ne soutiennent pas des autres langues. Je vais laisser les headings générés par `adr new`, mais j'écrirai le reste du texte en français, en suivant les conseils de [standards de qualité logicielle de beta.gouv.fr](https://doc.incubateur.net/communaute/gerer-sa-startup-detat-ou-de-territoires-au-quotidien/je-fais-des-choix-technologique/standards-de-qualite-beta.gouv.fr#standards-de-qualite-logicielle).

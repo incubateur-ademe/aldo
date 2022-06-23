@@ -149,6 +149,56 @@ module.exports = {
       color: 'emeraude'
     }
   ],
+  AgriculturalPractices: [
+    {
+      name: 'Allongement prairies temporaires (5 ans max)',
+      id: 'prairieExtension'
+    },
+    {
+      name: 'Intensification modérée des prairies peu productives (hors alpages et estives)',
+      id: 'prarieIntensification'
+    },
+    {
+      name: 'Agroforesterie en grandes cultures',
+      id: 'agroforestryCrops'
+    },
+    {
+      name: 'Agroforesterie en prairies',
+      id: 'agroforestryPrairies'
+    },
+    {
+      name: 'Couverts intermédiaires (CIPAN) en grandes cultures',
+      id: 'catchCrops'
+    },
+    {
+      name: 'Haies sur cultures (60 mètres linéaires par ha)',
+      id: 'hedgesCrops'
+    },
+    {
+      name: 'Haies sur prairies (100 mètres linéaires par ha)',
+      id: 'hedgesPrairies'
+    },
+    {
+      name: 'Bandes enherbées',
+      id: 'grassyStrips'
+    },
+    {
+      name: 'Couverts intercalaires en vignes',
+      id: 'interCoverCroppingVineyards'
+    },
+    {
+      name: 'Couverts intercalaires en vergers',
+      id: 'interCoverCroppingOrchards'
+    },
+    {
+      name: 'Semis direct continu',
+      id: 'directSowingContinuous'
+    },
+    {
+      name: 'Semis direct avec labour quinquennal',
+      id: 'directSowingFiveYearWork'
+    }
+  ],
   Colours: {
     terre: { // orange
       main: '#E4794A',

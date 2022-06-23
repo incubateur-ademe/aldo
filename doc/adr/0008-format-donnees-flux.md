@@ -25,6 +25,8 @@ Je veux definir un format pour un 'source de flux', et après envoyer au front c
   areaModified: boolean qui indique si l'area a été modifiée par l'utilisatrice ou non
   reservoir: 'sol', 'litière', 'biomasse', 'sol et litière'
   gas: 'C' ou 'N2O'
+  flux: flux unitaire (par ex tC/ha.an)
+  fluxEquivalent: flux unitaire en CO2e (tCO2e/ha.an)
   value: séquestration (ou émission si le valeur est < 0) selon le gaz de ce flux (tC/an ou tN2O/an)
   co2e: le valeur converti en CO2 equivilant (tCO2e/an) - utilisé pour le plupart des aggregations
 }
