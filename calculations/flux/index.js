@@ -4,6 +4,7 @@ const {
 } = require('../../data/flux')
 const { GroundTypes } = require('../constants')
 const { getFluxWoodProducts } = require('./woodProducts')
+const { getFluxAgriculturalPractices } = require('./agriculturalPractices')
 
 function convertCToCo2e (valueC) {
   return valueC * 44 / 12
@@ -86,6 +87,8 @@ function getAnnualFluxes (location, options) {
   })
   const woodFluxes = getFluxWoodProducts(originalLocation, options?.woodCalculation, options)
   allFluxes.push(...woodFluxes)
+  const agriculturalPracticesFlux = getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas)
+  allFluxes.push(...agriculturalPracticesFlux)
 
   const summary = {}
   let total = 0

@@ -333,5 +333,6 @@ module.exports = {
   getAllAnnualFluxes,
   getForestLitterFlux,
   getAnnualSurfaceChange,
-  getFranceFluxWoodProducts
+  getFranceFluxWoodProducts,
+  cToCo2e
 }

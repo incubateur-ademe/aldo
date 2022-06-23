@@ -270,3 +270,17 @@ test('total flux returned', () => {
   // expect(flux.total).toBeCloseTo(-11714.4, 1)
   expect(flux).toHaveProperty('total') // TODO: replace this with a test of the value once errors in spreadsheet are fixed
 })
+
+test('can define areas for agricultural practices for vineyards', () => {
+  // this EPCI has originally 17 tC/ha.an for vignes
+  const flux = getAnnualFluxes({ epci: getEpci('200015162', true) }, {
+    agriculturalPracticesEstablishedAreas: {
+      vineyardsInterCoverCropping: 20
+    }
+  })
+  expect(flux.summary.vignes.totalSequestration).toBeCloseTo(40, 0)
+  const practiceFlux = flux.allFlux.find(f => f.practice === 'vineyardsInterCoverCropping')
+  expect(practiceFlux.to).toEqual('vignes')
+  expect(practiceFlux.reservoir).toEqual('sol')
+  expect(practiceFlux.areaModified).toEqual(true)
+})

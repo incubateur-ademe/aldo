@@ -152,51 +152,63 @@ module.exports = {
   AgriculturalPractices: [
     {
       name: 'Allongement prairies temporaires (5 ans max)',
-      id: 'prairieExtension'
+      id: 'prairieExtension',
+      groundType: 'prairies'
     },
     {
       name: 'Intensification modérée des prairies peu productives (hors alpages et estives)',
-      id: 'prarieIntensification'
+      id: 'prairieIntensification',
+      groundType: 'prairies'
     },
     {
       name: 'Agroforesterie en grandes cultures',
-      id: 'agroforestryCrops'
+      id: 'cropsAgroforestry',
+      groundType: 'cultures'
     },
     {
       name: 'Agroforesterie en prairies',
-      id: 'agroforestryPrairies'
+      id: 'prairiesAgroforestry',
+      groundType: 'prairies'
     },
     {
       name: 'Couverts intermédiaires (CIPAN) en grandes cultures',
-      id: 'catchCrops'
+      id: 'catchCrops',
+      groundType: 'cultures'
     },
     {
       name: 'Haies sur cultures (60 mètres linéaires par ha)',
-      id: 'hedgesCrops'
+      id: 'cropsHedges',
+      groundType: 'cultures'
     },
     {
       name: 'Haies sur prairies (100 mètres linéaires par ha)',
-      id: 'hedgesPrairies'
+      id: 'prairiesHedges',
+      groundType: 'prairies'
     },
     {
       name: 'Bandes enherbées',
-      id: 'grassyStrips'
+      id: 'grassyStrips',
+      groundType: 'cultures'
     },
     {
       name: 'Couverts intercalaires en vignes',
-      id: 'interCoverCroppingVineyards'
+      id: 'vineyardsInterCoverCropping',
+      groundType: 'vignes'
     },
     {
       name: 'Couverts intercalaires en vergers',
-      id: 'interCoverCroppingOrchards'
+      id: 'orchardsInterCoverCropping',
+      groundType: 'vergers'
     },
     {
       name: 'Semis direct continu',
-      id: 'directSowingContinuous'
+      id: 'directSowingContinuous',
+      groundType: 'cultures'
     },
     {
       name: 'Semis direct avec labour quinquennal',
-      id: 'directSowingFiveYearWork'
+      id: 'directSowingFiveYearWork',
+      groundType: 'cultures'
     }
   ],
   Colours: {
