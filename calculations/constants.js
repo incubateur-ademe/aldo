@@ -153,61 +153,73 @@ module.exports = {
     {
       name: 'Allongement prairies temporaires (5 ans max)',
       id: 'prairieExtension',
+      url: 'allongement_prairies',
       groundType: 'cultures' // TODO: double check with ABC this is the correct GT
     },
     {
       name: 'Intensification modérée des prairies peu productives (hors alpages et estives)',
       id: 'prairieIntensification',
+      url: 'intensification_prairies',
       groundType: 'prairies'
     },
     {
       name: 'Agroforesterie en grandes cultures',
       id: 'cropsAgroforestry',
+      url: 'agroforestrie_cultures',
       groundType: 'cultures'
     },
     {
       name: 'Agroforesterie en prairies',
       id: 'prairiesAgroforestry',
+      url: 'agroforestrie_prairies',
       groundType: 'prairies'
     },
     {
       name: 'Couverts intermédiaires (CIPAN) en grandes cultures',
       id: 'catchCrops',
+      url: 'cipan',
       groundType: 'cultures'
     },
     {
       name: 'Haies sur cultures (60 mètres linéaires par ha)',
       id: 'cropsHedges',
+      url: 'haies_cultures',
       groundType: 'cultures'
     },
     {
       name: 'Haies sur prairies (100 mètres linéaires par ha)',
       id: 'prairiesHedges',
+      url: 'haies_prairies',
       groundType: 'prairies'
     },
     {
       name: 'Bandes enherbées',
       id: 'grassyStrips',
+      url: 'bandes_enherbees',
       groundType: 'cultures'
     },
     {
       name: 'Couverts intercalaires en vignes',
       id: 'vineyardsInterCoverCropping',
+      url: 'couverts_vignes',
       groundType: 'vignes'
     },
     {
       name: 'Couverts intercalaires en vergers',
       id: 'orchardsInterCoverCropping',
+      url: 'couverts_vergers',
       groundType: 'vergers'
     },
     {
       name: 'Semis direct continu',
       id: 'directSowingContinuous',
+      url: 'semis_direct_continu',
       groundType: 'cultures'
     },
     {
       name: 'Semis direct avec labour quinquennal',
       id: 'directSowingFiveYearWork',
+      url: 'semis_direct_labour',
       groundType: 'cultures'
     }
   ],

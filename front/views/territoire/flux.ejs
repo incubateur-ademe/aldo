@@ -16,7 +16,6 @@
           <% const groundType = sortedFluxKeys[index] %>
           <% const thisFlux = fluxSummary[groundType.stocksId] %>
           <!-- TODO: make row blue if area modified -->
-          <!-- TODO: display of agricultural practices fluxes -->
           <tr class="expandable-row flux-row">
             <td onClick='toggleRow(this)'>
               <%= groundType.name %> <%= thisFlux?.areaModified ? '*' : '' %>

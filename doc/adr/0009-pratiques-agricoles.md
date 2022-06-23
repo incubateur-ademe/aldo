@@ -50,3 +50,5 @@ Je n'ajouterai pas pour l'instant "Pratiques_agricoles:D1", je demanderai clarif
 ## Consequences
 
 Le melange français/anglais pour les mots métier pourrait ressembler un peu bizarre pour la prochaine personne qui travail dans ce base de code.
+
+Pour garder l'URL en français et avec les `_` j'aurai besoin d'ajouter une donnée en plus dans la définition des pratiques en `constants` - l'id français, et faire un étape de 'traduction' entre l'id dans l'url et le vrai id.

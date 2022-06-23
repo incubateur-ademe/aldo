@@ -36,7 +36,8 @@ async function territoryHandler (req, res) {
     })
     Object.keys(req.query).filter(key => key.startsWith('ap_')).forEach(key => {
       const practice = key.split('ap_')[1]
-      agriculturalPracticesEstablishedAreas[practice] = parseFloat(req.query[key])
+      const id = AgriculturalPractices.find(ap => ap.url === practice)?.id
+      agriculturalPracticesEstablishedAreas[id] = parseFloat(req.query[key])
       if (!isNaN(agriculturalPracticesEstablishedAreas[practice])) {
         hasModifiedAreaChange = true
       }
