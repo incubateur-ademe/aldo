@@ -1,0 +1,46 @@
+<h1>
+  <%= epci.nom %>
+</h1>
+<p>
+  SIREN : <%= epci.code %>
+</p>
+<p>
+  Population : <%= formatNumber(epci.populationTotale) %>
+</p>
+
+<% if (epci.membres) { %>
+  <section class="fr-accordion">
+    <p class="fr-accordion__title">
+      <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-communes">
+        <%= epci.membres.length %> communes
+      </button>
+    </p>
+    <div class="fr-collapse" id="accordion-communes">
+      <ul>
+        <div class="fr-grid-row">
+          <% for( let index=0; index < epci.membres.length; index++ ) { %>
+            <div class="fr-col-12 fr-sm-col-6 fr-col-md-4">
+              <li>
+                <%= epci.membres[index].nom %>
+              </li>
+            </div>
+            <% } %>
+        </div>
+      </ul>
+    </div>
+  </section>
+<% } else { %>
+  <p>
+    <%= epci.nombreCommunes %> communes
+  </p>
+<% } %>
+<div class="fr-callout fr-my-3w">
+  <p class="fr-callout__text">
+    Une <%= fluxTotal > 0 ? "séquestration" : "émission" %>
+    de carbone de
+    <%= formatNumber(fluxTotal/1000, 1) %> ktCO<sub>2</sub>e / an
+    et un stock total de
+    <%= formatNumber(stockTotal/1000000, 1) %> MtC,
+    à préserver !
+  </p>
+</div>

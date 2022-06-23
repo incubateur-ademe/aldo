@@ -1,0 +1,117 @@
+<div class="fr-grid-row fr-mt-3w">
+  <div class="fr-table fr-col-12 fr-col-md-6 fr-pr-md-1w">
+    <table>
+      <caption><h2>Stocks de carbone</h2></caption>
+      <thead>
+        <tr class="expandable-row-header stocks-row">
+          <th scope="col">Occupation du sol</th>
+          <th scope="col">Surface (ha)</th>
+          <th scope="col">Stocks carbone (tC)</th>
+          <th scope="col">Stocks proportion</th>
+          <td scope="col"></td>
+        </tr>
+      </thead>
+      <tbody>
+        <% for( let index=0; index < groundTypes.length; index++ ) { %>
+          <% const groundType = groundTypes[index] %>
+          <% const thisStock = stocks[groundType.stocksId] %>
+          <!-- TODO: make row blue if area modified -->
+          <tr class="expandable-row stocks-row">
+            <td onClick='toggleRow(this)'>
+              <%= groundType.name %>
+            </td>
+            <td onClick='toggleRow(this)' style="text-align: right;">
+              <% if (thisStock.area !==undefined) { %>
+                <%= formatNumber(thisStock.area) %> <%= thisStock.areaModified ? '*' : '' %>
+              <% } else { %>
+                <i>Pas applicable</i>
+              <% } %>
+            </td>
+            <td onClick='toggleRow(this)' style="text-align: right;">
+              <%= formatNumber(thisStock.stock) %>
+            </td>
+            <td onClick='toggleRow(this)' style="text-align: right;">
+              <% if (thisStock.stockPercentage> 10) { %>
+                <b>
+                  <%= formatNumber(thisStock.stockPercentage) %> %
+                </b>
+              <% } else { %>
+                <%= formatNumber(thisStock.stockPercentage) %> %
+              <% } %>
+            </td>
+            <td onClick='toggleRow(this)'>
+              <button onClick='toggleRow(this)' type="button">
+                <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
+              </button>
+            </td>
+            <td class='expanded-row-content hide-row'>
+              <!-- TODO: reset input values if URL doesn't contain the relevant query value -->
+              <% if (simpleStocks.indexOf(groundTypes[index].stocksId)> -1) { %>
+                <%- include('stockCalculations/simple', {index, stock: thisStock }) -%>
+              <% } else if (thisStock.children) { %>
+                <%- include('stockCalculations/subtypes', {index}) -%>
+              <% } else if (groundTypes[index].stocksId === 'produits bois' ) { %>
+                <%- include('stockCalculations/wood', {index, stock: thisStock, woodCalculation }) -%>
+              <% } %>
+            </td>
+          </tr>
+          <% } %>
+      </tbody>
+    </table>
+    <% if (hasModifiedArea) { %>
+      <p class="fr-text--sm fr-mt-1w">* Surface modifiée</p>
+    <% } %>
+    <!-- TODO: reset stocks areas button -->
+    <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/stocks/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">Lire plus de nos méthodes de calcul</a></p>
+  </div>
+  <!-- TODO: test a11y of these charts -->
+  <div class="fr-col-12 fr-col-sm-10 fr-col-md-6 fr-pt-6w">
+    <h3>Résultats graphiques</h3>
+    <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
+      <% for (let keyIdx=0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
+        <li>
+          <section class="fr-accordion">
+            <h4 class="fr-accordion__title">
+              <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
+                aria-controls="accordion-chart-<%= keyIdx %>">
+                <%= charts[Object.keys(charts)[keyIdx]].title %>
+              </button>
+            </h4>
+            <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
+              <canvas id="chart-<%= Object.keys(charts)[keyIdx] %>" width="400" height="400"></canvas>
+            </div>
+          </section>
+        </li>
+        <% } %>
+    </ul>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<script>
+  Chart.register(ChartDataLabels);
+  Chart.defaults.set('plugins.datalabels', {
+    anchor: 'end',
+    display: 'auto'
+  });
+
+  const groundTypeCtx = document.getElementById('chart-groundType');
+  const groundTypeChartData = JSON.parse(`<%- charts.groundType.data %>`);
+  new Chart(groundTypeCtx, groundTypeChartData);
+
+  const ctx = document.getElementById('chart-reservoir');
+  const chartData = JSON.parse(`<%- charts.reservoir.data %>`);
+  new Chart(ctx, chartData);
+
+  const densityCtx = document.getElementById('chart-density');
+  const densityChartData = JSON.parse(`<%- charts.density.data %>`);
+  new Chart(densityCtx, densityChartData);
+
+  const groundAndLitterCtx = document.getElementById('chart-groundAndLitter');
+  const groundAndLitterChartData = JSON.parse(`<%- charts.groundAndLitter.data %>`);
+  new Chart(groundAndLitterCtx, groundAndLitterChartData);
+
+  const biomassCtx = document.getElementById('chart-biomass');
+  const biomassChartData = JSON.parse(`<%- charts.biomass.data %>`);
+  new Chart(biomassCtx, biomassChartData);
+</script>

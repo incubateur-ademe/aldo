@@ -3,7 +3,7 @@ const { getAnnualFluxes } = require('../../calculations/flux')
 const rootFolder = path.join(__dirname, '../../')
 const { epciList, getEpci } = require(path.join(rootFolder, './calculations/epcis'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
-const { GroundTypes, Colours } = require(path.join(rootFolder, './calculations/constants'))
+const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
 
 async function territoryHandler (req, res) {
   const epci = await getEpci(req.query.epci) || {}
@@ -15,6 +15,7 @@ async function territoryHandler (req, res) {
   proportionSolsImpermeables = proportionSolsImpermeables ? (proportionSolsImpermeables / 100).toPrecision(2) : undefined
   let hasModifiedArea = false
   let hasModifiedAreaChange = false
+  const agriculturalPracticesEstablishedAreas = {}
   if (epci.code) {
     const areaOverrides = {}
     Object.keys(req.query).filter(key => key.startsWith('surface_')).forEach(key => {
@@ -32,11 +33,19 @@ async function territoryHandler (req, res) {
         hasModifiedAreaChange = true
       }
     })
+    Object.keys(req.query).filter(key => key.startsWith('ap_')).forEach(key => {
+      const practice = key.split('ap_')[1]
+      agriculturalPracticesEstablishedAreas[practice] = parseFloat(req.query[key])
+      if (!isNaN(agriculturalPracticesEstablishedAreas[practice])) {
+        hasModifiedAreaChange = true
+      }
+    })
     const options = {
       areas: areaOverrides,
       areaChanges: areaChangeOverrides,
       woodCalculation,
-      proportionSolsImpermeables
+      proportionSolsImpermeables,
+      agriculturalPracticesEstablishedAreas
     }
     stocks = await getStocks({ epci }, options)
     flux = getAnnualFluxes({ epci }, options)
@@ -109,7 +118,9 @@ async function territoryHandler (req, res) {
     proportionSolsImpermeables,
     fluxIds,
     stockTotal: stocks?.total,
-    fluxTotal: flux?.total
+    fluxTotal: flux?.total,
+    agriculturalPractices: AgriculturalPractices,
+    agriculturalPracticesEstablishedAreas
   })
 }
 

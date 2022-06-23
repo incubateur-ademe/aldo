@@ -1,0 +1,44 @@
+<div class="fr-col-12 fr-pr-md-1w fr-table">
+  <table>
+    <caption><h2>Changements de surface (ha)</h2></caption>
+    <thead>
+      <tr>
+        <td></td>
+        <% for( const to of fluxIds ) { %>
+          <th scope="col" class="flux-surface-col"><%= allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to).name %></th>
+        <% } %>
+      </tr>
+    </thead>
+    <tbody>
+      <% for( const from of fluxIds ) { %>
+        <tr>
+          <% const fromDetail = allGroundTypes.find(gt => gt.altFluxId === from || gt.fluxId === from) %>
+          <td scope="row"><%= fromDetail.name %></td>
+          <% for( const to of fluxIds ) { %>
+            <td>
+              <% if (from !== to) { %>
+                <% const toDetail = allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to) %>
+                <% let thisFlux = allFlux.filter(f => f.from === fromDetail.stocksId && f.to === toDetail.stocksId && f.gas === 'C') %>
+                <% thisFlux = thisFlux.length ? thisFlux[0] : undefined %>
+                <input
+                  class="fr-input fr-text--lg"
+                  type="number"
+                  inputmode="numeric"
+                  step="0.1"
+                  min="0"
+                  placeholder="<%= thisFlux?.originalArea ? formatNumber(thisFlux.originalArea, 1) : '-' %>"
+                  value="<%= thisFlux?.areaModified ? formatNumber(thisFlux.area, 1) : '-' %>"
+                  id="change_<%= from %>_<%= to %>"
+                  name="change_<%= from %>_<%= to %>"
+                >
+              <% } %>
+            </td>
+          <% } %>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <button class="fr-btn fr-mt-2w" type="submit">
+    Mettre à jour les surfaces
+  </button>
+</div>

@@ -1,0 +1,130 @@
+<div class="fr-grid-row fr-mt-3w">
+  <div class="fr-col-12 fr-col-md-7 fr-pr-md-1w fr-table">
+    <table>
+      <caption><h2>Flux de carbone</h2></caption>
+      <thead>
+        <tr class="expandable-row-header stocks-row">
+          <th scope="col">Occupation du sol finale</th>
+          <th scope="col">Sequestration tCO<sub>2</sub>e / an</th>
+          <td scope="col"></td>
+          <td scope="col"></td>
+          <td scope="col"></td>
+        </tr>
+      </thead>
+      <tbody>
+        <% for( let index=0; index < sortedFluxKeys.length; index++ ) { %>
+          <% const groundType = sortedFluxKeys[index] %>
+          <% const thisFlux = fluxSummary[groundType.stocksId] %>
+          <!-- TODO: make row blue if area modified -->
+          <tr class="expandable-row flux-row">
+            <td onClick='toggleRow(this)'>
+              <%= groundType.name %> <%= thisFlux?.areaModified ? '*' : '' %>
+            </td>
+            <td onClick='toggleRow(this)' style="text-align: right;">
+              <% if (thisFlux) { %>
+                <%= formatNumber(thisFlux.totalSequestration) %>
+              <% } else { %>
+                <i>Pas de données</i>
+              <% } %>
+            </td>
+            <td onClick='toggleRow(this)'>
+              <% if (!thisFlux || Math.abs(thisFlux.totalSequestration) < 0.5) { %>
+                <!-- no change -->
+              <% } else if (thisFlux.totalSequestration > 0) { %>
+                <!-- colour = 'succès' -->
+                <span style="color: #1f8d49;">séquestration</span>
+              <% } else { %>
+                <!-- rouge marianne -->
+                <span style="color: #e1000f;">émission</span>
+              <% } %>
+            </td>
+            <td onClick='toggleRow(this)'>
+              <button onClick='toggleRow(this)' type="button">
+                <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
+              </button>
+            </td>
+            <td class='expanded-row-content hide-row'>
+              <% if (!thisFlux) { %>
+                <p>Pas de données.</p>
+              <% } else if (Math.abs(thisFlux.totalSequestration) < 0.5) { %>
+                <p>Aucun changement du sol enregistré.</p>
+              <% } else if (groundType.stocksId === 'produits bois') { %>
+                <%- include('fluxCalculations/wood', { woodCalculation }) -%>
+              <% } else if (!groundType.children) { %>
+                <p class="fr-text--sm fr-mb-1w">
+                  Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %>&nbsp;:
+                </p>
+                <%- include('fluxCalculations/simple', { groundType: groundType.stocksId }) -%>
+              <% } else if(groundType.stocksId !== 'forêts') { %>
+                <p class="fr-text--sm fr-mb-1w">
+                  Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %> sont séparés par sous-type.
+                </p>
+                <!-- Prairies, sols artificiels -->
+                <% for (const child of groundType.children) { %>
+                  <% if(!Math.abs(fluxSummary[child]?.totalSequestration) < 0.5) { %>
+                    <p class="fr-text--sm fr-mb-1w">Vers <%= child %>&nbsp;:</p>
+                    <%- include('fluxCalculations/simple', { groundType: child }) -%>
+                    <br/>
+                  <% } %>
+                <% } %>
+              <% } else if(groundType.stocksId === 'forêts') { %>
+                <% if(allFlux.some(f => f.to === 'forêts' && f.value !== 0)) { %>
+                  <p class="fr-text--sm fr-mb-1w">
+                    Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %>&nbsp;:
+                  </p>
+                  <%- include('fluxCalculations/simple', { groundType: groundType.stocksId }) -%>
+                <% } else { %>
+                  <p class="fr-text--sm fr-mb-1w">
+                    Il n'y a aucun changement d'occupation du sol vers <%= groundType.name.toLowerCase() %>.
+                  </p>
+                <% } %>
+                <%- include('fluxCalculations/forest-biomass') -%>
+              <% } %>
+            </td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+    <% if (hasModifiedAreaChange) { %>
+      <p class="fr-text--sm fr-mt-1w">* Changement de surface modifiée</p>
+    <% } %>
+    <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/flux/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">Lire plus de nos méthodes de calcul</a></p>
+  </div>
+  <div class="fr-col-12 fr-col-sm-10 fr-col-md-5 fr-pt-6w">
+    <h3>Résultats graphiques</h3>
+    <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
+      <% for (let keyIdx=0; keyIdx < Object.keys(fluxCharts).length; keyIdx++) { %>
+        <li>
+          <section class="fr-accordion">
+            <h4 class="fr-accordion__title">
+              <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
+                aria-controls="accordion-flux-chart-<%= keyIdx %>">
+                <%= fluxCharts[Object.keys(fluxCharts)[keyIdx]].title %>
+              </button>
+            </h4>
+            <div class="fr-collapse" id="accordion-flux-chart-<%= keyIdx %>">
+              <canvas id="fluxChart-<%= Object.keys(fluxCharts)[keyIdx] %>" width="400" height="500"></canvas>
+            </div>
+          </section>
+        </li>
+        <% } %>
+    </ul>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<script>
+  Chart.register(ChartDataLabels);
+  Chart.defaults.set('plugins.datalabels', {
+    anchor: 'end',
+    display: 'auto'
+  });
+
+  const fluxReservoirCtx = document.getElementById('fluxChart-reservoir');
+  const fluxReservoirChartData = JSON.parse(`<%- fluxCharts.reservoir.data %>`);
+  new Chart(fluxReservoirCtx, fluxReservoirChartData);
+
+  const fluxGrountCtx = document.getElementById('fluxChart-groundType');
+  const fluxGroundChartData = JSON.parse(`<%- fluxCharts.groundType.data %>`);
+  new Chart(fluxGrountCtx, fluxGroundChartData);
+</script>

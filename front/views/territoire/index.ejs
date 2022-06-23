@@ -1,0 +1,61 @@
+<%- include('../partials/search-header') -%>
+  <main role="main" id="contenu">
+    <div class="fr-container fr-py-6w fr-px-2w">
+
+      <div class="fr-grid-row fr-grid-row--right no-print">
+        <button onclick="window.print()" class="fr-btn fr-btn--secondary">
+          Imprimer cette page
+        </button>
+      </div>
+
+      <% if (epci.code) { %>
+        <%- include('./introduction') -%>
+        <form action="/territoire" method="GET" class="fr-tabs fr-mt-4w">
+          <input type="hidden" name="epci" value="<%= epci.nom %>" />
+          <ul class="fr-tabs__list" role="tablist" aria-label="Données du territoire">
+            <li role="presentation">
+              <button type="button" id="tabpanel-stocks" class="fr-tabs__tab" tabindex="0" role="tab" aria-selected="true" aria-controls="tabpanel-stocks-panel" data-fr-js-tab-button="true">Stocks</button>
+            </li>
+            <li role="presentation">
+              <button type="button" id="tabpanel-flux" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="false" aria-controls="tabpanel-flux-panel" data-fr-js-tab-button="true">Flux</button>
+            </li>
+            <li role="presentation">
+              <button type="button" id="tabpanel-agricultural-practices" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="false" aria-controls="tabpanel-agricultural-practices-panel" data-fr-js-tab-button="true">
+                Pratiques agricoles
+              </button>
+            </li>
+            <li role="presentation">
+              <button type="button" id="tabpanel-config" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="false" aria-controls="tabpanel-config-panel" data-fr-js-tab-button="true">Configuration</button>
+            </li>
+          </ul>
+          <div id="tabpanel-stocks-panel" class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-stocks" tabindex="0">
+            <%- include('./stocks') -%>
+          </div>
+          <div id="tabpanel-flux-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-flux" tabindex="0">
+            <%- include('./flux') -%>
+            <%- include('./modify-flux-areas') -%>
+          </div>
+          <div id="tabpanel-agricultural-practices-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-agricultural-practices" tabindex="0">
+            <%- include('./agricultural-practices') -%>
+          </div>
+          <div id="tabpanel-config-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-config" tabindex="0">
+            <%- include('./shared-configuration') -%>
+          </div>
+        </form>
+      </div>
+      <% } else { %>
+        <h1>Aucun EPCI trouvé</h1>
+      <% } %>
+    </div>
+  </main>
+  <script>
+    // thanks to https://github.com/chhikaradi1993/Expandable-table-row
+    const toggleRow = (element) => {
+      if (element.nodeName === "BUTTON") {
+        element = element.parentElement;
+      }
+      element.parentElement.getElementsByClassName('expanded-row-content')[0].classList.toggle('hide-row');
+      event.stopPropagation();
+    }
+  </script>
+  <%- include('../partials/footer') -%>

@@ -1,0 +1,26 @@
+<div class="fr-form-group">
+  <h2>Pratiques agricoles</h2>
+  <p>Pratiques mises en place il y a moins de 20 ans (effet moyen pendant 20 ans - références nationales)</p>
+  <div class="fr-container">
+    <div class="fr-grid-row">
+      <% for(practice of agriculturalPractices) { %>
+        <div class="fr-col-12 fr-col-md-6">
+          <label class="fr-label fr-text--sm fr-mb-1w" for="ap_<%= practice.id %>"><%= practice.name %></label>
+          <input
+            class="fr-input fr-text--lg fr-col-6"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            placeholder="0"
+            value="<%= agriculturalPracticesEstablishedAreas[practice.id] %>"
+            id="ap_<%= practice.id %>"
+            name="ap_<%= practice.id %>"
+          >
+        </div>
+      <% } %>
+    </div>
+    <button class="fr-btn" type="submit">
+      Mettre à jour le calcul
+    </button>
+  </div>
+</div>
