@@ -4,6 +4,12 @@
     <thead>
       <tr>
         <td></td>
+        <th colspan="<%= fluxIds.length %>" class="fr-pb-0">Occupation de sol finale</th>
+      </tr>
+      <tr>
+        <th style="font-weight: normal;" scope="col">
+          Occupation de sol initiale
+        </th>
         <% for( const to of fluxIds ) { %>
           <th scope="col" class="flux-surface-col"><%= allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to).name %></th>
         <% } %>
@@ -13,7 +19,7 @@
       <% for( const from of fluxIds ) { %>
         <tr>
           <% const fromDetail = allGroundTypes.find(gt => gt.altFluxId === from || gt.fluxId === from) %>
-          <td scope="row"><%= fromDetail.name %></td>
+          <th scope="row"><%= fromDetail.name %></th>
           <% for( const to of fluxIds ) { %>
             <td>
               <% if (from !== to) { %>
