@@ -17,6 +17,7 @@
   </div>
   <%- include('./wood-choice') -%>
 </div>
-<button class="fr-btn" type="submit">
+<!-- the formaction here is not necessarily perfect but it's a bit better -->
+<button class="fr-btn" type="submit" formaction="/territoire/<%= tab %>">
   Mettre à jour le calcul
 </button>

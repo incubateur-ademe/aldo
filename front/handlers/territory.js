@@ -6,6 +6,7 @@ const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
 
 async function territoryHandler (req, res) {
+  const tab = req.params.tab || 'stocks'
   const epci = await getEpci(req.query.epci) || {}
   const epcis = await epciList()
   let stocks, flux
@@ -119,6 +120,7 @@ async function territoryHandler (req, res) {
   })
   res.render('territoire', {
     pageTitle: `${epci.nom}`,
+    tab,
     epcis,
     epci,
     groundTypes,

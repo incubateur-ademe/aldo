@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/territoire', territoryHandler)
+router.get('/territoire/:tab', territoryHandler)
 
 // TODO: complete and add the following back in
 // router.get('/contact', (req, res) => {
