@@ -136,6 +136,37 @@ function asPercentage (value, total) {
 
 // TODO: put in check for if the locations given are valid and findable?
 // Or maybe put this error throwing at the lowest level and let them bubble up
+/*
+Data format:
+stocks: {
+  <groundTypeKey>: {
+    area: in ha, user-entered area or our data
+    originalArea: in ha, area in our data
+    areaModified: boolean area !== originalArea
+    groundDensity: in tC/ha
+    groundStock: in tC
+    biomassDensity: in tC/ha
+    biomassStock: in tC
+    forestLitterDensity: in tC/ha
+    forestLitterStock: in tC
+    totalDensity: total density across ground, biomass, forest litter reservoirs
+    stock: total stock for ground type
+    children: [<keyword>] optional
+    parent: <keyword> optional
+  },
+  total: total stock for territory,
+  percentageByReservoir: reformat data for graph
+  byDensity: reformat data for graph
+}
+
+options: {
+  areas: {
+    <groundTypeKey>: in ha
+  },
+  woodCalculation: 'recolte' or 'consommation',
+  proportionSolsImpermeables: 0 - 1
+}
+*/
 function getStocks (location, options) {
   const originalLocation = location
   location = { epci: location.epci.code } // TODO: change the other APIs to use whole EPCI object like stocks wood products?
