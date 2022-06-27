@@ -75,8 +75,8 @@ async function territoryHandler (req, res) {
   }
   const groundTypes = GroundTypes.filter(type => !type.parentType)
   groundTypes.sort((a, b) => {
-    const stockA = stocks[a.stocksId].stock
-    const stockB = stocks[b.stocksId].stock
+    const stockA = stocks[a.stocksId].totalStock
+    const stockB = stocks[b.stocksId].totalStock
     if (stockA < stockB) return 1
     else if (stockA === stockB) return 0
     else return -1

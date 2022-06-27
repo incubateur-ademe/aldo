@@ -22,7 +22,7 @@ function getStocksByKeyword (location, keyword, options) {
   const biomassDensity = getBiomassCarbonDensity(location, keyword)
   const biomassStock = biomassDensity * area
   const stocks = {
-    stock: groundStock + biomassStock,
+    totalReservoirStock: groundStock + biomassStock,
     area,
     groundStock,
     biomassStock,
@@ -35,8 +35,9 @@ function getStocksByKeyword (location, keyword, options) {
     stocks.forestLitterDensity = forestLitterDensity
     stocks.totalDensity += forestLitterDensity
     stocks.forestLitterStock = forestLitterDensity * area
-    stocks.stock += stocks.forestLitterStock
+    stocks.totalReservoirStock += stocks.forestLitterStock
   }
+  stocks.totalStock = stocks.totalReservoirStock
   return stocks
 }
 
@@ -49,14 +50,14 @@ function getSubStocksByKeyword (location, keyword, parent, options) {
 
 function getStocksPrairies (subStocks) {
   const stocks = {
-    stock: 0,
+    totalReservoirStock: 0,
     area: 0,
     groundStock: 0,
     biomassStock: 0,
     forestLitterStock: 0
   }
   for (const subType of Object.keys(subStocks)) {
-    stocks.stock += subStocks[subType].stock
+    stocks.totalReservoirStock += subStocks[subType].totalReservoirStock
     stocks.area += subStocks[subType].area
     stocks.groundStock += subStocks[subType].groundStock
     stocks.biomassStock += subStocks[subType].biomassStock
@@ -64,6 +65,7 @@ function getStocksPrairies (subStocks) {
       stocks.forestLitterStock += subStocks[subType].forestLitterStock
     }
   }
+  stocks.totalStock = stocks.totalReservoirStock
   return stocks
 }
 
@@ -119,13 +121,14 @@ function getStocksHaies (location, options) {
   // TODO: ask more about this calculation - reusing forest carbon density?
   const carbonDensity = getBiomassCarbonDensity(location, 'forêt mixte')
   const area = getArea(location, 'haies', options.areas)
-  const stock = carbonDensity * area
+  const totalReservoirStock = carbonDensity * area
   return {
-    stock,
+    totalReservoirStock,
+    totalStock: totalReservoirStock,
     area,
     biomassDensity: carbonDensity,
     groundDensity: 0,
-    biomassStock: stock,
+    biomassStock: totalReservoirStock,
     totalDensity: carbonDensity
   }
 }
@@ -150,7 +153,12 @@ stocks: {
     forestLitterDensity: in tC/ha
     forestLitterStock: in tC
     totalDensity: total density across ground, biomass, forest litter reservoirs
-    stock: total stock for ground type
+    totalReservoirStock: total stocks for ground type for ground, biomass, forest litter reservoirs
+    agroforestryDensity: optional, tC/ha
+    agroforestryArea: optional, ha
+    agroforestryStock: optional, tC
+    totalStock: total stocks for territory
+    stockPercentage: 0-100 (totalStock / stocks.total * 100)
     children: [<keyword>] optional
     parent: <keyword> optional
   },
@@ -240,13 +248,13 @@ function getStocks (location, options) {
   // extra data prep for display - TODO: consider whether this is better handled by the handler
   // -- percentages by level 1 ground type
   const parentTypes = Object.keys(stocks).filter((s) => !stocks[s].parent)
-  const stocksTotal = parentTypes.reduce((a, b) => a + stocks[b].stock, 0)
+  const stocksTotal = parentTypes.reduce((a, b) => a + stocks[b].totalStock, 0)
   const groundAndLitterStocksTotal = parentTypes.reduce((a, b) => {
     return a + (stocks[b].groundStock || 0) + (stocks[b].forestLitterStock || 0)
   }, 0)
   const biomassStocksTotal = parentTypes.reduce((a, b) => a + (stocks[b].biomassStock || 0), 0)
   for (const key of parentTypes) {
-    stocks[key].stockPercentage = asPercentage(stocks[key].stock, stocksTotal)
+    stocks[key].stockPercentage = asPercentage(stocks[key].totalStock, stocksTotal)
     const groundAndLitter = stocks[key].groundStock + (stocks[key].forestLitterStock || 0)
     stocks[key].groundAndLitterStockPercentage = asPercentage(groundAndLitter, groundAndLitterStocksTotal)
     stocks[key].biomassStockPercentage = asPercentage(stocks[key].biomassStock, biomassStocksTotal)
@@ -259,7 +267,7 @@ function getStocks (location, options) {
     'Sol (30 cm)': asPercentage(groundStock, stocksTotal),
     'Biomasse sur pied': asPercentage(biomassStock, stocksTotal),
     Litière: asPercentage(forestLitterStock, stocksTotal),
-    'Matériaux bois': asPercentage(stocks['produits bois'].stock, stocksTotal)
+    'Matériaux bois': asPercentage(stocks['produits bois'].totalStock, stocksTotal)
   }
   // -- density per level 2 ground type
   stocks.byDensity = {}

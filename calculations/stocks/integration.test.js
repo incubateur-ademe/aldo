@@ -4,11 +4,11 @@ const { getEpci } = require('../epcis')
 test('returns stocks by ground type for a valid EPCI', () => {
   const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') })
 
-  expect(stocks.cultures.stock).toEqual(95097.48957450179)
+  expect(stocks.cultures.totalReservoirStock).toEqual(95097.48957450179)
   expect(stocks.cultures.stockPercentage).toEqual(6)
   expect(stocks.cultures.area).toEqual(1740.7313534999998)
 
-  expect(stocks.prairies.stock).toEqual(243059.8882460637)
+  expect(stocks.prairies.totalReservoirStock).toEqual(243059.8882460637)
   expect(stocks.prairies.stockPercentage).toEqual(15.3)
   expect(stocks.prairies.area).toEqual(2599.15354877)
 
@@ -25,67 +25,67 @@ test('returns stocks by ground type for a valid EPCI', () => {
   expect(stocks['prairies zones arborées'].area).toEqual(0)
   expect(stocks['prairies zones arborées'].totalDensity).toEqual(150.30767341)
 
-  expect(stocks['zones humides'].stock).toEqual(6813.237073875)
+  expect(stocks['zones humides'].totalReservoirStock).toEqual(6813.237073875)
   expect(stocks['zones humides'].stockPercentage).toEqual(0.4)
   expect(stocks['zones humides'].area).toEqual(54.505896590999996)
 
-  expect(stocks.vergers.stock).toEqual(0)
+  expect(stocks.vergers.totalReservoirStock).toEqual(0)
   expect(stocks.vergers.stockPercentage).toEqual(0)
   expect(stocks.vergers.area).toEqual(0)
 
-  expect(stocks.vignes.stock).toEqual(0)
+  expect(stocks.vignes.totalReservoirStock).toEqual(0)
   expect(stocks.vignes.stockPercentage).toEqual(0)
   expect(stocks.vignes.area).toEqual(0)
 
-  expect(stocks['sols artificiels'].stock).toBeCloseTo(67419.88, 2)
+  expect(stocks['sols artificiels'].totalReservoirStock).toBeCloseTo(67419.88, 2)
   expect(stocks['sols artificiels'].stockPercentage).toBeCloseTo(4.2, 1)
   expect(stocks['sols artificiels'].area).toBeCloseTo(1530.13, 2)
 
   expect(stocks['sols artificiels imperméabilisés'].area).toBeCloseTo(1224.10, 2)
   expect(stocks['sols artificiels imperméabilisés'].totalDensity).toBeCloseTo(30, 2)
-  expect(stocks['sols artificiels imperméabilisés'].stock).toBeCloseTo(36723.12, 2)
+  expect(stocks['sols artificiels imperméabilisés'].totalReservoirStock).toBeCloseTo(36723.12, 2)
 
   expect(stocks['sols artificiels arbustifs'].area).toBeCloseTo(306.03, 2)
   expect(stocks['sols artificiels arbustifs'].totalDensity).toBeCloseTo(100.31, 2)
-  expect(stocks['sols artificiels arbustifs'].stock).toBeCloseTo(30696.76, 2)
+  expect(stocks['sols artificiels arbustifs'].totalReservoirStock).toBeCloseTo(30696.76, 2)
 
   expect(stocks['sols artificiels arborés et buissonants'].area).toBeCloseTo(0, 2)
   expect(stocks['sols artificiels arborés et buissonants'].totalDensity).toBeCloseTo(145.57, 2)
-  expect(stocks['sols artificiels arborés et buissonants'].stock).toBeCloseTo(0, 2)
+  expect(stocks['sols artificiels arborés et buissonants'].totalReservoirStock).toBeCloseTo(0, 2)
 
-  expect(stocks.haies.stock).toEqual(5085.895944561377)
+  expect(stocks.haies.totalReservoirStock).toEqual(5085.895944561377)
   expect(stocks.haies.stockPercentage).toEqual(0.3)
   expect(stocks.haies.area).toEqual(61.68869213)
 
-  expect(stocks.forêts.stock).toEqual(1127615.0067169224)
+  expect(stocks.forêts.totalReservoirStock).toEqual(1127615.0067169224)
   expect(stocks.forêts.stockPercentage).toEqual(70.8)
   expect(stocks.forêts.area).toEqual(6456.9392066)
 
   expect(stocks['forêt mixte'].parent).toEqual('forêts')
   expect(stocks['forêt mixte'].area).toEqual(2762.462366)
   expect(stocks['forêt mixte'].totalDensity).toEqual(180.01374969)
-  expect(stocks['forêt mixte'].stock).toEqual(497281.2088811692)
+  expect(stocks['forêt mixte'].totalReservoirStock).toEqual(497281.2088811692)
 
   expect(stocks['forêt feuillu'].parent).toEqual('forêts')
   expect(stocks['forêt feuillu'].area).toEqual(951.8722256)
   expect(stocks['forêt feuillu'].totalDensity).toEqual(180.47012302000002)
-  expect(stocks['forêt feuillu'].stock).toEqual(171784.49765335317)
+  expect(stocks['forêt feuillu'].totalReservoirStock).toEqual(171784.49765335317)
 
   expect(stocks['forêt conifere'].parent).toEqual('forêts')
   expect(stocks['forêt conifere'].area).toEqual(2742.504615)
   expect(stocks['forêt conifere'].totalDensity).toEqual(167.19547565)
-  expect(stocks['forêt conifere'].stock).toEqual(458534.36357724515)
+  expect(stocks['forêt conifere'].totalReservoirStock).toEqual(458534.36357724515)
 
   expect(stocks['forêt peupleraie'].parent).toEqual('forêts')
   expect(stocks['forêt peupleraie'].area).toEqual(0.1)
   expect(stocks['forêt peupleraie'].totalDensity).toEqual(149.36605155)
-  expect(stocks['forêt peupleraie'].stock).toEqual(14.936605155)
+  expect(stocks['forêt peupleraie'].totalReservoirStock).toEqual(14.936605155)
 })
 
 test('returns correct wood stocks for consumption calculation type', () => {
   const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { woodCalculation: 'consommation' })
 
-  expect(stocks['produits bois'].stock).toEqual(49170.62093925741)
+  expect(stocks['produits bois'].totalReservoirStock).toEqual(49170.62093925741)
   expect(stocks['produits bois'].stockPercentage).toEqual(3.1)
   expect(stocks['produits bois'].localPopulation).toEqual(27164)
   expect(stocks['produits bois'].francePopulation).toEqual(65705495)
@@ -99,7 +99,7 @@ test('returns correct wood stocks for consumption calculation type', () => {
 test('returns correct wood stocks for harvest calculation type', () => {
   const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { woodCalculation: 'récolte' })
 
-  expect(stocks['produits bois'].stock).toEqual(48539.99762795377)
+  expect(stocks['produits bois'].totalReservoirStock).toEqual(48539.99762795377)
   expect(stocks['produits bois'].stockPercentage).toEqual(3)
   expect(stocks['produits bois'].boLocalHarvestTotal).toBeCloseTo(16138, 0)
   expect(stocks['produits bois'].biLocalHarvestTotal).toBeCloseTo(1538, 0)
@@ -123,13 +123,13 @@ test('returns stocks according to provided area overrides', () => {
     'sols artificiels arbustifs': 40
   }
   const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { areas })
-  expect(stocks.cultures.stock).toEqual(0)
-  expect(stocks.prairies.stock).toEqual(7448.4604046)
+  expect(stocks.cultures.totalReservoirStock).toEqual(0)
+  expect(stocks.prairies.totalReservoirStock).toEqual(7448.4604046)
   expect(stocks.cultures.originalArea).toBeCloseTo(1741, 0)
-  expect(stocks['sols artificiels arbustifs'].stock).toBeCloseTo(4012, 0)
+  expect(stocks['sols artificiels arbustifs'].totalReservoirStock).toBeCloseTo(4012, 0)
   // test that if area is not given, our area data is used
   expect(stocks['zones humides'].originalArea).toBeCloseTo(55, 0)
-  expect(stocks['sols artificiels imperméabilisés'].stock).toBeCloseTo(36723, 0)
+  expect(stocks['sols artificiels imperméabilisés'].totalReservoirStock).toBeCloseTo(36723, 0)
 })
 
 // chart data tests
@@ -175,7 +175,7 @@ test('returns EPCI information for name and other info where present', () => {
 
 test('option to modify split of sols artificiels', () => {
   const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, { proportionSolsImpermeables: 0.6 })
-  expect(stocks['sols artificiels'].stock).toBeCloseTo(88936, 0)
+  expect(stocks['sols artificiels'].totalReservoirStock).toBeCloseTo(88936, 0)
 })
 
 test('total stock returned', () => {
