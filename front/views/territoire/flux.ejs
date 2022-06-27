@@ -18,7 +18,7 @@
           <!-- TODO: make row blue if area modified -->
           <tr class="expandable-row flux-row">
             <td onClick='toggleRow(this)'>
-              <%= groundType.name %> <%= thisFlux?.areaModified ? '*' : '' %>
+              <%= groundType.name %> <%= thisFlux?.hasModifications ? '*' : '' %>
             </td>
             <td onClick='toggleRow(this)' style="text-align: right;">
               <% if (thisFlux) { %>
@@ -113,7 +113,7 @@
         <% } %>
       </tbody>
     </table>
-    <% if (hasModifiedAreaChange) { %>
+    <% if (fluxHaveModifications) { %>
       <p class="fr-text--sm fr-mt-1w">* Changement de surface modifiée</p>
     <% } %>
     <% if (Object.keys(agriculturalPracticeDetail).length) { %>

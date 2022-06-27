@@ -11,35 +11,56 @@ async function territoryHandler (req, res) {
   let stocks, flux
   const fluxDetail = {}
   const agriculturalPracticeDetail = {}
+  const agroforestryStock = {}
   const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
   let proportionSolsImpermeables = req.query['répartition_art_imp']
   proportionSolsImpermeables = proportionSolsImpermeables ? (proportionSolsImpermeables / 100).toPrecision(2) : undefined
-  let hasModifiedArea = false
-  let hasModifiedAreaChange = false
+  let stocksHaveModifications = false
+  let fluxHaveModifications = false
   const agriculturalPracticesEstablishedAreas = {}
   if (epci.code) {
+    // stocks area overrides
     const areaOverrides = {}
     Object.keys(req.query).filter(key => key.startsWith('surface_')).forEach(key => {
       const groundType = key.split('surface_')[1].replace(/_/g, ' ')
       areaOverrides[groundType] = parseFloat(req.query[key])
       if (!isNaN(areaOverrides[groundType])) {
-        hasModifiedArea = true
+        stocksHaveModifications = true
       }
     })
+    // flux area overrides
     const areaChangeOverrides = {}
     Object.keys(req.query).filter(key => key.startsWith('change_')).forEach(key => {
       const groundType = key.split('change_')[1]
       areaChangeOverrides[groundType] = parseFloat(req.query[key])
       if (!isNaN(areaChangeOverrides[groundType])) {
-        hasModifiedAreaChange = true
+        fluxHaveModifications = true
       }
     })
+    // agricultural practices area additions
     Object.keys(req.query).filter(key => key.startsWith('ap_')).forEach(key => {
       const practice = key.split('ap_')[1]
       const id = AgriculturalPractices.find(ap => ap.url === practice)?.id
       agriculturalPracticesEstablishedAreas[id] = parseFloat(req.query[key])
       if (!isNaN(agriculturalPracticesEstablishedAreas[practice])) {
-        hasModifiedAreaChange = true
+        fluxHaveModifications = true
+      }
+    })
+    // agroforestry area and density additions
+    Object.keys(req.query).filter(key => key.startsWith('af_area_')).forEach(key => {
+      const groundType = key.split('af_area_')[1].replace(/_/g, ' ')
+      agroforestryStock[groundType] = {
+        area: parseFloat(req.query[key])
+      }
+    })
+    Object.keys(req.query).filter(key => key.startsWith('af_density_')).forEach(key => {
+      const groundType = key.split('af_density_')[1].replace(/_/g, ' ')
+      const density = parseFloat(req.query[key])
+      if (!agroforestryStock[groundType]) {
+        agroforestryStock[groundType] = { density }
+      } else {
+        agroforestryStock[groundType].density = density
+        stocksHaveModifications = true // both area and density need to be defined to impact original totalStock
       }
     })
     const options = {
@@ -47,7 +68,8 @@ async function territoryHandler (req, res) {
       areaChanges: areaChangeOverrides,
       woodCalculation,
       proportionSolsImpermeables,
-      agriculturalPracticesEstablishedAreas
+      agriculturalPracticesEstablishedAreas,
+      agroforestryStock
     }
     stocks = await getStocks({ epci }, options)
     flux = getAnnualFluxes({ epci }, options)
@@ -122,15 +144,16 @@ async function territoryHandler (req, res) {
     sortedFluxKeys,
     fluxCharts: fluxCharts(flux),
     fluxDetail,
-    hasModifiedArea,
-    hasModifiedAreaChange,
+    stocksHaveModifications,
+    fluxHaveModifications,
     proportionSolsImpermeables,
     fluxIds,
     stockTotal: stocks?.total,
     fluxTotal: flux?.total,
     agriculturalPractices: AgriculturalPractices,
     agriculturalPracticesEstablishedAreas,
-    agriculturalPracticeDetail
+    agriculturalPracticeDetail,
+    agroforestryStock
   })
 }
 

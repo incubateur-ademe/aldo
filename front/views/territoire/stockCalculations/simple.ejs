@@ -2,19 +2,19 @@
 <p>Stocks de référence par unité de surface par réservoir&nbsp;:</p>
 <p class="fr-container formula fr-my-2w">
   <span class="captioned-value fr-col-3">
-  <span class="v fr-text--lg"><%= round(stock.groundDensity) %> tC/ha</span>
-  <span class="c fr-text--sm">sol (30 cm)</span>
-</span>
-<span class="fr-col-1" style="text-align: center;">+</span>
-<span class="captioned-value fr-col-3">
-  <span class="v fr-text--lg"><%= round(stock.biomassDensity) %> tC/ha</span>
-  <span class="c fr-text--sm">biomasse</span>
-</span>
-<span class="fr-col-1" style="text-align: center;">≈</span>
-<span class="captioned-value fr-col-3">
-  <span class="v fr-text--lg"><%= round(stock.totalDensity) %> tC/ha</span>
-  <span class="c fr-text--sm">total</span>
-</span>
+    <span class="v fr-text--lg"><%= round(stock.groundDensity) %> tC/ha</span>
+    <span class="c fr-text--sm">sol (30 cm)</span>
+  </span>
+  <span class="fr-col-1" style="text-align: center;">+</span>
+  <span class="captioned-value fr-col-3">
+    <span class="v fr-text--lg"><%= round(stock.biomassDensity) %> tC/ha</span>
+    <span class="c fr-text--sm">biomasse</span>
+  </span>
+  <span class="fr-col-1" style="text-align: center;">≈</span>
+  <span class="captioned-value fr-col-3">
+    <span class="v fr-text--lg"><%= round(stock.totalDensity) %> tC/ha</span>
+    <span class="c fr-text--sm">total</span>
+  </span>
 </p>
 <p>Stocks&nbsp;:</p>
 <p class="fr-container formula fr-my-2w">
@@ -39,6 +39,8 @@
   <span class="fr-col-1" style="text-align: center;">≈</span>
   <span class="fr-col-3 fr-text--lg"><%= round(stock.totalReservoirStock) %> tC</span>
 </p>
+<%- include('./agroforestry', {stocksId, stock}) -%>
+<br />
 <button class="fr-btn" type="submit">
   Mettre à jour la surface
 </button>

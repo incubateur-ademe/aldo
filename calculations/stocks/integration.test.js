@@ -199,10 +199,13 @@ test('option to add stocks in agroforestry for prairies and cultures', () => {
   expect(stocks.cultures.totalReservoirStock).toBeCloseTo(95097, 0) // unchanged
   expect(stocks.cultures.stockPercentage).toEqual(6) // unchanged
   expect(stocks.cultures.area).toBeCloseTo(1741, 0) // unchanged
+  expect(stocks.cultures.hasModifications).toEqual(true)
   expect(stocks.cultures.agroforestryStock).toEqual(6)
   expect(stocks.cultures.totalStock).toBeCloseTo(95103, 0)
 
   expect(stocks['prairies zones herbacées'].agroforestryStock).toEqual(9)
+  expect(stocks.prairies.agroforestryStock).toEqual(9)
   expect(stocks.prairies.totalReservoirStock).toBeCloseTo(243060, 0) // unchanged
   expect(stocks.prairies.totalStock).toBeCloseTo(243069, 0)
+  expect(stocks.prairies.hasModifications).toEqual(true)
 })

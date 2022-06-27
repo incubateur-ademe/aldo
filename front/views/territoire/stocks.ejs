@@ -18,11 +18,11 @@
           <!-- TODO: make row blue if area modified -->
           <tr class="expandable-row stocks-row">
             <td onClick='toggleRow(this)'>
-              <%= groundType.name %>
+              <%= groundType.name %> <%= thisStock.hasModifications ? '*' : '' %>
             </td>
             <td onClick='toggleRow(this)' style="text-align: right;">
               <% if (thisStock.area !==undefined) { %>
-                <%= formatNumber(thisStock.area) %> <%= thisStock.areaModified ? '*' : '' %>
+                <%= formatNumber(thisStock.area) %>
               <% } else { %>
                 <i>Pas applicable</i>
               <% } %>
@@ -46,20 +46,22 @@
             </td>
             <td class='expanded-row-content hide-row'>
               <!-- TODO: reset input values if URL doesn't contain the relevant query value -->
-              <% if (simpleStocks.indexOf(groundTypes[index].stocksId)> -1) { %>
-                <%- include('stockCalculations/simple', {index, stock: thisStock }) -%>
+              <% const stocksId = groundTypes[index].stocksId %>
+              <% if (simpleStocks.indexOf(stocksId) > -1) { %>
+                <%- include('stockCalculations/simple', {index, stocksId, stock: thisStock }) -%>
               <% } else if (thisStock.children) { %>
-                <%- include('stockCalculations/subtypes', {index}) -%>
-              <% } else if (groundTypes[index].stocksId === 'produits bois' ) { %>
-                <%- include('stockCalculations/wood', {index, stock: thisStock, woodCalculation }) -%>
+                <%- include('stockCalculations/subtypes', {stocksId, stock: thisStock}) -%>
+              <% } else if (stocksId === 'produits bois' ) { %>
+                <%- include('stockCalculations/wood', {stock: thisStock, woodCalculation }) -%>
               <% } %>
+              <!-- indicate if sols artificiels proportion was changed ? -->
             </td>
           </tr>
           <% } %>
       </tbody>
     </table>
-    <% if (hasModifiedArea) { %>
-      <p class="fr-text--sm fr-mt-1w">* Surface modifiée</p>
+    <% if (stocksHaveModifications) { %>
+      <p class="fr-text--sm fr-mt-1w">* Données modifiées</p>
     <% } %>
     <!-- TODO: reset stocks areas button -->
     <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/stocks/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">Lire plus de nos méthodes de calcul</a></p>

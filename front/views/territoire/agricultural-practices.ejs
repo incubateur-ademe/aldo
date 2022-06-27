@@ -1,7 +1,16 @@
 <div class="fr-form-group">
-  <h2>Pratiques agricoles</h2>
-  <p>Surface implantée depuis moins de 20 ans</p>
-  <div class="fr-container">
+  <div class="fr-container fr-px-0">
+    <div class="fr-grid-row" style="justify-content: space-between; align-items: center;">
+      <h2>Pratiques agricoles</h2>
+      <p class="fr-text--sm fr-mt-1w">
+        <a href="https://docs.datagir.ademe.fr/documentation-aldo/flux/pratiques-agricoles" target="_blank" rel="noopener noreferrer">
+          Lire plus de nos méthodes de calcul
+        </a>
+      </p>
+    </div>
+  </div>
+  <fieldset class="fr-container">
+    <legend class="fr-mb-1w">Surface implantée depuis moins de 20 ans</legend>
     <div class="fr-grid-row">
       <% for(practice of agriculturalPractices) { %>
         <div class="fr-col-12 fr-col-md-6">
@@ -22,13 +31,63 @@
         </div>
       <% } %>
     </div>
-    <button class="fr-btn fr-mt-1w" type="submit">
-      Mettre à jour le calcul
-    </button>
-  </div>
+  </fieldset>
+  <fieldset class="fr-container fr-my-2w">
+    <legend class="fr-mb-1w">Stocks biomasse existants en agroforestrie</legend>
+    <p class="fr-mb-1w">Sur cultures</p>
+    <div class="fr-grid-row fr-grid-row--middle">
+      <input
+        class="fr-input fr-text--lg fr-col-4"
+        type="number"
+        inputmode="numeric"
+        min="0"
+        placeholder="0"
+        value="<%= agroforestryStock?.cultures?.density %>"
+        id="af_density_cultures"
+        name="af_density_cultures"
+      >
+      <p class="fr-ml-1w fr-col-1">tC/ha</p>
+
+      <input
+        class="fr-input fr-text--lg fr-col-4"
+        type="number"
+        inputmode="numeric"
+        min="0"
+        placeholder="0"
+        value="<%= agroforestryStock?.cultures?.area %>"
+        id="af_area_cultures"
+        name="af_area_cultures"
+      >
+      <p class="fr-ml-1w fr-col-1">ha</p>
+    </div>
+    <p class="fr-mb-1w">Sur prairies</p>
+    <div class="fr-grid-row fr-grid-row--middle">
+      <input
+        class="fr-input fr-text--lg fr-col-4"
+        type="number"
+        inputmode="numeric"
+        min="0"
+        placeholder="0"
+        value="<%= agroforestryStock?.['prairies zones herbacées']?.density %>"
+        id="af_density_prairies_zones_herbacées"
+        name="af_density_prairies_zones_herbacées"
+      >
+      <p class="fr-ml-1w fr-col-1">tC/ha</p>
+
+      <input
+        class="fr-input fr-text--lg fr-col-4"
+        type="number"
+        inputmode="numeric"
+        min="0"
+        placeholder="0"
+        value="<%= agroforestryStock?.['prairies zones herbacées']?.area %>"
+        id="af_area_prairies_zones_herbacées"
+        name="af_area_prairies_zones_herbacées"
+      >
+      <p class="fr-ml-1w fr-col-1">ha</p>
+    </div>
+  </fieldset>
+  <button class="fr-btn fr-mt-1w" type="submit">
+    Mettre à jour le calcul
+  </button>
 </div>
-<p class="fr-text--sm fr-mt-1w">
-  <a href="https://docs.datagir.ademe.fr/documentation-aldo/flux/pratiques-agricoles" target="_blank" rel="noopener noreferrer">
-    Lire plus de nos méthodes de calcul
-  </a>
-</p>

@@ -1,7 +1,7 @@
 <p class="fr-text--sm fr-mb-1w">Comment est-ce que c'est calculé&nbsp;?</p>
 <p>Stocks de référence par unité de surface par réservoir&nbsp;:</p>
 <ul class="fr-my-2w">
-  <% for( const subtype of stocks[groundTypes[index].stocksId].children ) { %>
+  <% for( const subtype of stocks[stocksId].children ) { %>
     <li class="fr-my-1w">
       <p class="formula">
         <span class="fr-col-2 fr-text--sm fr-mr-2w hyphenate">
@@ -27,7 +27,7 @@
 </ul>
 <p>Stocks&nbsp;:</p>
 <ul class="fr-my-2w">
-  <% for( const subtype of stocks[groundTypes[index].stocksId].children ) { %>
+  <% for( const subtype of stocks[stocksId].children ) { %>
     <li class="fr-my-1w">
       <p class="formula">
         <span class="fr-col-2 fr-text--sm fr-mr-2w hyphenate">
@@ -38,6 +38,7 @@
           <span class="c fr-text--sm">total (tC/ha)</span>
         </span>
         <span class="fr-col-1" style="text-align: center;">x</span>
+        <% const subtypeName = pascalCase(allGroundTypes.find((g) => g.stocksId === subtype).stocksId) %> 
         <span class="captioned-value fr-col-3">
           <input
             class="fr-input fr-text--lg"
@@ -46,10 +47,10 @@
             min="0"
             placeholder="<%= round(stocks[subtype].originalArea) %>"
             value="<%= stocks[subtype].areaModified ? round(stocks[subtype].area) : undefined %>"
-            id="surface-<%= index %>"
-            name="surface_<%= pascalCase(allGroundTypes.find((g) => g.stocksId === subtype).stocksId) %>"
+            id="surface_<%= subtypeName %>"
+            name="surface_<%= subtypeName %>"
           >
-          <label class="fr-label fr-text--sm" for="surface-<%= index %>">surface (ha)</label>
+          <label class="fr-label fr-text--sm" for="surface_<%= subtypeName %>">surface (ha)</label>
         </span>
         <span class="fr-col-1" style="text-align: center;">≈</span>
         <span class="captioned-value fr-col-2">
@@ -60,6 +61,8 @@
     </li>
   <% } %> 
 </ul>
+<%- include('./agroforestry', {stocksId, stock}) -%>
+<br />
 <button class="fr-btn" type="submit">
   Mettre à jour la surface
 </button>

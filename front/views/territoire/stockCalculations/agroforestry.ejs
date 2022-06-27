@@ -1,0 +1,20 @@
+
+<% if (stock.agroforestryStock) { %>
+  <p>Stocks biomasse existants en agroforestrie&nbsp;:</p>
+  <p class="fr-container formula fr-my-2w">
+    <span class="captioned-value fr-col-3">
+      <span class="v fr-text--lg"><%= round(stock.agroforestryDensity) %> tC/ha</span>
+    </span>
+    <span class="fr-col-1" style="text-align: center;">x</span>
+    <span class="captioned-value fr-col-3">
+      <span class="v fr-text--lg"><%= round(stock.agroforestryArea) %> ha</span>
+    </span>
+    <span class="fr-col-1" style="text-align: center;">≈</span>
+    <span class="captioned-value fr-col-3">
+      <span class="v fr-text--lg"><%= round(stock.agroforestryStock) %> tC</span>
+    </span>
+  </p>
+<% } %>
+<% if (stocksId === 'cultures' || stocksId === 'prairies') { %>
+  <p class="fr-text--sm">Mettez à jour les stocks d'agroforestrie dans l'onglet « Pratiques agricoles ».</p>
+<% } %>

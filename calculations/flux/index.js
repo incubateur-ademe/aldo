@@ -109,6 +109,7 @@ function getAnnualFluxes (location, options) {
     }
     if (flux.areaModified) {
       summary[to].areaModified = flux.areaModified
+      summary[to].hasModifications = flux.areaModified
     }
     const typeInfo = GroundTypes.find(gt => gt.stocksId === to)
     if (typeInfo.parentType) {
@@ -127,6 +128,7 @@ function getAnnualFluxes (location, options) {
       }
       if (flux.areaModified) {
         summary[parent].areaModified = flux.areaModified
+        summary[parent].hasModifications = flux.areaModified
       }
     }
   })

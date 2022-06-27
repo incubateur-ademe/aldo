@@ -72,8 +72,12 @@ function getStocksForParent (subStocks) {
     if (subStocks[subType].forestLitterStock) {
       stocks.forestLitterStock += subStocks[subType].forestLitterStock
     }
+    // NB: this is the most simple solution whilst prairies zones herbacées and cultures are the only
+    // instances of agroforestryStock. This would not work if two or more children had agroforestry data
     if (subStocks[subType].agroforestryStock) {
-      stocks.agroforestryStock += subStocks[subType].agroforestryStock
+      stocks.agroforestryStock = subStocks[subType].agroforestryStock
+      stocks.agroforestryArea = subStocks[subType].agroforestryArea
+      stocks.agroforestryDensity = subStocks[subType].agroforestryDensity
     }
   }
   stocks.totalStock = stocks.totalReservoirStock + stocks.agroforestryStock
@@ -156,7 +160,8 @@ stocks: {
   <groundTypeKey>: {
     area: in ha, user-entered area or our data
     originalArea: in ha, area in our data
-    areaModified: boolean area !== originalArea
+    areaModified: area or area of child was overridden by user
+    hasModifications: areaModified || other modifications through options
     groundDensity: in tC/ha
     groundStock: in tC
     biomassDensity: in tC/ha
@@ -297,9 +302,20 @@ function getStocks (location, options) {
         const children = GroundTypes.find(gt => gt.stocksId === key).children
         const hasModifiedChild = children?.some(child => modifiedAreas.includes(child))
         stocks[key].areaModified = hasModifiedChild
+        stocks[key].hasModifications = hasModifiedChild
       } else {
         stocks[key].originalArea = originalAreas[key]
         stocks[key].areaModified = true
+        stocks[key].hasModifications = true
+      }
+    }
+  })
+  Object.keys(options.agroforestryStock || []).forEach(key => {
+    const hasModifications = options.agroforestryStock[key].density && options.agroforestryStock[key].area
+    if (hasModifications) {
+      stocks[key].hasModifications = true
+      if (stocks[key].parent) {
+        stocks[stocks[key].parent].hasModifications = true
       }
     }
   })
