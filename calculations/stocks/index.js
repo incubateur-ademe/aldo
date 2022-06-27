@@ -38,6 +38,13 @@ function getStocksByKeyword (location, keyword, options) {
     stocks.totalReservoirStock += stocks.forestLitterStock
   }
   stocks.totalStock = stocks.totalReservoirStock
+  if (options.agroforestryStock?.[keyword]) {
+    // one or the other might not be defined, default to 0 in that case
+    stocks.agroforestryDensity = options.agroforestryStock[keyword].density || 0
+    stocks.agroforestryArea = options.agroforestryStock[keyword].area || 0
+    stocks.agroforestryStock = stocks.agroforestryArea * stocks.agroforestryDensity
+    stocks.totalStock += stocks.agroforestryStock
+  }
   return stocks
 }
 
@@ -48,13 +55,14 @@ function getSubStocksByKeyword (location, keyword, parent, options) {
   return stocks
 }
 
-function getStocksPrairies (subStocks) {
+function getStocksForParent (subStocks) {
   const stocks = {
     totalReservoirStock: 0,
     area: 0,
     groundStock: 0,
     biomassStock: 0,
-    forestLitterStock: 0
+    forestLitterStock: 0,
+    agroforestryStock: 0
   }
   for (const subType of Object.keys(subStocks)) {
     stocks.totalReservoirStock += subStocks[subType].totalReservoirStock
@@ -64,8 +72,11 @@ function getStocksPrairies (subStocks) {
     if (subStocks[subType].forestLitterStock) {
       stocks.forestLitterStock += subStocks[subType].forestLitterStock
     }
+    if (subStocks[subType].agroforestryStock) {
+      stocks.agroforestryStock += subStocks[subType].agroforestryStock
+    }
   }
-  stocks.totalStock = stocks.totalReservoirStock
+  stocks.totalStock = stocks.totalReservoirStock + stocks.agroforestryStock
   return stocks
 }
 
@@ -209,11 +220,12 @@ function getStocks (location, options) {
   prairieChildren.forEach((c) => {
     prairiesSubtypes[c] = getSubStocksByKeyword(location, c, 'prairies', {
       areas: options.areas,
-      groundKeyword: 'prairies'
+      groundKeyword: 'prairies',
+      agroforestryStock: options.agroforestryStock
     })
   })
   Object.assign(stocks, prairiesSubtypes)
-  stocks.prairies = getStocksPrairies(prairiesSubtypes)
+  stocks.prairies = getStocksForParent(prairiesSubtypes)
   stocks.prairies.children = prairieChildren
   // forests
   const forestChildren = GroundTypes.find(gt => gt.stocksId === 'forêts').children
@@ -226,7 +238,7 @@ function getStocks (location, options) {
     })
   })
   Object.assign(stocks, forestSubtypes)
-  stocks.forêts = getStocksPrairies(forestSubtypes)
+  stocks.forêts = getStocksForParent(forestSubtypes)
   stocks.forêts.children = forestChildren
   // sols artificiels
   // this is an overload of the use of options.areas but since all sols artificiels areas need to
@@ -242,7 +254,7 @@ function getStocks (location, options) {
     })
   })
   Object.assign(stocks, solArtSubtypes)
-  stocks['sols artificiels'] = getStocksPrairies(solArtSubtypes)
+  stocks['sols artificiels'] = getStocksForParent(solArtSubtypes)
   stocks['sols artificiels'].children = solArtChildren
 
   // extra data prep for display - TODO: consider whether this is better handled by the handler
