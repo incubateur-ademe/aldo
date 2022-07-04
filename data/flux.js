@@ -114,6 +114,7 @@ function getToForestBiomassFlux (location, to) {
 
 function getFromForestBiomassFlux (location, from, to) {
   // get to stock and - from stock
+  if (to === 'produits bois') return
   return getBiomassCarbonDensity(location, to) - getBiomassCarbonDensity(location, from)
 }
 
@@ -242,7 +243,8 @@ function getAllAnnualFluxes (location, options) {
         }
       }
       const forestBiomassFrom = ['forêt mixte', 'forêt conifere', 'forêt feuillu']
-      if (forestBiomassFrom.includes(from) && to !== 'forêts' && !toGt.children) {
+      // to: forests won't happen because of the toGt.children check
+      if (forestBiomassFrom.includes(from) && !forestBiomassFrom.includes(to) && to !== 'forêt peupleraie' && !toGt.children) {
         const biomassFlux = getFromForestBiomassFlux(location, from, to)
         if (biomassFlux !== undefined) {
           fluxes.push({
