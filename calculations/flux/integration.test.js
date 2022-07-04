@@ -77,9 +77,9 @@ test('returns correct total for sols artificiels', () => {
   const solsArt = flux.allFlux.filter(f => f.to.startsWith('sols'))
   expect(solsArt.filter(f => f.reservoir === 'sol').length).toBe(24)
   expect(solsArt.filter(f => f.reservoir === 'litière').length).toBe(10)
-  expect(solsArt.filter(f => f.reservoir === 'biomasse').length).toBe(21)
+  expect(solsArt.filter(f => f.reservoir === 'biomasse').length).toBe(30)
   expect(solsArt.filter(f => f.reservoir === 'sol et litière').length).toBe(1)
-  expect(solsArt.length).toBe(56)
+  expect(solsArt.length).toBe(65)
   expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-97, 0)
 })
 

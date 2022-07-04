@@ -24,7 +24,7 @@ test('returns all carbon flux in tc/(ha.year) for biomass cultures', () => {
   const fluxes = getAllAnnualFluxes({ epci: '200007177' })
   const biomassFlux = fluxes.filter(f => f.reservoir === 'biomasse')
   const cultureFluxes = biomassFlux.filter(f => f.to === 'cultures')
-  expect(cultureFluxes.length).toBe(6)
+  expect(cultureFluxes.length).toBe(9)
   expect(fluxes[0]).toHaveProperty('from')
   expect(fluxes[0]).toHaveProperty('to')
   expect(fluxes[0]).toHaveProperty('flux')
