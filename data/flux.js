@@ -242,7 +242,7 @@ function getAllAnnualFluxes (location, options) {
         }
       }
       const forestBiomassFrom = ['forêt mixte', 'forêt conifere', 'forêt feuillu']
-      if (forestBiomassFrom.includes(from) && to !== 'forêts') {
+      if (forestBiomassFrom.includes(from) && to !== 'forêts' && !toGt.children) {
         const biomassFlux = getFromForestBiomassFlux(location, from, to)
         if (biomassFlux !== undefined) {
           fluxes.push({
