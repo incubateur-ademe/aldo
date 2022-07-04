@@ -1,6 +1,7 @@
 // TODO: move this file to a folder that both layers can rely on to not completely break
 // dependency tree
 const { GroundTypes } = require('../calculations/constants')
+const { getBiomassCarbonDensity } = require('./stocks')
 
 function getGroundCarbonFluxKey (from, to) {
   const fromDetails = GroundTypes.find(groundType => groundType.stocksId === from)
@@ -89,7 +90,7 @@ function getBiomassFlux (location, from, to) {
   }
 }
 
-function getForestBiomassFlux (location, to) {
+function getToForestBiomassFlux (location, to) {
   let data
   if (to === 'forêt peupleraie') {
     const csvFilePath = './dataByEpci/biomasse-forets-peupleraies.csv'
@@ -109,6 +110,11 @@ function getForestBiomassFlux (location, to) {
   if (dataValue) {
     return parseFloat(dataValue)
   }
+}
+
+function getFromForestBiomassFlux (location, from, to) {
+  // get to stock and - from stock
+  return getBiomassCarbonDensity(location, to) - getBiomassCarbonDensity(location, from)
 }
 
 // TODO: explainer for this
@@ -235,11 +241,25 @@ function getAllAnnualFluxes (location, options) {
           })
         }
       }
+      const forestBiomassFrom = ['forêt mixte', 'forêt conifere', 'forêt feuillu']
+      if (forestBiomassFrom.includes(from) && to !== 'forêts') {
+        const biomassFlux = getFromForestBiomassFlux(location, from, to)
+        if (biomassFlux !== undefined) {
+          fluxes.push({
+            from,
+            to,
+            flux: biomassFlux,
+            fluxEquivalent: cToCo2e(biomassFlux),
+            reservoir: 'biomasse',
+            gas: 'C'
+          })
+        }
+      }
     }
   }
   const forestTypes = GroundTypes.filter(gt => gt.stocksId.startsWith('forêt '))
   for (const fType of forestTypes) {
-    const biomassFlux = getForestBiomassFlux(location, fType.stocksId)
+    const biomassFlux = getToForestBiomassFlux(location, fType.stocksId)
     if (biomassFlux !== undefined) {
       fluxes.push({
         to: fType.stocksId,
