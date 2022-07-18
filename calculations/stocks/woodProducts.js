@@ -14,9 +14,11 @@ function getStocksByConsumption (location) {
   const epciPop = location.epci.populationTotale
   const proportion = epciPop / popTotal
   const franceStocks = getFranceStocksWoodProducts()
+  franceStocks.bi = co2ToCarbon(franceStocks.bi)
+  franceStocks.bo = co2ToCarbon(franceStocks.bo)
   const biStock = proportion * franceStocks.bi
   const boStock = proportion * franceStocks.bo
-  const stock = co2ToCarbon(biStock + boStock)
+  const stock = biStock + boStock
   return {
     totalReservoirStock: stock,
     totalStock: stock,
@@ -35,6 +37,8 @@ function getStocksByHarvest (location) {
   const localAnnualWoodProductsHarvest = getAnnualWoodProductsHarvest(location)
   const franceAnnualWoodProductsHarvest = getAnnualFranceWoodProductsHarvest()
   const franceStocksByCategory = getFranceStocksWoodProducts()
+  franceStocksByCategory.bi = co2ToCarbon(franceStocksByCategory.bi)
+  franceStocksByCategory.bo = co2ToCarbon(franceStocksByCategory.bo)
 
   function harvestTotal (data, category) {
     return data.feuillus[category] + data.coniferes[category]
@@ -60,8 +64,7 @@ function getStocksByHarvest (location) {
   function stock (category) {
     return feuillus[category] + coniferes[category]
   }
-  let totalStock = stock('bo') + stock('bi')
-  totalStock = co2ToCarbon(totalStock)
+  const totalStock = stock('bo') + stock('bi')
   return {
     totalReservoirStock: totalStock,
     totalStock,
