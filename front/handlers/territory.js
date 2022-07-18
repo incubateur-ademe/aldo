@@ -176,16 +176,15 @@ function charts (stocks) {
   })
   const stocksDensityLabels = Object.keys(stocks.byDensity).map(key => GroundTypes.find(k => k.stocksId === key)?.name)
   return {
-    groundType: pieChart('Répartition des stocks de carbone par occupation du sol', stocksPercentageLabels, stocksPercentageValues),
     reservoir: {
-      title: 'Répartition du stock par reservoir',
+      title: 'Répartition du stock de carbone par réservoir, toutes occupations du sol confondues',
       data: JSON.stringify({
         type: 'pie',
         data: {
           // ideally would put % into tooltip label but can't get the override function to work
           labels: Object.keys(stocks.percentageByReservoir).map(key => '% ' + key),
           datasets: [{
-            label: 'Répartition du stock par reservoir',
+            label: 'Répartition du stock de carbone par réservoir',
             // TODO: use a mapping for key to display name instead
             data: Object.keys(stocks.percentageByReservoir).map(key => stocks.percentageByReservoir[key]),
             backgroundColor: chartBackgroundColors,
@@ -195,8 +194,11 @@ function charts (stocks) {
         }
       })
     },
+    groundType: pieChart('Répartition du stock de carbone par occupation du sol, tous réservoirs confondus', stocksPercentageLabels, stocksPercentageValues),
+    groundAndLitter: pieChart('Répartition du stock de carbone par occupation du sol dans les réservoirs Sols & Litières', stocksPercentageLabels, groundAndLitterStocksValues),
+    biomass: pieChart('Répartition du stock de carbone par occupation du sol dans le réservoir Biomasse', stocksPercentageLabels, biomassStocksValues),
     density: {
-      title: 'Stocks de référence par unité de surface',
+      title: 'Stocks de référence par unité de surface et par occupation du sol',
       data: JSON.stringify({
         type: 'bar',
         data: {
@@ -216,6 +218,12 @@ function charts (stocks) {
                 text: 'Stocks de référence (tC/ha)',
                 display: true
               }
+            },
+            x: {
+              title: {
+                text: 'Typologie d’occupation du sol',
+                display: true
+              }
             }
           },
           plugins: {
@@ -225,9 +233,7 @@ function charts (stocks) {
           }
         }
       })
-    },
-    groundAndLitter: pieChart('Répartition des stocks de carbone dans les sols et litière par occupation du sol', stocksPercentageLabels, groundAndLitterStocksValues),
-    biomass: pieChart('Répartition des stocks de carbone dans la biomasse par occupation du sol', stocksPercentageLabels, biomassStocksValues)
+    }
   }
 }
 

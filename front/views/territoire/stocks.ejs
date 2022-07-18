@@ -75,16 +75,17 @@
     <h3>Résultats graphiques</h3>
     <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
       <% for (let keyIdx=0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
+        <% const key = Object.keys(charts)[keyIdx] %> 
         <li>
           <section class="fr-accordion">
             <h4 class="fr-accordion__title">
               <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
                 aria-controls="accordion-chart-<%= keyIdx %>">
-                <%= charts[Object.keys(charts)[keyIdx]].title %>
+                <%= charts[key].title %>
               </button>
             </h4>
             <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
-              <canvas id="chart-<%= Object.keys(charts)[keyIdx] %>" width="400" height="400"></canvas>
+              <canvas id="chart-<%= key %>" width="400" height="400"></canvas>
             </div>
           </section>
         </li>
@@ -97,8 +98,11 @@
 <script>
   Chart.register(ChartDataLabels);
   Chart.defaults.set('plugins.datalabels', {
-    anchor: 'end',
-    display: 'auto'
+    anchor: 'center',
+    display(context) {
+      // don't show labels when value === 0. Important for pie charts when dataIndex of a 0 is higher than a later data with a value > 0
+      return context.dataset.data[context.dataIndex] > 0
+    }
   });
 
   const groundTypeCtx = document.getElementById('chart-groundType');
