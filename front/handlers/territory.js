@@ -258,7 +258,7 @@ function fluxCharts (flux) {
   })
   return {
     reservoir: {
-      title: 'Repartition des flux (tCO2e/an)',
+      title: 'Flux de carbone (tCO2e/an) par réservoir, toutes occupations du sol confondues',
       data: JSON.stringify({
         type: 'bar',
         data: {
@@ -293,8 +293,7 @@ function fluxCharts (flux) {
     },
     groundType: {
       title:
-        'Flux en milliers de tCO2eq/an de l\'EPCI, par occupation du sol, ' +
-        'Bases de changement CLC 2012-2018; Inventaire forestier 2012-2016',
+        'Flux de carbone (tCO2e/an) par occupation du sol, tous réservoirs confondus',
       data: JSON.stringify({
         type: 'bar',
         data: {
