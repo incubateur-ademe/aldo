@@ -255,6 +255,22 @@ test('option to modify the areas changed', () => {
   expect(summary['produits bois'].totalSequestration).toBeCloseTo(14223, 0)
 })
 
+test('option to set an area changed to 0', () => {
+  const epci = getEpci('245700398', true)
+  let flux = getAnnualFluxes({ epci })
+  let summary = flux.summary
+  const originalFlux = summary.cultures.totalSequestration
+  expect(originalFlux).not.toBe(0)
+
+  const areaChanges = {
+    prai_herb_cult: 0
+  }
+  flux = getAnnualFluxes({ epci }, { areaChanges })
+  summary = flux.summary
+  // prairies to cultures results in an emission, so when reduced to 0 the sequestration value is larger
+  expect(summary.cultures.totalSequestration).toBeGreaterThan(originalFlux)
+})
+
 test('total flux returned', () => {
   const flux = getAnnualFluxes({ epci: getEpci('200043974', true) })
   expect(flux.summary.cultures.totalSequestration).toBeCloseTo(-467, 0)
