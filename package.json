@@ -1,7 +1,7 @@
 {
   "name": "aldo",
   "version": "1.0.0",
-  "description": "Calculez le carbone stocké et ses flux sur votre territoire",
+  "description": "Calculer le stock et les flux de carbone sur votre territoire",
   "engines": {
     "node": "16"
   },

@@ -1,6 +1,8 @@
-<p class="fr-text--sm fr-mb-1w">Comment est-ce que c'est calculé&nbsp;?</p>
+<p class="fr-text--sm fr-mb-1w">Comment est-ce calculé&nbsp;?</p>
 <% if (woodCalculation === 'récolte') { %>
-  <p class="fr-text--sm">Approche <b>production</b> : répartition selon récolte</p>
+  <p class="fr-text--sm">
+    Approche <b>production</b> : répartition du carbone stocké en France dans les produits bois proportionnelle à la récolte théorique locale
+  </p>
   <p class="fr-text--xs">Vous pouvez changer l'approche dans l'onglet configuration.</p>
   <p class="fr-mt-2w">Proportion récolte théorique&nbsp;:</p>
   <ul class="fr-container">
@@ -8,8 +10,8 @@
     <%- include('./wood-harvest-portion', { stock, category: 'bi' }) -%>
   </ul>
   <p class="fr-text--xs">
-    Calcul ADEME considérant un taux de prélèvement égal à celui de la grande région écologique et
-    une répartition entre usage égal à celui de la région admnistrative.
+    La récolte théorique locale est estimé en considérant que le taux de prélèvement sur les surfaces forestières locales est égale à celui de grande
+    région écologique, et que la répartition de cette récolte entre les usages (BO/BI) est égale à celle de la région administrative (calcul ADEME).
   </p>
   <p class="fr-mt-2w">Stocks&nbsp;:</p>
   <ul class="fr-container">
@@ -17,10 +19,12 @@
     <%- include('./wood-harvest-stocks', { stock, category: 'bi' }) -%>
   </ul>
 <% } else { %>
-  <p class="fr-text--sm">Approche <b>consommation</b> : répartition selon habitants</p>
+  <p class="fr-text--sm">
+    Approche <b>consommation</b> : répartition du carbone stocké en France dans les produits bois proportionnelle au nombre d’habitants du territoire
+  </p>
   <p class="fr-text--xs">Vous pouvez changer l'approche dans l'onglet configuration.</p>
-  <p class="fr-my-2w">Proportion habitants&nbsp;:</p>
-  <div class="fr-container">
+  <p class="fr-mt-2w">Proportion habitants&nbsp;:</p>
+  <div class="fr-container fr-my-1w">
     <p class="formula">
       <span class="captioned-value fr-col-4">
         <span class="v fr-text--lg"><%= formatNumber(stock.localPopulation) %></span>
