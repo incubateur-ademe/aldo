@@ -155,7 +155,9 @@ async function territoryHandler (req, res) {
     agriculturalPractices: AgriculturalPractices,
     agriculturalPracticesEstablishedAreas,
     agriculturalPracticeDetail,
-    agroforestryStock
+    agroforestryStock,
+    // TODO: ideally have the reset URL return to the tab the button was clicked from
+    resetUrl: stocksHaveModifications || fluxHaveModifications ? `${req._parsedUrl.pathname}?epci=${req.query.epci}` : undefined
   })
 }
 

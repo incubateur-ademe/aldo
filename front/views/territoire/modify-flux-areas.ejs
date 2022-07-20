@@ -52,4 +52,9 @@
   <button class="fr-btn fr-mt-2w" type="submit" formaction="/territoire/flux">
     Mettre à jour les surfaces
   </button>
+  <% if (fluxHaveModifications) { %>
+    <a class="fr-btn fr-btn--secondary fr-ml-2w" href="<%= resetUrl %>">
+      Réinitialiser
+    </a>
+  <% } %>
 </div>

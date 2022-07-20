@@ -64,8 +64,10 @@
     </table>
     <% if (stocksHaveModifications) { %>
       <p class="fr-text--sm fr-mt-1w">* Données modifiées</p>
+      <a class="fr-btn fr-btn--secondary fr-mt-1w" href="<%= resetUrl %>">
+        Réinitialiser les données
+      </a>
     <% } %>
-    <!-- TODO: reset stocks areas button -->
     <p class="fr-text--sm fr-mt-1w">
       <a href="https://docs.datagir.ademe.fr/documentation-aldo/stocks/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">
         En savoir plus sur les méthodes de calculs
