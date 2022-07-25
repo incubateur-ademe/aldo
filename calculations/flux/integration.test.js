@@ -320,3 +320,22 @@ test('can define areas for agricultural practices', () => {
   expect(practiceFlux.reservoir).toEqual('sol')
   expect(practiceFlux.areaModified).toEqual(true)
 })
+
+test('returns detail about the increase of biomass in forests by forest subtype', () => {
+  const flux = getAnnualFluxes({ epci: getEpci('200015162', true) }, {})
+  const deciduousBiomass = flux.allFlux.filter((f) => f.to === 'forêt feuillu' && f.reservoir === 'biomasse')[0]
+  expect(deciduousBiomass.value).toBeCloseTo(32476, 0)
+  expect(deciduousBiomass.growth).toBeCloseTo(2.04, 2)
+  expect(deciduousBiomass.mortality).toBeCloseTo(0.50, 2)
+  expect(deciduousBiomass.timberExtraction).toBeCloseTo(0.15, 2)
+  expect(deciduousBiomass.fluxMeterCubed).toBeCloseTo(1.39, 2)
+  expect(deciduousBiomass.conversionFactor).toBeCloseTo(0.86, 2)
+  // test poplar as well since the data comes from a different source than the other three
+  const poplarBiomass = flux.allFlux.filter((f) => f.to === 'forêt peupleraie' && f.reservoir === 'biomasse')[0]
+  expect(poplarBiomass.value).toBeCloseTo(5.7, 1)
+  expect(poplarBiomass.growth).toBeCloseTo(17.95, 2)
+  expect(poplarBiomass.mortality).toBeCloseTo(0.23, 2)
+  expect(poplarBiomass.timberExtraction).toBeCloseTo(14.11, 2)
+  expect(poplarBiomass.fluxMeterCubed).toBeCloseTo(3.62, 2)
+  expect(poplarBiomass.conversionFactor).toBeCloseTo(0.30, 2)
+})
