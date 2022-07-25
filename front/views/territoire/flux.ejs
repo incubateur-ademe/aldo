@@ -1,12 +1,11 @@
 <div class="fr-grid-row fr-mt-3w">
-  <div class="fr-col-12 fr-col-md-7 fr-pr-md-1w fr-table">
-    <table>
+  <div class="fr-table fr-col-12 fr-col-lg-9 fr-pr-md-1w">
+    <table class="detail-table">
       <caption><h2>Flux de carbone</h2></caption>
       <thead>
-        <tr class="expandable-row-header stocks-row">
+        <tr class="expandable-row-header flux-row">
           <th scope="col">Occupation du sol finale</th>
-          <th scope="col">Sequestration tCO<sub>2</sub>e / an</th>
-          <td scope="col"></td>
+          <th scope="col">Sequestration tCO<sub>2</sub>e&nbsp;/&nbsp;an</th>
           <td scope="col"></td>
           <td scope="col"></td>
         </tr>
@@ -27,7 +26,7 @@
                 <i>Pas de données</i>
               <% } %>
             </td>
-            <td onClick='toggleRow(this)'>
+            <td onClick='toggleRow(this)' style="text-align: center;">
               <% if (!thisFlux || Math.abs(thisFlux.totalSequestration) < 0.5) { %>
                 <!-- no change -->
               <% } else if (thisFlux.totalSequestration > 0) { %>
@@ -129,7 +128,7 @@
     <% } %>
     <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/flux/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">En savoir plus sur les méthodes de calculs</a></p>
   </div>
-  <div class="fr-col-12 fr-col-sm-10 fr-col-md-5 fr-pt-6w">
+  <div class="fr-col-12 fr-col-md-8 fr-col-lg-6 fr-pt-2w">
     <h3>Résultats graphiques</h3>
     <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
       <% for (let keyIdx=0; keyIdx < Object.keys(fluxCharts).length; keyIdx++) { %>

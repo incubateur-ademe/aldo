@@ -1,4 +1,4 @@
-<div class="fr-col-12 fr-pr-md-1w fr-table">
+<div class="fr-col-12 fr-pr-md-1w fr-table fr-mt-8w">
   <table>
     <caption>
       <h2>Changements de surface (ha)</h2>
@@ -24,7 +24,7 @@
       <% for( const from of fluxIds ) { %>
         <tr>
           <% const fromDetail = allGroundTypes.find(gt => gt.altFluxId === from || gt.fluxId === from) %>
-          <th scope="row"><%= fromDetail.name %></th>
+          <th scope="row" style="font-weight: normal;"><%= fromDetail.name %></th>
           <% for( const to of fluxIds ) { %>
             <td>
               <% if (from !== to) { %>

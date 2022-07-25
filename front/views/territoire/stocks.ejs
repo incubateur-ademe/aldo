@@ -1,6 +1,8 @@
 <div class="fr-grid-row fr-mt-3w">
-  <div class="fr-table fr-col-12 fr-col-md-6 fr-pr-md-1w">
-    <table>
+  <div class="fr-table fr-col-12 fr-col-lg-9 fr-pr-md-1w">
+    <!-- TODO: why does an anchor link break the table tabs? -->
+    <!-- <p class="fr-mb-1w fr-text--sm"><a href="#resultatsstocks">Résultats graphiques</a></p> -->
+    <table class="detail-table">
       <caption><h2>Stocks de carbone</h2></caption>
       <thead>
         <tr class="expandable-row-header stocks-row">
@@ -73,7 +75,7 @@
     </p>
   </div>
   <!-- TODO: test a11y of these charts -->
-  <div class="fr-col-12 fr-col-sm-10 fr-col-md-6 fr-pt-6w">
+  <div class="fr-col-12 fr-col-md-8 fr-col-lg-6 fr-pt-2w">
     <h3>Résultats graphiques</h3>
     <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
       <% for (let keyIdx=0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
