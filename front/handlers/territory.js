@@ -400,13 +400,7 @@ async function excelExportHandler (req, res) {
     .style(style)
     .style({ font: { size: 14 } })
 
-  wb.write('Excel.xlsx')
-  // concerns:
-  // - can't download immediately - maybe write is async
-  // - where is this file being saved when on the server? Will it clog up the server/clash with other users?
-  res.download('Excel.xlsx', function (error) {
-    console.log('Error : ', error)
-  })
+  wb.write('Excel.xlsx', res)
 }
 
 module.exports = {
