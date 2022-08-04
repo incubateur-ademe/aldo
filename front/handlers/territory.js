@@ -6,96 +6,95 @@ const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
 
 async function territoryHandler (req, res) {
-  const tab = req.params.tab || 'stocks'
-  const epci = await getEpci(req.query.epci) || {}
   const epcis = await epciList()
-  let stocks, flux
-  const fluxDetail = {}
-  const agriculturalPracticeDetail = {}
-  const agroforestryStock = {}
-  const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
-  let proportionSolsImpermeables = req.query['répartition_art_imp']
-  proportionSolsImpermeables = proportionSolsImpermeables ? (proportionSolsImpermeables / 100).toPrecision(2) : undefined
-  let stocksHaveModifications = false
-  let fluxHaveModifications = false
-  const agriculturalPracticesEstablishedAreas = {}
-  if (epci.code) {
-    // stocks area overrides
-    const areaOverrides = {}
-    Object.keys(req.query).filter(key => key.startsWith('surface_')).forEach(key => {
-      const groundType = key.split('surface_')[1].replace(/_/g, ' ')
-      areaOverrides[groundType] = parseFloat(req.query[key])
-      if (!isNaN(areaOverrides[groundType])) {
-        stocksHaveModifications = true
-      }
-    })
-    // flux area overrides
-    const areaChangeOverrides = {}
-    Object.keys(req.query).filter(key => key.startsWith('change_')).forEach(key => {
-      const groundType = key.split('change_')[1]
-      areaChangeOverrides[groundType] = parseFloat(req.query[key])
-      if (!isNaN(areaChangeOverrides[groundType])) {
-        fluxHaveModifications = true
-      }
-    })
-    // agricultural practices area additions
-    Object.keys(req.query).filter(key => key.startsWith('ap_')).forEach(key => {
-      const practice = key.split('ap_')[1]
-      const id = AgriculturalPractices.find(ap => ap.url === practice)?.id
-      agriculturalPracticesEstablishedAreas[id] = parseFloat(req.query[key])
-      if (!isNaN(agriculturalPracticesEstablishedAreas[practice])) {
-        fluxHaveModifications = true
-      }
-    })
-    // agroforestry area and density additions
-    Object.keys(req.query).filter(key => key.startsWith('af_area_')).forEach(key => {
-      const groundType = key.split('af_area_')[1].replace(/_/g, ' ')
-      agroforestryStock[groundType] = {
-        area: parseFloat(req.query[key])
-      }
-    })
-    Object.keys(req.query).filter(key => key.startsWith('af_density_')).forEach(key => {
-      const groundType = key.split('af_density_')[1].replace(/_/g, ' ')
-      const density = parseFloat(req.query[key])
-      if (!agroforestryStock[groundType]) {
-        agroforestryStock[groundType] = { density }
-      } else {
-        agroforestryStock[groundType].density = density
-        stocksHaveModifications = true // both area and density need to be defined to impact original totalStock
-      }
-    })
-    const options = {
-      areas: areaOverrides,
-      areaChanges: areaChangeOverrides,
-      woodCalculation,
-      proportionSolsImpermeables,
-      agriculturalPracticesEstablishedAreas,
-      agroforestryStock
-    }
-    stocks = await getStocks({ epci }, options)
-    flux = getAnnualFluxes({ epci }, options)
-    flux.allFlux.forEach(f => {
-      if (f.value !== 0) {
-        if (f.practice) {
-          if (!agriculturalPracticeDetail[f.to]) {
-            agriculturalPracticeDetail[f.to] = []
-          }
-          agriculturalPracticeDetail[f.to].push(f)
-        } else {
-          if (!fluxDetail[f.to]) {
-            fluxDetail[f.to] = []
-          }
-          fluxDetail[f.to].push(f)
-        }
-      }
-    })
-  } else {
+  const epci = await getEpci(req.query.epci) || {}
+  if (!epci.code) {
     res.status(404)
     res.render('404', {
       epcis
     })
     return
   }
+  // check request to determine if any area overrides have been specified for stocks and flux
+  let stocksHaveModifications = false
+  let fluxHaveModifications = false
+  const areaOverrides = {}
+  Object.keys(req.query).filter(key => key.startsWith('surface_')).forEach(key => {
+    const groundType = key.split('surface_')[1].replace(/_/g, ' ')
+    areaOverrides[groundType] = parseFloat(req.query[key])
+    if (!isNaN(areaOverrides[groundType])) {
+      stocksHaveModifications = true
+    }
+  })
+  const areaChangeOverrides = {}
+  Object.keys(req.query).filter(key => key.startsWith('change_')).forEach(key => {
+    const groundType = key.split('change_')[1]
+    areaChangeOverrides[groundType] = parseFloat(req.query[key])
+    if (!isNaN(areaChangeOverrides[groundType])) {
+      fluxHaveModifications = true
+    }
+  })
+  // check if there are agricultural practices area additions
+  const agriculturalPracticesEstablishedAreas = {}
+  Object.keys(req.query).filter(key => key.startsWith('ap_')).forEach(key => {
+    const practice = key.split('ap_')[1]
+    const id = AgriculturalPractices.find(ap => ap.url === practice)?.id
+    agriculturalPracticesEstablishedAreas[id] = parseFloat(req.query[key])
+    if (!isNaN(agriculturalPracticesEstablishedAreas[practice])) {
+      fluxHaveModifications = true
+    }
+  })
+  // check if there are agroforestry area and density additions
+  const agroforestryStock = {}
+  Object.keys(req.query).filter(key => key.startsWith('af_area_')).forEach(key => {
+    const groundType = key.split('af_area_')[1].replace(/_/g, ' ')
+    agroforestryStock[groundType] = {
+      area: parseFloat(req.query[key])
+    }
+  })
+  Object.keys(req.query).filter(key => key.startsWith('af_density_')).forEach(key => {
+    const groundType = key.split('af_density_')[1].replace(/_/g, ' ')
+    const density = parseFloat(req.query[key])
+    if (!agroforestryStock[groundType]) {
+      agroforestryStock[groundType] = { density }
+    } else {
+      agroforestryStock[groundType].density = density
+      stocksHaveModifications = true // both area and density need to be defined to impact original totalStock
+    }
+  })
+
+  // prepare configuration to be passed to stocks and flux fetching
+  const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
+  let proportionSolsImpermeables = req.query['répartition_art_imp']
+  proportionSolsImpermeables = proportionSolsImpermeables ? (proportionSolsImpermeables / 100).toPrecision(2) : undefined
+  const options = {
+    areas: areaOverrides,
+    areaChanges: areaChangeOverrides,
+    woodCalculation,
+    proportionSolsImpermeables,
+    agriculturalPracticesEstablishedAreas,
+    agroforestryStock
+  }
+  const stocks = await getStocks({ epci }, options)
+  const flux = getAnnualFluxes({ epci }, options)
+  const fluxDetail = {}
+  const agriculturalPracticeDetail = {}
+  flux.allFlux.forEach(f => {
+    if (f.value !== 0) {
+      if (f.practice) {
+        if (!agriculturalPracticeDetail[f.to]) {
+          agriculturalPracticeDetail[f.to] = []
+        }
+        agriculturalPracticeDetail[f.to].push(f)
+      } else {
+        if (!fluxDetail[f.to]) {
+          fluxDetail[f.to] = []
+        }
+        fluxDetail[f.to].push(f)
+      }
+    }
+  })
+  // ordering for display greatest stocks/flux (seq or emission) descending
   const groundTypes = GroundTypes.filter(type => !type.parentType)
   groundTypes.sort((a, b) => {
     const stockA = stocks[a.stocksId].totalStock
@@ -120,7 +119,7 @@ async function territoryHandler (req, res) {
   })
   res.render('territoire', {
     pageTitle: `${epci.nom}`,
-    tab,
+    tab: req.params.tab || 'stocks',
     epcis,
     epci,
     groundTypes,
@@ -357,6 +356,60 @@ function pieChart (title, labels, values) {
   }
 }
 
+async function excelExportHandler (req, res) {
+  const xl = require('excel4node')
+
+  // Create a new instance of a Workbook class
+  const wb = new xl.Workbook()
+
+  // Add Worksheets to the workbook
+  const ws = wb.addWorksheet('Sheet 1')
+
+  // Create a reusable style
+  const style = wb.createStyle({
+    font: {
+      color: '#FF0800',
+      size: 12
+    },
+    numberFormat: '$#,##0.00; ($#,##0.00); -'
+  })
+
+  // Set value of cell A1 to 100 as a number type styled with paramaters of style
+  ws.cell(1, 1)
+    .number(100)
+    .style(style)
+
+  // Set value of cell B1 to 200 as a number type styled with paramaters of style
+  ws.cell(1, 2)
+    .number(200)
+    .style(style)
+
+  // Set value of cell C1 to a formula styled with paramaters of style
+  ws.cell(1, 3)
+    .formula('A1 + B1')
+    .style(style)
+
+  // Set value of cell A2 to 'string' styled with paramaters of style
+  ws.cell(2, 1)
+    .string('string')
+    .style(style)
+
+  // Set value of cell A3 to true as a boolean type styled with paramaters of style but with an adjustment to the font size.
+  ws.cell(3, 1)
+    .bool(true)
+    .style(style)
+    .style({ font: { size: 14 } })
+
+  wb.write('Excel.xlsx')
+  // concerns:
+  // - can't download immediately - maybe write is async
+  // - where is this file being saved when on the server? Will it clog up the server/clash with other users?
+  res.download('Excel.xlsx', function (error) {
+    console.log('Error : ', error)
+  })
+}
+
 module.exports = {
-  territoryHandler
+  territoryHandler,
+  excelExportHandler
 }

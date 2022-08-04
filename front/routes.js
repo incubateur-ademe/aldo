@@ -4,7 +4,7 @@ const router = express.Router()
 const path = require('path')
 const rootFolder = path.join(__dirname, '../')
 const { epciList } = require(path.join(rootFolder, './calculations/epcis'))
-const { territoryHandler } = require('./handlers/territory')
+const { territoryHandler, excelExportHandler } = require('./handlers/territory')
 
 router.get('/', async (req, res) => {
   res.render('landing', {
@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/territoire', territoryHandler)
+router.get('/territoire/tableur', excelExportHandler)
 router.get('/territoire/:tab', territoryHandler)
 
 // TODO: complete and add the following back in
