@@ -83,9 +83,17 @@ async function excelExportHandler (req, res) {
     .style({
       border: outlinedCell
     })
+  ws.cell(firstRow + 2, firstColumn, undefined, firstColumn + 1, true)
+    .string('Lien')
+    .style(headerTextStyle)
+  ws.cell(firstRow + 2, firstColumn + 2, undefined, firstColumn + 3, true)
+    .link(`https://${process.env.HOSTNAME}/territoire${req._parsedUrl.search}`, 'Outil Aldo en ligne')
+    .style({
+      border: outlinedCell
+    })
 
   // Summary block
-  const summaryRow = firstRow + 3
+  const summaryRow = firstRow + 4
   ws.column(firstColumn + 1)
     .setWidth(19)
   ws.cell(summaryRow, firstColumn + 1)
@@ -104,7 +112,7 @@ async function excelExportHandler (req, res) {
     .style(number2dpStyle)
 
   // Table
-  const tableStartRow = firstRow + 5
+  const tableStartRow = summaryRow + 2
   const tableStartColumn = firstColumn
   // header row
   ws.column(tableStartColumn)
