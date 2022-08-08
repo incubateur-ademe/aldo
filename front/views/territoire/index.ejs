@@ -2,12 +2,6 @@
   <main role="main" id="contenu">
     <div class="fr-container fr-py-6w fr-px-2w">
 
-      <div class="fr-grid-row fr-grid-row--right no-print">
-        <button onclick="window.print()" class="fr-btn fr-btn--secondary">
-          Imprimer cette page
-        </button>
-      </div>
-
       <% if (epci.code) { %>
         <%- include('./introduction') -%>
         <form action="/territoire/stocks" method="GET" class="fr-tabs fr-mt-4w">

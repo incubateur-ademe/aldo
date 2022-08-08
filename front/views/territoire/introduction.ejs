@@ -1,12 +1,25 @@
 <h1>
   <%= epci.nom %>
 </h1>
-<p>
-  SIREN : <%= epci.code %>
-</p>
-<p>
-  Population : <%= formatNumber(epci.populationTotale) %>
-</p>
+
+<div class="fr-grid-row">
+  <div class="fr-col-12 fr-col-md-2">
+    <p>
+      SIREN : <%= epci.code %>
+    </p>
+    <p>
+      Population : <%= formatNumber(epci.populationTotale) %>
+    </p>
+  </div>
+  <div class="fr-col no-print" style="text-align: right;">
+    <button onclick="window.print()" class="fr-btn fr-btn--secondary">
+      Imprimer cette page
+    </button>
+    <p class="fr-mt-2w">
+      <a href="/territoire/tableur<%= sharingQueryStr %> " download>Télécharger en format Excel</a>
+    </p>
+  </div>
+</div>
 
 <% if (epci.membres) { %>
   <section class="fr-accordion">
