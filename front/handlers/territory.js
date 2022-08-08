@@ -4,6 +4,7 @@ const { epciList, getEpci } = require(path.join(rootFolder, './calculations/epci
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
+const { parseOptionsFromQuery } = require('./options')
 
 async function territoryHandler (req, res) {
   const epcis = await epciList()
@@ -15,66 +16,7 @@ async function territoryHandler (req, res) {
     })
     return
   }
-  // check request to determine if any area overrides have been specified for stocks and flux
-  let stocksHaveModifications = false
-  let fluxHaveModifications = false
-  const areaOverrides = {}
-  Object.keys(req.query).filter(key => key.startsWith('surface_')).forEach(key => {
-    const groundType = key.split('surface_')[1].replace(/_/g, ' ')
-    areaOverrides[groundType] = parseFloat(req.query[key])
-    if (!isNaN(areaOverrides[groundType])) {
-      stocksHaveModifications = true
-    }
-  })
-  const areaChangeOverrides = {}
-  Object.keys(req.query).filter(key => key.startsWith('change_')).forEach(key => {
-    const groundType = key.split('change_')[1]
-    areaChangeOverrides[groundType] = parseFloat(req.query[key])
-    if (!isNaN(areaChangeOverrides[groundType])) {
-      fluxHaveModifications = true
-    }
-  })
-  // check if there are agricultural practices area additions
-  const agriculturalPracticesEstablishedAreas = {}
-  Object.keys(req.query).filter(key => key.startsWith('ap_')).forEach(key => {
-    const practice = key.split('ap_')[1]
-    const id = AgriculturalPractices.find(ap => ap.url === practice)?.id
-    agriculturalPracticesEstablishedAreas[id] = parseFloat(req.query[key])
-    if (!isNaN(agriculturalPracticesEstablishedAreas[practice])) {
-      fluxHaveModifications = true
-    }
-  })
-  // check if there are agroforestry area and density additions
-  const agroforestryStock = {}
-  Object.keys(req.query).filter(key => key.startsWith('af_area_')).forEach(key => {
-    const groundType = key.split('af_area_')[1].replace(/_/g, ' ')
-    agroforestryStock[groundType] = {
-      area: parseFloat(req.query[key])
-    }
-  })
-  Object.keys(req.query).filter(key => key.startsWith('af_density_')).forEach(key => {
-    const groundType = key.split('af_density_')[1].replace(/_/g, ' ')
-    const density = parseFloat(req.query[key])
-    if (!agroforestryStock[groundType]) {
-      agroforestryStock[groundType] = { density }
-    } else {
-      agroforestryStock[groundType].density = density
-      stocksHaveModifications = true // both area and density need to be defined to impact original totalStock
-    }
-  })
-
-  // prepare configuration to be passed to stocks and flux fetching
-  const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
-  let proportionSolsImpermeables = req.query['répartition_art_imp']
-  proportionSolsImpermeables = proportionSolsImpermeables ? (proportionSolsImpermeables / 100).toPrecision(2) : undefined
-  const options = {
-    areas: areaOverrides,
-    areaChanges: areaChangeOverrides,
-    woodCalculation,
-    proportionSolsImpermeables,
-    agriculturalPracticesEstablishedAreas,
-    agroforestryStock
-  }
+  const options = parseOptionsFromQuery(req.query)
   const stocks = await getStocks({ epci }, options)
   const flux = getAnnualFluxes({ epci }, options)
   const fluxDetail = {}
@@ -117,6 +59,15 @@ async function territoryHandler (req, res) {
       fluxIds.push(gt.altFluxId || gt.fluxId)
     }
   })
+  // TODO: ideally have the reset URL return to the tab the button was clicked from
+  const resetUrl = options.stocksHaveModifications || options.fluxHaveModifications ? `${req._parsedUrl.pathname}?epci=${req.query.epci}` : undefined
+  // this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
+  let sharingQueryStr = `?epci=${req.query.epci}`
+  Object.keys(req.query).forEach(queryParam => {
+    if (req.query[queryParam] && queryParam !== 'epci') {
+      sharingQueryStr += `&${queryParam}=${req.query[queryParam]}`
+    }
+  })
   res.render('territoire', {
     pageTitle: `${epci.nom}`,
     tab: req.params.tab || 'stocks',
@@ -139,24 +90,19 @@ async function territoryHandler (req, res) {
       return text.replace(/ /g, '_')
     },
     simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides', 'haies'],
-    woodCalculation,
     fluxSummary: flux?.summary,
     allFlux: flux?.allFlux,
     sortedFluxKeys,
     fluxCharts: fluxCharts(flux),
     fluxDetail,
-    stocksHaveModifications,
-    fluxHaveModifications,
-    proportionSolsImpermeables,
     fluxIds,
     stockTotal: stocks?.total,
     fluxTotal: flux?.total,
     agriculturalPractices: AgriculturalPractices,
-    agriculturalPracticesEstablishedAreas,
     agriculturalPracticeDetail,
-    agroforestryStock,
-    // TODO: ideally have the reset URL return to the tab the button was clicked from
-    resetUrl: stocksHaveModifications || fluxHaveModifications ? `${req._parsedUrl.pathname}?epci=${req.query.epci}` : undefined
+    resetUrl,
+    sharingQueryStr,
+    ...options
   })
 }
 

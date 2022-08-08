@@ -5,6 +5,7 @@ const { getEpci } = require(path.join(rootFolder, './calculations/epcis'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes } = require(path.join(rootFolder, './calculations/constants'))
+const { parseOptionsFromQuery } = require('./options')
 
 async function excelExportHandler (req, res) {
   // prepare data
@@ -13,14 +14,7 @@ async function excelExportHandler (req, res) {
     res.status(404)
     return
   }
-  const options = {
-    // areas: areaOverrides,
-    // areaChanges: areaChangeOverrides,
-    // woodCalculation,
-    // proportionSolsImpermeables,
-    // agriculturalPracticesEstablishedAreas,
-    // agroforestryStock
-  }
+  const options = parseOptionsFromQuery(req.query)
   const stocks = await getStocks({ epci }, options)
   const flux = getAnnualFluxes({ epci }, options)
 
@@ -87,13 +81,21 @@ async function excelExportHandler (req, res) {
     .string('Lien')
     .style(headerTextStyle)
   ws.cell(firstRow + 2, firstColumn + 2, undefined, firstColumn + 3, true)
-    .link(`https://${process.env.HOSTNAME}/territoire${req._parsedUrl.search}`, 'Outil Aldo en ligne')
+    .link(`${process.env.PROTOCOL.toLowerCase()}://${process.env.HOSTNAME}/territoire${req._parsedUrl.search}`, 'Outil Aldo en ligne')
+    .style({
+      border: outlinedCell
+    })
+  ws.cell(firstRow + 3, firstColumn, undefined, firstColumn + 1, true)
+    .string('Date d\'export')
+    .style(headerTextStyle)
+  ws.cell(firstRow + 3, firstColumn + 2, undefined, firstColumn + 3, true)
+    .date(new Date())
     .style({
       border: outlinedCell
     })
 
   // Summary block
-  const summaryRow = firstRow + 4
+  const summaryRow = firstRow + 5
   ws.column(firstColumn + 1)
     .setWidth(19)
   ws.cell(summaryRow, firstColumn + 1)
@@ -131,7 +133,7 @@ async function excelExportHandler (req, res) {
   ws.column(tableStartColumn + 6)
     .setWidth(29.5)
   ws.cell(tableStartRow, tableStartColumn + 6)
-    .string('Surface modifiée par l\'utilisateur ?')
+    .string('Modifié par l\'utilisateur ?')
     .style(headerTextStyle)
 
   const parentGroundTypes = GroundTypes.filter((gt) => !gt.parentType)
@@ -157,6 +159,7 @@ async function excelExportHandler (req, res) {
           right: borderStyle
         }
       })
+    let hasUserEdits = false
     if (fluxSummary !== undefined) {
       ws.cell(groundTypeRow, tableStartColumn + 1)
         .number(fluxSummary.totalSequestration || 0)
@@ -165,6 +168,7 @@ async function excelExportHandler (req, res) {
         directionCell
           .string(isSequestration ? 'séquestration' : 'émission')
       }
+      hasUserEdits = fluxSummary.hasModifications
     }
     // stocks
     const stock = stocks[gt.stocksId]
@@ -182,6 +186,10 @@ async function excelExportHandler (req, res) {
       ws.cell(groundTypeRow, tableStartColumn + 5)
         .string('du stock total')
     }
+    // has user edits
+    ws.cell(groundTypeRow, tableStartColumn + 6)
+      .bool(hasUserEdits || stock.hasModifications)
+
     // add border whether or not there is text
     ws.cell(groundTypeRow, tableStartColumn + 5)
       .style({
@@ -211,29 +219,18 @@ async function excelExportHandler (req, res) {
         }
       })
   }
-  // TODO: column for surface modifié par l'utilisateur
 
-  // thoughts for debugging user issues au cas où :
-  // TODO: put export date somewhere?
-  // TODO: save options in second worksheet?
-
-  // // Set value of cell A1 to 100 as a number type styled with paramaters of style
-  // ws.cell(1, 1)
-  //   .number(100)
-  //   .style(style)
-
-  // // Set value of cell B1 to 200 as a number type styled with paramaters of style
-  // ws.cell(1, 2)
-  //   .number(200)
-  //   .style(style)
-
-  // // Set value of cell A2 to 'string' styled with paramaters of style
-
-  // // Set value of cell A3 to true as a boolean type styled with paramaters of style but with an adjustment to the font size.
-  // ws.cell(3, 1)
-  //   .bool(true)
-  //   .style(style)
-  //   .style({ font: { size: 14 } })
+  const optionsWs = wb.addWorksheet('Configurations')
+  Object.keys(req.query).forEach((queryParam, idx) => {
+    optionsWs.column(1).setWidth(35)
+    optionsWs.column(2).setWidth(35)
+    // row parameter must not be zero
+    optionsWs.cell(idx + 1, 1)
+      .string(queryParam)
+      .style(headerTextStyle)
+    optionsWs.cell(idx + 1, 2)
+      .string(req.query[queryParam])
+  })
 
   wb.write(`${epci.nom}.xlsx`, res)
 }
