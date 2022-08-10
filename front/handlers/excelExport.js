@@ -168,7 +168,7 @@ async function excelExportHandler (req, res) {
         directionCell
           .string(isSequestration ? 'séquestration' : 'émission')
       }
-      hasUserEdits = fluxSummary.hasModifications
+      hasUserEdits = !!fluxSummary.hasModifications
     }
     // stocks
     const stock = stocks[gt.stocksId]
@@ -188,7 +188,7 @@ async function excelExportHandler (req, res) {
     }
     // has user edits
     ws.cell(groundTypeRow, tableStartColumn + 6)
-      .bool(hasUserEdits || stock.hasModifications)
+      .bool(hasUserEdits || !!stock.hasModifications)
 
     // add border whether or not there is text
     ws.cell(groundTypeRow, tableStartColumn + 5)
