@@ -86,7 +86,6 @@
                     Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %>&nbsp;:
                   </p>
                   <%- include('fluxCalculations/simple', { groundType: groundType.stocksId }) -%>
-                  <br />
                 <% } %>
                 <% if (hasFluxFromAgriculturalPractices) { %>
                   <p class="fr-text--sm fr-mb-1w fr-mt-2w">
@@ -108,9 +107,8 @@
                   <!-- Prairies, sols artificiels -->
                   <% for (const child of groundType.children) { %>
                     <% if(hasData(child)) { %>
-                      <p class="fr-text--sm fr-mb-1w">Vers <%= child %>&nbsp;:</p>
+                      <p class="fr-text--sm">Vers <%= child %>&nbsp;:</p>
                       <%- include('fluxCalculations/simple', { groundType: child }) -%>
-                      <br/>
                     <% } %>
                   <% } %>
                 <% } %>

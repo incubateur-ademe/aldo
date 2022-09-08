@@ -20,7 +20,8 @@ tr.expandable-row {
 }
 
 tr.expandable-row:hover {
-  background-color: #E9EDFE !important;
+  /* blue-cumulus-950 */
+  background-color: #e6eefe !important;
 }
 
 .expanded-row-content {
