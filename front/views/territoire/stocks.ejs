@@ -1,9 +1,31 @@
-<div class="fr-grid-row fr-mt-3w">
-  <div class="fr-table fr-col-12 fr-col-lg-9 fr-pr-md-1w">
-    <!-- TODO: why does an anchor link break the table tabs? -->
-    <!-- <p class="fr-mb-1w fr-text--sm"><a href="#resultatsstocks">Résultats graphiques</a></p> -->
+<div class="fr-grid-row">
+  <h2 class="fr-col-12">Stocks de carbone</h2>
+  <!-- TODO: why does an anchor link break the table tabs? -->
+  <!-- <p class="fr-col-12 fr-mb-1w fr-text--sm"><a href="#tableur-stocks">Résultats détaillés</a></p> -->
+  <!-- TODO: test a11y of these charts -->
+  <div class="fr-col-12 fr-col-md-8 fr-col-lg-6 fr-pb-4w">
+    <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
+      <% for (let keyIdx=0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
+        <% const key = Object.keys(charts)[keyIdx] %> 
+        <li>
+          <section class="fr-accordion">
+            <h3 class="fr-accordion__title">
+              <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
+                aria-controls="accordion-chart-<%= keyIdx %>">
+                <%= charts[key].title %>
+              </button>
+            </h3>
+            <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
+              <canvas id="chart-<%= key %>" width="400" height="400"></canvas>
+            </div>
+          </section>
+        </li>
+        <% } %>
+    </ul>
+  </div>
+  <div class="fr-table fr-col-12 fr-col-lg-9 fr-pr-md-1w fr-mt-2w">
     <table class="detail-table">
-      <caption><h2>Stocks de carbone</h2></caption>
+      <caption>Stocks de carbone par occupation du sol</caption>
       <thead>
         <tr class="expandable-row-header stocks-row">
           <th scope="col">Occupation du sol</th>
@@ -73,28 +95,6 @@
         En savoir plus sur les méthodes de calculs
       </a>
     </p>
-  </div>
-  <!-- TODO: test a11y of these charts -->
-  <div class="fr-col-12 fr-col-md-8 fr-col-lg-6 fr-pt-2w">
-    <h3>Résultats graphiques</h3>
-    <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
-      <% for (let keyIdx=0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
-        <% const key = Object.keys(charts)[keyIdx] %> 
-        <li>
-          <section class="fr-accordion">
-            <h4 class="fr-accordion__title">
-              <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
-                aria-controls="accordion-chart-<%= keyIdx %>">
-                <%= charts[key].title %>
-              </button>
-            </h4>
-            <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
-              <canvas id="chart-<%= key %>" width="400" height="400"></canvas>
-            </div>
-          </section>
-        </li>
-        <% } %>
-    </ul>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

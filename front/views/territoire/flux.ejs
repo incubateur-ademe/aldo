@@ -1,7 +1,27 @@
-<div class="fr-grid-row fr-mt-3w">
-  <div class="fr-table fr-col-12 fr-col-lg-9 fr-pr-md-1w">
+<div class="fr-grid-row">
+  <h2 class="fr-col-12">Flux de carbone</h2>
+  <div class="fr-col-12 fr-col-md-8 fr-col-lg-6 fr-pb-2w">
+    <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
+      <% for (let keyIdx=0; keyIdx < Object.keys(fluxCharts).length; keyIdx++) { %>
+        <li>
+          <section class="fr-accordion">
+            <h3 class="fr-accordion__title">
+              <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
+                aria-controls="accordion-flux-chart-<%= keyIdx %>">
+                <%= fluxCharts[Object.keys(fluxCharts)[keyIdx]].title %>
+              </button>
+            </h3>
+            <div class="fr-collapse" id="accordion-flux-chart-<%= keyIdx %>">
+              <canvas id="fluxChart-<%= Object.keys(fluxCharts)[keyIdx] %>" width="400" height="500"></canvas>
+            </div>
+          </section>
+        </li>
+        <% } %>
+    </ul>
+  </div>
+  <div class="fr-table fr-col-12 fr-col-lg-9 fr-pr-md-1w fr-mt-2w">
     <table class="detail-table">
-      <caption><h2>Flux de carbone</h2></caption>
+      <caption>Flux de carbone par occupation du sol finale</caption>
       <thead>
         <tr class="expandable-row-header flux-row">
           <th scope="col">Occupation du sol finale</th>
@@ -127,26 +147,6 @@
       <p class="fr-text--sm fr-mt-1w">Mettez à jour vos pratiques agricoles pour voir comment elles influencent les flux dans votre térritoire avec l'onglet « Pratiques agricoles ».</p>
     <% } %>
     <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/flux/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">En savoir plus sur les méthodes de calculs</a></p>
-  </div>
-  <div class="fr-col-12 fr-col-md-8 fr-col-lg-6 fr-pt-2w">
-    <h3>Résultats graphiques</h3>
-    <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
-      <% for (let keyIdx=0; keyIdx < Object.keys(fluxCharts).length; keyIdx++) { %>
-        <li>
-          <section class="fr-accordion">
-            <h4 class="fr-accordion__title">
-              <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
-                aria-controls="accordion-flux-chart-<%= keyIdx %>">
-                <%= fluxCharts[Object.keys(fluxCharts)[keyIdx]].title %>
-              </button>
-            </h4>
-            <div class="fr-collapse" id="accordion-flux-chart-<%= keyIdx %>">
-              <canvas id="fluxChart-<%= Object.keys(fluxCharts)[keyIdx] %>" width="400" height="500"></canvas>
-            </div>
-          </section>
-        </li>
-        <% } %>
-    </ul>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
