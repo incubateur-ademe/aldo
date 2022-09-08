@@ -9,11 +9,11 @@
     <thead>
       <tr>
         <td></td>
-        <th colspan="<%= fluxIds.length %>" class="fr-pb-0">Occupation de sol finale</th>
+        <th colspan="<%= fluxIds.length %>" class="fr-pb-0">Occupation du sol finale</th>
       </tr>
       <tr>
         <th style="font-weight: normal;" scope="col">
-          Occupation de sol initiale
+          Occupation du sol initiale
         </th>
         <% for( const to of fluxIds ) { %>
           <th scope="col" class="flux-surface-col"><%= allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to).name %></th>
