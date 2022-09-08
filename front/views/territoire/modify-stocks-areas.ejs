@@ -1,0 +1,35 @@
+<div class="fr-mt-8w">
+  <h2>Modifier les occupations du sol</h2>
+  <div class="fr-grid-row">
+    <% for( let index=0; index < stocksGroundTypes.length; index++ ) { %>
+      <% const groundType = stocksGroundTypes[index] %>
+      <% const stock = stocks[groundType.stocksId] %>
+      <div class="fr-col-6 fr-col-md-4">
+        <label class="fr-label fr-text--sm fr-mb-1w" for="all-surface-<%= index %>">
+          <%= groundType.name %>
+        </label>
+        <div class="fr-grid-row">
+          <input
+            class="fr-input fr-text--lg fr-col-9 fr-col-md-8"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            placeholder="<%= round(stock.originalArea) %>"
+            value="<%= stock.areaModified ? round(stock.area) : undefined %>"
+            id="all-surface-<%= index %>"
+            name="surface_<%= pascalCase(stocksGroundTypes[index].stocksId) %>"
+          >
+          <p class="fr-pt-1w fr-ml-1w">ha</p>
+        </div>
+      </div>
+    <% } %>
+  </div>
+  <button class="fr-btn fr-mt-2w" type="submit" formaction="/territoire/stocks">
+    Mettre à jour les surfaces
+  </button>
+  <% if (stocksHaveModifications) { %>
+    <a class="fr-btn fr-btn--secondary fr-md-ml-2w fr-mt-2w fr-md-mt-0" href="<%= resetUrl %>">
+      Réinitialiser
+    </a>
+  <% } %>
+</div>

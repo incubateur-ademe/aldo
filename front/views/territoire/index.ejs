@@ -24,6 +24,7 @@
           </ul>
           <div id="tabpanel-stocks-panel" class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-stocks" tabindex="0">
             <%- include('./stocks') -%>
+            <%- include('./modify-stocks-areas') -%>
           </div>
           <div id="tabpanel-flux-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-flux" tabindex="0">
             <%- include('./flux') -%>
@@ -51,5 +52,20 @@
       element.parentElement.getElementsByClassName('expanded-row-content')[0].classList.toggle('hide-row');
       event.stopPropagation();
     }
+
+    // introduced to:
+    // - shorten URLs by only including the values that are overridden
+    // - handle the case for stocks where there are two inputs that can change the same value
+    let queryParams = new URLSearchParams(window.location.search)
+    $('input').change((event) => {
+      queryParams.set(event.target.name, event.target.value)
+    })
+
+    $('form').submit((event) => {
+      let currentTab = $("button.fr-tabs__tab[aria-selected=true]")[0]
+      currentTab = currentTab?.id.endsWith("flux") ? "flux" : "stocks"
+      window.location.href = `/territoire/${currentTab}?${queryParams.toString()}`
+      event.preventDefault()
+    })
   </script>
   <%- include('../partials/footer') -%>

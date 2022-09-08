@@ -59,6 +59,13 @@ async function territoryHandler (req, res) {
       fluxIds.push(gt.altFluxId || gt.fluxId)
     }
   })
+  // these are the types that can be modified to customise the stocks calculations
+  const stocksGroundTypes = GroundTypes.filter(gt => !gt.children && gt.stocksId !== 'produits bois')
+  stocksGroundTypes.sort((a, b) => {
+    if (a.name > b.name) return 1
+    else if (a.name === b.name) return 0
+    else return -1
+  })
   // TODO: ideally have the reset URL return to the tab the button was clicked from
   const resetUrl = options.stocksHaveModifications || options.fluxHaveModifications ? `${req._parsedUrl.pathname}?epci=${req.query.epci}` : undefined
   // this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
@@ -75,6 +82,7 @@ async function territoryHandler (req, res) {
     epci,
     groundTypes,
     allGroundTypes: GroundTypes,
+    stocksGroundTypes,
     stocks,
     charts: stocks && charts(stocks),
     formatNumber (number, sigFig = 0) {
