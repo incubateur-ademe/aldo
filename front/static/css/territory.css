@@ -5,7 +5,7 @@ table.detail-table {
 
 tr.stocks-row {
   display: grid;
-  grid-template-columns: 1fr repeat(3, 0.9fr) 0.5fr;
+  grid-template-columns: 1fr 0.6fr 0.9fr 0.9fr 0.5fr;
   justify-content: flex-start;
 }
 

@@ -31,8 +31,8 @@
         <tr class="expandable-row-header stocks-row">
           <th scope="col">Occupation du sol</th>
           <th scope="col">Surface (ha)</th>
-          <th scope="col">Stocks carbone (tC)</th>
-          <th scope="col">Stocks (%)</th>
+          <th scope="col">Stocks de carbone (tC)</th>
+          <th scope="col">Stocks de carbone (%)</th>
           <td scope="col"></td>
         </tr>
       </thead>
@@ -87,7 +87,7 @@
     </table>
     <% if (stocksHaveModifications) { %>
       <p class="fr-text--sm fr-mt-1w">* Données modifiées</p>
-      <a class="fr-btn fr-btn--secondary fr-mt-1w" href="<%= resetUrl %>">
+      <a class="fr-btn fr-btn--secondary fr-mt-1w" href="/territoire/stocks<%= resetQueryStr %>">
         Réinitialiser les données
       </a>
     <% } %>

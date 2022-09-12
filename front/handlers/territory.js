@@ -66,8 +66,7 @@ async function territoryHandler (req, res) {
     else if (a.name === b.name) return 0
     else return -1
   })
-  // TODO: ideally have the reset URL return to the tab the button was clicked from
-  const resetUrl = options.stocksHaveModifications || options.fluxHaveModifications ? `${req._parsedUrl.pathname}?epci=${req.query.epci}` : undefined
+  const resetQueryStr = options.stocksHaveModifications || options.fluxHaveModifications ? `?epci=${req.query.epci}` : undefined
   // this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
   let sharingQueryStr = `?epci=${req.query.epci}`
   Object.keys(req.query).forEach(queryParam => {
@@ -108,7 +107,7 @@ async function territoryHandler (req, res) {
     fluxTotal: flux?.total,
     agriculturalPractices: AgriculturalPractices,
     agriculturalPracticeDetail,
-    resetUrl,
+    resetQueryStr,
     sharingQueryStr,
     ...options
   })
