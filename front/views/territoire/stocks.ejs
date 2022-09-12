@@ -49,7 +49,7 @@
               <% if (thisStock.area !==undefined) { %>
                 <%= formatNumber(thisStock.area) %>
               <% } else { %>
-                <i>Pas applicable</i>
+                <i title="Les stocks générés par l’usage de produits bois ne sont pas liés à une surface d’occupation du sol.">Pas applicable</i>
               <% } %>
             </td>
             <td onClick='toggleRow(this)' style="text-align: right;">
