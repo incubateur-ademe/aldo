@@ -33,24 +33,6 @@ function parseOptionsFromQuery (query) {
       fluxHaveModifications = true
     }
   })
-  // check if there are agroforestry area and density additions
-  const agroforestryStock = {}
-  Object.keys(query).filter(key => key.startsWith('af_area_')).forEach(key => {
-    const groundType = key.split('af_area_')[1].replace(/_/g, ' ')
-    agroforestryStock[groundType] = {
-      area: parseFloat(query[key])
-    }
-  })
-  Object.keys(query).filter(key => key.startsWith('af_density_')).forEach(key => {
-    const groundType = key.split('af_density_')[1].replace(/_/g, ' ')
-    const density = parseFloat(query[key])
-    if (!agroforestryStock[groundType]) {
-      agroforestryStock[groundType] = { density }
-    } else {
-      agroforestryStock[groundType].density = density
-      stocksHaveModifications = true // both area and density need to be defined to impact original totalStock
-    }
-  })
 
   // prepare configuration to be passed to stocks and flux fetching
   const woodCalculation = query['répartition_produits_bois'] || 'récolte'
@@ -62,7 +44,6 @@ function parseOptionsFromQuery (query) {
     woodCalculation,
     proportionSolsImpermeables,
     agriculturalPracticesEstablishedAreas,
-    agroforestryStock,
     fluxHaveModifications,
     stocksHaveModifications
   }

@@ -38,13 +38,6 @@ function getStocksByKeyword (location, keyword, options) {
     stocks.totalReservoirStock += stocks.forestLitterStock
   }
   stocks.totalStock = stocks.totalReservoirStock
-  if (options.agroforestryStock?.[keyword]) {
-    // one or the other might not be defined, default to 0 in that case
-    stocks.agroforestryDensity = options.agroforestryStock[keyword].density || 0
-    stocks.agroforestryArea = options.agroforestryStock[keyword].area || 0
-    stocks.agroforestryStock = stocks.agroforestryArea * stocks.agroforestryDensity
-    stocks.totalStock += stocks.agroforestryStock
-  }
   return stocks
 }
 
@@ -61,8 +54,7 @@ function getStocksForParent (subStocks) {
     area: 0,
     groundStock: 0,
     biomassStock: 0,
-    forestLitterStock: 0,
-    agroforestryStock: 0
+    forestLitterStock: 0
   }
   for (const subType of Object.keys(subStocks)) {
     stocks.totalReservoirStock += subStocks[subType].totalReservoirStock
@@ -72,15 +64,8 @@ function getStocksForParent (subStocks) {
     if (subStocks[subType].forestLitterStock) {
       stocks.forestLitterStock += subStocks[subType].forestLitterStock
     }
-    // NB: this is the most simple solution whilst prairies zones herbacées and cultures are the only
-    // instances of agroforestryStock. This would not work if two or more children had agroforestry data
-    if (subStocks[subType].agroforestryStock) {
-      stocks.agroforestryStock = subStocks[subType].agroforestryStock
-      stocks.agroforestryArea = subStocks[subType].agroforestryArea
-      stocks.agroforestryDensity = subStocks[subType].agroforestryDensity
-    }
   }
-  stocks.totalStock = stocks.totalReservoirStock + stocks.agroforestryStock
+  stocks.totalStock = stocks.totalReservoirStock
   return stocks
 }
 
@@ -170,9 +155,6 @@ stocks: {
     forestLitterStock: in tC
     totalDensity: total density across ground, biomass, forest litter reservoirs
     totalReservoirStock: total stocks for ground type for ground, biomass, forest litter reservoirs
-    agroforestryDensity: optional, tC/ha
-    agroforestryArea: optional, ha
-    agroforestryStock: optional, tC
     totalStock: total stocks for territory
     stockPercentage: 0-100 (totalStock / stocks.total * 100)
     children: [<keyword>] optional
@@ -225,8 +207,7 @@ function getStocks (location, options) {
   prairieChildren.forEach((c) => {
     prairiesSubtypes[c] = getSubStocksByKeyword(location, c, 'prairies', {
       areas: options.areas,
-      groundKeyword: 'prairies',
-      agroforestryStock: options.agroforestryStock
+      groundKeyword: 'prairies'
     })
   })
   Object.assign(stocks, prairiesSubtypes)
@@ -307,15 +288,6 @@ function getStocks (location, options) {
         stocks[key].originalArea = originalAreas[key]
         stocks[key].areaModified = true
         stocks[key].hasModifications = true
-      }
-    }
-  })
-  Object.keys(options.agroforestryStock || []).forEach(key => {
-    const hasModifications = options.agroforestryStock[key].density && options.agroforestryStock[key].area
-    if (hasModifications) {
-      stocks[key].hasModifications = true
-      if (stocks[key].parent) {
-        stocks[stocks[key].parent].hasModifications = true
       }
     }
   })
