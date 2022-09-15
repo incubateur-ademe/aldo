@@ -34,6 +34,7 @@
       <tbody>
         <% for( let index=0; index < sortedFluxKeys.length; index++ ) { %>
           <% const groundType = sortedFluxKeys[index] %>
+          <% if (groundType.stocksId === 'haies') continue %>
           <% const thisFlux = fluxSummary[groundType.stocksId] %>
           <!-- TODO: make row blue if area modified -->
           <tr class="expandable-row flux-row">

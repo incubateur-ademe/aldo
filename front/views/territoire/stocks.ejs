@@ -78,6 +78,8 @@
                 <%- include('stockCalculations/subtypes', {stocksId, stock: thisStock}) -%>
               <% } else if (stocksId === 'produits bois' ) { %>
                 <%- include('stockCalculations/wood', {stock: thisStock, woodCalculation }) -%>
+              <% } else if (stocksId === 'haies' ) { %>
+                <%- include('stockCalculations/hedges', {stock: thisStock }) -%>
               <% } %>
               <!-- indicate if sols artificiels proportion was changed ? -->
             </td>

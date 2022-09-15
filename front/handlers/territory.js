@@ -96,7 +96,7 @@ async function territoryHandler (req, res) {
     pascalCase (text) {
       return text.replace(/ /g, '_')
     },
-    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides', 'haies'],
+    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides'],
     fluxSummary: flux?.summary,
     allFlux: flux?.allFlux,
     sortedFluxKeys,
