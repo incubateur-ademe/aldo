@@ -131,4 +131,8 @@
   const biomassCtx = document.getElementById('chart-biomass');
   const biomassChartData = JSON.parse(`<%- charts.biomass.data %>`);
   new Chart(biomassCtx, biomassChartData);
+
+  const groundTypeStackedCtx = document.getElementById('chart-groundTypeStacked');
+  const groundTypeStackedChartData = JSON.parse(`<%- charts.groundTypeStacked.data %>`);
+  new Chart(groundTypeStackedCtx, groundTypeStackedChartData);
 </script>

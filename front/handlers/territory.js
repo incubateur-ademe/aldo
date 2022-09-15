@@ -118,6 +118,9 @@ function charts (stocks) {
   const chartBorderColors = Object.values(Colours).map(c => c.main)
   const stocksPercentageLabels = []
   const stocksPercentageValues = []
+  const biomassValues = []
+  const groundValues = []
+  const forestLitterValues = []
   const groundAndLitterStocksValues = []
   const biomassStocksValues = []
   Object.keys(stocks).forEach(key => {
@@ -126,6 +129,9 @@ function charts (stocks) {
       stocksPercentageValues.push(stocks[key].stockPercentage)
       groundAndLitterStocksValues.push(stocks[key].groundAndLitterStockPercentage)
       biomassStocksValues.push(stocks[key].biomassStockPercentage)
+      biomassValues.push(Math.round(stocks[key].biomassStock / 1000))
+      groundValues.push(Math.round(stocks[key].groundStock / 1000))
+      forestLitterValues.push(Math.round(stocks[key].forestLitterStock / 1000))
     }
   })
   const stocksDensityLabels = Object.keys(stocks.byDensity).map(key => GroundTypes.find(k => k.stocksId === key)?.name)
@@ -178,6 +184,61 @@ function charts (stocks) {
                 text: 'Typologie d’occupation du sol',
                 display: true
               }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      })
+    },
+    groundTypeStacked: {
+      title: 'Ventilation du stock carbone par occupation du sol (tous réservoirs inclus)',
+      data: JSON.stringify({
+        type: 'bar',
+        data: {
+          labels: stocksPercentageLabels,
+          datasets: [
+            {
+              label: 'Sol',
+              data: groundValues,
+              backgroundColor: Colours.tournesol['950'],
+              borderColor: Colours.tournesol.main,
+              borderWidth: 2
+            },
+            {
+              label: 'Biomasse',
+              data: biomassValues,
+              backgroundColor: Colours.emeraude['950'],
+              borderColor: Colours.emeraude.main,
+              borderWidth: 2
+            },
+            {
+              label: 'Litière',
+              data: forestLitterValues,
+              backgroundColor: Colours.opera['950'],
+              borderColor: Colours.opera.main,
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          scales: {
+            y: {
+              title: {
+                text: 'Stocks de carbone (ktCO2e)',
+                display: true
+              },
+              stacked: true
+            },
+            x: {
+              title: {
+                text: 'Typologie d’occupation du sol',
+                display: true
+              },
+              stacked: true
             }
           },
           plugins: {
