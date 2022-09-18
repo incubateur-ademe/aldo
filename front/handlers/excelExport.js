@@ -193,6 +193,7 @@ async function excelExportHandler (req, res) {
   ws.cell(row, secondColumn).string('Produits bois (hors cadre de dépôt)')
   ws.cell(row, thirdColumn).number(0) // TODO: formula
   ws.cell(row, thirdColumn + 1).number(2018)
+  row++
 
   // Occupation du sol (ha) du territoire en 2018 :
   row++
@@ -210,10 +211,75 @@ async function excelExportHandler (req, res) {
   row++
 
   // Changements d'occupation du sol annuel moyen (ha/an) du territoire entre 2012 et 2018 :
-
+  row++
+  ws.cell(row, startColumn).string('Changements d\'occupation du sol annuel moyen (ha/an) du territoire entre 2012 et 2018 :')
+  row++
+  ws.cell(row, thirdColumn).string('Occupation de sol finale')
+  row++
+  ws.cell(row, secondColumn).string('Occupation de sol initiale')
+  const fluxGroundTypes = []
+  GroundTypes.forEach(gt => {
+    if (gt.altFluxId || gt.fluxId) {
+      fluxGroundTypes.push(gt)
+    }
+  })
+  fluxGroundTypes.forEach((gt, idx) => {
+    ws.cell(row, thirdColumn + idx).string(gt.name)
+  })
+  row++
+  fluxGroundTypes.forEach((gtInitial, idx) => {
+    ws.cell(row, secondColumn).string(gtInitial.name)
+    fluxGroundTypes.forEach((gtFinal, idxFinal) => {
+      const thisFlux = flux.allFlux.filter(f => f.from === gtInitial.stocksId && f.to === gtFinal.stocksId && f.gas === 'C')
+      if (thisFlux.length && thisFlux[0].area) {
+        ws.cell(row, thirdColumn + idxFinal).number(thisFlux[0].area)
+      }
+    })
+    row++
+  })
   // Flux unitaire de référence (tCO2e/ha/an) du territoire :
+  row++
+  ws.cell(row, startColumn).string('Flux unitaire de référence (tCO2e/ha/an) du territoire :')
+  row++
+  ws.cell(row, thirdColumn).string('Occupation de sol finale')
+  row++
+  ws.cell(row, secondColumn).string('Occupation de sol initiale')
+  fluxGroundTypes.forEach((gt, idx) => {
+    ws.cell(row, thirdColumn + idx).string(gt.name)
+  })
+  row++
+  fluxGroundTypes.forEach((gtInitial, idx) => {
+    ws.cell(row, secondColumn).string(gtInitial.name)
+    fluxGroundTypes.forEach((gtFinal, idxFinal) => {
+      const thisFlux = flux.allFlux.filter(f => f.from === gtInitial.stocksId && f.to === gtFinal.stocksId && f.gas === 'C')
+      if (thisFlux.length && thisFlux[0].flux) {
+        ws.cell(row, thirdColumn + idxFinal).number(thisFlux[0].flux)
+      }
+    })
+    row++
+  })
 
   // Flux de carbone annuel moyen (tCO2e/an) du territoire entre 2012 et 2018 :
+  row++
+  ws.cell(row, startColumn).string('Flux unitaire de référence (tCO2e/ha/an) du territoire :')
+  row++
+  ws.cell(row, thirdColumn).string('Occupation de sol finale')
+  row++
+  ws.cell(row, secondColumn).string('Occupation de sol initiale')
+  fluxGroundTypes.forEach((gt, idx) => {
+    ws.cell(row, thirdColumn + idx).string(gt.name)
+  })
+  row++
+  fluxGroundTypes.forEach((gtInitial, idx) => {
+    ws.cell(row, secondColumn).string(gtInitial.name)
+    fluxGroundTypes.forEach((gtFinal, idxFinal) => {
+      const thisFlux = flux.allFlux.filter(f => f.from === gtInitial.stocksId && f.to === gtFinal.stocksId && f.gas === 'C')
+      if (thisFlux.length && thisFlux[0].co2e) {
+        ws.cell(row, thirdColumn + idxFinal).number(thisFlux[0].co2e)
+      }
+    })
+    row++
+  })
 
   wb.write(`${epci.nom}.xlsx`, res)
 }
