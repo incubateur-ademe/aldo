@@ -21,40 +21,23 @@ async function excelExportHandler (req, res) {
   // prepare export
   const wb = new xl.Workbook()
   const ws = wb.addWorksheet('Tableau de bord')
-  const borderStyle = {
-    style: 'thin',
-    color: 'black'
-  }
-  const outlinedCell = {
-    left: borderStyle,
-    right: borderStyle,
-    top: borderStyle,
-    bottom: borderStyle
-  }
-  const headerTextStyle = wb.createStyle({
-    font: {
-      bold: true
-    },
-    border: outlinedCell,
-    alignment: {
-      shrinkToFit: true
-    }
-  })
-  const rowHeaderTextStyle = wb.createStyle({
-    font: {
-      bold: true
-    },
-    border: {
-      left: borderStyle,
-      right: borderStyle
-    }
-  })
+  const inputBlue = '#4472C4'
   const number2dpStyle = wb.createStyle({
     numberFormat: '##0.00',
-    border: outlinedCell
+    font: {
+      color: inputBlue
+    }
   })
   const integerStyle = wb.createStyle({
-    numberFormat: '###,##0'
+    numberFormat: '###,##0',
+    font: {
+      color: inputBlue
+    }
+  })
+  const dataStyle = wb.createStyle({
+    font: {
+      color: inputBlue
+    }
   })
 
   // easier to move around if everything is relative
@@ -69,11 +52,13 @@ async function excelExportHandler (req, res) {
     .string('Nom')
   ws.cell(row, thirdColumn)
     .string(epci.nom)
+    .style(dataStyle)
   row++
   ws.cell(row, secondColumn)
     .string('SIREN')
   ws.cell(row, thirdColumn)
     .string(epci.code)
+    .style(dataStyle)
   row++
   ws.cell(row, secondColumn)
     .string('Lien')
@@ -84,6 +69,7 @@ async function excelExportHandler (req, res) {
     .string('Date d\'export')
   ws.cell(row, thirdColumn)
     .date(new Date())
+    .style(dataStyle)
   row++
   ws.cell(row, secondColumn)
     .string('Communes')
@@ -91,6 +77,7 @@ async function excelExportHandler (req, res) {
     epci.membres.forEach(commune => {
       ws.cell(row, thirdColumn)
         .string(commune.nom)
+        .style(dataStyle)
       row++
     })
   }
@@ -129,7 +116,7 @@ async function excelExportHandler (req, res) {
     if (stock.stockPercentage) {
       ws.cell(row, thirdColumn + 2).number(stock.stockPercentage).style(integerStyle)
     }
-    ws.cell(row, thirdColumn + 3).bool(!!stock.hasModifications)
+    ws.cell(row, thirdColumn + 3).bool(!!stock.hasModifications).style(dataStyle)
     const cell = stockCellColumn + row.toString()
     if (gt.stocksId === 'forêts') forestStockCell = cell
     else if (gt.stocksId === 'produits bois') woodStockCell = cell
@@ -164,16 +151,13 @@ async function excelExportHandler (req, res) {
         .style({
           font: {
             color: isSequestration ? '#1f8d49' : '#e1000f'
-          },
-          border: {
-            right: borderStyle
           }
         })
       if (isSequestration || isEmission) {
         directionCell
           .string(isSequestration ? 'séquestration' : 'émission')
       }
-      ws.cell(row, thirdColumn + 2).bool(!!fluxSummary.hasModifications)
+      ws.cell(row, thirdColumn + 2).bool(!!fluxSummary.hasModifications).style(dataStyle)
     }
     row++
   })
@@ -193,20 +177,20 @@ async function excelExportHandler (req, res) {
   const cToCo2e = '44 / 12'
   ws.cell(row, secondColumn).string('Forêt')
   ws.cell(row, thirdColumn).formula(`${cToCo2e} * ${forestStockCell}`).style(integerStyle)
-  ws.cell(row, thirdColumn + 1).number(2018)
+  ws.cell(row, thirdColumn + 1).number(2018).style(dataStyle)
   row++
   ws.cell(row, secondColumn).string('Sols agricoles (terres cultivées et prairies)')
   ws.cell(row, thirdColumn).formula(`${cToCo2e} * (${agriGroundStockCells.join(' + ')})`).style(integerStyle)
-  ws.cell(row, thirdColumn + 1).number(2018)
+  ws.cell(row, thirdColumn + 1).number(2018).style(dataStyle)
   row++
   ws.cell(row, secondColumn).string('Autres sols')
   ws.cell(row, thirdColumn).formula(`${cToCo2e} * (${otherGroundStockCells.join(' + ')})`).style(integerStyle)
-  ws.cell(row, thirdColumn + 1).number(2018)
+  ws.cell(row, thirdColumn + 1).number(2018).style(dataStyle)
   row++
   // TODO: italicise
   ws.cell(row, secondColumn).string('Produits bois (hors cadre de dépôt)')
   ws.cell(row, thirdColumn).formula(`${cToCo2e} * ${woodStockCell}`).style(integerStyle)
-  ws.cell(row, thirdColumn + 1).number(2018)
+  ws.cell(row, thirdColumn + 1).number(2018).style(dataStyle)
   row++
 
   // Occupation du sol (ha) du territoire en 2018 :
