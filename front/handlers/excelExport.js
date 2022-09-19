@@ -121,13 +121,13 @@ async function excelExportHandler (req, res) {
     ws.cell(row, secondColumn).string(gt.name)
     const stock = stocks[gt.stocksId]
     if (stock.area) {
-      ws.cell(row, thirdColumn).number(stock.area)
+      ws.cell(row, thirdColumn).number(stock.area).style(integerStyle)
     }
     if (stock.totalStock) {
-      ws.cell(row, thirdColumn + 1).number(stock.totalStock)
+      ws.cell(row, thirdColumn + 1).number(stock.totalStock).style(integerStyle)
     }
     if (stock.stockPercentage) {
-      ws.cell(row, thirdColumn + 2).number(stock.stockPercentage)
+      ws.cell(row, thirdColumn + 2).number(stock.stockPercentage).style(integerStyle)
     }
     ws.cell(row, thirdColumn + 3).bool(!!stock.hasModifications)
     const cell = stockCellColumn + row.toString()
@@ -156,7 +156,7 @@ async function excelExportHandler (req, res) {
     const fluxSummary = flux?.summary[gt.stocksId]
     if (fluxSummary) {
       const sequestration = fluxSummary.totalSequestration
-      ws.cell(row, thirdColumn).number(sequestration || 0)
+      ws.cell(row, thirdColumn).number(sequestration || 0).style(integerStyle)
       // comparing to 0.5 because number is rounded to integer
       const isSequestration = sequestration > 0.5
       const isEmission = sequestration < -0.5
@@ -192,20 +192,20 @@ async function excelExportHandler (req, res) {
   row++
   const cToCo2e = '44 / 12'
   ws.cell(row, secondColumn).string('Forêt')
-  ws.cell(row, thirdColumn).formula(`${cToCo2e} * ${forestStockCell}`)
+  ws.cell(row, thirdColumn).formula(`${cToCo2e} * ${forestStockCell}`).style(integerStyle)
   ws.cell(row, thirdColumn + 1).number(2018)
   row++
   ws.cell(row, secondColumn).string('Sols agricoles (terres cultivées et prairies)')
-  ws.cell(row, thirdColumn).formula(`${cToCo2e} * (${agriGroundStockCells.join(' + ')})`)
+  ws.cell(row, thirdColumn).formula(`${cToCo2e} * (${agriGroundStockCells.join(' + ')})`).style(integerStyle)
   ws.cell(row, thirdColumn + 1).number(2018)
   row++
   ws.cell(row, secondColumn).string('Autres sols')
-  ws.cell(row, thirdColumn).formula(`${cToCo2e} * (${otherGroundStockCells.join(' + ')})`)
+  ws.cell(row, thirdColumn).formula(`${cToCo2e} * (${otherGroundStockCells.join(' + ')})`).style(integerStyle)
   ws.cell(row, thirdColumn + 1).number(2018)
   row++
   // TODO: italicise
   ws.cell(row, secondColumn).string('Produits bois (hors cadre de dépôt)')
-  ws.cell(row, thirdColumn).formula(`${cToCo2e} * ${woodStockCell}`)
+  ws.cell(row, thirdColumn).formula(`${cToCo2e} * ${woodStockCell}`).style(integerStyle)
   ws.cell(row, thirdColumn + 1).number(2018)
   row++
 
@@ -218,7 +218,7 @@ async function excelExportHandler (req, res) {
     ws.cell(row, secondColumn).string(gt.name)
     const stock = stocks[gt.stocksId]
     if (stock.area) {
-      ws.cell(row, thirdColumn).number(stock.area)
+      ws.cell(row, thirdColumn).number(stock.area).style(integerStyle)
     }
     row++
   })
@@ -246,7 +246,7 @@ async function excelExportHandler (req, res) {
     fluxGroundTypes.forEach((gtFinal, idxFinal) => {
       const thisFlux = flux.allFlux.filter(f => f.from === gtInitial.stocksId && f.to === gtFinal.stocksId && f.gas === 'C')
       if (thisFlux.length && thisFlux[0].area) {
-        ws.cell(row, thirdColumn + idxFinal).number(thisFlux[0].area)
+        ws.cell(row, thirdColumn + idxFinal).number(thisFlux[0].area).style(number2dpStyle)
       }
     })
     row++
@@ -267,7 +267,7 @@ async function excelExportHandler (req, res) {
     fluxGroundTypes.forEach((gtFinal, idxFinal) => {
       const thisFlux = flux.allFlux.filter(f => f.from === gtInitial.stocksId && f.to === gtFinal.stocksId && f.gas === 'C')
       if (thisFlux.length && thisFlux[0].flux) {
-        ws.cell(row, thirdColumn + idxFinal).number(thisFlux[0].flux)
+        ws.cell(row, thirdColumn + idxFinal).number(thisFlux[0].flux).style(integerStyle)
       }
     })
     row++
@@ -275,7 +275,7 @@ async function excelExportHandler (req, res) {
 
   // Flux de carbone annuel moyen (tCO2e/an) du territoire entre 2012 et 2018 :
   row++
-  ws.cell(row, startColumn).string('Flux unitaire de référence (tCO2e/ha/an) du territoire :')
+  ws.cell(row, startColumn).string('Flux de carbone annuel moyen (tCO2e/an) du territoire entre 2012 et 2018 :')
   row++
   ws.cell(row, thirdColumn).string('Occupation de sol finale')
   row++
@@ -289,7 +289,7 @@ async function excelExportHandler (req, res) {
     fluxGroundTypes.forEach((gtFinal, idxFinal) => {
       const thisFlux = flux.allFlux.filter(f => f.from === gtInitial.stocksId && f.to === gtFinal.stocksId && f.gas === 'C')
       if (thisFlux.length && thisFlux[0].co2e) {
-        ws.cell(row, thirdColumn + idxFinal).number(thisFlux[0].co2e)
+        ws.cell(row, thirdColumn + idxFinal).number(thisFlux[0].co2e).style(integerStyle)
       }
     })
     row++
