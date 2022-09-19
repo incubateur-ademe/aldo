@@ -116,7 +116,9 @@ async function excelExportHandler (req, res) {
     if (stock.stockPercentage) {
       ws.cell(row, thirdColumn + 2).number(stock.stockPercentage).style(integerStyle)
     }
-    ws.cell(row, thirdColumn + 3).bool(!!stock.hasModifications).style(dataStyle)
+    ws.cell(row, thirdColumn + 3)
+      .formula(stock.areaModified ? '=TRUE()' : '=FALSE()') // bool(true) wasn't working when tested in LibreOffice
+      .style(dataStyle)
     const cell = stockCellColumn + row.toString()
     if (gt.stocksId === 'forêts') forestStockCell = cell
     else if (gt.stocksId === 'produits bois') woodStockCell = cell
@@ -157,7 +159,9 @@ async function excelExportHandler (req, res) {
         directionCell
           .string(isSequestration ? 'séquestration' : 'émission')
       }
-      ws.cell(row, thirdColumn + 2).bool(!!fluxSummary.hasModifications).style(dataStyle)
+      ws.cell(row, thirdColumn + 2)
+        .formula(fluxSummary.areaModified ? '=TRUE()' : '=FALSE()')
+        .style(dataStyle)
     }
     row++
   })
