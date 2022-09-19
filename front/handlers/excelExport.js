@@ -4,7 +4,7 @@ const rootFolder = path.join(__dirname, '../../')
 const { getEpci } = require(path.join(rootFolder, './calculations/epcis'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
-const { GroundTypes } = require(path.join(rootFolder, './calculations/constants'))
+const { GroundTypes, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
 const { parseOptionsFromQuery } = require('./options')
 
 async function excelExportHandler (req, res) {
@@ -82,10 +82,28 @@ async function excelExportHandler (req, res) {
     })
   }
 
-  // user configuration TODO
+  // user configuration
   row++
   ws.cell(row, startColumn).string('Configuration utilisateur')
   row++
+  ws.cell(row, secondColumn)
+    .string('Choix de l\'hypothèse sur la répartition du produit bois')
+    .style(dataStyle)
+  ws.cell(row, thirdColumn).string(options.woodCalculation).style(dataStyle)
+  row++
+  ws.cell(row, secondColumn)
+    .string('Hypothèses de répartition des surfaces entre sols artificiels (% sols imperméabilisés)')
+    .style(dataStyle)
+  ws.cell(row, thirdColumn).number(options.proportionSolsImpermeables * 100).style(integerStyle)
+  row++
+  Object.entries(options.agriculturalPracticesEstablishedAreas).forEach(([practice, area]) => {
+    const practiceInfo = AgriculturalPractices.find((ap) => ap.id === practice)
+    if (practiceInfo.name) {
+      ws.cell(row, secondColumn).string(practiceInfo.name).style(dataStyle)
+      ws.cell(row, thirdColumn).number(area).style(integerStyle)
+      row++
+    }
+  })
   row++
 
   // stocks

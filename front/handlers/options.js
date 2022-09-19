@@ -36,7 +36,7 @@ function parseOptionsFromQuery (query) {
 
   // prepare configuration to be passed to stocks and flux fetching
   const woodCalculation = query['répartition_produits_bois'] || 'récolte'
-  let proportionSolsImpermeables = query['répartition_art_imp']
+  let proportionSolsImpermeables = query['répartition_art_imp'] || 80
   proportionSolsImpermeables = proportionSolsImpermeables ? (proportionSolsImpermeables / 100).toPrecision(2) : undefined
   return {
     areas: areaOverrides,
