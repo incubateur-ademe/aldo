@@ -112,6 +112,11 @@ async function excelExportHandler (req, res) {
   row++
 
   const parentGroundTypes = GroundTypes.filter((gt) => !gt.parentType)
+  const stockCellColumn = 'D'
+  let forestStockCell = null
+  const agriGroundStockCells = []
+  const otherGroundStockCells = []
+  let woodStockCell = null
   parentGroundTypes.forEach((gt, idx) => {
     ws.cell(row, secondColumn).string(gt.name)
     const stock = stocks[gt.stocksId]
@@ -125,6 +130,14 @@ async function excelExportHandler (req, res) {
       ws.cell(row, thirdColumn + 2).number(stock.stockPercentage)
     }
     ws.cell(row, thirdColumn + 3).bool(!!stock.hasModifications)
+    const cell = stockCellColumn + row.toString()
+    if (gt.stocksId === 'forêts') forestStockCell = cell
+    else if (gt.stocksId === 'produits bois') woodStockCell = cell
+    else if (gt.stocksId === 'sols artificiels' || gt.stocksId === 'zones humides') {
+      otherGroundStockCells.push(cell)
+    } else {
+      agriGroundStockCells.push(cell)
+    }
     row++
   })
   row++
@@ -177,21 +190,22 @@ async function excelExportHandler (req, res) {
   ws.cell(row, thirdColumn).string('Séquestration nette de dioxyde de carbone en TeqCO2')
   ws.cell(row, thirdColumn + 1).string('Année de référence')
   row++
+  const cToCo2e = '44 / 12'
   ws.cell(row, secondColumn).string('Forêt')
-  ws.cell(row, thirdColumn).number(0) // TODO: formula
+  ws.cell(row, thirdColumn).formula(`${cToCo2e} * ${forestStockCell}`)
   ws.cell(row, thirdColumn + 1).number(2018)
   row++
   ws.cell(row, secondColumn).string('Sols agricoles (terres cultivées et prairies)')
-  ws.cell(row, thirdColumn).number(0) // TODO: formula
+  ws.cell(row, thirdColumn).formula(`${cToCo2e} * (${agriGroundStockCells.join(' + ')})`)
   ws.cell(row, thirdColumn + 1).number(2018)
   row++
   ws.cell(row, secondColumn).string('Autres sols')
-  ws.cell(row, thirdColumn).number(0) // TODO: formula
+  ws.cell(row, thirdColumn).formula(`${cToCo2e} * (${otherGroundStockCells.join(' + ')})`)
   ws.cell(row, thirdColumn + 1).number(2018)
   row++
   // TODO: italicise
   ws.cell(row, secondColumn).string('Produits bois (hors cadre de dépôt)')
-  ws.cell(row, thirdColumn).number(0) // TODO: formula
+  ws.cell(row, thirdColumn).formula(`${cToCo2e} * ${woodStockCell}`)
   ws.cell(row, thirdColumn + 1).number(2018)
   row++
 
