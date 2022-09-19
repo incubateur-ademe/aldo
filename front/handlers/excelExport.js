@@ -209,10 +209,27 @@ async function excelExportHandler (req, res) {
   ws.cell(row, thirdColumn).formula(`${cToCo2e} * (${otherGroundStockCells.join(' + ')})`).style(integerStyle)
   ws.cell(row, thirdColumn + 1).number(2018).style(dataStyle)
   row++
-  // TODO: italicise
-  ws.cell(row, secondColumn).string('Produits bois (hors cadre de dépôt)')
-  ws.cell(row, thirdColumn).formula(`${cToCo2e} * ${woodStockCell}`).style(integerStyle)
-  ws.cell(row, thirdColumn + 1).number(2018).style(dataStyle)
+  const italics = wb.createStyle({
+    font: {
+      italics: true
+    }
+  })
+  const blueItalics = wb.createStyle({
+    font: {
+      italics: true,
+      color: inputBlue
+    }
+  })
+  const blueItalicsInteger = wb.createStyle({
+    numberFormat: '###,##0',
+    font: {
+      italics: true,
+      color: inputBlue
+    }
+  })
+  ws.cell(row, secondColumn).string('Produits bois (hors cadre de dépôt)').style(italics)
+  ws.cell(row, thirdColumn).formula(`${cToCo2e} * ${woodStockCell}`).style(blueItalicsInteger)
+  ws.cell(row, thirdColumn + 1).number(2018).style(blueItalics)
   row++
 
   // Occupation du sol (ha) du territoire en 2018 :
