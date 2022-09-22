@@ -325,7 +325,7 @@ function getSolsArtificielsException (location, options, from, to, clcAnnualChan
     }
     const changeSolsArbores = getAnnualSurfaceChange(location, options, from, 'sols artificiels arborés et buissonants')
     const changeArboresAndImpermeables = clcAnnualChange + changeSolsArbores
-    if (changeSolsArbores < 0.2 * changeArboresAndImpermeables) {
+    if (changeSolsArbores < estimatedPortionGreen * changeArboresAndImpermeables) {
       return changeArboresAndImpermeables * estimatedPortionImpermeable
     } else {
       return clcAnnualChange
@@ -343,15 +343,17 @@ function getSolsArtificielsException (location, options, from, to, clcAnnualChan
       }
     }
     const changeSolsArbores = getAnnualSurfaceChange(location, options, from, 'sols artificiels arborés et buissonants')
-    const changeSolsImpermeables = getAnnualSurfaceChange(location, options, from, 'sols artificiels imperméabilisés')
-    const changeArboresAndImpermeables = changeSolsImpermeables + changeSolsArbores
-    if (changeSolsArbores < 0.2 * changeArboresAndImpermeables) {
+    // TODO: why is clcAnnualChange here > impermeables when they use the same clcCodes ? test cultures 244000865
+    const changeArboresAndImpermeables = clcAnnualChange + changeSolsArbores
+    if (changeSolsArbores < estimatedPortionGreen * changeArboresAndImpermeables) {
       return changeArboresAndImpermeables * estimatedPortionGreen - changeSolsArbores
     } else {
       return 0
     }
+  } else if (to === 'sols artificiels arborés et buissonants') {
+    const none = ['sols artificiels arbustifs', 'prairies zones arborées', 'prairies zones arbustives', 'vergers', 'vignes', 'zones humides']
+    if (none.indexOf(from) > -1) return 0
   }
-  // arborés follows logic of other ground types - ie takes the sum of the original CLC values
 }
 
 // source: TODO. In tCO2/an

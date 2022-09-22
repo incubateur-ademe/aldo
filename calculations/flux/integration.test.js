@@ -344,31 +344,11 @@ test('take into account forest biomass changes', () => {
   expect(leafyToArtImp.value).toBeCloseTo(-131.6, 1)
 })
 
-// BJ 200071165
-// CY always blank
-// O blank ; AI 244900015
-// sols art tests
 test('a few different fluxes to sols artificiels', () => {
   let flux = getAnnualFluxes({ epci: getEpci('200071165', true) })
-  // TODO: check why table gives 134 and I get 133
-  expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(133, 0)
-  // const values = {
-  //   'sols artificiels imperméabilisés': 0,
-  //   'sols artificiels arborés et buissonants': 0,
-  //   'sols artificiels arbustifs': 0
-  // }
-  // flux = getAnnualFluxes({ epci: getEpci('244000865', true) })
-  // flux.allFlux.forEach((f) => {
-  //   if (f.to in values && f.gas === 'C') {
-  //     values[f.to] += f.value
-  //   }
-  //   if (f.to === 'sols artificiels arbustifs') {
-  //     console.log(f)
-  //   }
-  // })
-  // console.log(values)
+  expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(134, 0)
+  flux = getAnnualFluxes({ epci: getEpci('244000865', true) })
   expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(-6126, 0)
-  // NB Flux_C:F174 sum wrong
   flux = getAnnualFluxes({ epci: getEpci('244900015', true) })
   expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(-1759, 0)
 })

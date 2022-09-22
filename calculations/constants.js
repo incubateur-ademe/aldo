@@ -79,7 +79,7 @@ module.exports = {
       color: 'gris',
       fluxId: 'art_enh',
       // these codes are used in flux biomasse calcs but not sols
-      clcCodes: ['112', '121', '122', '124', '131', '132', '133', '142']
+      clcCodes: ['111', '112', '121', '122', '123', '124', '131', '132', '133', '142']
     },
     {
       stocksId: 'sols artificiels imperméabilisés',
