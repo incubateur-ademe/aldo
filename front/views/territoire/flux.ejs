@@ -109,8 +109,8 @@
                   <!-- Prairies, sols artificiels -->
                   <% for (const child of groundType.children) { %>
                     <% if(hasData(child)) { %>
-                      // TODO: use display name not stocksId here
-                      <p class="fr-text--sm">Vers <%= child %>&nbsp;:</p>
+                      <% const childName = allGroundTypes.find((g) => g.stocksId === child).name.toLowerCase() %>
+                      <p class="fr-text--sm">Vers <%= childName %>&nbsp;:</p>
                       <%- include('fluxCalculations/simple', { groundType: child }) -%>
                     <% } %>
                   <% } %>
