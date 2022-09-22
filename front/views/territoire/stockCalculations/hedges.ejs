@@ -1,0 +1,30 @@
+<p class="fr-text--sm fr-mb-1w">Comment est-ce calculé&nbsp;?</p>
+<p>Les stocks de carbone dans le sol sont inclus dans les stocks reliés aux occupations du sol.</p>
+<br />
+<p>Stocks&nbsp;:</p>
+<p class="fr-container formula fr-my-2w">
+  <span class="captioned-value fr-col-3">
+    <span class="v fr-text--lg"><%= round(stock.totalDensity) %> tC/ha</span>
+    <span class="c fr-text--sm">biomasse</span>
+  </span>
+  <span class="fr-col-1" style="text-align: center;">x</span>
+  <span class="captioned-value fr-col-3">
+    <input
+      class="fr-input fr-text--lg"
+      type="number"
+      inputmode="numeric"
+      min="0"
+      placeholder="<%= round(stock.originalArea) %>"
+      value="<%= stock.areaModified ? round(stock.area) : undefined %>"
+      id="surface-haies"
+      name="surface_haies"
+    >
+    <label class="fr-label fr-text--sm" for="surface-haies">surface (ha)</label>
+  </span>
+  <span class="fr-col-1" style="text-align: center;">≈</span>
+  <span class="fr-col-3 fr-text--lg"><%= round(stock.totalReservoirStock) %> tC</span>
+</p>
+<br />
+<button class="fr-btn" type="submit">
+  Mettre à jour la surface
+</button>

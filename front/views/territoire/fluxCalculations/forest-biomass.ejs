@@ -1,9 +1,10 @@
 <p class="fr-text--sm fr-mb-1w fr-mt-2w">
   Les flux annuels liés à l'accroissement de la biomasse en forêts&nbsp;:
 </p>
-<table>
+<table class="fr-table fr-table--blue-cumulus">
   <thead>
     <th class="fr-text--xs">Composition</th>
+    <th class="fr-text--xs">Réservoir</th>
     <th class="fr-text--xs">Flux unitaire (tCO<sub>2</sub>e/ha.an)</th>
     <th class="fr-text--xs">Surface (ha)</th>
     <th class="fr-text--xs">Flux (tCO<sub>2</sub>e/an)</th>
@@ -13,6 +14,7 @@
     <% for( const detail of forestBiomassFlux ) { %>
       <tr>
         <td><%= allGroundTypes.find(gt => gt.stocksId === detail.to).shortName.toLowerCase() %></td>
+        <td style="text-align: right;"><%= detail.reservoir %></td>
         <td style="text-align: right;"><%= detail.fluxEquivalent !== undefined ? formatNumber(detail.fluxEquivalent, 1) : '-' %></td>
         <td style="text-align: right;"><%= detail.area %></td>
         <td style="text-align: right;"><%= formatNumber(detail.co2e) %></td>

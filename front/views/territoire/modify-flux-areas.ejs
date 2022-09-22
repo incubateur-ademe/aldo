@@ -1,14 +1,19 @@
-<div class="fr-col-12 fr-pr-md-1w fr-table">
+<div class="fr-col-12 fr-pr-md-1w fr-table fr-mt-8w">
   <table>
-    <caption><h2>Changements de surface (ha)</h2></caption>
+    <caption>
+      <h2>Changements de surface (ha)</h2>
+      <p class="fr-text--sm fr-mt-2w" style="font-weight: normal;">
+        Les surfaces d’occupation du sol sont issues des inventaires Corine Land Cover 2012 et 2018. Vous pouvez les mettre à jour ci-dessous si vous avez des données locales.
+      </p>
+    </caption>
     <thead>
       <tr>
         <td></td>
-        <th colspan="<%= fluxIds.length %>" class="fr-pb-0">Occupation de sol finale</th>
+        <th colspan="<%= fluxIds.length %>" class="fr-pb-0">Occupation du sol finale</th>
       </tr>
       <tr>
         <th style="font-weight: normal;" scope="col">
-          Occupation de sol initiale
+          Occupation du sol initiale
         </th>
         <% for( const to of fluxIds ) { %>
           <th scope="col" class="flux-surface-col"><%= allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to).name %></th>
@@ -19,7 +24,7 @@
       <% for( const from of fluxIds ) { %>
         <tr>
           <% const fromDetail = allGroundTypes.find(gt => gt.altFluxId === from || gt.fluxId === from) %>
-          <th scope="row"><%= fromDetail.name %></th>
+          <th scope="row" style="font-weight: normal;"><%= fromDetail.name %></th>
           <% for( const to of fluxIds ) { %>
             <td>
               <% if (from !== to) { %>
@@ -45,6 +50,11 @@
     </tbody>
   </table>
   <button class="fr-btn fr-mt-2w" type="submit" formaction="/territoire/flux">
-    Mettre à jour les surfaces
+    Mettre à jour les changements de surface
   </button>
+  <% if (fluxHaveModifications) { %>
+    <a class="fr-btn fr-btn--secondary fr-ml-2w" href="/territoire/flux<%= resetQueryStr %>">
+      Réinitialiser
+    </a>
+  <% } %>
 </div>

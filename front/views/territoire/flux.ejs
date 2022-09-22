@@ -1,12 +1,32 @@
-<div class="fr-grid-row fr-mt-3w">
-  <div class="fr-col-12 fr-col-md-7 fr-pr-md-1w fr-table">
-    <table>
-      <caption><h2>Flux de carbone</h2></caption>
+<div>
+  <h2>Flux de carbone</h2>
+  <p class="fr-text--sm">Bases de changement CLC 2012 2018 & Inventaire forestier IGN 2012 2016</p>
+  <div class="fr-col-12 fr-col-md-8 fr-col-lg-6 fr-pb-2w">
+    <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
+      <% for (let keyIdx=0; keyIdx < Object.keys(fluxCharts).length; keyIdx++) { %>
+        <li>
+          <section class="fr-accordion">
+            <h3 class="fr-accordion__title">
+              <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
+                aria-controls="accordion-flux-chart-<%= keyIdx %>">
+                <%= fluxCharts[Object.keys(fluxCharts)[keyIdx]].title %>
+              </button>
+            </h3>
+            <div class="fr-collapse" id="accordion-flux-chart-<%= keyIdx %>">
+              <canvas id="fluxChart-<%= Object.keys(fluxCharts)[keyIdx] %>" width="400" height="500"></canvas>
+            </div>
+          </section>
+        </li>
+        <% } %>
+    </ul>
+  </div>
+  <div class="fr-table fr-col-12 fr-col-lg-9 fr-pr-md-1w fr-mt-2w">
+    <table class="detail-table">
+      <caption>Flux de carbone par occupation du sol finale</caption>
       <thead>
-        <tr class="expandable-row-header stocks-row">
+        <tr class="expandable-row-header flux-row">
           <th scope="col">Occupation du sol finale</th>
-          <th scope="col">Sequestration tCO<sub>2</sub>e / an</th>
-          <td scope="col"></td>
+          <th scope="col">Sequestration tCO<sub>2</sub>e&nbsp;/&nbsp;an</th>
           <td scope="col"></td>
           <td scope="col"></td>
         </tr>
@@ -14,6 +34,7 @@
       <tbody>
         <% for( let index=0; index < sortedFluxKeys.length; index++ ) { %>
           <% const groundType = sortedFluxKeys[index] %>
+          <% if (groundType.stocksId === 'haies') continue %>
           <% const thisFlux = fluxSummary[groundType.stocksId] %>
           <!-- TODO: make row blue if area modified -->
           <tr class="expandable-row flux-row">
@@ -27,7 +48,7 @@
                 <i>Pas de données</i>
               <% } %>
             </td>
-            <td onClick='toggleRow(this)'>
+            <td onClick='toggleRow(this)' style="text-align: center;">
               <% if (!thisFlux || Math.abs(thisFlux.totalSequestration) < 0.5) { %>
                 <!-- no change -->
               <% } else if (thisFlux.totalSequestration > 0) { %>
@@ -67,7 +88,6 @@
                     Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %>&nbsp;:
                   </p>
                   <%- include('fluxCalculations/simple', { groundType: groundType.stocksId }) -%>
-                  <br />
                 <% } %>
                 <% if (hasFluxFromAgriculturalPractices) { %>
                   <p class="fr-text--sm fr-mb-1w fr-mt-2w">
@@ -77,15 +97,20 @@
                 <% } %>
               <% } else if(groundType.stocksId !== 'forêts') { %>
                 <% if (hasFluxFromAreaChange) { %>
-                  <p class="fr-text--sm fr-mb-1w">
-                    Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %> sont séparés par sous-type.
-                  </p>
+                  <% function hasData(child) {
+                    return Math.abs(fluxSummary[child]?.totalSequestration) > 0.5
+                  }
+                  const hasDataForMultipleChildren = groundType.children.filter(child => hasData(child)).length > 1 %>
+                  <% if (hasDataForMultipleChildren) { %>
+                    <p class="fr-text--sm fr-mb-1w">
+                      Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %> sont séparés par sous-typologie.
+                    </p>
+                  <% } %>
                   <!-- Prairies, sols artificiels -->
                   <% for (const child of groundType.children) { %>
-                    <% if(!Math.abs(fluxSummary[child]?.totalSequestration) < 0.5) { %>
-                      <p class="fr-text--sm fr-mb-1w">Vers <%= child %>&nbsp;:</p>
+                    <% if(hasData(child)) { %>
+                      <p class="fr-text--sm">Vers <%= child %>&nbsp;:</p>
                       <%- include('fluxCalculations/simple', { groundType: child }) -%>
-                      <br/>
                     <% } %>
                   <% } %>
                 <% } %>
@@ -121,27 +146,7 @@
     <% } else { %>
       <p class="fr-text--sm fr-mt-1w">Mettez à jour vos pratiques agricoles pour voir comment elles influencent les flux dans votre térritoire avec l'onglet « Pratiques agricoles ».</p>
     <% } %>
-    <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/flux/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">Lire plus de nos méthodes de calcul</a></p>
-  </div>
-  <div class="fr-col-12 fr-col-sm-10 fr-col-md-5 fr-pt-6w">
-    <h3>Résultats graphiques</h3>
-    <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
-      <% for (let keyIdx=0; keyIdx < Object.keys(fluxCharts).length; keyIdx++) { %>
-        <li>
-          <section class="fr-accordion">
-            <h4 class="fr-accordion__title">
-              <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
-                aria-controls="accordion-flux-chart-<%= keyIdx %>">
-                <%= fluxCharts[Object.keys(fluxCharts)[keyIdx]].title %>
-              </button>
-            </h4>
-            <div class="fr-collapse" id="accordion-flux-chart-<%= keyIdx %>">
-              <canvas id="fluxChart-<%= Object.keys(fluxCharts)[keyIdx] %>" width="400" height="500"></canvas>
-            </div>
-          </section>
-        </li>
-        <% } %>
-    </ul>
+    <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/flux/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">En savoir plus sur les méthodes de calculs</a></p>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -149,7 +154,7 @@
 <script>
   Chart.register(ChartDataLabels);
   Chart.defaults.set('plugins.datalabels', {
-    anchor: 'end',
+    anchor: 'center',
     display: 'auto'
   });
 

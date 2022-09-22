@@ -1,12 +1,17 @@
+table.detail-table {
+  /* dsfr changes this to block, but want fixed width when expanding rows */
+  display: table;
+}
+
 tr.stocks-row {
   display: grid;
-  grid-template-columns: 1fr repeat(3, 0.9fr) 0.5fr;
+  grid-template-columns: 1fr 0.6fr 0.9fr 0.9fr 0.5fr;
   justify-content: flex-start;
 }
 
 tr.flux-row {
   display: grid;
-  grid-template-columns: 1fr repeat(2, 0.9fr) 0.3fr;
+  grid-template-columns: 0.9fr 0.7fr 1fr 0.3fr;
   justify-content: flex-start;
 }
 
@@ -15,7 +20,8 @@ tr.expandable-row {
 }
 
 tr.expandable-row:hover {
-  background-color: #E9EDFE !important;
+  /* blue-cumulus-950 */
+  background-color: #e6eefe !important;
 }
 
 .expanded-row-content {

@@ -1,13 +1,38 @@
-<div class="fr-grid-row fr-mt-3w">
-  <div class="fr-table fr-col-12 fr-col-md-6 fr-pr-md-1w">
-    <table>
-      <caption><h2>Stocks de carbone</h2></caption>
+<div>
+  <h2>Stocks de carbone</h2>
+  <p class="fr-text--sm">Bases de changement CLC 2012 2018 & Inventaire forestier IGN 2012 2016</p>
+  <!-- TODO: why does an anchor link break the table tabs? -->
+  <!-- <p class="fr-col-12 fr-mb-1w fr-text--sm"><a href="#tableur-stocks">Résultats détaillés</a></p> -->
+  <!-- TODO: test a11y of these charts -->
+  <div class="fr-col-12 fr-col-md-8 fr-col-lg-6 fr-pb-4w">
+    <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
+      <% for (let keyIdx=0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
+        <% const key = Object.keys(charts)[keyIdx] %> 
+        <li>
+          <section class="fr-accordion">
+            <h3 class="fr-accordion__title">
+              <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
+                aria-controls="accordion-chart-<%= keyIdx %>">
+                <%= charts[key].title %>
+              </button>
+            </h3>
+            <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
+              <canvas id="chart-<%= key %>" width="400" height="400"></canvas>
+            </div>
+          </section>
+        </li>
+        <% } %>
+    </ul>
+  </div>
+  <div class="fr-table fr-col-12 fr-col-lg-9 fr-pr-md-1w fr-mt-2w">
+    <table class="detail-table">
+      <caption>Stocks de carbone par occupation du sol</caption>
       <thead>
         <tr class="expandable-row-header stocks-row">
           <th scope="col">Occupation du sol</th>
           <th scope="col">Surface (ha)</th>
-          <th scope="col">Stocks carbone (tC)</th>
-          <th scope="col">Stocks proportion</th>
+          <th scope="col">Stocks de carbone (tC)</th>
+          <th scope="col">Stocks de carbone (%)</th>
           <td scope="col"></td>
         </tr>
       </thead>
@@ -24,7 +49,7 @@
               <% if (thisStock.area !==undefined) { %>
                 <%= formatNumber(thisStock.area) %>
               <% } else { %>
-                <i>Pas applicable</i>
+                <i title="Les stocks générés par l’usage de produits bois ne sont pas liés à une surface d’occupation du sol.">Pas applicable</i>
               <% } %>
             </td>
             <td onClick='toggleRow(this)' style="text-align: right;">
@@ -53,6 +78,8 @@
                 <%- include('stockCalculations/subtypes', {stocksId, stock: thisStock}) -%>
               <% } else if (stocksId === 'produits bois' ) { %>
                 <%- include('stockCalculations/wood', {stock: thisStock, woodCalculation }) -%>
+              <% } else if (stocksId === 'haies' ) { %>
+                <%- include('stockCalculations/hedges', {stock: thisStock }) -%>
               <% } %>
               <!-- indicate if sols artificiels proportion was changed ? -->
             </td>
@@ -62,30 +89,15 @@
     </table>
     <% if (stocksHaveModifications) { %>
       <p class="fr-text--sm fr-mt-1w">* Données modifiées</p>
+      <a class="fr-btn fr-btn--secondary fr-mt-1w" href="/territoire/stocks<%= resetQueryStr %>">
+        Réinitialiser les données
+      </a>
     <% } %>
-    <!-- TODO: reset stocks areas button -->
-    <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/stocks/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">Lire plus de nos méthodes de calcul</a></p>
-  </div>
-  <!-- TODO: test a11y of these charts -->
-  <div class="fr-col-12 fr-col-sm-10 fr-col-md-6 fr-pt-6w">
-    <h3>Résultats graphiques</h3>
-    <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
-      <% for (let keyIdx=0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
-        <li>
-          <section class="fr-accordion">
-            <h4 class="fr-accordion__title">
-              <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
-                aria-controls="accordion-chart-<%= keyIdx %>">
-                <%= charts[Object.keys(charts)[keyIdx]].title %>
-              </button>
-            </h4>
-            <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
-              <canvas id="chart-<%= Object.keys(charts)[keyIdx] %>" width="400" height="400"></canvas>
-            </div>
-          </section>
-        </li>
-        <% } %>
-    </ul>
+    <p class="fr-text--sm fr-mt-1w">
+      <a href="https://docs.datagir.ademe.fr/documentation-aldo/stocks/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">
+        En savoir plus sur les méthodes de calculs
+      </a>
+    </p>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -93,8 +105,11 @@
 <script>
   Chart.register(ChartDataLabels);
   Chart.defaults.set('plugins.datalabels', {
-    anchor: 'end',
-    display: 'auto'
+    anchor: 'center',
+    display(context) {
+      // don't show labels when value === 0. Important for pie charts when dataIndex of a 0 is higher than a later data with a value > 0
+      return context.dataset.data[context.dataIndex] > 0
+    }
   });
 
   const groundTypeCtx = document.getElementById('chart-groundType');
@@ -116,4 +131,8 @@
   const biomassCtx = document.getElementById('chart-biomass');
   const biomassChartData = JSON.parse(`<%- charts.biomass.data %>`);
   new Chart(biomassCtx, biomassChartData);
+
+  const groundTypeStackedCtx = document.getElementById('chart-groundTypeStacked');
+  const groundTypeStackedChartData = JSON.parse(`<%- charts.groundTypeStacked.data %>`);
+  new Chart(groundTypeStackedCtx, groundTypeStackedChartData);
 </script>

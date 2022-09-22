@@ -1,7 +1,7 @@
 {
   "name": "aldo",
   "version": "1.0.0",
-  "description": "Calculez le carbone stocké et ses flux sur votre territoire",
+  "description": "Calculer le stock et les flux de carbone sur votre territoire",
   "engines": {
     "node": "16"
   },
@@ -27,7 +27,9 @@
     "@etalab/decoupage-administratif": "^0.9.0-0",
     "@gouvfr/dsfr": "^1.2.1",
     "csvtojson": "^2.0.10",
+    "dotenv": "^16.0.1",
     "ejs": "^3.1.7",
+    "excel4node": "^1.8.0",
     "express": "^4.17.1"
   },
   "devDependencies": {

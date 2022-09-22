@@ -23,12 +23,12 @@ function getAnnualSurfaceChange (location, options, from, to) {
     const fromDetail = GroundTypes.find(ground => ground.stocksId === from)
     const toDetail = GroundTypes.find(ground => ground.stocksId === to)
     const key = `${fromDetail.altFluxId || fromDetail.fluxId}_${toDetail.altFluxId || toDetail.fluxId}`
-    if (overrides[key] || overrides[key] === 0) {
+    if (overrides[key] >= 0) {
       area = overrides[key]
     }
   }
   const originalArea = getAnnualSurfaceChangeData(location, options, from, to)
-  if (!area) {
+  if (area === undefined) {
     area = originalArea
   } else {
     areaModified = true

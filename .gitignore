@@ -3,3 +3,4 @@
 /notes
 .vscode/
 /data/dataByEpci/*.json
+.env
