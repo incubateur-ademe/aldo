@@ -1,101 +1,42 @@
 const path = require('path')
-const { getAnnualFluxes } = require('../../calculations/flux')
 const rootFolder = path.join(__dirname, '../../')
 const { epciList, getEpci } = require(path.join(rootFolder, './calculations/epcis'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
+const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
+const { parseOptionsFromQuery } = require('./options')
 
 async function territoryHandler (req, res) {
-  const tab = req.params.tab || 'stocks'
-  const epci = await getEpci(req.query.epci) || {}
   const epcis = await epciList()
-  let stocks, flux
-  const fluxDetail = {}
-  const agriculturalPracticeDetail = {}
-  const agroforestryStock = {}
-  const woodCalculation = req.query['répartition_produits_bois'] || 'récolte'
-  let proportionSolsImpermeables = req.query['répartition_art_imp']
-  proportionSolsImpermeables = proportionSolsImpermeables ? (proportionSolsImpermeables / 100).toPrecision(2) : undefined
-  let stocksHaveModifications = false
-  let fluxHaveModifications = false
-  const agriculturalPracticesEstablishedAreas = {}
-  if (epci.code) {
-    // stocks area overrides
-    const areaOverrides = {}
-    Object.keys(req.query).filter(key => key.startsWith('surface_')).forEach(key => {
-      const groundType = key.split('surface_')[1].replace(/_/g, ' ')
-      areaOverrides[groundType] = parseFloat(req.query[key])
-      if (!isNaN(areaOverrides[groundType])) {
-        stocksHaveModifications = true
-      }
-    })
-    // flux area overrides
-    const areaChangeOverrides = {}
-    Object.keys(req.query).filter(key => key.startsWith('change_')).forEach(key => {
-      const groundType = key.split('change_')[1]
-      areaChangeOverrides[groundType] = parseFloat(req.query[key])
-      if (!isNaN(areaChangeOverrides[groundType])) {
-        fluxHaveModifications = true
-      }
-    })
-    // agricultural practices area additions
-    Object.keys(req.query).filter(key => key.startsWith('ap_')).forEach(key => {
-      const practice = key.split('ap_')[1]
-      const id = AgriculturalPractices.find(ap => ap.url === practice)?.id
-      agriculturalPracticesEstablishedAreas[id] = parseFloat(req.query[key])
-      if (!isNaN(agriculturalPracticesEstablishedAreas[practice])) {
-        fluxHaveModifications = true
-      }
-    })
-    // agroforestry area and density additions
-    Object.keys(req.query).filter(key => key.startsWith('af_area_')).forEach(key => {
-      const groundType = key.split('af_area_')[1].replace(/_/g, ' ')
-      agroforestryStock[groundType] = {
-        area: parseFloat(req.query[key])
-      }
-    })
-    Object.keys(req.query).filter(key => key.startsWith('af_density_')).forEach(key => {
-      const groundType = key.split('af_density_')[1].replace(/_/g, ' ')
-      const density = parseFloat(req.query[key])
-      if (!agroforestryStock[groundType]) {
-        agroforestryStock[groundType] = { density }
-      } else {
-        agroforestryStock[groundType].density = density
-        stocksHaveModifications = true // both area and density need to be defined to impact original totalStock
-      }
-    })
-    const options = {
-      areas: areaOverrides,
-      areaChanges: areaChangeOverrides,
-      woodCalculation,
-      proportionSolsImpermeables,
-      agriculturalPracticesEstablishedAreas,
-      agroforestryStock
-    }
-    stocks = await getStocks({ epci }, options)
-    flux = getAnnualFluxes({ epci }, options)
-    flux.allFlux.forEach(f => {
-      if (f.value !== 0) {
-        if (f.practice) {
-          if (!agriculturalPracticeDetail[f.to]) {
-            agriculturalPracticeDetail[f.to] = []
-          }
-          agriculturalPracticeDetail[f.to].push(f)
-        } else {
-          if (!fluxDetail[f.to]) {
-            fluxDetail[f.to] = []
-          }
-          fluxDetail[f.to].push(f)
-        }
-      }
-    })
-  } else {
+  const epci = await getEpci(req.query.epci) || {}
+  if (!epci.code) {
     res.status(404)
     res.render('404', {
       epcis
     })
     return
   }
+  const options = parseOptionsFromQuery(req.query)
+  const stocks = await getStocks({ epci }, options)
+  const flux = getAnnualFluxes({ epci }, options)
+  const fluxDetail = {}
+  const agriculturalPracticeDetail = {}
+  flux.allFlux.forEach(f => {
+    if (f.value !== 0) {
+      if (f.practice) {
+        if (!agriculturalPracticeDetail[f.to]) {
+          agriculturalPracticeDetail[f.to] = []
+        }
+        agriculturalPracticeDetail[f.to].push(f)
+      } else {
+        if (!fluxDetail[f.to]) {
+          fluxDetail[f.to] = []
+        }
+        fluxDetail[f.to].push(f)
+      }
+    }
+  })
+  // ordering for display greatest stocks/flux (seq or emission) descending
   const groundTypes = GroundTypes.filter(type => !type.parentType)
   groundTypes.sort((a, b) => {
     const stockA = stocks[a.stocksId].totalStock
@@ -118,13 +59,29 @@ async function territoryHandler (req, res) {
       fluxIds.push(gt.altFluxId || gt.fluxId)
     }
   })
+  // these are the types that can be modified to customise the stocks calculations
+  const stocksGroundTypes = GroundTypes.filter(gt => !gt.children && gt.stocksId !== 'produits bois')
+  stocksGroundTypes.sort((a, b) => {
+    if (a.name > b.name) return 1
+    else if (a.name === b.name) return 0
+    else return -1
+  })
+  const resetQueryStr = options.stocksHaveModifications || options.fluxHaveModifications ? `?epci=${req.query.epci}` : undefined
+  // this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
+  let sharingQueryStr = `?epci=${req.query.epci}`
+  Object.keys(req.query).forEach(queryParam => {
+    if (req.query[queryParam] && queryParam !== 'epci') {
+      sharingQueryStr += `&${queryParam}=${req.query[queryParam]}`
+    }
+  })
   res.render('territoire', {
     pageTitle: `${epci.nom}`,
-    tab,
+    tab: req.params.tab || 'stocks',
     epcis,
     epci,
     groundTypes,
     allGroundTypes: GroundTypes,
+    stocksGroundTypes,
     stocks,
     charts: stocks && charts(stocks),
     formatNumber (number, sigFig = 0) {
@@ -139,25 +96,20 @@ async function territoryHandler (req, res) {
     pascalCase (text) {
       return text.replace(/ /g, '_')
     },
-    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides', 'haies'],
-    woodCalculation,
+    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides'],
     fluxSummary: flux?.summary,
     allFlux: flux?.allFlux,
     sortedFluxKeys,
     fluxCharts: fluxCharts(flux),
     fluxDetail,
-    stocksHaveModifications,
-    fluxHaveModifications,
-    proportionSolsImpermeables,
     fluxIds,
     stockTotal: stocks?.total,
     fluxTotal: flux?.total,
     agriculturalPractices: AgriculturalPractices,
-    agriculturalPracticesEstablishedAreas,
     agriculturalPracticeDetail,
-    agroforestryStock,
-    // TODO: ideally have the reset URL return to the tab the button was clicked from
-    resetUrl: stocksHaveModifications || fluxHaveModifications ? `${req._parsedUrl.pathname}?epci=${req.query.epci}` : undefined
+    resetQueryStr,
+    sharingQueryStr,
+    ...options
   })
 }
 
@@ -166,6 +118,9 @@ function charts (stocks) {
   const chartBorderColors = Object.values(Colours).map(c => c.main)
   const stocksPercentageLabels = []
   const stocksPercentageValues = []
+  const biomassValues = []
+  const groundValues = []
+  const forestLitterValues = []
   const groundAndLitterStocksValues = []
   const biomassStocksValues = []
   Object.keys(stocks).forEach(key => {
@@ -174,6 +129,9 @@ function charts (stocks) {
       stocksPercentageValues.push(stocks[key].stockPercentage)
       groundAndLitterStocksValues.push(stocks[key].groundAndLitterStockPercentage)
       biomassStocksValues.push(stocks[key].biomassStockPercentage)
+      biomassValues.push(Math.round(stocks[key].biomassStock / 1000))
+      groundValues.push(Math.round(stocks[key].groundStock / 1000))
+      forestLitterValues.push(Math.round(stocks[key].forestLitterStock / 1000))
     }
   })
   const stocksDensityLabels = Object.keys(stocks.byDensity).map(key => GroundTypes.find(k => k.stocksId === key)?.name)
@@ -226,6 +184,61 @@ function charts (stocks) {
                 text: 'Typologie d’occupation du sol',
                 display: true
               }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      })
+    },
+    groundTypeStacked: {
+      title: 'Ventilation du stock carbone par occupation du sol (tous réservoirs inclus)',
+      data: JSON.stringify({
+        type: 'bar',
+        data: {
+          labels: stocksPercentageLabels,
+          datasets: [
+            {
+              label: 'Sol',
+              data: groundValues,
+              backgroundColor: Colours.tournesol['950'],
+              borderColor: Colours.tournesol.main,
+              borderWidth: 2
+            },
+            {
+              label: 'Biomasse',
+              data: biomassValues,
+              backgroundColor: Colours.emeraude['950'],
+              borderColor: Colours.emeraude.main,
+              borderWidth: 2
+            },
+            {
+              label: 'Litière',
+              data: forestLitterValues,
+              backgroundColor: Colours.opera['950'],
+              borderColor: Colours.opera.main,
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          scales: {
+            y: {
+              title: {
+                text: 'Stocks de carbone (ktCO2e)',
+                display: true
+              },
+              stacked: true
+            },
+            x: {
+              title: {
+                text: 'Typologie d’occupation du sol',
+                display: true
+              },
+              stacked: true
             }
           },
           plugins: {

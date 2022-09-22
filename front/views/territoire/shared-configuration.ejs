@@ -16,8 +16,9 @@
     <p class="fr-text--sm">enherbés : <b><%= 100 - (proportionSolsImpermeables || 0.8) * 100 %> %</b></p>
   </div>
   <%- include('./wood-choice') -%>
+  <button class="fr-btn fr-mt-4w" type="submit" formaction="/territoire/<%= tab %>">
+    Mettre à jour le calcul
+  </button>
+  <%- include('./modify-stocks-areas') -%>
+  <%- include('./modify-flux-areas') -%>
 </div>
-<!-- the formaction here is not necessarily perfect but it's a bit better -->
-<button class="fr-btn" type="submit" formaction="/territoire/<%= tab %>">
-  Mettre à jour le calcul
-</button>

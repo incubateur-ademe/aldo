@@ -209,18 +209,6 @@ module.exports = {
       id: 'orchardsInterCoverCropping',
       url: 'couverts_vergers',
       groundType: 'vergers'
-    },
-    {
-      name: 'Semis direct continu',
-      id: 'directSowingContinuous',
-      url: 'semis_direct_continu',
-      groundType: 'cultures'
-    },
-    {
-      name: 'Semis direct avec labour quinquennal',
-      id: 'directSowingFiveYearWork',
-      url: 'semis_direct_labour',
-      groundType: 'cultures'
     }
   ],
   Colours: {
