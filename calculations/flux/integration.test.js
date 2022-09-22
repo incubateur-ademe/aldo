@@ -248,8 +248,10 @@ test('option to modify the areas changed', () => {
   expect(summary.prairies.totalSequestration).toBeCloseTo(-5332, 0)
   expect(summary['zones humides'].totalSequestration).toBeCloseTo(1112, 0)
   expect(summary.vergers.totalSequestration).toBeCloseTo(-14735, 0)
-  expect(summary.vignes.totalSequestration).toBeCloseTo(-45250, 0)
-  expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-58942, 0)
+  // NB: Flux_C:G101 & F173 were wrong
+  expect(summary.vignes.totalSequestration).toBeCloseTo(-43784, 0)
+  // NB: 4+ cells references for custom areas were wrong
+  expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-71247, 0)
   expect(summary['forêts'].totalSequestration).toBeCloseTo(-19010, 0)
   expect(summary['produits bois'].totalSequestration).toBeCloseTo(14223, 0)
 })
