@@ -20,7 +20,7 @@
       <tr>
         <td><%= allGroundTypes.find(gt => gt.stocksId === detail.to).shortName.toLowerCase() %></td>
         <td><%= detail.reservoir %></td>
-        <td style="text-align: right;"><%= detail.area %></td>
+        <td style="text-align: right;"><%= formatNumber(detail.area, 1) %></td>
         <td style="text-align: right;"><%= formatNumber(detail.growth, 2) %></td>
         <td style="text-align: right;"><%= formatNumber(detail.mortality, 2) %></td>
         <td style="text-align: right;"><%= formatNumber(detail.timberExtraction, 2) %></td>
