@@ -1,0 +1,42 @@
+<div class="fr-col-12 fr-pr-md-1w fr-table fr-mt-8w">
+  <table>
+    <caption>
+      <h2>Flux de carbone annuel moyen (tCO2e/an) du territoire</h2>
+      <p class="fr-text--sm fr-mt-2w" style="font-weight: normal;">
+        Pour la période entre 2012 et 2018
+      </p>
+    </caption>
+    <thead>
+      <tr>
+        <td></td>
+        <th colspan="<%= fluxIds.length %>" class="fr-pb-0">Occupation du sol finale</th>
+      </tr>
+      <tr>
+        <th style="font-weight: normal;" scope="col">
+          Occupation du sol initiale
+        </th>
+        <% for( const to of fluxIds ) { %>
+          <th scope="col" class="flux-surface-col"><%= allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to).name %></th>
+        <% } %>
+      </tr>
+    </thead>
+    <tbody>
+      <% for( const from of fluxIds ) { %>
+        <tr>
+          <% const fromDetail = allGroundTypes.find(gt => gt.altFluxId === from || gt.fluxId === from) %>
+          <th scope="row" style="font-weight: normal;"><%= fromDetail.name %></th>
+          <% for( const to of fluxIds ) { %>
+            <td>
+              <% if (from !== to) { %>
+                <% const toDetail = allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to) %>
+                <% let thisFlux = allFlux.filter(f => f.from === fromDetail.stocksId && f.to === toDetail.stocksId && f.gas === 'C') %>
+                <% thisFlux = thisFlux.length ? thisFlux[0] : undefined %>
+                <%= thisFlux?.co2e ? formatNumber(thisFlux.co2e, 1) : '-' %>
+              <% } %>
+            </td>
+          <% } %>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
