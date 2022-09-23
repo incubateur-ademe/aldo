@@ -78,7 +78,8 @@ module.exports = {
       parentType: 'sols artificiels',
       color: 'gris',
       fluxId: 'art_enh',
-      // these codes are used in flux biomasse calcs but not sols
+      // clcCodes for this and imperméabilisés the same because the area for flux
+      // goes through further calculations before being used to calculate flux
       clcCodes: ['111', '112', '121', '122', '123', '124', '131', '132', '133', '142']
     },
     {

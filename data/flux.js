@@ -343,17 +343,14 @@ function getSolsArtificielsException (location, options, from, to, clcAnnualChan
       }
     }
     const changeSolsArbores = getAnnualSurfaceChange(location, options, from, 'sols artificiels arborés et buissonants')
-    // TODO: why is clcAnnualChange here > impermeables when they use the same clcCodes ? test cultures 244000865
     const changeArboresAndImpermeables = clcAnnualChange + changeSolsArbores
     if (changeSolsArbores < estimatedPortionGreen * changeArboresAndImpermeables) {
       return changeArboresAndImpermeables * estimatedPortionGreen - changeSolsArbores
     } else {
       return 0
     }
-  } else if (to === 'sols artificiels arborés et buissonants') {
-    const none = ['sols artificiels arbustifs', 'prairies zones arborées', 'prairies zones arbustives', 'vergers', 'vignes', 'zones humides']
-    if (none.indexOf(from) > -1) return 0
   }
+  // arborés uses CLC change area
 }
 
 // source: TODO. In tCO2/an
