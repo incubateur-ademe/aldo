@@ -90,7 +90,7 @@ function getBiomassFlux (location, from, to) {
   }
 }
 
-function getToForestBiomassFlux (location, to) {
+function getForestBiomassDetail (location, to) {
   let data
   if (to === 'forêt peupleraie') {
     const csvFilePath = './dataByEpci/biomasse-forets-peupleraies.csv'
@@ -108,7 +108,15 @@ function getToForestBiomassFlux (location, to) {
   }
   const dataValue = data['BILAN_CARB (tC∙ha-1∙an-1)']
   if (dataValue) {
-    return parseFloat(dataValue)
+    return {
+      flux: parseFloat(dataValue),
+      // all but peupleraie use m3/ha
+      growth: parseFloat(data['PRODUCTION (m3∙ha-1)'] || data['PRODUCTION (m3∙ha-1∙an-1)']),
+      mortality: parseFloat(data['MORTALITE (m3∙ha-1∙an-1)']),
+      timberExtraction: parseFloat(data['PRELEVEMENT (m3∙ha-1∙an-1)']),
+      fluxMeterCubed: parseFloat(data['BILAN_M3 (m3∙ha-1∙an-1)']),
+      conversionFactor: parseFloat(data['Fexp (VOL -> CARB)'])
+    }
   }
 }
 
@@ -261,14 +269,20 @@ function getAllAnnualFluxes (location, options) {
   }
   const forestTypes = GroundTypes.filter(gt => gt.stocksId.startsWith('forêt '))
   for (const fType of forestTypes) {
-    const biomassFlux = getToForestBiomassFlux(location, fType.stocksId)
+    const biomassInfo = getForestBiomassDetail(location, fType.stocksId)
+    const biomassFlux = biomassInfo.flux
     if (biomassFlux !== undefined) {
       fluxes.push({
         to: fType.stocksId,
         flux: biomassFlux,
         fluxEquivalent: cToCo2e(biomassFlux),
         reservoir: 'biomasse',
-        gas: 'C'
+        gas: 'C',
+        growth: biomassInfo.growth,
+        mortality: biomassInfo.mortality,
+        timberExtraction: biomassInfo.timberExtraction,
+        fluxMeterCubed: biomassInfo.fluxMeterCubed,
+        conversionFactor: biomassInfo.conversionFactor
       })
     }
   }

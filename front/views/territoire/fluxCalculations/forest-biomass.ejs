@@ -5,8 +5,13 @@
   <thead>
     <th class="fr-text--xs">Composition</th>
     <th class="fr-text--xs">Réservoir</th>
-    <th class="fr-text--xs">Flux unitaire (tCO<sub>2</sub>e/ha.an)</th>
     <th class="fr-text--xs">Surface (ha)</th>
+    <th class="fr-text--xs">Accroissement biologique unitaire (m<sup>3</sup>/ha/an)</th>
+    <th class="fr-text--xs">Mortalité unitaire (m<sup>3</sup>/ha/an)</th>
+    <th class="fr-text--xs">Prélèvements de bois unitaire (m<sup>3</sup>/ha/an)</th>
+    <th class="fr-text--xs">Bilan total unitaire (m<sup>3</sup>/ha/an)</th>
+    <th class="fr-text--xs">Facteur de conversion (tC/m<sup>3</sup>)</th>
+    <th class="fr-text--xs">Flux total unitaire (tCO<sub>2</sub>e/ha/an)</th>
     <th class="fr-text--xs">Flux (tCO<sub>2</sub>e/an)</th>
   </thead>
   <tbody>
@@ -14,9 +19,14 @@
     <% for( const detail of forestBiomassFlux ) { %>
       <tr>
         <td><%= allGroundTypes.find(gt => gt.stocksId === detail.to).shortName.toLowerCase() %></td>
-        <td style="text-align: right;"><%= detail.reservoir %></td>
+        <td><%= detail.reservoir %></td>
+        <td style="text-align: right;"><%= formatNumber(detail.area, 1) %></td>
+        <td style="text-align: right;"><%= formatNumber(detail.growth, 2) %></td>
+        <td style="text-align: right;"><%= formatNumber(detail.mortality, 2) %></td>
+        <td style="text-align: right;"><%= formatNumber(detail.timberExtraction, 2) %></td>
+        <td style="text-align: right;"><%= formatNumber(detail.fluxMeterCubed, 2) %></td>
+        <td style="text-align: right;"><%= formatNumber(detail.conversionFactor, 2) %></td>
         <td style="text-align: right;"><%= detail.fluxEquivalent !== undefined ? formatNumber(detail.fluxEquivalent, 1) : '-' %></td>
-        <td style="text-align: right;"><%= detail.area %></td>
         <td style="text-align: right;"><%= formatNumber(detail.co2e) %></td>
       </tr>
     <% } %>
