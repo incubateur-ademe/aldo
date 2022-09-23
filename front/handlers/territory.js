@@ -104,11 +104,14 @@ async function territoryHandler (req, res) {
     fluxDetail,
     fluxIds,
     stockTotal: stocks?.total,
+    stockTotalEquivalent: stocks?.totalEquivalent,
     fluxTotal: flux?.total,
     agriculturalPractices: AgriculturalPractices,
     agriculturalPracticeDetail,
     resetQueryStr,
     sharingQueryStr,
+    beges: req.query.beges,
+    perimetre: req.query.perimetre,
     ...options
   })
 }

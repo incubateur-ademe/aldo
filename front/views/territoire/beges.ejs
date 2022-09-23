@@ -1,0 +1,35 @@
+<h2 class="fr-mt-4w">Comparaison au Bilan GES de Territoire - facultatif</h2>
+<label class="fr-label fr-mb-2w" for="beges">A l'année de référence 2018, le BEGES de Territoire est de :</label>
+<div style="display: flex;">
+  <input
+    class="fr-input fr-text--lg fr-col-4 fr-mr-1w"
+    type="number"
+    inputmode="numeric"
+    id="beges"
+    name="beges"
+    value="<%= beges %>"
+  >
+  <p class="fr-pt-1w fr-ml-1w">tCO2e</p>
+</div>
+<div class="fr-form-group">
+  <fieldset class="fr-fieldset">
+    <legend class="fr-fieldset__legend fr-text--regular" id='perimetre-legend'>
+      Périmètre :
+    </legend>
+    <div class="fr-fieldset__content">
+      <div class="fr-radio-group">
+        <input type="radio" id="reglementaire" name="perimetre" value="règlementaire" <%= perimetre === 'règlementaire' ? 'checked' : '' %>>
+        <label class="fr-label" for="reglementaire">règlementaire
+        </label>
+      </div>
+      <div class="fr-radio-group">
+        <input type="radio" id="complet" name="perimetre" value="complet" <%= perimetre === 'complet' ? 'checked' : '' %>>
+        <label class="fr-label" for="complet">complet
+        </label>
+      </div>
+    </div>
+  </fieldset>
+</div>
+<button class="fr-btn" type="submit" formaction="/territoire/<%= tab %>">
+  Valider
+</button>

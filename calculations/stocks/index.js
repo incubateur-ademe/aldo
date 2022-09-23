@@ -292,6 +292,8 @@ function getStocks (location, options) {
     }
   })
   stocks.total = stocksTotal
+  // carbon to CO2 equivalent
+  stocks.totalEquivalent = stocksTotal * 44 / 12
   return stocks
 }
 
