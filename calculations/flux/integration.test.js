@@ -318,7 +318,7 @@ test('can define areas for agricultural practices', () => {
   expect(practiceFlux.areaModified).toEqual(true)
 })
 
-test('take into account forest biomass changes', () => {
+test('take into account loss of forest biomass due to changes from forest ground types', () => {
   let flux = getAnnualFluxes({ epci: getEpci('243000643', true) })
   const mixToVineyard = flux.allFlux.filter(f => f.from === 'forêt mixte' && f.to === 'vignes')[0]
   expect(mixToVineyard.area).toBeCloseTo(0.9, 1)
@@ -346,11 +346,14 @@ test('take into account forest biomass changes', () => {
   expect(leafyToArtImp.value).toBeCloseTo(-131.6, 1)
 })
 
-test('a few different fluxes to sols artificiels', () => {
+test('flux for sols artificiels', () => {
+  // this location has a change from cultures to SA arborés
   let flux = getAnnualFluxes({ epci: getEpci('200071165', true) })
   expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(134, 0)
+  // this location tests changes to sols arbustifs
   flux = getAnnualFluxes({ epci: getEpci('244000865', true) })
   expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(-6126, 0)
+  // this location has a change to SA arborés from another SA subtype (133)
   flux = getAnnualFluxes({ epci: getEpci('244900015', true) })
   expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(-1759, 0)
 })
