@@ -349,6 +349,11 @@ function getSolsArtificielsException (location, options, from, to, clcAnnualChan
     } else {
       return 0
     }
+  } else if (to === 'sols artificiels arborés et buissonants') {
+    const none = ['sols artificiels arbustifs', 'prairies zones arborées', 'prairies zones arbustives', 'vergers', 'vignes', 'zones humides']
+    if (none.indexOf(from) > -1) {
+      return 0
+    }
   }
   // arborés uses CLC change area
 }
