@@ -73,13 +73,14 @@ module.exports = {
     },
     {
       stocksId: 'sols artificiels arbustifs',
-      name: 'Sols artificiels arbustifs',
-      // sometimes referred to as "sols artificiels enherbés" in spreadsheet
-      shortName: 'Arbustifs',
+      name: 'Sols artificiels enherbés et arbustifs',
+      shortName: 'Enherbés et arbustifs',
       parentType: 'sols artificiels',
       color: 'gris',
       fluxId: 'art_enh',
-      clcCodes: ['112', '121', '122', '124', '131', '132', '133', '142']
+      // clcCodes for this and imperméabilisés the same because the area for flux
+      // goes through further calculations before being used to calculate flux
+      clcCodes: ['111', '112', '121', '122', '123', '124', '131', '132', '133', '142']
     },
     {
       stocksId: 'sols artificiels imperméabilisés',
@@ -92,8 +93,8 @@ module.exports = {
     },
     {
       stocksId: 'sols artificiels arborés et buissonants',
-      name: 'Sols artificiels arborés et buissonants',
-      shortName: 'Arborés et buissonants',
+      name: 'Sols artificiels arborés',
+      shortName: 'Arborés',
       parentType: 'sols artificiels',
       color: 'gris',
       fluxId: 'art_arb',
@@ -121,6 +122,7 @@ module.exports = {
       shortName: 'Feuillu',
       parentType: 'forêts',
       color: 'bourgeon',
+      // TODO: 324 should be mixte
       clcCodes: ['311', '324']
     },
     {

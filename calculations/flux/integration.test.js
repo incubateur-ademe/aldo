@@ -16,8 +16,6 @@ test('returns expected number of entries for cultures litter changes', () => {
   expect(litter.length).toBe(1)
 })
 
-// TODO: make all flux have a value and a co2e value - sums are done on co2e
-
 // data-dependent tests
 test('returns expected flux for each prairies -> cultures ground changes', () => {
   const allFlux = getAnnualFluxes({ epci: getEpci('200007177', true) }).allFlux
@@ -46,7 +44,7 @@ test('returns all relevant carbon and N20 emissions for cultures', () => {
   const summary = getAnnualFluxes({ epci: getEpci('200007177', true) }).summary
   expect(summary.cultures.totalSequestration).toBeCloseTo(-2702.5, 1)
   const fluxes = getAnnualFluxes({ epci: getEpci('200000933', true) })
-  expect(fluxes.summary.cultures.totalSequestration).toBeCloseTo(-750, 0)
+  expect(fluxes.summary.cultures.totalSequestration).toBeCloseTo(-4150, 0)
 })
 
 test('returns correct total for vergers and vignes', () => {
@@ -55,13 +53,13 @@ test('returns correct total for vergers and vignes', () => {
   summary = getAnnualFluxes({ epci: getEpci('200015162', true) }).summary
   expect(summary.vignes.totalSequestration).toBeCloseTo(17, 0)
   // the following value is wrong in the spreadsheet, so my calculations break.
-  // summary = getAnnualFluxes({ epci: getEpci('200040798', true) }).summary
-  // expect(summary.vignes.totalSequestration).toBeCloseTo(-99, 0)
+  summary = getAnnualFluxes({ epci: getEpci('200040798', true) }).summary
+  expect(summary.vignes.totalSequestration).toBeCloseTo(0, 0)
 })
 
 test('returns correct total for all prairies', () => {
   const summary = getAnnualFluxes({ epci: getEpci('200015162', true) }).summary
-  expect(summary.prairies.totalSequestration).toBeCloseTo(-772, 0)
+  expect(summary.prairies.totalSequestration).toBeCloseTo(-3577, 0)
 })
 
 test('returns correct total for zones humides', () => {
@@ -77,9 +75,9 @@ test('returns correct total for sols artificiels', () => {
   const solsArt = flux.allFlux.filter(f => f.to.startsWith('sols'))
   expect(solsArt.filter(f => f.reservoir === 'sol').length).toBe(24)
   expect(solsArt.filter(f => f.reservoir === 'litière').length).toBe(10)
-  expect(solsArt.filter(f => f.reservoir === 'biomasse').length).toBe(21)
+  expect(solsArt.filter(f => f.reservoir === 'biomasse').length).toBe(30)
   expect(solsArt.filter(f => f.reservoir === 'sol et litière').length).toBe(1)
-  expect(solsArt.length).toBe(56)
+  expect(solsArt.length).toBe(65)
   expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-97, 0)
 })
 
@@ -121,10 +119,11 @@ test('returns detail by wood product category, with different keys depending on 
   expect(bo.co2e).toBeCloseTo(347, 0)
 })
 
-test('option to modify split of sols artificiels', () => {
-  const flux = getAnnualFluxes({ epci: getEpci('245700398', true) }, { proportionSolsImpermeables: 0.6 }).summary
-  expect(flux['sols artificiels'].totalSequestration).toBeCloseTo(-66, 0)
-})
+// can't rely on original table for this value because it doesn't take into account the proportion change in many equations
+// test('option to modify split of sols artificiels', () => {
+//   const flux = getAnnualFluxes({ epci: getEpci('245700398', true) }, { proportionSolsImpermeables: 0.6 }).summary
+//   expect(flux['sols artificiels'].totalSequestration).toBeCloseTo(-192, 0)
+// })
 
 test('option to modify the areas changed', () => {
   const areaChanges = {
@@ -241,7 +240,7 @@ test('option to modify the areas changed', () => {
   }
   const flux = getAnnualFluxes({ epci: getEpci('200043974', true) }, { areaChanges })
   const summary = flux.summary
-  expect(summary.cultures.totalSequestration).toBeCloseTo(-57156, 0)
+  expect(summary.cultures.totalSequestration).toBeCloseTo(-58440, 0)
   expect(summary.cultures.areaModified).toBe(true)
   const culturesFlux = flux.allFlux.filter(f => f.to === 'cultures' && !!f.area)
   expect(culturesFlux[0]).toHaveProperty('originalArea')
@@ -249,8 +248,10 @@ test('option to modify the areas changed', () => {
   expect(summary.prairies.totalSequestration).toBeCloseTo(-5332, 0)
   expect(summary['zones humides'].totalSequestration).toBeCloseTo(1112, 0)
   expect(summary.vergers.totalSequestration).toBeCloseTo(-14735, 0)
+  // NB: Flux_C:G101 & F173 were wrong
   expect(summary.vignes.totalSequestration).toBeCloseTo(-43784, 0)
-  expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-66720, 0)
+  // NB: 4+ cells references for custom areas were wrong
+  expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-71247, 0)
   expect(summary['forêts'].totalSequestration).toBeCloseTo(-19010, 0)
   expect(summary['produits bois'].totalSequestration).toBeCloseTo(14223, 0)
 })
@@ -273,17 +274,15 @@ test('option to set an area changed to 0', () => {
 
 test('total flux returned', () => {
   const flux = getAnnualFluxes({ epci: getEpci('200043974', true) })
-  expect(flux.summary.cultures.totalSequestration).toBeCloseTo(-467, 0)
+  expect(flux.summary.cultures.totalSequestration).toBeCloseTo(-1752, 0)
   expect(flux.summary.prairies.totalSequestration).toBeCloseTo(0, 0)
   expect(flux.summary['zones humides'].totalSequestration).toBeCloseTo(0, 0)
   expect(flux.summary.vergers.totalSequestration).toBeCloseTo(0, 0)
   expect(flux.summary.vignes.totalSequestration).toBeCloseTo(0, 0)
-  // Received difference:   1301.042160641411
-  // expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(-3976, 0)
+  expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(-7206, 0)
   expect(flux.summary.forêts.totalSequestration).toBeCloseTo(-21494, 0)
   expect(flux.summary['produits bois'].totalSequestration).toBeCloseTo(14223, 0)
-  // Received difference:   1300.773231537636
-  // expect(flux.total).toBeCloseTo(-11714.4, 1)
+  expect(flux.total).toBeCloseTo(-16229.2, 1)
   expect(flux).toHaveProperty('total') // TODO: replace this with a test of the value once errors in spreadsheet are fixed
 })
 
@@ -304,16 +303,14 @@ test('can define areas for agricultural practices', () => {
   })
   const summary = flux.summary
   expect(summary.cultures.totalSequestration).toBeCloseTo(148, 0)
-  // TODO: why the difference in this number and in the table?
-  expect(summary.prairies.totalSequestration).toBeCloseTo(-681, 0)
+  expect(summary.prairies.totalSequestration).toBeCloseTo(-3486, 0)
   expect(summary['zones humides'].totalSequestration).toBeCloseTo(0, 0)
   expect(summary.vergers.totalSequestration).toBeCloseTo(36, 0)
   expect(summary.vignes.totalSequestration).toBeCloseTo(40, 0)
-  // TODO: why the difference
-  expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-443, 0)
+  expect(summary['sols artificiels'].totalSequestration).toBeCloseTo(-1006, 0)
   expect(summary['forêts'].totalSequestration).toBeCloseTo(123237, 0)
   expect(summary['produits bois'].totalSequestration).toBeCloseTo(16, 0)
-  expect(flux.total / 1000).toBeCloseTo(122.4, 1)
+  expect(flux.total).toBeCloseTo(118986.1, 1)
   // data format check
   const practiceFlux = flux.allFlux.find(f => f.practice === 'vineyardsInterCoverCropping')
   expect(practiceFlux.to).toEqual('vignes')
@@ -338,4 +335,44 @@ test('returns detail about the increase of biomass in forests by forest subtype'
   expect(poplarBiomass.timberExtraction).toBeCloseTo(14.11, 2)
   expect(poplarBiomass.fluxMeterCubed).toBeCloseTo(3.62, 2)
   expect(poplarBiomass.conversionFactor).toBeCloseTo(0.30, 2)
+})
+
+test('take into account loss of forest biomass due to changes from forest ground types', () => {
+  let flux = getAnnualFluxes({ epci: getEpci('243000643', true) })
+  const mixToVineyard = flux.allFlux.filter(f => f.from === 'forêt mixte' && f.to === 'vignes')[0]
+  expect(mixToVineyard.area).toBeCloseTo(0.9, 1)
+  expect(mixToVineyard.value).toBeCloseTo(-27.3, 1)
+  flux = getAnnualFluxes({ epci: getEpci('200000933', true) })
+  const leafyToCrop = flux.allFlux.filter(f => f.from === 'forêt feuillu' && f.to === 'cultures')[0]
+  expect(leafyToCrop.area).toBeCloseTo(9.8, 1)
+  expect(leafyToCrop.value).toBeCloseTo(-927.3, 1)
+  flux = getAnnualFluxes({ epci: getEpci('200072668', true) })
+  const conifereToPArb = flux.allFlux.filter(f => f.from === 'forêt conifere' && f.to === 'prairies zones arbustives')[0]
+  expect(conifereToPArb.area).toBeCloseTo(3.5, 1)
+  expect(conifereToPArb.value).toBeCloseTo(-244.5, 1)
+  flux = getAnnualFluxes({ epci: getEpci('244000865', true) })
+  const coniferToArtificial = flux.allFlux.filter(f => f.from === 'forêt conifere' && f.to === 'sols artificiels arbustifs')[0]
+  expect(coniferToArtificial.area).toBeCloseTo(3.1, 1)
+  expect(coniferToArtificial.value).toBeCloseTo(-118.4, 1)
+  const coniferToArtImp = flux.allFlux.filter(f => f.from === 'forêt conifere' && f.to === 'sols artificiels imperméabilisés')[0]
+  expect(coniferToArtImp.area).toBeCloseTo(12.4, 1)
+  expect(coniferToArtImp.value).toBeCloseTo(-560.3, 1)
+  const leafyToArtArb = flux.allFlux.filter(f => f.from === 'forêt feuillu' && f.to === 'sols artificiels arbustifs')[0]
+  expect(leafyToArtArb.area).toBeCloseTo(0.45, 1)
+  expect(leafyToArtArb.value).toBeCloseTo(-29.7, 1)
+  const leafyToArtImp = flux.allFlux.filter(f => f.from === 'forêt feuillu' && f.to === 'sols artificiels imperméabilisés')[0]
+  expect(leafyToArtImp.area).toBeCloseTo(1.8, 1)
+  expect(leafyToArtImp.value).toBeCloseTo(-131.6, 1)
+})
+
+test('flux for sols artificiels', () => {
+  // this location has a change from cultures to SA arborés
+  let flux = getAnnualFluxes({ epci: getEpci('200071165', true) })
+  expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(134, 0)
+  // this location tests changes to sols arbustifs
+  flux = getAnnualFluxes({ epci: getEpci('244000865', true) })
+  expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(-6126, 0)
+  // this location has a change to SA arborés from another SA subtype (133)
+  flux = getAnnualFluxes({ epci: getEpci('244900015', true) })
+  expect(flux.summary['sols artificiels'].totalSequestration).toBeCloseTo(-1759, 0)
 })
