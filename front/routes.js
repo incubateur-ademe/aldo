@@ -21,6 +21,14 @@ router.get('/epci/:epci', territoryHandler)
 router.get('/epci/:epci/tableur', excelExportHandler)
 router.get('/epci/:epci/:tab', territoryHandler)
 
+router.get('*', async (req, res) => {
+  const epcis = await epciList()
+  res.status(404)
+  res.render('404', {
+    epcis
+  })
+})
+
 // TODO: complete and add the following back in
 // router.get('/contact', (req, res) => {
 //   res.render('contact', {

@@ -5,26 +5,7 @@
     <div class="fr-py-6w">
       <h1>Calculer le stock et les flux de carbone sur votre territoire</h1>
 
-      <div class="fr-container-fluid fr-my-6w">
-        <div class="fr-grid-row fr-grid-row--gutters">
-          <form method="GET" class="fr-col-12 fr-col-md-8">
-            <div class="fr-search-bar fr-search-bar--lg" id="search-2" role="search">
-              <label class="fr-label" for="epci-search">
-                Nom/SIREN de l'EPCI
-              </label>
-              <input class="fr-input" placeholder="Taper le nom ou SIREN de l'EPCI..." type="search" id="epci-search" name="epci" list="epci-names" required>
-              <button class="fr-btn" title="Rechercher" type="submit">
-                Rechercher
-              </button>
-              <datalist id="epci-names">
-                <% for (let index = 0; index < epcis.length; index++) {%>
-                  <option value="<%= epcis[index].code %>"><%= epcis[index].nom %> (<%= epcis[index].code %>)</option>
-                <%} %>
-              </datalist>
-            </div>
-          </form>
-        </div>
-      </div>
+      <%- include('partials/search-lg') -%>
     </div>
 
     <h2>Aldo : qu'est-ce que c'est ?</h2>

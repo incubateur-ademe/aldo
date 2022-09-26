@@ -12,8 +12,9 @@ async function territoryHandler (req, res) {
   const epci = await getEpci(req.params.epci, true) || {}
   if (!epci.code) {
     res.status(404)
-    res.render('404', {
-      epcis
+    res.render('404-epci', {
+      epcis,
+      attemptedSearch: req.params.epci
     })
     return
   }

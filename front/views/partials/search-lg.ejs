@@ -1,0 +1,21 @@
+<div class="fr-container-fluid fr-my-6w">
+  <div class="fr-grid-row fr-grid-row--gutters">
+    <form action="/" method="GET" class="fr-col-12 fr-col-md-8">
+      <div class="fr-search-bar fr-search-bar--lg" id="search-2" role="search">
+        <label class="fr-label" for="epci-search">
+          Nom/SIREN de l'EPCI
+        </label>
+        <input class="fr-input" placeholder="Taper le nom ou SIREN de l'EPCI..." type="search" id="epci-search" name="epci" list="epci-names" required>
+        <button class="fr-btn" title="Rechercher" type="submit">
+          Rechercher
+        </button>
+        <datalist id="epci-names">
+          <% for (let index = 0; index < epcis.length; index++) {%>
+            <option value="<%= epcis[index].code %>"><%= epcis[index].nom %> (<%= epcis[index].code %>)</option>
+          <%} %>
+        </datalist>
+      </div>
+    </form>
+  </div>
+  <p class="fr-text--xs fr-mt-1w">Nous utilisons les noms d'EPCI de la fin de 2018</p>
+</div>
