@@ -1,16 +1,16 @@
+const franceData = require('./dataByEpci/france.json')
 
 function epciList () {
-  const epcis = require('./dataByEpci/epci.csv.json')
-  const communes = require('./dataByEpci/communes_17122018.csv.json')
-  epcis.forEach(epci => {
-    epci.populationTotale = parseInt(epci.populationTotale, 10)
-    epci.membres = communes.filter((c) => c.epci === epci.code).map((c) => c.commune)
+  return Object.values(franceData.epcis).map((epci) => {
+    return {
+      code: epci.code,
+      nom: epci.nom
+    }
   })
-  return epcis
 }
 
-function getPopulationTotal (epcis) {
-  return epcis.reduce((total, epci) => total + epci.populationTotale, 0)
+function getPopulationTotal () {
+  return franceData.totalPopulation
 }
 
 module.exports = {

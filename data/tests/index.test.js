@@ -8,8 +8,3 @@ test('returns EPCI list', () => {
 test('returns population total for EPCIs in system', () => {
   expect(getPopulationTotal(epciList())).toBe(65705495)
 })
-
-test('EPCI communes are included', () => {
-  const list = epciList()
-  expect(list[0].membres).toBeDefined()
-})

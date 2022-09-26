@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const rootFolder = path.join(__dirname, '../')
-const { epciList } = require(path.join(rootFolder, './calculations/epcis'))
+const { epciList } = require(path.join(rootFolder, './data'))
 const { territoryHandler } = require('./handlers/territory')
 const { excelExportHandler } = require('./handlers/excelExport')
 
@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     res.redirect('/epci/' + req.query.epci)
   } else {
     res.render('landing', {
-      epcis: await epciList()
+      epcis: epciList()
     })
   }
 })

@@ -5,12 +5,12 @@ const {
 const {
   getFranceFluxWoodProducts
 } = require('../../data/flux')
-const { epciList, getPopulationTotal } = require('../../data')
+const { getPopulationTotal } = require('../../data')
 
 // TODO: refactor shared concepts between flux and stocks
 
 function getFluxByConsumption (location) {
-  const popTotal = getPopulationTotal(epciList())
+  const popTotal = getPopulationTotal()
   const epciPop = location.epci.populationTotale
   const proportion = epciPop / popTotal
   const franceFlux = getFranceFluxWoodProducts()

@@ -2,5 +2,5 @@
 .DS_Store
 /notes
 .vscode/
-/data/dataByEpci/*.json
+/data/dataByEpci/*.csv.json
 .env

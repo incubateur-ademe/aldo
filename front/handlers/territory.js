@@ -1,6 +1,7 @@
 const path = require('path')
 const rootFolder = path.join(__dirname, '../../')
-const { epciList, getEpci } = require(path.join(rootFolder, './calculations/epcis'))
+const { getEpci } = require(path.join(rootFolder, './calculations/epcis'))
+const { epciList } = require(path.join(rootFolder, './data'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
