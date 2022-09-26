@@ -27,11 +27,11 @@
       </div>
     <% } %>
   </div>
-  <button class="fr-btn fr-mt-2w" type="submit" formaction="/territoire/stocks">
+  <button class="fr-btn fr-mt-2w" type="submit" formaction="<%= baseUrl %>/stocks">
     Mettre à jour les surfaces
   </button>
   <% if (stocksHaveModifications) { %>
-    <a class="fr-btn fr-btn--secondary fr-md-ml-2w fr-mt-2w fr-md-mt-0" href="/territoire/stocks<%= resetQueryStr %>">
+    <a class="fr-btn fr-btn--secondary fr-md-ml-2w fr-mt-2w fr-md-mt-0" href="<%= baseUrl %>/stocks<%= resetQueryStr %>">
       Réinitialiser
     </a>
   <% } %>

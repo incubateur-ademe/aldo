@@ -169,10 +169,11 @@ test('returns carbon density by ground type for a valid EPCI', () => {
 })
 
 test('returns EPCI information for name and other info where present', () => {
-  const info = getEpci('CC Faucigny-Glières')
-  expect(info.code).toBe('200000172')
-  expect(info.membres).toBeDefined()
-  expect(info.populationTotale).toBe(27164)
+  // this EPCI has changed since 2018, so this tests that the communes are being found from older data
+  const info = getEpci('CC Le Grésivaudan')
+  expect(info.code).toBe('200018166')
+  expect(info.membres.length).toBeGreaterThan(0)
+  expect(info.populationTotale).toBe(104039)
 })
 
 test('option to modify split of sols artificiels', () => {

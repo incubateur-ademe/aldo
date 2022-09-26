@@ -1,6 +1,7 @@
 const path = require('path')
 const rootFolder = path.join(__dirname, '../../')
-const { epciList, getEpci } = require(path.join(rootFolder, './calculations/epcis'))
+const { getEpci } = require(path.join(rootFolder, './calculations/epcis'))
+const { epciList } = require(path.join(rootFolder, './data'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
@@ -8,7 +9,7 @@ const { parseOptionsFromQuery } = require('./options')
 
 async function territoryHandler (req, res) {
   const epcis = await epciList()
-  const epci = await getEpci(req.query.epci) || {}
+  const epci = await getEpci(req.params.epci, true) || {}
   if (!epci.code) {
     res.status(404)
     res.render('404', {
@@ -66,9 +67,9 @@ async function territoryHandler (req, res) {
     else if (a.name === b.name) return 0
     else return -1
   })
-  const resetQueryStr = options.stocksHaveModifications || options.fluxHaveModifications ? `?epci=${req.query.epci}` : undefined
+  const resetQueryStr = options.stocksHaveModifications || options.fluxHaveModifications ? '?' : undefined
   // this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
-  let sharingQueryStr = `?epci=${req.query.epci}`
+  let sharingQueryStr = '?'
   Object.keys(req.query).forEach(queryParam => {
     if (req.query[queryParam] && queryParam !== 'epci') {
       sharingQueryStr += `&${queryParam}=${req.query[queryParam]}`
@@ -108,6 +109,7 @@ async function territoryHandler (req, res) {
     fluxTotal: flux?.total,
     agriculturalPractices: AgriculturalPractices,
     agriculturalPracticeDetail,
+    baseUrl: `/epci/${epci.code}`,
     resetQueryStr,
     sharingQueryStr,
     beges: req.query.beges,

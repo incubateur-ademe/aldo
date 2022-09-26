@@ -1,13 +1,16 @@
+const franceData = require('./dataByEpci/france.json')
 
 function epciList () {
-  const csvFilePath = './dataByEpci/epci.csv'
-  const epcis = require(csvFilePath + '.json')
-  epcis.forEach(epci => { epci.populationTotale = parseInt(epci.populationTotale) }, 10)
-  return epcis
+  return Object.values(franceData.epcis).map((epci) => {
+    return {
+      code: epci.code,
+      nom: epci.nom
+    }
+  })
 }
 
-function getPopulationTotal (epcis) {
-  return epcis.reduce((total, epci) => total + epci.populationTotale, 0)
+function getPopulationTotal () {
+  return franceData.totalPopulation
 }
 
 module.exports = {

@@ -3,14 +3,14 @@ const {
   getAnnualWoodProductsHarvest,
   getAnnualFranceWoodProductsHarvest
 } = require('../../data/stocks')
-const { epciList, getPopulationTotal } = require('../../data')
+const { getPopulationTotal } = require('../../data')
 
 function co2ToCarbon (co2) {
   return co2 * 12 / 44
 }
 
 function getStocksByConsumption (location) {
-  const popTotal = getPopulationTotal(epciList())
+  const popTotal = getPopulationTotal()
   const epciPop = location.epci.populationTotale
   const proportion = epciPop / popTotal
   const franceStocks = getFranceStocksWoodProducts()
