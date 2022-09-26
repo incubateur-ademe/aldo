@@ -46,7 +46,7 @@
           <div class="fr-header__search fr-modal" id="modal-851">
             <div class="fr-container fr-container-lg--fluid">
               <button class="fr-link--close fr-link" aria-controls="modal-851">Fermer</button>
-              <form action="/territoire" method="GET">
+              <form action="/" method="GET">
                 <div class="fr-search-bar" id="search-850" role="search">
                   <label class="fr-label" for="search-850-input">Nom EPCI</label>
                   <input class="fr-input" placeholder="Nom EPCI" type="search" id="search-850-input" name="epci" list="epci-names" required>
@@ -55,7 +55,7 @@
                   </button>
                   <datalist id="epci-names">
                     <% for (let index = 0; index < epcis.length; index++) {%>
-                      <option value="<%= epcis[index].nom %>"><%= epcis[index].nom %></option>
+                      <option value="<%= epcis[index].code %>"><%= epcis[index].nom %> (<%= epcis[index].code %>)</option>
                     <%} %>
                   </datalist>
                 </div>

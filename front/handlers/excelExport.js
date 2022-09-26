@@ -9,7 +9,7 @@ const { parseOptionsFromQuery } = require('./options')
 
 async function excelExportHandler (req, res) {
   // prepare data
-  const epci = await getEpci(req.query.epci) || {}
+  const epci = await getEpci(req.params.epci, true) || {}
   if (!epci.code) {
     res.status(404)
     return
@@ -63,7 +63,7 @@ async function excelExportHandler (req, res) {
   ws.cell(row, secondColumn)
     .string('Lien')
   ws.cell(row, thirdColumn)
-    .link(`${process.env.PROTOCOL.toLowerCase()}://${process.env.HOSTNAME}/territoire${req._parsedUrl.search}`, 'Outil Aldo en ligne')
+    .link(`${process.env.PROTOCOL.toLowerCase()}://${process.env.HOSTNAME}/epci/${epci.code}?${req._parsedUrl.search}`, 'Outil Aldo en ligne')
   row++
   ws.cell(row, secondColumn)
     .string('Date d\'export')
@@ -76,7 +76,7 @@ async function excelExportHandler (req, res) {
   if (epci.membres?.length) {
     epci.membres.forEach(commune => {
       ws.cell(row, thirdColumn)
-        .string(commune.nom)
+        .string(commune)
         .style(dataStyle)
       row++
     })

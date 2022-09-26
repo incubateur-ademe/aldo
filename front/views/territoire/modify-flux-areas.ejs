@@ -49,11 +49,11 @@
       <% } %>
     </tbody>
   </table>
-  <button class="fr-btn fr-mt-2w" type="submit" formaction="/territoire/flux">
+  <button class="fr-btn fr-mt-2w" type="submit" formaction="<%= baseUrl %>/flux">
     Mettre à jour les calculs
   </button>
   <% if (fluxHaveModifications) { %>
-    <a class="fr-btn fr-btn--secondary fr-ml-2w" href="/territoire/flux<%= resetQueryStr %>">
+    <a class="fr-btn fr-btn--secondary fr-ml-2w" href="<%= baseUrl %>/flux<%= resetQueryStr %>">
       Réinitialiser
     </a>
   <% } %>

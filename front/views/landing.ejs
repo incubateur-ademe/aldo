@@ -7,18 +7,18 @@
 
       <div class="fr-container-fluid fr-my-6w">
         <div class="fr-grid-row fr-grid-row--gutters">
-          <form action="/territoire/stocks" method="GET" class="fr-col-12 fr-col-md-8">
+          <form method="GET" class="fr-col-12 fr-col-md-8">
             <div class="fr-search-bar fr-search-bar--lg" id="search-2" role="search">
               <label class="fr-label" for="epci-search">
-                  Nom EPCI
+                Nom EPCI
               </label>
               <input class="fr-input" placeholder="Taper le nom de l'EPCI..." type="search" id="epci-search" name="epci" list="epci-names" required>
-              <button class="fr-btn" title="Rechercher">
-                  Rechercher
+              <button class="fr-btn" title="Rechercher" type="submit">
+                Rechercher
               </button>
               <datalist id="epci-names">
                 <% for (let index = 0; index < epcis.length; index++) {%>
-                  <option value="<%= epcis[index].nom %>"><%= epcis[index].nom %></option>
+                  <option value="<%= epcis[index].code %>"><%= epcis[index].nom %> (<%= epcis[index].code %>)</option>
                 <%} %>
               </datalist>
             </div>

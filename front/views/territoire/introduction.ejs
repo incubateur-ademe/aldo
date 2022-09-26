@@ -16,7 +16,7 @@
       Imprimer cette page
     </button>
     <p class="fr-mt-2w">
-      <a href="/territoire/tableur<%= sharingQueryStr %> " download>Télécharger en format Excel</a>
+      <a href="<%= baseUrl %>/tableur<%= sharingQueryStr %> " download>Télécharger en format Excel</a>
     </p>
   </div>
 </div>
@@ -34,7 +34,7 @@
           <% for( let index=0; index < epci.membres.length; index++ ) { %>
             <div class="fr-col-12 fr-sm-col-6 fr-col-md-4">
               <li>
-                <%= epci.membres[index].nom %>
+                <%= epci.membres[index] %>
               </li>
             </div>
             <% } %>
@@ -71,7 +71,7 @@
     </p>
   <% } else { %>
     <p class="fr-text--xs">
-      Ajoutez le Bilan GES de Territoire dans <a href="/territoire/configuration<%= sharingQueryStr %> ">l'onglet configuration</a>.
+      Ajoutez le Bilan GES de Territoire dans <a href="<%= baseUrl %>/configuration<%= sharingQueryStr %> ">l'onglet configuration</a>.
     </p>
   <% } %>
 </div>
