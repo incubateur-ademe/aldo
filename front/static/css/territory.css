@@ -55,21 +55,3 @@ tr.expandable-row:hover {
 th.flux-surface-col {
   min-width: 9em;
 }
-
-@media print {
-  header {
-    display: none;
-  }
-
-  .no-print {
-    display: none;
-  }
-
-  footer {
-    display: none;
-  }
-
-  .fr-collapse {
-    display: block;
-  }
-}

@@ -3,7 +3,7 @@
 </h1>
 
 <div class="fr-grid-row">
-  <div class="fr-col-12 fr-col-md-2">
+  <div class="fr-col-12 fr-col-md-3">
     <p>
       SIREN : <%= epci.code %>
     </p>
@@ -11,12 +11,9 @@
       Population : <%= formatNumber(epci.populationTotale) %>
     </p>
   </div>
-  <div class="fr-col no-print" style="text-align: right;">
-    <button onclick="window.print()" class="fr-btn fr-btn--secondary">
-      Imprimer cette page
-    </button>
+  <div class="fr-col" style="text-align: right;">
     <p class="fr-mt-2w">
-      <a href="<%= baseUrl %>/tableur<%= sharingQueryStr %> " download>Télécharger en format Excel</a>
+      <a href="<%= baseUrl %>/tableur<%= sharingQueryStr %> " download class="fr-btn fr-btn--secondary">Télécharger en format Excel</a>
     </p>
   </div>
 </div>
