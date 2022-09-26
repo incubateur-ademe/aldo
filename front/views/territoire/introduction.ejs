@@ -21,7 +21,7 @@
   </div>
 </div>
 
-<% if (epci.membres) { %>
+<% if (epci.membres.length) { %>
   <section class="fr-accordion">
     <p class="fr-accordion__title">
       <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-communes">
@@ -44,7 +44,7 @@
   </section>
 <% } else { %>
   <p>
-    <%= epci.nombreCommunes %> communes
+    <%= epci.nombreCommunes %> commune<%= epci.nombreCommunes === 1 ? '' : 's' %>
   </p>
 <% } %>
 <div class="fr-callout fr-my-3w">

@@ -13,12 +13,23 @@ const epciLookup = {
 }
 
 try {
+  let differencesCommuneCount = 0
+  console.log('difference de nombre de communes attendues et trouvées:')
   epcis.forEach(epci => {
     epci.populationTotale = parseInt(epci.populationTotale, 10)
+    epci.nombreCommunes = parseInt(epci.nombreCommunes, 10)
     epciLookup.epcis[epci.code] = epci
     epciLookup.epcis[epci.code].membres = communes.filter((c) => c.epci === epci.code).map((c) => c.commune)
+    if (epciLookup.epcis[epci.code].membres.length !== epci.nombreCommunes) {
+      console.log(epci.nom, epci.code)
+      console.log('attendu', epci.nombreCommunes)
+      console.log('trouvé', epciLookup.epcis[epci.code].membres.length)
+      differencesCommuneCount++
+    }
     epciLookup.totalPopulation += epci.populationTotale
   })
+  console.log(differencesCommuneCount, 'EPCIs with commune count differences')
+  console.log(Object.keys(epcis).length, 'EPCIs in total')
 
   // convert JSON object to a string
   const data = JSON.stringify(epciLookup, null, 2)
