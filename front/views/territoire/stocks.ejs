@@ -1,6 +1,7 @@
 <div>
   <h2>Stocks de carbone</h2>
-  <p class="fr-text--sm">Bases de changement CLC 2012 2018 & Inventaire forestier IGN 2012 2016</p>
+  <p class="fr-text--sm fr-mb-1w">Bases de changement CLC 2012 2018 & Inventaire forestier IGN 2012 2016</p>
+  <%- include('../partials/calculation-warning') -%>
   <!-- TODO: why does an anchor link break the table tabs? -->
   <!-- <p class="fr-col-12 fr-mb-1w fr-text--sm"><a href="#tableur-stocks">Résultats détaillés</a></p> -->
   <!-- TODO: test a11y of these charts -->
@@ -17,6 +18,9 @@
               </button>
             </h3>
             <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
+              <% if (charts[key].note) { %>
+                <p><%= charts[key].note %></p>
+              <% } %>
               <canvas id="chart-<%= key %>" width="400" height="400"></canvas>
             </div>
           </section>
