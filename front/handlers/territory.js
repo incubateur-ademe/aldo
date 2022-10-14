@@ -165,6 +165,7 @@ function charts (stocks) {
     biomass: pieChart('Répartition du stock de carbone par occupation du sol dans le réservoir Biomasse', stocksPercentageLabels, biomassStocksValues),
     density: {
       title: 'Stocks de référence par unité de surface et par occupation du sol',
+      note: 'Les stocks de référence pour les sols sont issus de données du Réseau de Mesures de la Qualité de Sols (RMQS) du GIS-SOL entre 2001 et 2011 et calculés par occupation du sol et par grande région pédoclimatique. La zone pédoclimatique majoritaire est affectée à l\'EPCI conformément aux travaux du CITEPA. Les stocks de référence à l\'ha dans la biomasse de forêt sont issus de l\'inventaire forestier de l\'IGN entre 2011 et 2020 et calculés par typologie de forêt et par grande région écologique.',
       data: JSON.stringify({
         type: 'bar',
         data: {
@@ -315,6 +316,7 @@ function fluxCharts (flux) {
     groundType: {
       title:
         'Flux de carbone (tCO2e/an) par occupation du sol, tous réservoirs confondus',
+      note: 'Les flux de référence pour les changements d’occupation des sols sont issus de données du Réseau de Mesures de la Qualité des Sols (RMQS) du GIS-SOL entre 2001 et 2011 et calculés par occupation du sol et par grande région pédoclimatique. La zone pédoclimatique majoritaire est affectée à l\'EPCI conformément aux travaux du CITEPA. Les flux de référence à l’ha dans la biomasse de forêt sont issus de l’inventaire forestier de l’IGN entre 2011 et 2020 et calculés par typologie de forêt et par grande région écologique. Les flux de référence pour les pratiques agricoles stockantes sont des valeurs moyennes nationales (travaux INRAE 2013).',
       data: JSON.stringify({
         type: 'bar',
         data: {

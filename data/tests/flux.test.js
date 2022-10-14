@@ -6,7 +6,7 @@ const {
 } = require('../flux')
 
 test('returns carbon flux in tC/(ha.year) for ground for given area and from -> to combination', () => {
-  expect(getAnnualGroundCarbonFlux({ epci: '200007177' }, 'prairies zones arborées', 'cultures')).toBeCloseTo(-14.8, 1)
+  expect(getAnnualGroundCarbonFlux({ epci: '200007177' }, 'prairies zones arborées', 'cultures')).toBeCloseTo(-14.8 / 20, 1)
 })
 
 test('returns all carbon flux in tc/(ha.year) for ground cultures', () => {
@@ -17,7 +17,7 @@ test('returns all carbon flux in tc/(ha.year) for ground cultures', () => {
   expect(cultureFluxes.length).toBe(7)
   expect(fluxes[0]).toHaveProperty('from')
   expect(fluxes[0]).toHaveProperty('to')
-  expect(fluxes[0]).toHaveProperty('flux')
+  expect(fluxes[0]).toHaveProperty('annualFlux')
 })
 
 test('returns all carbon flux in tc/(ha.year) for biomass cultures', () => {
@@ -27,7 +27,7 @@ test('returns all carbon flux in tc/(ha.year) for biomass cultures', () => {
   expect(cultureFluxes.length).toBe(9)
   expect(fluxes[0]).toHaveProperty('from')
   expect(fluxes[0]).toHaveProperty('to')
-  expect(fluxes[0]).toHaveProperty('flux')
+  expect(fluxes[0]).toHaveProperty('annualFlux')
 })
 
 test('returns annual? change in surface area', () => {

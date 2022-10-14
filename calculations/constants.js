@@ -153,10 +153,10 @@ module.exports = {
   ],
   AgriculturalPractices: [
     {
-      name: 'Allongement prairies temporaires (5 ans max)',
+      name: 'Intégration ou allongement de prairies temporaires dans les rotations de cultures',
       id: 'prairieExtension',
       url: 'allongement_prairies',
-      groundType: 'cultures' // TODO: double check with ABC this is the correct GT
+      groundType: 'cultures'
     },
     {
       name: 'Intensification modérée des prairies peu productives (hors alpages et estives)',

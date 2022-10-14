@@ -54,6 +54,8 @@ function getAnnualFluxes (location, options) {
     flux.area = area
     flux.areaModified = areaModified
     flux.originalArea = originalArea
+    flux.flux = flux.annualFlux
+    if (flux.yearsForFlux) flux.flux *= flux.yearsForFlux
     if (flux.to.startsWith('forêt ')) {
       flux.value = flux.flux * flux.area
     } else if (flux.reservoir === 'sol') {

@@ -1,19 +1,24 @@
 <div>
   <h2>Flux de carbone</h2>
-  <p class="fr-text--sm">Bases de changement CLC 2012 2018 & Inventaire forestier IGN 2012 2016</p>
+  <p class="fr-text--sm fr-mb-1w">Bases de changement CLC 2012 2018 & Inventaire forestier IGN 2012 2016</p>
+  <%- include('../partials/calculation-warning') -%>
   <div class="fr-col-12 fr-col-md-8 fr-col-lg-6 fr-pb-2w">
     <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
       <% for (let keyIdx=0; keyIdx < Object.keys(fluxCharts).length; keyIdx++) { %>
+        <% const chartKey = Object.keys(fluxCharts)[keyIdx]%>
         <li>
           <section class="fr-accordion">
             <h3 class="fr-accordion__title">
               <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
                 aria-controls="accordion-flux-chart-<%= keyIdx %>">
-                <%= fluxCharts[Object.keys(fluxCharts)[keyIdx]].title %>
+                <%= fluxCharts[chartKey].title %>
               </button>
             </h3>
             <div class="fr-collapse" id="accordion-flux-chart-<%= keyIdx %>">
-              <canvas id="fluxChart-<%= Object.keys(fluxCharts)[keyIdx] %>" width="400" height="500"></canvas>
+              <% if (fluxCharts[chartKey].note) { %>
+                <p><%= fluxCharts[chartKey].note %></p>
+              <% } %>
+              <canvas id="fluxChart-<%= chartKey %>" width="400" height="500"></canvas>
             </div>
           </section>
         </li>

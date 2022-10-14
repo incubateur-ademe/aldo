@@ -30,3 +30,11 @@ span.tofill::before {
   padding-top: 0.2rem;
   margin-left: 2rem;
 }
+.aldo-logo {
+  height: 5rem;
+  margin-top: 1rem;
+}
+.fr-header__service {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}

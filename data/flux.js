@@ -49,7 +49,7 @@ function getAnnualGroundCarbonFlux (location, from, to) {
   const data = dataByEpci.find(data => data.siren === location.epci)
   const dataValue = data[getGroundCarbonFluxKey(from, to)]
   if (dataValue) {
-    return parseFloat(dataValue) * multiplier('sol', from, to)
+    return parseFloat(dataValue)
   }
 }
 
@@ -86,7 +86,7 @@ function getBiomassFlux (location, from, to) {
   key = keyReplacements[key] || key
   const dataValue = data[key]
   if (dataValue) {
-    return parseFloat(dataValue) * multiplier('biomasse', from, to)
+    return parseFloat(dataValue)
   }
 }
 
@@ -126,8 +126,9 @@ function getFromForestBiomassFlux (location, from, to) {
   return getBiomassCarbonDensity(location, to) - getBiomassCarbonDensity(location, from)
 }
 
-// TODO: explainer for this
-function multiplier (reservoir, from, to) {
+// some flux data is annual, some is for the 20 year period. This function returns 1 or 20
+// depending on what is required to normalise the fluxs to the same tCO2e/ha.
+function yearMultiplier (reservoir, from, to) {
   const multiplier = 20
   if (reservoir === 'sol') {
     // order of statements is important (see below)
@@ -155,6 +156,11 @@ function multiplier (reservoir, from, to) {
       return 1
     }
   } else if (reservoir === 'biomasse') {
+    // not relevant for certain types
+    const ignore = ['produits bois', 'sols artificiels']
+    if (from.startsWith('forêt ') || to.startsWith('forêt ') || ignore.includes(from) || ignore.includes(to)) {
+      return
+    }
     // NB: the order here is very important, for example zones humides
     // always gives 20 except when going to sols imperméabilisés
     if (from === 'sols artificiels imperméabilisés') {
@@ -213,13 +219,15 @@ function getAllAnnualFluxes (location, options) {
         continue
       }
       if (fromGt.fluxId && toGt.fluxId) {
-        const groundFlux = getAnnualGroundCarbonFlux(location, from, to)
-        if (groundFlux !== undefined) {
+        const annualFlux = getAnnualGroundCarbonFlux(location, from, to)
+        const yearsForFlux = yearMultiplier('sol', from, to)
+        if (annualFlux !== undefined) {
           fluxes.push({
             from,
             to,
-            flux: groundFlux,
-            fluxEquivalent: cToCo2e(groundFlux),
+            annualFlux,
+            annualFluxEquivalent: cToCo2e(annualFlux),
+            yearsForFlux,
             reservoir: 'sol',
             gas: 'C'
           })
@@ -229,8 +237,8 @@ function getAllAnnualFluxes (location, options) {
           fluxes.push({
             from,
             to,
-            flux: litterFlux,
-            fluxEquivalent: cToCo2e(litterFlux),
+            annualFlux: litterFlux,
+            annualFluxEquivalent: cToCo2e(litterFlux),
             reservoir: 'litière',
             gas: 'C'
           })
@@ -239,12 +247,14 @@ function getAllAnnualFluxes (location, options) {
       const ignoreBiomass = ['prairies', 'haies', 'forêts']
       if (!ignoreBiomass.includes(from) && !ignoreBiomass.includes(to)) {
         const biomassFlux = getBiomassFlux(location, from, to)
+        const yearsForFlux = yearMultiplier('biomasse', from, to)
         if (biomassFlux !== undefined) {
           fluxes.push({
             from,
             to,
-            flux: biomassFlux,
-            fluxEquivalent: cToCo2e(biomassFlux),
+            annualFlux: biomassFlux,
+            annualFluxEquivalent: cToCo2e(biomassFlux),
+            yearsForFlux,
             reservoir: 'biomasse',
             gas: 'C'
           })
@@ -258,8 +268,8 @@ function getAllAnnualFluxes (location, options) {
           fluxes.push({
             from,
             to,
-            flux: biomassFlux,
-            fluxEquivalent: cToCo2e(biomassFlux),
+            annualFlux: biomassFlux,
+            annualFluxEquivalent: cToCo2e(biomassFlux),
             reservoir: 'biomasse',
             gas: 'C'
           })
@@ -274,8 +284,8 @@ function getAllAnnualFluxes (location, options) {
     if (biomassFlux !== undefined) {
       fluxes.push({
         to: fType.stocksId,
-        flux: biomassFlux,
-        fluxEquivalent: cToCo2e(biomassFlux),
+        annualFlux: biomassFlux,
+        annualFluxEquivalent: cToCo2e(biomassFlux),
         reservoir: 'biomasse',
         gas: 'C',
         growth: biomassInfo.growth,

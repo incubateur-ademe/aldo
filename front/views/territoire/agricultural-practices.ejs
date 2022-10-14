@@ -9,11 +9,12 @@
       </p>
     </div>
   </div>
+  <%- include('../partials/calculation-warning') -%>
   <fieldset class="fr-container fr-pb-3w">
     <legend class="fr-mb-1w">Surface implantée depuis moins de 20 ans</legend>
     <div class="fr-grid-row">
       <% for(practice of agriculturalPractices) { %>
-        <div class="fr-col-12 fr-col-md-6">
+        <div class="fr-col-12 fr-col-md-5">
           <label class="fr-label fr-text--sm fr-mb-1w" for="ap_<%= practice.url %>"><%= practice.name %></label>
           <div class="fr-grid-row fr-grid-row--middle">
             <input
