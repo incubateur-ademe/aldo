@@ -26,7 +26,7 @@
         <td style="text-align: right;"><%= formatNumber(detail.timberExtraction, 2) %></td>
         <td style="text-align: right;"><%= formatNumber(detail.fluxMeterCubed, 2) %></td>
         <td style="text-align: right;"><%= formatNumber(detail.conversionFactor, 2) %></td>
-        <td style="text-align: right;"><%= detail.fluxEquivalent !== undefined ? formatNumber(detail.fluxEquivalent, 1) : '-' %></td>
+        <td style="text-align: right;"><%= detail.annualFluxEquivalent !== undefined ? formatNumber(detail.annualFluxEquivalent, 1) : '-' %></td>
         <td style="text-align: right;"><%= formatNumber(detail.co2e) %></td>
       </tr>
     <% } %>

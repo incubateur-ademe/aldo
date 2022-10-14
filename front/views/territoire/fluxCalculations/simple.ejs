@@ -3,7 +3,8 @@
     <th class="fr-text--xs">Occupation initiale</th>
     <th class="fr-text--xs">Reservoir</th>
     <th class="fr-text--xs">Gas</th>
-    <th class="fr-text--xs">Flux unitaire (tCO<sub>2</sub>e/ha)</th>
+    <th class="fr-text--xs">Flux unitaire annuel (tCO<sub>2</sub>e/ha/an)</th>
+    <th class="fr-text--xs">Nombre d'années concernées</th>
     <th class="fr-text--xs">Surface moyenne convertie (ha/an)</th>
     <th class="fr-text--xs">Flux (tCO<sub>2</sub>e/an)</th>
   </thead>
@@ -14,7 +15,8 @@
           <td><%= detail.from %></td>
           <td><%= detail.reservoir || '-' %></td>
           <td><%= detail.gas %></td>
-          <td style="text-align: right;"><%= detail.fluxEquivalent !== undefined ? formatNumber(detail.fluxEquivalent, 1) : '-' %></td>
+          <td style="text-align: right;"><%= detail.annualFluxEquivalent !== undefined ? formatNumber(detail.annualFluxEquivalent, 1) : '-' %></td>
+          <td style="text-align: right;"><%= detail.yearsForFlux !== undefined ? detail.yearsForFlux : '-' %></td>
           <td style="text-align: right;"><%= detail.area !== undefined ? formatNumber(detail.area, 1) : '-' %><%= detail.areaModified ? ' *' : '' %></td>
           <td style="text-align: right;"><%= formatNumber(detail.co2e) %></td>
         </tr>
