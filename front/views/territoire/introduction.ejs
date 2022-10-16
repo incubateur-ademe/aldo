@@ -47,14 +47,14 @@
 <div class="fr-callout fr-my-3w">
   <p class="fr-callout__title fr-mb-1w">
     Une <%= fluxTotal > 0 ? "séquestration" : "émission" %>
-    de carbone de
+    nette de carbone de
     <%= formatNumber(Math.abs(fluxTotal)/1000, 1) %> ktCO<sub>2</sub>e / an
     et un stock total de
     <%= formatNumber(stockTotal/1000000, 1) %> MtC,
     à préserver !
   </p>
   <p class="fr-callout__text fr-mb-1w">
-    Si tout ce stock de carbone était réémis vers l'atmosphère, cela représenterait
+    Si tout ce stock de carbone était réémis vers l'atmosphère, cela représenterait une émission de
     <%= formatNumber(stockTotalEquivalent/1000) %> ktCO2e.
     À ce jour, il y a une <%= fluxTotal > 0 ? "augmentation" : "réduction" %> de
     <%= formatNumber(Math.abs(fluxTotal)/stockTotal * 100, 1) %> % du stock par an.
