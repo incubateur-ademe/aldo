@@ -117,11 +117,6 @@ async function excelExportHandler (req, res) {
   row++
 
   const parentGroundTypes = GroundTypes.filter((gt) => !gt.parentType)
-  const stockCellColumn = 'D'
-  let forestStockCell = null
-  const agriGroundStockCells = []
-  const otherGroundStockCells = []
-  let woodStockCell = null
   parentGroundTypes.forEach((gt, idx) => {
     ws.cell(row, secondColumn).string(gt.name)
     const stock = stocks[gt.stocksId]
@@ -137,14 +132,6 @@ async function excelExportHandler (req, res) {
     ws.cell(row, thirdColumn + 3)
       .formula(stock.areaModified ? '=TRUE()' : '=FALSE()') // bool(true) wasn't working when tested in LibreOffice
       .style(dataStyle)
-    const cell = stockCellColumn + row.toString()
-    if (gt.stocksId === 'forêts') forestStockCell = cell
-    else if (gt.stocksId === 'produits bois') woodStockCell = cell
-    else if (gt.stocksId === 'sols artificiels' || gt.stocksId === 'zones humides') {
-      otherGroundStockCells.push(cell)
-    } else {
-      agriGroundStockCells.push(cell)
-    }
     row++
   })
   row++
@@ -157,6 +144,11 @@ async function excelExportHandler (req, res) {
   ws.cell(row, thirdColumn + 2).string('Modifié par l\'utilisateur ?')
   row++
 
+  const fluxCellColumn = 'C'
+  let forestFluxCell = null
+  const agriGroundFluxCells = []
+  const otherGroundFluxCells = []
+  let woodFluxCell = null
   parentGroundTypes.forEach((gt, idx) => {
     if (gt.stocksId === 'haies') return
     ws.cell(row, secondColumn).string(gt.name)
@@ -181,6 +173,14 @@ async function excelExportHandler (req, res) {
         .formula(fluxSummary.areaModified ? '=TRUE()' : '=FALSE()')
         .style(dataStyle)
     }
+    const cell = fluxCellColumn + row.toString()
+    if (gt.stocksId === 'forêts') forestFluxCell = cell
+    else if (gt.stocksId === 'produits bois') woodFluxCell = cell
+    else if (gt.stocksId === 'sols artificiels' || gt.stocksId === 'zones humides') {
+      otherGroundFluxCells.push(cell)
+    } else {
+      agriGroundFluxCells.push(cell)
+    }
     row++
   })
 
@@ -196,18 +196,18 @@ async function excelExportHandler (req, res) {
   ws.cell(row, thirdColumn).string('Séquestration nette de dioxyde de carbone en TeqCO2')
   ws.cell(row, thirdColumn + 1).string('Année de référence')
   row++
-  const cToCo2e = '44 / 12'
+  const yearReference = 'Moyenne annuelle 2012-2018'
   ws.cell(row, secondColumn).string('Forêt')
-  ws.cell(row, thirdColumn).formula(`${cToCo2e} * ${forestStockCell}`).style(integerStyle)
-  ws.cell(row, thirdColumn + 1).number(2018).style(dataStyle)
+  ws.cell(row, thirdColumn).formula(`${forestFluxCell}`).style(integerStyle)
+  ws.cell(row, thirdColumn + 1).string(yearReference).style(dataStyle)
   row++
   ws.cell(row, secondColumn).string('Sols agricoles (terres cultivées et prairies)')
-  ws.cell(row, thirdColumn).formula(`${cToCo2e} * (${agriGroundStockCells.join(' + ')})`).style(integerStyle)
-  ws.cell(row, thirdColumn + 1).number(2018).style(dataStyle)
+  ws.cell(row, thirdColumn).formula(`${agriGroundFluxCells.join(' + ')}`).style(integerStyle)
+  ws.cell(row, thirdColumn + 1).string(yearReference).style(dataStyle)
   row++
   ws.cell(row, secondColumn).string('Autres sols')
-  ws.cell(row, thirdColumn).formula(`${cToCo2e} * (${otherGroundStockCells.join(' + ')})`).style(integerStyle)
-  ws.cell(row, thirdColumn + 1).number(2018).style(dataStyle)
+  ws.cell(row, thirdColumn).formula(`${otherGroundFluxCells.join(' + ')}`).style(integerStyle)
+  ws.cell(row, thirdColumn + 1).string(yearReference).style(dataStyle)
   row++
   const italics = wb.createStyle({
     font: {
@@ -227,9 +227,9 @@ async function excelExportHandler (req, res) {
       color: inputBlue
     }
   })
-  ws.cell(row, secondColumn).string('Produits bois (hors cadre de dépôt)').style(italics)
-  ws.cell(row, thirdColumn).formula(`${cToCo2e} * ${woodStockCell}`).style(blueItalicsInteger)
-  ws.cell(row, thirdColumn + 1).number(2018).style(blueItalics)
+  ws.cell(row, secondColumn).string('Produits bois (facultatif pour le cadre de dépôt)').style(italics)
+  ws.cell(row, thirdColumn).formula(`${woodFluxCell}`).style(blueItalicsInteger)
+  ws.cell(row, thirdColumn + 1).string(yearReference).style(blueItalics)
   row++
 
   // Occupation du sol (ha) du territoire en 2018 :
