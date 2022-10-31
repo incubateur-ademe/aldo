@@ -1,4 +1,4 @@
-<h1>
+<h1 class="fr-mt-6w">
   <%= epci.nom %>
 </h1>
 
@@ -19,30 +19,30 @@
 </div>
 
 <% if (epci.membres.length) { %>
-  <section class="fr-accordion">
-    <p class="fr-accordion__title">
-      <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-communes">
-        <%= epci.membres.length %> communes
-      </button>
-    </p>
-    <div class="fr-collapse" id="accordion-communes">
-      <ul>
-        <div class="fr-grid-row">
-          <% for( let index=0; index < epci.membres.length; index++ ) { %>
-            <div class="fr-col-12 fr-sm-col-6 fr-col-md-4">
-              <li>
-                <%= epci.membres[index] %>
-              </li>
-            </div>
-            <% } %>
-        </div>
-      </ul>
-    </div>
-  </section>
-<% } else { %>
-  <p>
-    <%= epci.nombreCommunes %> commune<%= epci.nombreCommunes === 1 ? '' : 's' %>
+<section class="fr-accordion">
+  <p class="fr-accordion__title">
+    <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-communes">
+      <%= epci.membres.length %> communes
+    </button>
   </p>
+  <div class="fr-collapse" id="accordion-communes">
+    <ul>
+      <div class="fr-grid-row">
+        <% for( let index=0; index < epci.membres.length; index++ ) { %>
+        <div class="fr-col-12 fr-sm-col-6 fr-col-md-4">
+          <li>
+            <%= epci.membres[index] %>
+          </li>
+        </div>
+        <% } %>
+      </div>
+    </ul>
+  </div>
+</section>
+<% } else { %>
+<p>
+  <%= epci.nombreCommunes %> commune<%= epci.nombreCommunes === 1 ? '' : 's' %>
+</p>
 <% } %>
 <div class="fr-callout fr-my-3w">
   <p class="fr-callout__title fr-mb-1w">
@@ -60,15 +60,15 @@
     <%= formatNumber(Math.abs(fluxTotal)/stockTotal * 100, 1) %> % du stock par an.
   </p>
   <% if (beges) { %>
-    <p>
-      À titre de comparaison, ce flux de carbone
-      <%= fluxTotal > 0 ? "séquetre" : "émet" %>
-      <%= formatNumber(fluxTotal/beges * 100) %> % du BEGES<%= perimetre ? ` ${perimetre}` : '' %>,
-      donc de ce qui est émit chaque année par le territoire.
-    </p>
+  <p>
+    À titre de comparaison, ce flux de carbone
+    <%= fluxTotal > 0 ? "séquetre" : "émet" %>
+    <%= formatNumber(fluxTotal/beges * 100) %> % du BEGES<%= perimetre ? ` ${perimetre}` : '' %>,
+    donc de ce qui est émit chaque année par le territoire.
+  </p>
   <% } else { %>
-    <p class="fr-text--xs">
-      Ajoutez le Bilan GES de Territoire dans <a href="<%= baseUrl %>/configuration<%= sharingQueryStr %> ">l'onglet configuration</a>.
-    </p>
+  <p class="fr-text--xs">
+    Ajoutez le Bilan GES de Territoire dans <a href="<%= baseUrl %>/configuration<%= sharingQueryStr %> ">l'onglet configuration</a>.
+  </p>
   <% } %>
 </div>

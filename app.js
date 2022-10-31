@@ -8,6 +8,10 @@ const appRepo = 'https://github.com/datagir/aldo'
 
 const app = express()
 
+app.use(express.urlencoded({
+  extended: true
+}))
+
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, './front/views'))
 

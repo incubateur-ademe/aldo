@@ -1,73 +1,68 @@
 <%- include('../partials/search-header') -%>
-  <main role="main" id="contenu">
-    <div class="fr-container fr-py-6w fr-px-2w">
-
-      <% if (epci.code) { %>
-        <%- include('./introduction') -%>
-        <form action="<%= baseUrl %>/stocks" method="GET" class="fr-tabs fr-mt-4w" id="territory">
-          <input type="hidden" name="epci" value="<%= epci.nom %>" />
-          <ul class="fr-tabs__list" role="tablist" aria-label="Données du territoire">
-            <li role="presentation">
-              <button type="button" id="tabpanel-stocks" class="fr-tabs__tab" tabindex="0" role="tab" aria-selected="<%=tab === 'stocks'%>" aria-controls="tabpanel-stocks-panel" data-fr-js-tab-button="true">Stocks</button>
-            </li>
-            <li role="presentation">
-              <button type="button" id="tabpanel-flux" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="<%=tab === 'flux'%>" aria-controls="tabpanel-flux-panel" data-fr-js-tab-button="true">Flux</button>
-            </li>
-            <li role="presentation">
-              <button type="button" id="tabpanel-agricultural-practices" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="false" aria-controls="tabpanel-agricultural-practices-panel" data-fr-js-tab-button="true">
-                Pratiques agricoles
-              </button>
-            </li>
-            <li role="presentation">
-              <button type="button" id="tabpanel-config" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="<%=tab === 'configuration'%>" aria-controls="tabpanel-config-panel" data-fr-js-tab-button="true">Configuration</button>
-            </li>
-          </ul>
-          <div id="tabpanel-stocks-panel" class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-stocks" tabindex="0">
-            <%- include('./stocks') -%>
-            <%- include('./modify-stocks-areas') -%>
-          </div>
-          <div id="tabpanel-flux-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-flux" tabindex="0">
-            <%- include('./flux') -%>
-            <%- include('./modify-flux-areas') -%>
-            <%- include('./flux-grid') -%>
-          </div>
-          <div id="tabpanel-agricultural-practices-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-agricultural-practices" tabindex="0">
-            <%- include('./agricultural-practices') -%>
-          </div>
-          <div id="tabpanel-config-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-config" tabindex="0">
-            <%- include('./shared-configuration') -%>
-          </div>
-        </form>
+<main role="main" id="contenu">
+  <div class="fr-container fr-pb-6w fr-px-2w">
+    <%- include('../partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: epci.nom, }, ], }) -%>
+    <%- include('./introduction') -%>
+    <form action="<%= baseUrl %>/stocks" method="GET" class="fr-tabs fr-mt-4w" id="territory">
+      <input type="hidden" name="epci" value="<%= epci.nom %>" />
+      <ul class="fr-tabs__list" role="tablist" aria-label="Données du territoire">
+        <li role="presentation">
+          <button type="button" id="tabpanel-stocks" class="fr-tabs__tab" tabindex="0" role="tab" aria-selected="<%=tab === 'stocks'%>" aria-controls="tabpanel-stocks-panel" data-fr-js-tab-button="true">Stocks</button>
+        </li>
+        <li role="presentation">
+          <button type="button" id="tabpanel-flux" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="<%=tab === 'flux'%>" aria-controls="tabpanel-flux-panel" data-fr-js-tab-button="true">Flux</button>
+        </li>
+        <li role="presentation">
+          <button type="button" id="tabpanel-agricultural-practices" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="false" aria-controls="tabpanel-agricultural-practices-panel" data-fr-js-tab-button="true">
+            Pratiques agricoles
+          </button>
+        </li>
+        <li role="presentation">
+          <button type="button" id="tabpanel-config" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="<%=tab === 'configuration'%>" aria-controls="tabpanel-config-panel" data-fr-js-tab-button="true">Configuration</button>
+        </li>
+      </ul>
+      <div id="tabpanel-stocks-panel" class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-stocks" tabindex="0">
+        <%- include('./stocks') -%>
+        <%- include('./modify-stocks-areas') -%>
       </div>
-      <% } else { %>
-        <h1>Aucun EPCI trouvé</h1>
-      <% } %>
-    </div>
-  </main>
-  <script>
-    // thanks to https://github.com/chhikaradi1993/Expandable-table-row
-    const toggleRow = (element) => {
-      if (element.nodeName === "BUTTON") {
-        element = element.parentElement;
-      }
-      element.parentElement.getElementsByClassName('expanded-row-content')[0].classList.toggle('hide-row');
-      event.stopPropagation();
+      <div id="tabpanel-flux-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-flux" tabindex="0">
+        <%- include('./flux') -%>
+        <%- include('./modify-flux-areas') -%>
+        <%- include('./flux-grid') -%>
+      </div>
+      <div id="tabpanel-agricultural-practices-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-agricultural-practices" tabindex="0">
+        <%- include('./agricultural-practices') -%>
+      </div>
+      <div id="tabpanel-config-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-config" tabindex="0">
+        <%- include('./shared-configuration') -%>
+      </div>
+    </form>
+  </div>
+</main>
+<script>
+  // thanks to https://github.com/chhikaradi1993/Expandable-table-row
+  const toggleRow = (element) => {
+    if (element.nodeName === "BUTTON") {
+      element = element.parentElement;
     }
+    element.parentElement.getElementsByClassName('expanded-row-content')[0].classList.toggle('hide-row');
+    event.stopPropagation();
+  }
 
-    // introduced to:
-    // - shorten URLs by only including the values that are overridden
-    // - handle the case for stocks where there are two inputs that can change the same value
-    let queryParams = new URLSearchParams(window.location.search)
-    $('input').change((event) => {
-      queryParams.set(event.target.name, event.target.value)
-    })
+  // introduced to:
+  // - shorten URLs by only including the values that are overridden
+  // - handle the case for stocks where there are two inputs that can change the same value
+  let queryParams = new URLSearchParams(window.location.search)
+  $('input').change((event) => {
+    queryParams.set(event.target.name, event.target.value)
+  })
 
-    $('form#territory').submit((event) => {
-      let currentTab = $("button.fr-tabs__tab[aria-selected=true]")[0]
-      currentTab = currentTab?.id.endsWith("flux") ? "flux" : "stocks"
-      const epciCode = window.location.pathname.split('/')[2]
-      window.location.href = `/epci/${epciCode}/${currentTab}?${queryParams.toString()}`
-      event.preventDefault()
-    })
-  </script>
-  <%- include('../partials/footer') -%>
+  $('form#territory').submit((event) => {
+    let currentTab = $("button.fr-tabs__tab[aria-selected=true]")[0]
+    currentTab = currentTab?.id.endsWith("flux") ? "flux" : "stocks"
+    const epciCode = window.location.pathname.split('/')[2]
+    window.location.href = `/epci/${epciCode}/${currentTab}?${queryParams.toString()}`
+    event.preventDefault()
+  })
+</script>
+<%- include('../partials/footer') -%>

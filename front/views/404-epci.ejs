@@ -1,8 +1,9 @@
 <%- include('partials/search-header') -%>
 <main role="main" id="contenu">
-  <div class="fr-container fr-py-6w fr-px-2w">
+  <div class="fr-container fr-pb-6w fr-px-2w">
+    <%- include('./partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: 'EPCI inconnu', }, ], }) -%>
 
-    <h1>Page pas trouvée</h1>
+    <h1 class="fr-mt-6w">Page pas trouvée</h1>
 
     <p>Nous n'avons pas trouvé un EPCI avec le nom ou SIREN « <%= attemptedSearch %> ». Veuillez rechercher à nouveau.</p>
     <%- include('partials/search-lg') -%>

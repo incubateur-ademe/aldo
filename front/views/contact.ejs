@@ -1,44 +1,62 @@
 <%- include('partials/header') -%>
-<main role="main" id="contenu">	
-<div class="fr-container fr-mb-8w">
-	<%- include('partials/ariane',
-	  {
-	    items: [
-	      	{
-		        label: 'Accueil',
-		        url: '/'
-			},
-			{
-		        label: 'Contact',
-			},
-	    ],
-	  })
-	-%>
+<main role="main" id="contenu">
+  <div class="fr-container fr-mb-8w">
+    <%- include('partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: 'Contact', }, ], }) -%>
 
+    <h1>Contactez-nous</h1>
 
-        <h1>Exemple de formulaire de contact</h1>
+    <% if (status === 'succès') { %>
+    <div class="fr-alert fr-alert--success fr-mb-3w">
+      <h3 class="fr-alert__title">Succès de l'envoi</h3>
+      <p>Votre mail a été bien envoyé. Nous répondrons dès que possible.</p>
+    </div>
+    <% } else if (!!status) { %>
+    <div class="fr-alert fr-alert--error fr-mb-3w">
+      <h3 class="fr-alert__title">Il y avait une erreur</h3>
+      <p>
+        Votre message n'a pas été envoyé. Vous pouvez nous contacter direct à
+        <a href="mailto:<%= process.env.ALDO_EMAIL %>"><%= process.env.ALDO_EMAIL %></a>
+      </p>
+    </div>
+    <% } %>
 
-
-              <div class="fr-callout fr-callout--scheme-soft-blue-soft fr-mb-3w">
-				  <p class="fr-callout__text">Ne mentionnez pas de données personnelles (nom, adresse, numéros de téléphone, numéro de sécurité sociale, numéro fiscal, lieu et date de naissance...) à l'exception, bien sûr, de votre adresse électronique.</p>
-				</div>
-
-          <form action="/" method="POST">
-            <div class="fr-input-group">
-			  <label class="fr-label" for="email" aria-describedby="format">Votre adresse électronique</label>
-			  <p class="fr-hint-text" id="format">L’adresse électronique doit être au format <em>nom@exemple.fr</em></p>
-              <input class="fr-input" type="email" id="email" name="email" required>
-            </div>
-	        <div class="fr-input-group">
-				<label class="fr-label" for="message">Votre message</label>
-				<textarea required class="fr-input" id="message" rows="5"></textarea>
-	        </div>
-            <div class="fr-input-group">
-              <button type="submit" class="fr-btn" >Envoyer mon message</button>
-            </div>
-          </form>
-
-
-</div>
+    <form action="/contact" method="POST">
+      <div class="fr-input-group">
+        <label class="fr-label" for="name">
+          Votre nom et/ou prénom
+        </label>
+        <input class="fr-input" id="name" name="name" required />
+      </div>
+      <div class="fr-input-group">
+        <label class="fr-label" for="email" aria-describedby="format">
+          Votre adresse électronique
+        </label>
+        <p class="fr-hint-text" id="format">
+          L’adresse électronique doit être au format <em>nom@exemple.fr</em>
+        </p>
+        <input class="fr-input" type="email" id="email" name="email" required />
+      </div>
+      <div class="fr-input-group">
+        <label class="fr-label" for="subject">
+          Objet
+        </label>
+        <input class="fr-input" id="subject" name="subject" required />
+      </div>
+      <div class="fr-input-group">
+        <label class="fr-label" for="message" aria-describedby="data-warning">
+          Votre message
+        </label>
+        <p class="fr-hint-text" id="data-warning">
+          Ne mentionnez pas de données personnelles (adresse, numéros de
+          téléphone, numéro de sécurité sociale, numéro fiscal, lieu et date de
+          naissance...) à l'exception, bien sûr, de votre adresse électronique.
+        </p>
+        <textarea class="fr-input" id="message" name="message" rows="5" required></textarea>
+      </div>
+      <div class="fr-input-group">
+        <button type="submit" class="fr-btn">Envoyer mon message</button>
+      </div>
+    </form>
+  </div>
 </main>
 <%- include('partials/footer') -%>
