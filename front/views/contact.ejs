@@ -15,7 +15,7 @@
       <h3 class="fr-alert__title">Il y avait une erreur</h3>
       <p>
         Votre message n'a pas été envoyé. Vous pouvez nous contacter direct à
-        <a href="mailto:aldo@abc-transitionbascarbone.fr">aldo@abc-transitionbascarbone.fr</a>
+        <a href="mailto:<%= process.env.ALDO_EMAIL %>"><%= process.env.ALDO_EMAIL %></a>
       </p>
     </div>
     <% } %>
