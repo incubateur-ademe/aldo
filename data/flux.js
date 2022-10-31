@@ -333,6 +333,9 @@ function getAnnualSurfaceChange (location, options, from, to) {
   return yearlyAreaChange
 }
 
+// this is not actually the change in forest surface area, but the total at the final date
+// and is used only in biomass growth calculations
+// TODO: how to reflect this better in variable naming?
 function getAnnualForestSurfaceChange (location, to) {
   const csvFilePath = './dataByEpci/ign19.csv'
   const dataByEpci = require(csvFilePath + '.json')
