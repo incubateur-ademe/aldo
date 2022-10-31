@@ -30,7 +30,8 @@
     "dotenv": "^16.0.1",
     "ejs": "^3.1.7",
     "excel4node": "^1.8.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "sib-api-v3-sdk": "^8.4.2"
   },
   "devDependencies": {
     "eslint": "^7.32.0",

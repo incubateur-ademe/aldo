@@ -8,36 +8,20 @@
 <script type="module" src="/~/@gouvfr/dsfr/dist/dsfr/dsfr.module.min.js"></script>
 <script type="text/javascript" nomodule src="/~/@gouvfr/dsfr/dist/dsfr/dsfr.nomodule.min.js"></script>
 
-<!-- TODO Matomo -->
-<!-- <script>
-  var _paq = window._paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="https://stats.data.gouv.fr/";
-    _paq.push(['setTrackerUrl', u+'matomo.php']);
-    _paq.push(['setSiteId', '211']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script> -->
-<!-- End Matomo Code -->
-
 <footer role="contentinfo" class="fr-footer" id="footer">
   <div class="fr-container">
     <div class="fr-footer__body">
       <div class="fr-footer__brand fr-enlarge-link">
-          <a href="/" title="Retour à l’accueil">
-              <p class="fr-logo">
-                  République
-                  <br>française
-              </p>
-          </a>
-          <a class="fr-footer__brand-link" href="/" title="Retour à l’accueil">
-            <div class="fr-footer__logo">
-              <%- include('ademe-logo') -%>
-            </div>
+        <a href="/" title="Retour à l’accueil">
+          <p class="fr-logo">
+            République
+            <br>française
+          </p>
+        </a>
+        <a class="fr-footer__brand-link" href="/" title="Retour à l’accueil">
+          <div class="fr-footer__logo">
+            <%- include('ademe-logo') -%>
+          </div>
         </a>
       </div>
       <div class="fr-footer__content">
@@ -45,16 +29,14 @@
           <%= appDescription %>
         </p>
         <p class="fr-footer__content-desc">
-            Le code source est ouvert et les contributions sont bienvenues.
-            <a href="<%= appRepo %>" target="_blank" rel="noopener">
-              Voir le code source
-            </a>
+          Le code source est ouvert et les contributions sont bienvenues.
+          <a href="<%= appRepo %>" target="_blank" rel="noopener">
+            Voir le code source
+          </a>
         </p>
         <ul class="fr-footer__content-list">
           <li class="fr-footer__content-item">
-            <a class="fr-footer__content-link"
-               title="Contactez-nous"
-               href="mailto:aldo@abc-transitionbascarbone.fr">
+            <a class="fr-footer__content-link" href="/contact">
               Contactez-nous
             </a>
           </li>
@@ -83,7 +65,9 @@
           <a class="fr-footer__bottom-link" href="/contact">Contactez-nous</a>
         </li> -->
         <li class="fr-footer__bottom-item">
-            <button class="fr-footer__bottom-link fr-fi-sun-fill-line fr-link--icon-left" aria-controls="fr-theme-modal" data-fr-opened="false">Paramètres d'affichage</button>
+          <button class="fr-footer__bottom-link fr-fi-sun-fill-line fr-link--icon-left" aria-controls="fr-theme-modal" data-fr-opened="false">
+            Paramètres d'affichage
+          </button>
         </li>
       </ul>
       <!-- TODO: double check this licence -->
@@ -95,4 +79,5 @@
   <%- include('dark-mode-modale') -%>
 </footer>
 </body>
+
 </html>
