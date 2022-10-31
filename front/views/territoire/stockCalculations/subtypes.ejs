@@ -7,15 +7,23 @@
         <span class="fr-col-2 fr-text--sm fr-mr-2w hyphenate">
           <%= allGroundTypes.find((g) => g.stocksId === subtype).shortName %>&nbsp;:&nbsp;
         </span>
+        <% const hasForestLitter = !!stocks[subtype].forestLitterDensity %>
         <span class="captioned-value fr-col-2">
           <span class="v fr-text--lg"><%= round(stocks[subtype].groundDensity) %> tC/ha</span>
           <span class="c fr-text--sm">sol (30 cm)</span>
         </span>
         <span class="fr-col-1" style="text-align: center;">+</span>
-        <span class="captioned-value fr-col-3">
+        <span class="captioned-value <%= hasForestLitter ? 'fr-col-2' : 'fr-col-3' %>">
           <span class="v fr-text--lg"><%= round(stocks[subtype].biomassDensity) %> tC/ha</span>
           <span class="c fr-text--sm">biomasse</span>
         </span>
+        <% if (hasForestLitter) { %>
+          <span class="fr-col-1" style="text-align: center;">+</span>
+          <span class="captioned-value fr-col-2">
+            <span class="v fr-text--lg"><%= round(stocks[subtype].forestLitterDensity) %> tC/ha</span>
+            <span class="c fr-text--sm">litière</span>
+          </span>
+        <% } %>
         <span class="fr-col-1" style="text-align: center;">≈</span>
         <span class="captioned-value fr-col-2">
           <span class="v fr-text--lg"><%= round(stocks[subtype].totalDensity) %></span>
