@@ -109,17 +109,20 @@ function getPoplarBiomassCarbonDensity (location) {
   return parseFloat(data?.carbonDensity)
 }
 
-// source: CITEPA 2016 in tCO2
+// source: CITEPA 2016-2019 in tC
 function getFranceStocksWoodProducts () {
   return {
-    bo: 177419001,
-    bi: 258680001
-    // TODO: ask about BE, which is present in other places but not these stats
+    bo: 33741446.79,
+    bi: 58436577.05
   }
 }
 
+// source: CITEPA 2016-2020 in m3
 function getAnnualFranceWoodProductsHarvest () {
-  return getAnnualWoodProductsHarvest({ epci: 'FRANCE' })
+  return {
+    bo: 19253833.33,
+    bi: 10472666.67
+  }
 }
 
 function getAnnualWoodProductsHarvest (location) {
@@ -131,14 +134,8 @@ function getAnnualWoodProductsHarvest (location) {
     return parseFloat(val)
   }
   return {
-    feuillus: {
-      bo: getValue('feuillus', 'recolteBo'),
-      bi: getValue('feuillus', 'recolteBi')
-    },
-    coniferes: {
-      bo: getValue('coniferes', 'recolteBo'),
-      bi: getValue('coniferes', 'recolteBi')
-    }
+    bo: getValue('feuillus', 'recolteBo') + getValue('coniferes', 'recolteBo'),
+    bi: getValue('feuillus', 'recolteBi') + getValue('coniferes', 'recolteBi')
   }
 }
 

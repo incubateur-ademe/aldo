@@ -5,17 +5,11 @@ const {
 } = require('../../data/stocks')
 const { getPopulationTotal } = require('../../data')
 
-function co2ToCarbon (co2) {
-  return co2 * 12 / 44
-}
-
 function getStocksByConsumption (location) {
   const popTotal = getPopulationTotal()
   const epciPop = location.epci.populationTotale
   const proportion = epciPop / popTotal
   const franceStocks = getFranceStocksWoodProducts()
-  franceStocks.bi = co2ToCarbon(franceStocks.bi)
-  franceStocks.bo = co2ToCarbon(franceStocks.bo)
   const biStock = proportion * franceStocks.bi
   const boStock = proportion * franceStocks.bo
   const stock = biStock + boStock
@@ -37,13 +31,6 @@ function getStocksByHarvest (location) {
   const localAnnualWoodProductsHarvest = getAnnualWoodProductsHarvest(location)
   const franceAnnualWoodProductsHarvest = getAnnualFranceWoodProductsHarvest()
   const franceStocksByCategory = getFranceStocksWoodProducts()
-  franceStocksByCategory.bi = co2ToCarbon(franceStocksByCategory.bi)
-  franceStocksByCategory.bo = co2ToCarbon(franceStocksByCategory.bo)
-
-  localAnnualWoodProductsHarvest.bo = localAnnualWoodProductsHarvest.feuillus.bo + localAnnualWoodProductsHarvest.coniferes.bo
-  localAnnualWoodProductsHarvest.bi = localAnnualWoodProductsHarvest.feuillus.bi + localAnnualWoodProductsHarvest.coniferes.bi
-  franceAnnualWoodProductsHarvest.bo = franceAnnualWoodProductsHarvest.feuillus.bo + franceAnnualWoodProductsHarvest.coniferes.bo
-  franceAnnualWoodProductsHarvest.bi = franceAnnualWoodProductsHarvest.feuillus.bi + franceAnnualWoodProductsHarvest.coniferes.bi
 
   function portion (category) {
     return localAnnualWoodProductsHarvest[category] / franceAnnualWoodProductsHarvest[category]
