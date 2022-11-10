@@ -22,11 +22,13 @@ test('returns area in hectares (ha) for ground type "prairies zones herbacées" 
 })
 
 test('throws useful error when attempting to get area for ground type without type to CLC type mapping', () => {
+  let error
   try {
     getArea({ epci: '200000172' }, 'lake')
-  } catch (error) {
-    expect(error.message).toBe("No CLC code mapping found for ground type 'lake'")
+  } catch (e) {
+    error = e
   }
+  expect(error.message).toBe("No CLC code mapping found for ground type 'lake'")
 })
 
 // TODO: Ask about source of that data, and why many ground types don't have values, others appear to be constant.
@@ -84,11 +86,13 @@ test('returns forest litter carbon density (tC/ha) for valid forest subtype', ()
 })
 
 test('throws error when attempting to get forest litter carbon density for invalid forest subtype', () => {
+  let error
   try {
     getForestLitterCarbonDensity('invalid')
-  } catch (error) {
-    expect(error.message).toBe("No forest litter carbon density found for forest subtype 'invalid'")
+  } catch (e) {
+    error = e
   }
+  expect(error.message).toBe("No forest litter carbon density found for forest subtype 'invalid'")
 })
 
 test('returns biomass carbon density (as tC/ha) for poplar groves', () => {
