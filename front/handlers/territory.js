@@ -97,7 +97,10 @@ async function territoryHandler (req, res) {
       'annualFluxEquivalent'
     ]
     for (const property of fluxProperties) {
-      summary[property] = averageByProperty(subtypeFluxes, property)
+      // the property of interest can have quite different values for different geo locations
+      // and the surface area within that location can be quite different
+      // so use a weighted sum, not an average, to get closer to a reasonable 'average' value
+      summary[property] = weightedSum(subtypeFluxes, property, 'area')
     }
     forestBiomassSummaryByType.push(summary)
   }
@@ -153,8 +156,13 @@ function sumByProperty (objArray, key) {
   return sum
 }
 
-function averageByProperty (objArray, key) {
-  return sumByProperty(objArray, key) / objArray.length
+function weightedSum (objArray, key, keyForWeighting) {
+  const total = sumByProperty(objArray, keyForWeighting)
+  let weightedSum = 0
+  objArray.forEach((obj) => {
+    weightedSum += obj[key] * obj[keyForWeighting] / total
+  })
+  return weightedSum
 }
 
 function charts (stocks) {
