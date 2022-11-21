@@ -162,6 +162,7 @@ function weightedAverage (objArray, key, keyForWeighting) {
     weightedSum += obj[key] * obj[keyForWeighting]
   })
   const total = sumByProperty(objArray, keyForWeighting)
+  // this will break if total is 0...
   return weightedSum / total
 }
 

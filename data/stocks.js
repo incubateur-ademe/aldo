@@ -15,8 +15,8 @@ function getCarbonDensity (location, groundType) {
 function getArea (location, groundType) {
   if (groundType === 'haies') {
     return getAreaHaies(location)
-  } else if (groundType === 'forêt peupleraie') {
-    return getAreaPoplars(location)
+  } else if (groundType.startsWith('forêt ')) {
+    return getAreaForests(location, groundType)
   }
   // consider using clcCodes in constants file
   // TODO: make more standardised keys?
@@ -26,10 +26,6 @@ function getArea (location, groundType) {
     'prairies zones herbacées': ['231', '321'],
     'prairies zones arbustives': ['322'],
     'prairies zones arborées': ['323'],
-    forêt: ['311', '312', '313', '324'],
-    'forêt feuillu': ['311', '324'],
-    'forêt conifere': ['312'],
-    'forêt mixte': ['313'],
     vignes: ['221'],
     vergers: ['222', '223'],
     'sols arborés': ['141'], // aka "sols artificiels arborés et buissonants" in stocks_c tab
@@ -54,10 +50,6 @@ function getArea (location, groundType) {
       totalArea += parseFloat(area)
     }
   }
-  // forests are a bit more complicated
-  if (groundType === 'forêt feuillu') {
-    totalArea -= getAreaPoplars(location)
-  }
   return totalArea
 }
 
@@ -71,12 +63,24 @@ function getAreaHaies (location) {
   return parseFloat(data[0].area)
 }
 
-// TODO: ask why not using IGN for all forest areas
-function getAreaPoplars (location) {
-  const csvFilePath = './dataByEpci/ign19.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci)
-  return parseFloat(data.peupleraies)
+// using IGN, not CLC, data for forests because it is more accurate
+// side effect being that the sum of the areas could be different to the
+// recorded size of the EPCI.
+function getAreaForests (location, forestType) {
+  const csvFilePath = './dataByEpci/surface-foret-par-commune.csv'
+  const areaData = require(csvFilePath + '.json')
+  const areaDataForEpci = areaData.filter(data => data.CODE_EPCI === location.epci)
+  let sum = 0
+  const areaCompositionColumnName = {
+    'forêt feuillu': 'SUR_FEUILLUS',
+    'forêt conifere': 'SUR_RESINEUX',
+    'forêt mixte': 'SUR_MIXTES',
+    'forêt peupleraie': 'SUR_PEUPLERAIES'
+  }[forestType]
+  areaDataForEpci.forEach((communeData) => {
+    sum += +communeData[areaCompositionColumnName]
+  })
+  return sum
 }
 
 function getBiomassCarbonDensity (location, groundType) {
