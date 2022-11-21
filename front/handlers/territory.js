@@ -100,7 +100,7 @@ async function territoryHandler (req, res) {
       // the property of interest can have quite different values for different geo locations
       // and the surface area within that location can be quite different
       // so use a weighted sum, not an average, to get closer to a reasonable 'average' value
-      summary[property] = weightedSum(subtypeFluxes, property, 'area')
+      summary[property] = weightedAverage(subtypeFluxes, property, 'area')
     }
     forestBiomassSummaryByType.push(summary)
   }
@@ -156,13 +156,13 @@ function sumByProperty (objArray, key) {
   return sum
 }
 
-function weightedSum (objArray, key, keyForWeighting) {
-  const total = sumByProperty(objArray, keyForWeighting)
+function weightedAverage (objArray, key, keyForWeighting) {
   let weightedSum = 0
   objArray.forEach((obj) => {
-    weightedSum += obj[key] * obj[keyForWeighting] / total
+    weightedSum += obj[key] * obj[keyForWeighting]
   })
-  return weightedSum
+  const total = sumByProperty(objArray, keyForWeighting)
+  return weightedSum / total
 }
 
 function charts (stocks) {
