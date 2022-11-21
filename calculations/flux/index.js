@@ -50,7 +50,7 @@ function getAnnualFluxes (location, options) {
   options = options || {}
   const allFluxes = getAllAnnualFluxes(location, options)
   allFluxes.forEach((flux) => {
-    if (!flux.area) {
+    if (!flux.area && flux.area !== 0) {
       const { area, areaModified, originalArea } = getAnnualSurfaceChange(location, options, flux.from, flux.to)
       flux.area = area
       flux.areaModified = areaModified

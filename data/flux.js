@@ -1,7 +1,6 @@
 // TODO: move this file to a folder that both layers can rely on to not completely break
 // dependency tree
 const { GroundTypes } = require('../calculations/constants')
-const { getBiomassCarbonDensity } = require('./stocks')
 
 function getGroundCarbonFluxKey (from, to) {
   const fromDetails = GroundTypes.find(groundType => groundType.stocksId === from)
@@ -88,42 +87,6 @@ function getBiomassFlux (location, from, to) {
   if (dataValue) {
     return parseFloat(dataValue)
   }
-}
-
-function getForestBiomassDetail (location, to) {
-  let data
-  if (to === 'forêt peupleraie') {
-    const csvFilePath = './dataByEpci/biomasse-forets-peupleraies.csv'
-    const dataByEpci = require(csvFilePath + '.json')
-    data = dataByEpci.find(data => data.siren === location.epci)
-  } else {
-    const csvFilePath = './dataByEpci/biomass-forets.csv'
-    const dataByEpci = require(csvFilePath + '.json')
-    const forestType = to.split(' ')[1]
-    data = dataByEpci.find(data => data.siren === location.epci && data.type.toLowerCase() === forestType)
-  }
-  if (!data) {
-    console.log(`No biomass data found for forest type '${to}' and epci '${location.epci}'`)
-    return
-  }
-  const dataValue = data['BILAN_CARB (tC∙ha-1∙an-1)']
-  if (dataValue) {
-    return {
-      flux: parseFloat(dataValue),
-      // all but peupleraie use m3/ha
-      growth: parseFloat(data['PRODUCTION (m3∙ha-1)'] || data['PRODUCTION (m3∙ha-1∙an-1)']),
-      mortality: parseFloat(data['MORTALITE (m3∙ha-1∙an-1)']),
-      timberExtraction: parseFloat(data['PRELEVEMENT (m3∙ha-1∙an-1)']),
-      fluxMeterCubed: parseFloat(data['BILAN_M3 (m3∙ha-1∙an-1)']),
-      conversionFactor: parseFloat(data['Fexp (VOL -> CARB)'])
-    }
-  }
-}
-
-function getFromForestBiomassFlux (location, from, to) {
-  // get to stock and - from stock
-  if (to === 'produits bois') return
-  return getBiomassCarbonDensity(location, to) - getBiomassCarbonDensity(location, from)
 }
 
 // some flux data is annual, some is for the 20 year period. This function returns 1 or 20
@@ -217,6 +180,10 @@ function getAllAnnualFluxes (location, options) {
       const to = toGt.stocksId
       if (from === to) {
         continue
+      } else if (to in GroundTypes.find((gt) => gt.stocksId === 'forêts').children) {
+        // there is no CLC change to forest subtypes, only to the forest parent type.
+        // Biomass flux per subtype is handled separately
+        continue
       }
       if (fromGt.fluxId && toGt.fluxId) {
         const annualFlux = getAnnualGroundCarbonFlux(location, from, to)
@@ -260,42 +227,8 @@ function getAllAnnualFluxes (location, options) {
           })
         }
       }
-      // const forestBiomassFrom = ['forêt mixte', 'forêt conifere', 'forêt feuillu']
-      // // to: forests won't happen because of the toGt.children check
-      // if (forestBiomassFrom.includes(from) && !forestBiomassFrom.includes(to) && to !== 'forêt peupleraie' && !toGt.children) {
-      //   const biomassFlux = getFromForestBiomassFlux(location, from, to)
-      //   if (biomassFlux !== undefined) {
-      //     fluxes.push({
-      //       from,
-      //       to,
-      //       annualFlux: biomassFlux,
-      //       annualFluxEquivalent: cToCo2e(biomassFlux),
-      //       reservoir: 'biomasse',
-      //       gas: 'C'
-      //     })
-      //   }
-      // }
     }
   }
-  // const forestTypes = GroundTypes.filter(gt => gt.stocksId.startsWith('forêt '))
-  // for (const fType of forestTypes) {
-  //   const biomassInfo = getForestBiomassDetail(location, fType.stocksId)
-  //   const biomassFlux = biomassInfo.flux
-  //   if (biomassFlux !== undefined) {
-  //     fluxes.push({
-  //       to: fType.stocksId,
-  //       annualFlux: biomassFlux,
-  //       annualFluxEquivalent: cToCo2e(biomassFlux),
-  //       reservoir: 'biomasse',
-  //       gas: 'C',
-  //       growth: biomassInfo.growth,
-  //       mortality: biomassInfo.mortality,
-  //       timberExtraction: biomassInfo.timberExtraction,
-  //       fluxMeterCubed: biomassInfo.fluxMeterCubed,
-  //       conversionFactor: biomassInfo.conversionFactor
-  //     })
-  //   }
-  // }
   const forestBiomassFluxes = getForestBiomassFluxesByCommune(location)
   fluxes = fluxes.concat(forestBiomassFluxes)
   return fluxes
@@ -307,7 +240,8 @@ function cToCo2e (valueC) {
 
 function getAnnualSurfaceChange (location, options, from, to) {
   if (to.startsWith('forêt ')) {
-    return getForestAreaByComposition(location, to)
+    // not elegant error management but shouldn't happen
+    throw new Error('Change to forest is only measured at parent-type level, not subtype')
   }
   const csvFilePath = './dataByEpci/clc18-change.csv'
   const dataByEpci = require(csvFilePath + '.json')
@@ -383,25 +317,6 @@ function getFranceFluxWoodProducts () {
     bo: 812000,
     bi: 751000
   }
-}
-
-// this is the forest surface area at the final date
-// and is used only in biomass growth calculations
-function getForestAreaByComposition (location, to) {
-  const csvFilePath = './dataByEpci/surface-foret-par-commune.csv'
-  const dataByCommune = require(csvFilePath + '.json')
-  const communes = dataByCommune.filter(data => data.CODE_EPCI === location.epci)
-  const areaCompositionColumnName = {
-    'forêt feuillu': 'SUR_FEUILLUS',
-    'forêt conifere': 'SUR_RESINEUX',
-    'forêt mixte': 'SUR_MIXTES',
-    'forêt peupleraie': 'SUR_PEUPLERAIES'
-  }[to]
-  let area = 0
-  communes.forEach((dataForCommune) => {
-    area += +dataForCommune[areaCompositionColumnName]
-  })
-  return area
 }
 
 // Source for the following data : IGN 2022
