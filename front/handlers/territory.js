@@ -76,6 +76,31 @@ async function territoryHandler (req, res) {
       sharingQueryStr += `&${queryParam}=${req.query[queryParam]}`
     }
   })
+  // TODO: double check numbers, esp annualFluxEquivalent vs co2e
+  // aggregate forest biomass data which is by commune, not EPCI
+  const forestBiomassSummaryByType = []
+  const forestSubtypes = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
+  for (const subtype of forestSubtypes) {
+    const subtypeFluxes =
+      flux.allFlux.filter((flux) => flux.to === subtype && flux.reservoir === 'biomasse')
+    const summary = {
+      to: subtype,
+      area: sumByProperty(subtypeFluxes, 'area'),
+      co2e: sumByProperty(subtypeFluxes, 'co2e')
+    }
+    const fluxProperties = [
+      'growth',
+      'mortality',
+      'timberExtraction',
+      'fluxMeterCubed',
+      'conversionFactor',
+      'annualFluxEquivalent'
+    ]
+    for (const property of fluxProperties) {
+      summary[property] = averageByProperty(subtypeFluxes, property)
+    }
+    forestBiomassSummaryByType.push(summary)
+  }
   res.render('territoire', {
     pageTitle: `${epci.nom}`,
     tab: req.params.tab || 'stocks',
@@ -115,8 +140,21 @@ async function territoryHandler (req, res) {
     sharingQueryStr,
     beges: req.query.beges,
     perimetre: req.query.perimetre,
+    forestBiomassSummaryByType,
     ...options
   })
+}
+
+function sumByProperty (objArray, key) {
+  let sum = 0
+  objArray.forEach((obj) => {
+    sum += obj[key]
+  })
+  return sum
+}
+
+function averageByProperty (objArray, key) {
+  return sumByProperty(objArray, key) / objArray.length
 }
 
 function charts (stocks) {
