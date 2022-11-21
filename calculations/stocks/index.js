@@ -2,6 +2,8 @@ const {
   getArea: getAreaData,
   getCarbonDensity,
   getBiomassCarbonDensity,
+  getLiveBiomassCarbonDensity,
+  getDeadBiomassCarbonDensity,
   getForestLitterCarbonDensity
 } = require('../../data/stocks')
 const { getStocksWoodProducts } = require('./woodProducts')
@@ -19,7 +21,7 @@ function getStocksByKeyword (location, keyword, options) {
   const area = getArea(location, keyword, options.areas)
   const groundDensity = getCarbonDensity(location, options.groundKeyword || keyword)
   const groundStock = groundDensity * area
-  const biomassDensity = getBiomassCarbonDensity(location, keyword)
+  const biomassDensity = getBiomassCarbonDensity(location, keyword) || 0
   const biomassStock = biomassDensity * area
   const stocks = {
     totalReservoirStock: groundStock + biomassStock,
@@ -30,12 +32,18 @@ function getStocksByKeyword (location, keyword, options) {
     biomassDensity,
     totalDensity: groundDensity + biomassDensity
   }
-  if (options.getLitter) {
+  if (keyword.startsWith('forêt ')) {
+    const liveBiomassDensity = getLiveBiomassCarbonDensity(location, keyword) || 0
+    const liveBiomassStock = liveBiomassDensity * area
+    stocks.liveBiomassDensity = liveBiomassDensity
+    const deadBiomassDensity = getDeadBiomassCarbonDensity(location, keyword) || 0
+    stocks.deadBiomassDensity = deadBiomassDensity
+    const deadBiomassStock = deadBiomassDensity * area
     const forestLitterDensity = getForestLitterCarbonDensity(keyword.replace('forêt ', ''))
     stocks.forestLitterDensity = forestLitterDensity
-    stocks.totalDensity += forestLitterDensity
     stocks.forestLitterStock = forestLitterDensity * area
-    stocks.totalReservoirStock += stocks.forestLitterStock
+    stocks.totalDensity += forestLitterDensity + liveBiomassDensity + deadBiomassDensity
+    stocks.totalReservoirStock += stocks.forestLitterStock + liveBiomassStock + deadBiomassStock
   }
   stocks.totalStock = stocks.totalReservoirStock
   return stocks
@@ -118,8 +126,7 @@ function getAreasSolsArtificiels (location, options) {
 }
 
 function getStocksHaies (location, options) {
-  // TODO: ask more about this calculation - reusing forest carbon density?
-  const carbonDensity = getBiomassCarbonDensity(location, 'forêt mixte')
+  const carbonDensity = getBiomassCarbonDensity(location, 'haies')
   const area = getArea(location, 'haies', options.areas)
   const totalReservoirStock = carbonDensity * area
   return {
@@ -219,8 +226,7 @@ function getStocks (location, options) {
   forestChildren.forEach((c) => {
     forestSubtypes[c] = getSubStocksByKeyword(location, c, 'forêts', {
       areas: options.areas,
-      groundKeyword: 'forêts',
-      getLitter: true
+      groundKeyword: 'forêts'
     })
   })
   Object.assign(stocks, forestSubtypes)

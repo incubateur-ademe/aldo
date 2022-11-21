@@ -1,4 +1,3 @@
-
 // Gets the carbon area density of a given ground type.
 function getCarbonDensity (location, groundType) {
   const csvFilePath = './dataByEpci/ground.csv'
@@ -83,12 +82,73 @@ function getAreaForests (location, forestType) {
   return sum
 }
 
+function getForestBiomassCarbonDensities (location, forestSubtype) {
+  let csvFilePath = './dataByEpci/surface-foret-par-commune.csv'
+  const areaData = require(csvFilePath + '.json')
+  csvFilePath = './dataByEpci/bilan-carbone-foret-par-localisation.csv'
+  const carbonData = require(csvFilePath + '.json')
+  const localisationLevels = ['groupeser', 'greco', 'rad13', 'bassin_populicole']
+  // there is data will null values because it isn't statistically significant at that
+  // level. Remove these lines because they are not used.
+  const significantCarbonData = carbonData.filter((data) => data.surface_ic === 's')
+  const areaDataForEpci = areaData.filter(data => data.CODE_EPCI === location.epci)
+
+  let weightedLiveSum = 0
+  let weightedDeadSum = 0
+  let totalArea = 0
+  const areaCompositionColumnName = {
+    'forêt feuillu': 'SUR_FEUILLUS',
+    'forêt conifere': 'SUR_RESINEUX',
+    'forêt mixte': 'SUR_MIXTES',
+    'forêt peupleraie': 'SUR_PEUPLERAIES'
+  }[forestSubtype]
+  areaDataForEpci.forEach((communeData) => {
+    let carbonDataForCommuneAndLocalisation
+    const subtype = {
+      'forêt feuillu': 'Feuillu',
+      'forêt conifere': 'Conifere',
+      'forêt mixte': 'Mixte',
+      'forêt peupleraie': 'Peupleraie'
+    }[forestSubtype]
+    const compositionCarbonData =
+      significantCarbonData.filter((data) => data.composition === subtype)
+    for (const i in localisationLevels) {
+      const level = localisationLevels[i]
+      const localisationCode = communeData[`code_${level}`]
+      carbonDataForCommuneAndLocalisation =
+        compositionCarbonData.find((data) => data.code_localisation === localisationCode)
+      if (carbonDataForCommuneAndLocalisation) {
+        break
+      }
+    }
+    if (!carbonDataForCommuneAndLocalisation) {
+      console.log('Using France biomass stock data for ', communeData.INSEE_COM, forestSubtype)
+      const france = 'France'
+      carbonDataForCommuneAndLocalisation =
+        compositionCarbonData.find((data) => data.code_localisation === france)
+      if (!carbonDataForCommuneAndLocalisation) {
+        // this is unexpected
+        const message =
+          `Carbon data could not be retrieved for commune ${communeData.INSEE_COM} and subtype ${forestSubtype}`
+        throw new Error(message)
+      }
+    }
+    const area = +communeData[areaCompositionColumnName]
+    weightedLiveSum += +carbonDataForCommuneAndLocalisation['carbone_(tC∙ha-1)'] * area
+    weightedDeadSum += +carbonDataForCommuneAndLocalisation['bois_mort_volume_(m3∙ha-1)'] * area
+    totalArea += area
+  })
+  const live = weightedLiveSum / totalArea
+  const dead = weightedDeadSum / totalArea
+  return { live, dead }
+}
+
 function getBiomassCarbonDensity (location, groundType) {
-  if (groundType === 'forêt peupleraie') {
-    return getPoplarBiomassCarbonDensity(location)
-  } else if (groundType.startsWith('forêt')) {
-    return getForestBiomassCarbonDensity(location, groundType.split(' ')[1])
+  if (groundType.startsWith('forêt')) {
+    return
   }
+  // TODO: ask more about this calculation - reusing forest carbon density?
+  if (groundType === 'haies') groundType = 'forêt mixte'
   const csvFilePath = './dataByEpci/biomass-hors-forets.csv'
   const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)
@@ -96,21 +156,16 @@ function getBiomassCarbonDensity (location, groundType) {
   return parseInt(data[groundType], 10) || 0
 }
 
-function getForestBiomassCarbonDensity (location, forestType) {
-  const csvFilePath = './dataByEpci/biomass-forets.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci && data.type.toLowerCase() === forestType)
-  if (!data) {
-    throw new Error(`No biomass data found for forest type '${forestType}' and epci '${location.epci}'`)
+function getLiveBiomassCarbonDensity (location, forestType) {
+  if (forestType.startsWith('forêt ')) {
+    return getForestBiomassCarbonDensities(location, forestType).live
   }
-  return parseFloat(data.stock)
 }
 
-function getPoplarBiomassCarbonDensity (location) {
-  const csvFilePath = './dataByEpci/biomasse-forets-peupleraies.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci)
-  return parseFloat(data?.carbonDensity)
+function getDeadBiomassCarbonDensity (location, forestType) {
+  if (forestType.startsWith('forêt ')) {
+    return getForestBiomassCarbonDensities(location, forestType).dead
+  }
 }
 
 // source: CITEPA 2016 in tCO2
@@ -158,7 +213,8 @@ module.exports = {
   getCarbonDensity,
   getArea,
   getBiomassCarbonDensity,
-  getForestBiomassCarbonDensity,
+  getLiveBiomassCarbonDensity,
+  getDeadBiomassCarbonDensity,
   getFranceStocksWoodProducts,
   getForestLitterCarbonDensity,
   getAnnualWoodProductsHarvest,
