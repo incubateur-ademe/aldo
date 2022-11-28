@@ -36,12 +36,17 @@ function getStocksByKeyword (location, keyword, options) {
     const liveBiomassDensity = getLiveBiomassCarbonDensity(location, keyword) || 0
     const liveBiomassStock = liveBiomassDensity * area
     stocks.liveBiomassDensity = liveBiomassDensity
+    stocks.liveBiomassStock = liveBiomassStock
+
     const deadBiomassDensity = getDeadBiomassCarbonDensity(location, keyword) || 0
     stocks.deadBiomassDensity = deadBiomassDensity
     const deadBiomassStock = deadBiomassDensity * area
+    stocks.deadBiomassStock = deadBiomassStock
+
     const forestLitterDensity = getForestLitterCarbonDensity(keyword.replace('forêt ', ''))
     stocks.forestLitterDensity = forestLitterDensity
     stocks.forestLitterStock = forestLitterDensity * area
+
     stocks.totalDensity += forestLitterDensity + liveBiomassDensity + deadBiomassDensity
     stocks.totalReservoirStock += stocks.forestLitterStock + liveBiomassStock + deadBiomassStock
   }
@@ -62,7 +67,9 @@ function getStocksForParent (subStocks) {
     area: 0,
     groundStock: 0,
     biomassStock: 0,
-    forestLitterStock: 0
+    forestLitterStock: 0,
+    liveBiomassStock: 0,
+    deadBiomassStock: 0
   }
   for (const subType of Object.keys(subStocks)) {
     stocks.totalReservoirStock += subStocks[subType].totalReservoirStock
@@ -71,6 +78,8 @@ function getStocksForParent (subStocks) {
     stocks.biomassStock += subStocks[subType].biomassStock
     if (subStocks[subType].forestLitterStock) {
       stocks.forestLitterStock += subStocks[subType].forestLitterStock
+      stocks.liveBiomassStock += subStocks[subType].liveBiomassStock
+      stocks.deadBiomassStock += subStocks[subType].deadBiomassStock
     }
   }
   stocks.totalStock = stocks.totalReservoirStock
@@ -256,16 +265,16 @@ function getStocks (location, options) {
   const groundAndLitterStocksTotal = parentTypes.reduce((a, b) => {
     return a + (stocks[b].groundStock || 0) + (stocks[b].forestLitterStock || 0)
   }, 0)
-  const biomassStocksTotal = parentTypes.reduce((a, b) => a + (stocks[b].biomassStock || 0), 0)
+  const biomassStocksTotal = parentTypes.reduce((a, b) => a + sumAllBiomassStock(stocks[b]), 0)
   for (const key of parentTypes) {
     stocks[key].stockPercentage = asPercentage(stocks[key].totalStock, stocksTotal)
     const groundAndLitter = stocks[key].groundStock + (stocks[key].forestLitterStock || 0)
     stocks[key].groundAndLitterStockPercentage = asPercentage(groundAndLitter, groundAndLitterStocksTotal)
-    stocks[key].biomassStockPercentage = asPercentage(stocks[key].biomassStock, biomassStocksTotal)
+    stocks[key].biomassStockPercentage = asPercentage(sumAllBiomassStock(stocks[key]), biomassStocksTotal)
   }
   // -- percentage stock by reservoir
   const groundStock = parentTypes.reduce((acc, cur) => acc + (stocks[cur].groundStock || 0), 0)
-  const biomassStock = parentTypes.reduce((acc, cur) => acc + (stocks[cur].biomassStock || 0), 0)
+  const biomassStock = parentTypes.reduce((acc, cur) => acc + sumAllBiomassStock(stocks[cur]), 0)
   const forestLitterStock = parentTypes.reduce((acc, cur) => acc + (stocks[cur].forestLitterStock || 0), 0)
   stocks.percentageByReservoir = {
     'Sol (30 cm)': asPercentage(groundStock, stocksTotal),
@@ -301,6 +310,10 @@ function getStocks (location, options) {
   // carbon to CO2 equivalent
   stocks.totalEquivalent = stocksTotal * 44 / 12
   return stocks
+}
+
+function sumAllBiomassStock (stock) {
+  return (stock.biomassStock || 0) + (stock.liveBiomassStock || 0) + (stock.deadBiomassStock || 0)
 }
 
 module.exports = {
