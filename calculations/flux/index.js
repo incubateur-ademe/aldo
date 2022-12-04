@@ -50,11 +50,15 @@ function getAnnualFluxes (location, options) {
   options = options || {}
   const allFluxes = getAllAnnualFluxes(location, options)
   allFluxes.forEach((flux) => {
-    const { area, areaModified, originalArea } = getAnnualSurfaceChange(location, options, flux.from, flux.to)
-    flux.area = area
-    flux.areaModified = areaModified
-    flux.originalArea = originalArea
+    if (!flux.area && flux.area !== 0) {
+      const { area, areaModified, originalArea } = getAnnualSurfaceChange(location, options, flux.from, flux.to)
+      flux.area = area
+      flux.areaModified = areaModified
+      flux.originalArea = originalArea
+    }
+    const area = flux.area
     flux.flux = flux.annualFlux
+    // TODO: is flux ever used, or is it only annualFlux?
     if (flux.yearsForFlux) flux.flux *= flux.yearsForFlux
     if (flux.to.startsWith('forêt ')) {
       flux.value = flux.flux * flux.area

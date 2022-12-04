@@ -55,3 +55,10 @@ tr.expandable-row:hover {
 th.flux-surface-col {
   min-width: 9em;
 }
+
+/* inbetween fr-col-1 and fr-col-2 */
+.my-col-1-5 {
+  flex: 0 0 13%;
+  max-width: 13%;
+  width: 13%;
+}
