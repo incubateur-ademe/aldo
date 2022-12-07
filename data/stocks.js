@@ -204,18 +204,50 @@ function getAnnualFranceWoodProductsHarvest () {
   }
 }
 
+// for each category (BO, BI), return m3/an harvested
 function getAnnualWoodProductsHarvest (location) {
-  const csvFilePath = './dataByEpci/produits-bois.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.filter(data => data.siren === location.epci)
-  function getValue (composition, category) {
-    const val = data.find((d) => d.composition === composition)[category]
-    return parseFloat(val)
+  const harvestByCategory = {
+    bo: 0,
+    bi: 0
   }
-  return {
-    bo: getValue('feuillus', 'recolteBo') + getValue('coniferes', 'recolteBo'),
-    bi: getValue('feuillus', 'recolteBi') + getValue('coniferes', 'recolteBi')
+  const typeToColumn = {
+    'forêt feuillu': 'SUR_FEUILLUS',
+    'forêt conifere': 'SUR_RESINEUX'
   }
+  const conversionBFTToVAT = {
+    'forêt conifere': 1.3,
+    'forêt feuillu': 1.44
+  }
+  const areaDataForEpci = getCommuneAreaDataForEpci(location)
+  const significantCarbonData = getSignificantCarbonData()
+  const regionProportionData = getRegionProportionData()
+  areaDataForEpci.forEach((communeData) => {
+    ['forêt conifere', 'forêt feuillu'].forEach((forestSubtype) => {
+      const areaCompositionColumnName = typeToColumn[forestSubtype]
+      const area = +communeData[areaCompositionColumnName]
+      const carbonData = getCarbonDataForCommuneAndComposition(communeData, significantCarbonData, forestSubtype)
+      const bftPerHa = carbonData['prelevement_volume_(m3∙ha-1∙an-1)']
+      const bft = bftPerHa * area
+      const vat = bft * conversionBFTToVAT[forestSubtype]
+      const total = bft * 0.9 + (vat - bft) * 0.5
+      harvestByCategory.bo += total * harvestProportion(regionProportionData, 'bo', communeData)
+      harvestByCategory.bi += total * harvestProportion(regionProportionData, 'bi', communeData)
+      // TODO: consider returning total as well for display (total includes BE)
+    })
+  })
+  return harvestByCategory
+}
+
+function getRegionProportionData () {
+  const csvFilePath = './dataByEpci/proportion-usage-bois-par-region.csv'
+  const data = require(csvFilePath + '.json')
+  return data
+}
+
+function harvestProportion (regionProportionData, category, communeData) {
+  const region = communeData.code_rad13
+  const dataForRegion = regionProportionData.find((data) => data.code_localisation === region)
+  return +dataForRegion[`% ${category.toUpperCase()}`] / 100
 }
 
 function getForestLitterCarbonDensity (subtype) {
