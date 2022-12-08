@@ -1,53 +1,54 @@
 <p class="fr-text--sm fr-mb-1w">Comment est-ce calculé&nbsp;?</p>
 <% if (woodCalculation === 'récolte') { %>
-  <p class="fr-text--sm">
-    Approche <b>production</b> : répartition du carbone stocké en France dans les produits bois proportionnelle à la récolte théorique locale.
-  </p>
-  <p class="fr-text--sm">
-    Les stocks générés par l’usage de produits bois ne sont pas liés à une surface d’occupation du sol.
-  </p>
-  <p class="fr-text--xs">Vous pouvez changer l'approche dans <a href="<%= baseUrl %>/configuration<%= sharingQueryStr %> ">l'onglet configuration</a>.</p>
-  <p class="fr-mt-2w">Proportion récolte théorique&nbsp;:</p>
-  <ul class="fr-container">
-    <%- include('./wood-harvest-portion', { stock, category: 'bo' }) -%>
-    <%- include('./wood-harvest-portion', { stock, category: 'bi' }) -%>
-  </ul>
-  <p class="fr-text--xs">
-    La récolte théorique locale est estimé en considérant que le taux de prélèvement sur les surfaces forestières locales est égale à celui de grande
-    région écologique, et que la répartition de cette récolte entre les usages (BO/BI) est égale à celle de la région administrative (calcul ADEME).
-  </p>
-  <p class="fr-mt-2w">Stocks&nbsp;:</p>
-  <ul class="fr-container">
-    <%- include('./wood-harvest-stocks', { stock, category: 'bo' }) -%>
-    <%- include('./wood-harvest-stocks', { stock, category: 'bi' }) -%>
-  </ul>
+<p class="fr-text--sm">
+  Approche <b>production</b> : répartition du carbone stocké en France dans les produits bois proportionnelle à la récolte théorique locale.
+</p>
+<p class="fr-text--sm">
+  Les stocks générés par l’usage de produits bois ne sont pas liés à une surface d’occupation du sol.
+</p>
+<p class="fr-text--xs">Vous pouvez changer l'approche dans <a href="<%= baseUrl %>/configuration<%= sharingQueryStr %> ">l'onglet configuration</a>.</p>
+<p class="fr-mt-2w">Proportion récolte théorique&nbsp;:</p>
+<ul class="fr-container">
+  <%- include('./wood-harvest-portion', { stock, category: 'bo' }) -%>
+  <%- include('./wood-harvest-portion', { stock, category: 'bi' }) -%>
+</ul>
+<p class="fr-text--xs">
+  La récolte théorique locale est estimé en considérant que le taux de prélèvement sur les surfaces forestières locales est égale à celui de grande
+  région écologique, et que la répartition de cette récolte entre les usages (BO/BI) est égale à celle de la région administrative (calcul ADEME).
+  La récolte théorique totale est <%= formatNumber(stock.localHarvestTotal) %> m<sup>3</sup>/an tous usages compris (BO/BI/BE).
+</p>
+<p class="fr-mt-2w">Stocks&nbsp;:</p>
+<ul class="fr-container">
+  <%- include('./wood-harvest-stocks', { stock, category: 'bo' }) -%>
+  <%- include('./wood-harvest-stocks', { stock, category: 'bi' }) -%>
+</ul>
 <% } else { %>
-  <p class="fr-text--sm">
-    Approche <b>consommation</b> : répartition du carbone stocké en France dans les produits bois proportionnelle au nombre d’habitants du territoire.
+<p class="fr-text--sm">
+  Approche <b>consommation</b> : répartition du carbone stocké en France dans les produits bois proportionnelle au nombre d’habitants du territoire.
+</p>
+<p class="fr-text--sm">
+  Les stocks générés par l’usage de produits bois ne sont pas liés à une surface d’occupation du sol.
+</p>
+<p class="fr-text--xs">Vous pouvez changer l'approche dans <a href="<%= baseUrl %>/configuration<%= sharingQueryStr %> ">l'onglet configuration</a>.</p>
+<p class="fr-mt-2w">Proportion habitants&nbsp;:</p>
+<div class="fr-container fr-my-1w">
+  <p class="formula">
+    <span class="captioned-value fr-col-4">
+      <span class="v fr-text--lg"><%= formatNumber(stock.localPopulation) %></span>
+      <span class="c fr-text--sm">population local</span>
+    </span>
+    <span class="fr-col-1" style="text-align: center;">/</span>
+    <span class="captioned-value fr-col-4">
+      <span class="v fr-text--lg"><%= formatNumber(stock.francePopulation) %></span>
+      <span class="c fr-text--sm">population France</span>
+    </span>
+    <span class="fr-col-1" style="text-align: center;">≈</span>
+    <span class="fr-col-3 v fr-text--lg"><%= formatNumber(stock.portionPopulation * 100, 2) %> %</span>
   </p>
-  <p class="fr-text--sm">
-    Les stocks générés par l’usage de produits bois ne sont pas liés à une surface d’occupation du sol.
-  </p>
-  <p class="fr-text--xs">Vous pouvez changer l'approche dans <a href="<%= baseUrl %>/configuration<%= sharingQueryStr %> ">l'onglet configuration</a>.</p>
-  <p class="fr-mt-2w">Proportion habitants&nbsp;:</p>
-  <div class="fr-container fr-my-1w">
-    <p class="formula">
-      <span class="captioned-value fr-col-4">
-        <span class="v fr-text--lg"><%= formatNumber(stock.localPopulation) %></span>
-        <span class="c fr-text--sm">population local</span>
-      </span>
-      <span class="fr-col-1" style="text-align: center;">/</span>
-      <span class="captioned-value fr-col-4">
-        <span class="v fr-text--lg"><%= formatNumber(stock.francePopulation) %></span>
-        <span class="c fr-text--sm">population France</span>
-      </span>
-      <span class="fr-col-1" style="text-align: center;">≈</span>
-      <span class="fr-col-3 v fr-text--lg"><%= formatNumber(stock.portionPopulation * 100, 2) %> %</span>
-    </p>
-  </div>
-  <p class="fr-mt-2w">Stocks&nbsp;:</p>
-  <ul class="fr-container">
-    <%- include('./wood-population-stocks', { stock, category: 'bo' }) -%>
-    <%- include('./wood-population-stocks', { stock, category: 'bi' }) -%>
-  </ul>
+</div>
+<p class="fr-mt-2w">Stocks&nbsp;:</p>
+<ul class="fr-container">
+  <%- include('./wood-population-stocks', { stock, category: 'bo' }) -%>
+  <%- include('./wood-population-stocks', { stock, category: 'bi' }) -%>
+</ul>
 <% } %>

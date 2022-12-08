@@ -49,6 +49,7 @@ function getStocksByHarvest (location) {
     totalStock,
     boLocalHarvestTotal: localAnnualWoodProductsHarvest.bo,
     biLocalHarvestTotal: localAnnualWoodProductsHarvest.bi,
+    localHarvestTotal: localAnnualWoodProductsHarvest.all,
     boFranceHarvestTotal: franceAnnualWoodProductsHarvest.bo,
     biFranceHarvestTotal: franceAnnualWoodProductsHarvest.bi,
     boPortion: portion('bo'),

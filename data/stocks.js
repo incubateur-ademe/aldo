@@ -208,7 +208,8 @@ function getAnnualFranceWoodProductsHarvest () {
 function getAnnualWoodProductsHarvest (location) {
   const harvestByCategory = {
     bo: 0,
-    bi: 0
+    bi: 0,
+    all: 0
   }
   const typeToColumn = {
     'forêt feuillu': 'SUR_FEUILLUS',
@@ -232,7 +233,7 @@ function getAnnualWoodProductsHarvest (location) {
       const total = bft * 0.9 + (vat - bft) * 0.5
       harvestByCategory.bo += total * harvestProportion(regionProportionData, 'bo', communeData)
       harvestByCategory.bi += total * harvestProportion(regionProportionData, 'bi', communeData)
-      // TODO: consider returning total as well for display (total includes BE)
+      harvestByCategory.all += total
     })
   })
   return harvestByCategory
