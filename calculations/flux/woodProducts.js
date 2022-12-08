@@ -48,13 +48,10 @@ function getFluxByHarvest (location) {
   const allFranceHarvest = getAnnualFranceWoodProductsHarvest()
   const franceSequestration = getFranceFluxWoodProducts()
 
-  const franceHarvest = (category) => allFranceHarvest.coniferes[category] + allFranceHarvest.feuillus[category]
-  const localHarvest = (category) => allLocalHarvest.coniferes[category] + allLocalHarvest.feuillus[category]
-
-  const boPortion = localHarvest('bo') / franceHarvest('bo')
+  const boPortion = allLocalHarvest.bo / allFranceHarvest.bo
   const bo = boPortion * franceSequestration.bo
 
-  const biPortion = localHarvest('bi') / franceHarvest('bi')
+  const biPortion = allLocalHarvest.bi / allFranceHarvest.bi
   const bi = biPortion * franceSequestration.bi
 
   return [
@@ -64,8 +61,8 @@ function getFluxByHarvest (location) {
       category: 'bo',
       value: bo,
       co2e: bo,
-      localHarvest: localHarvest('bo'),
-      franceHarvest: franceHarvest('bo'),
+      localHarvest: allLocalHarvest.bo,
+      franceHarvest: allFranceHarvest.bo,
       localPortion: boPortion,
       franceSequestration: franceSequestration.bo
     },
@@ -75,8 +72,8 @@ function getFluxByHarvest (location) {
       category: 'bi',
       value: bi,
       co2e: bi,
-      localHarvest: localHarvest('bi'),
-      franceHarvest: franceHarvest('bi'),
+      localHarvest: allLocalHarvest.bi,
+      franceHarvest: allFranceHarvest.bi,
       localPortion: biPortion,
       franceSequestration: franceSequestration.bi
     }

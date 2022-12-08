@@ -311,11 +311,11 @@ function getSolsArtificielsException (location, options, from, to, clcAnnualChan
   // arborés uses CLC change area
 }
 
-// source: TODO. In tCO2/an
+// source: CITEPA 2016-2019. In tCO2/an
 function getFranceFluxWoodProducts () {
   return {
-    bo: 812000,
-    bi: 751000
+    bo: 918160.6252,
+    bi: 441532.8296
   }
 }
 
