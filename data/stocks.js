@@ -213,17 +213,21 @@ function getAnnualWoodProductsHarvest (location) {
   }
   const typeToColumn = {
     'forêt feuillu': 'SUR_FEUILLUS',
-    'forêt conifere': 'SUR_RESINEUX'
+    'forêt conifere': 'SUR_RESINEUX',
+    'forêt mixte': 'SUR_MIXTES',
+    'forêt peupleraie': 'SUR_PEUPLERAIES'
   }
   const conversionBFTToVAT = {
     'forêt conifere': 1.3,
-    'forêt feuillu': 1.44
+    'forêt feuillu': 1.44,
+    'forêt mixte': 1.37,
+    'forêt peupleraie': 1.44
   }
   const areaDataForEpci = getCommuneAreaDataForEpci(location)
   const significantCarbonData = getSignificantCarbonData()
   const regionProportionData = getRegionProportionData()
   areaDataForEpci.forEach((communeData) => {
-    ['forêt conifere', 'forêt feuillu'].forEach((forestSubtype) => {
+    ['forêt conifere', 'forêt feuillu', 'forêt mixte', 'forêt peupleraie'].forEach((forestSubtype) => {
       const areaCompositionColumnName = typeToColumn[forestSubtype]
       const area = +communeData[areaCompositionColumnName]
       const carbonData = getCarbonDataForCommuneAndComposition(communeData, significantCarbonData, forestSubtype)
