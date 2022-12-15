@@ -114,11 +114,11 @@ async function territoryHandler (req, res) {
     stocksGroundTypes,
     stocks,
     charts: stocks && charts(stocks),
-    formatNumber (number, sigFig = 0) {
-      const multiplier = Math.pow(10, sigFig)
-      const rounded = Math.round(number * multiplier) / multiplier
-      if (rounded === 0) return 0 // without this get "-0"
-      return rounded.toLocaleString('fr-FR')
+    formatNumber (number, fractionDigits = 0) {
+      return number.toLocaleString('fr-FR', {
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits
+      })
     },
     round (number) {
       return Math.round(number)

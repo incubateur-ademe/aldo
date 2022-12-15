@@ -7,9 +7,6 @@
 <table class="fr-table fr-table--blue-cumulus fr-mb-1w">
   <thead>
     <th class="fr-text--xs">Composition</th>
-    <!-- <th class="fr-text--xs">Commune</th>
-    <th class="fr-text--xs">IGN niveau</th>
-    <th class="fr-text--xs">IGN local</th> -->
     <th class="fr-text--xs">Surface (ha)</th>
     <th class="fr-text--xs">Accroissement biologique unitaire (m<sup>3</sup>&nbsp;BFT/ha/an)</th>
     <th class="fr-text--xs">Mortalité unitaire (m<sup>3</sup>&nbsp;BFT/ha/an)</th>
@@ -23,17 +20,24 @@
     <% for( const detail of forestBiomassSummaryByType ) { %>
     <tr>
       <td><%= allGroundTypes.find(gt => gt.stocksId === detail.to).shortName.toLowerCase() %></td>
-      <!-- <td><%= detail.commune %></td>
-        <td><%= detail.ignLocalisationLevel %></td>
-        <td><%= detail.ignLocalisationCode %></td> -->
       <td style="text-align: right;"><%= formatNumber(detail.area, 1) %></td>
+      <% if (detail.area) { %>
       <td style="text-align: right;"><%= formatNumber(detail.growth, 2) %></td>
       <td style="text-align: right;"><%= formatNumber(detail.mortality, 2) %></td>
       <td style="text-align: right;"><%= formatNumber(detail.timberExtraction, 2) %></td>
       <td style="text-align: right;"><%= formatNumber(detail.fluxMeterCubed, 2) %></td>
       <td style="text-align: right;"><%= formatNumber(detail.conversionFactor, 2) %></td>
-      <td style="text-align: right;"><%= detail.annualFluxEquivalent !== undefined ? formatNumber(detail.annualFluxEquivalent, 1) : '-' %></td>
+      <td style="text-align: right;"><%= formatNumber(detail.annualFluxEquivalent, 1) %></td>
       <td style="text-align: right;"><%= formatNumber(detail.co2e) %></td>
+      <% } else { %>
+      <td style="text-align: right;">-</td>
+      <td style="text-align: right;">-</td>
+      <td style="text-align: right;">-</td>
+      <td style="text-align: right;">-</td>
+      <td style="text-align: right;">-</td>
+      <td style="text-align: right;">-</td>
+      <td style="text-align: right;">0</td>
+      <% } %>
     </tr>
     <% } %>
   </tbody>
