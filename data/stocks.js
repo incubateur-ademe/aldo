@@ -221,7 +221,7 @@ function getAnnualWoodProductsHarvest (location) {
     'forêt conifere': 1.3,
     'forêt feuillu': 1.44,
     'forêt mixte': 1.37,
-    'forêt peupleraie': 1.44
+    'forêt peupleraie': 1.3
   }
   const areaDataForEpci = getCommuneAreaDataForEpci(location)
   const significantCarbonData = getSignificantCarbonData()
