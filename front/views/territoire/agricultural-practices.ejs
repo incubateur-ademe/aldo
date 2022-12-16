@@ -9,9 +9,15 @@
       </p>
     </div>
   </div>
-  <%- include('../partials/calculation-warning') -%>
+  <p>
+    Les pratiques agricoles stockantes mises en place depuis moins de 20 ans,
+    ou envisagées dans les prochaines années, sont exprimées par hectare.
+    Leur potentiel stockant est donné en tonnes de carbone par hectare et par an.
+    La séquestration est ici considérée durer pendant 20 ans avant d'atteindre
+    un état d'équilibre ("saturation").
+  </p>
   <fieldset class="fr-container fr-pb-3w">
-    <legend class="fr-mb-1w">Surface implantée depuis moins de 20 ans</legend>
+    <legend class="fr-mb-1w">Cumul des surfaces implantées sur les 20 dernières années</legend>
     <div class="fr-grid-row">
       <% for(practice of agriculturalPractices) { %>
         <div class="fr-col-12 fr-col-md-5">
