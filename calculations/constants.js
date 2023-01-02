@@ -114,7 +114,7 @@ module.exports = {
       shortName: 'Mixte',
       parentType: 'forêts',
       color: 'bourgeon',
-      clcCodes: ['313']
+      clcCodes: ['313', '324']
     },
     {
       stocksId: 'forêt feuillu',
@@ -122,8 +122,7 @@ module.exports = {
       shortName: 'Feuillu',
       parentType: 'forêts',
       color: 'bourgeon',
-      // TODO: 324 should be mixte
-      clcCodes: ['311', '324']
+      clcCodes: ['311']
     },
     {
       stocksId: 'forêt conifere',
