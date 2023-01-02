@@ -53,25 +53,33 @@ router.post('/contact', (req, res) => {
   })
 })
 
+router.get('/accessibilite', (req, res) => {
+  res.render('accessibilite', {
+    pageTitle: 'Accessibilité'
+  })
+})
+
+router.get('/mentions-legales', (req, res) => {
+  res.render('legalNotice', {
+    pageTitle: 'Mentions légales'
+  })
+})
+
 router.get('/sitemap.txt', (req, res) => {
   function url (path) {
     return `${process.env.PROTOCOL.toLowerCase()}://${process.env.HOSTNAME}${path}`
   }
   const content = [
     url('/'),
-    url('/contact')
+    url('/contact'),
+    url('/accessibilite'),
+    url('/mentions-legales')
   ]
   epciList().forEach((epci) => {
     content.push(url(`/epci/${epci.code}`))
   })
   res.header('Content-Type', 'text/plain')
   res.send(content.join('\n'))
-})
-
-router.get('/accessibilite', (req, res) => {
-  res.render('accessibilite', {
-    pageTitle: 'Accessibilité'
-  })
 })
 
 router.get('*', async (req, res) => {
@@ -81,13 +89,5 @@ router.get('*', async (req, res) => {
     epcis
   })
 })
-
-// TODO: complete and add the following back in
-// router.get('/mentions-legales', (req, res) => {
-//   res.render('legalNotice', {
-//     pageTitle: 'Mentions légales',
-//     contactEmail: 'mon-produit@beta.gouv.fr'
-//   })
-// })
 
 module.exports = router
