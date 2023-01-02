@@ -13,7 +13,8 @@ router.get('/', async (req, res) => {
     res.redirect('/epci/' + req.query.epci)
   } else {
     res.render('landing', {
-      epcis: epciList()
+      epcis: epciList(),
+      isHomepage: true
     })
   }
 })
