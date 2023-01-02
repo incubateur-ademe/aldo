@@ -125,7 +125,6 @@ function getCarbonDataForCommuneAndComposition (communeData, carbonData, forestS
   }
   if (carbonDataForCommuneAndComposition) return carbonDataForCommuneAndComposition
   // no precise data found, fall back to using data for France.
-  console.log('Using France biomass stock data for ', communeData.INSEE_COM, forestSubtype)
   const franceCompositionCarbonData =
     compositionCarbonData.find((data) => data.code_localisation === 'France')
   if (franceCompositionCarbonData) {

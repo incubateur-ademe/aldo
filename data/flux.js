@@ -378,7 +378,6 @@ function getForestBiomassFluxesByCommune (location) {
         }
       }
       if (!carbonDataForCommuneAndLocalisation) {
-        console.log('Using France data for ', communeData.INSEE_COM, forestSubtype)
         const france = 'France'
         flux.ignLocalisationLevel = france
         flux.ignLocalisationCode = france

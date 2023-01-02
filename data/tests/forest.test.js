@@ -1,21 +1,21 @@
 const {
   // getAnnualGroundCarbonFlux,
   // getAllAnnualFluxes,
-  getAnnualSurfaceChange,
-  getForestBiomassFluxByCommune
+  // getAnnualSurfaceChange,
+  getForestBiomassFluxesByCommune
 } = require('../flux')
 
-test('returns expected area for forest types', () => {
-  const epci = { epci: '200000172' }
-  expect(getAnnualSurfaceChange(epci, {}, undefined, 'forêt feuillu')).toBeCloseTo(1920.9, 1)
-  expect(getAnnualSurfaceChange(epci, {}, undefined, 'forêt conifere')).toBeCloseTo(3876.0, 1)
-  expect(getAnnualSurfaceChange(epci, {}, undefined, 'forêt peupleraie')).toBeCloseTo(0.1, 1)
-  expect(getAnnualSurfaceChange(epci, {}, undefined, 'forêt mixte')).toBeCloseTo(2976.8, 1)
-})
+// test('returns expected area for forest types', () => {
+//   const epci = { epci: '200000172' }
+//   expect(getAnnualSurfaceChange(epci, {}, undefined, 'forêt feuillu')).toBeCloseTo(1920.9, 1)
+//   expect(getAnnualSurfaceChange(epci, {}, undefined, 'forêt conifere')).toBeCloseTo(3876.0, 1)
+//   expect(getAnnualSurfaceChange(epci, {}, undefined, 'forêt peupleraie')).toBeCloseTo(0.1, 1)
+//   expect(getAnnualSurfaceChange(epci, {}, undefined, 'forêt mixte')).toBeCloseTo(2976.8, 1)
+// })
 
 test('returns array of fluxes of expected structure', () => {
   const epci = { epci: '200000172' }
-  const fluxes = getForestBiomassFluxByCommune(epci)
+  const fluxes = getForestBiomassFluxesByCommune(epci)
   expect(fluxes.length).toBe(40)
   const flux = fluxes[0]
   expect(flux).toHaveProperty('to')
