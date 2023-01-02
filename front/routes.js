@@ -68,6 +68,12 @@ router.get('/sitemap.txt', (req, res) => {
   res.send(content.join('\n'))
 })
 
+router.get('/accessibilite', (req, res) => {
+  res.render('accessibilite', {
+    pageTitle: 'Accessibilité'
+  })
+})
+
 router.get('*', async (req, res) => {
   const epcis = await epciList()
   res.status(404)
@@ -77,12 +83,6 @@ router.get('*', async (req, res) => {
 })
 
 // TODO: complete and add the following back in
-// router.get('/accessibilite', (req, res) => {
-//   res.render('accessibilite', {
-//     pageTitle: 'Accessibilité'
-//   })
-// })
-
 // router.get('/mentions-legales', (req, res) => {
 //   res.render('legalNotice', {
 //     pageTitle: 'Mentions légales',
