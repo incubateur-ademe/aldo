@@ -70,12 +70,13 @@ async function territoryHandler (req, res) {
   })
   const resetQueryStr = options.stocksHaveModifications || options.fluxHaveModifications ? '?' : undefined
   // this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
-  let sharingQueryStr = '?'
-  Object.keys(req.query).forEach(queryParam => {
-    if (req.query[queryParam] && queryParam !== 'epci') {
-      sharingQueryStr += `&${queryParam}=${req.query[queryParam]}`
-    }
+  let sharingQueryStr = ''
+  const params = Object.keys(req.query).map(queryParam => {
+    return `${queryParam}=${req.query[queryParam]}`
   })
+  if (params.length) {
+    sharingQueryStr = `?${params.join('&')}`
+  }
   // TODO: double check numbers, esp annualFluxEquivalent vs co2e
   // aggregate forest biomass data which is by commune, not EPCI
   const forestBiomassSummaryByType = []

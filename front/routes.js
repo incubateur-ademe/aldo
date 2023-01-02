@@ -53,6 +53,21 @@ router.post('/contact', (req, res) => {
   })
 })
 
+router.get('/sitemap.txt', (req, res) => {
+  function url (path) {
+    return `${process.env.PROTOCOL.toLowerCase()}://${process.env.HOSTNAME}${path}`
+  }
+  const content = [
+    url('/'),
+    url('/contact')
+  ]
+  epciList().forEach((epci) => {
+    content.push(url(`/epci/${epci.code}`))
+  })
+  res.header('Content-Type', 'text/plain')
+  res.send(content.join('\n'))
+})
+
 router.get('*', async (req, res) => {
   const epcis = await epciList()
   res.status(404)
