@@ -77,34 +77,7 @@ async function territoryHandler (req, res) {
   if (params.length) {
     sharingQueryStr = `?${params.join('&')}`
   }
-  // TODO: double check numbers, esp annualFluxEquivalent vs co2e
-  // aggregate forest biomass data which is by commune, not EPCI
-  const forestBiomassSummaryByType = []
-  const forestSubtypes = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
-  for (const subtype of forestSubtypes) {
-    const subtypeFluxes =
-      flux.allFlux.filter((flux) => flux.to === subtype && flux.reservoir === 'biomasse')
-    const summary = {
-      to: subtype,
-      area: sumByProperty(subtypeFluxes, 'area'),
-      co2e: sumByProperty(subtypeFluxes, 'co2e')
-    }
-    const fluxProperties = [
-      'growth',
-      'mortality',
-      'timberExtraction',
-      'fluxMeterCubed',
-      'conversionFactor',
-      'annualFluxEquivalent'
-    ]
-    for (const property of fluxProperties) {
-      // the property of interest can have quite different values for different geo locations
-      // and the surface area within that location can be quite different
-      // so use a weighted sum, not an average, to get closer to a reasonable 'average' value
-      summary[property] = weightedAverage(subtypeFluxes, property, 'area')
-    }
-    forestBiomassSummaryByType.push(summary)
-  }
+
   res.render('territoire', {
     pageTitle: `${epci.nom}`,
     tab: req.params.tab || 'stocks',
@@ -144,27 +117,9 @@ async function territoryHandler (req, res) {
     sharingQueryStr,
     beges: req.query.beges,
     perimetre: req.query.perimetre,
-    forestBiomassSummaryByType,
+    forestBiomassSummaryByType: flux?.biomassSummary,
     ...options
   })
-}
-
-function sumByProperty (objArray, key) {
-  let sum = 0
-  objArray.forEach((obj) => {
-    sum += obj[key]
-  })
-  return sum
-}
-
-function weightedAverage (objArray, key, keyForWeighting) {
-  let weightedSum = 0
-  objArray.forEach((obj) => {
-    weightedSum += obj[key] * obj[keyForWeighting]
-  })
-  const total = sumByProperty(objArray, keyForWeighting)
-  // this will break if total is 0...
-  return weightedSum / total
 }
 
 function charts (stocks) {

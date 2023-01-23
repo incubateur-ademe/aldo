@@ -20,7 +20,9 @@
     <% for( const detail of forestBiomassSummaryByType ) { %>
     <tr>
       <td><%= allGroundTypes.find(gt => gt.stocksId === detail.to).shortName.toLowerCase() %></td>
-      <td style="text-align: right;"><%= formatNumber(detail.area, 1) %></td>
+      <td style="text-align: right;" nowrap="nowrap">
+        <%= formatNumber(detail.area, 1) %><%= detail.areaModified ? ' *' : '' %>
+      </td>
       <% if (detail.area) { %>
       <td style="text-align: right;"><%= formatNumber(detail.growth, 2) %></td>
       <td style="text-align: right;"><%= formatNumber(detail.mortality, 2) %></td>

@@ -334,7 +334,7 @@ function getForestBiomassFluxesByCommune (location) {
   csvFilePath = './dataByEpci/bilan-carbone-foret-par-localisation.csv'
   const carbonData = require(csvFilePath + '.json')
   const localisationLevels = ['groupeser', 'greco', 'rad13', 'bassin_populicole']
-  // there is data will null values because it isn't statistically significant at that
+  // there is data with null values because it isn't statistically significant at that
   // level. Remove these lines because they are not used.
   const significantCarbonData = carbonData.filter((data) => data.surface_ic === 's')
   const areaDataForEpci = areaData.filter(data => data.CODE_EPCI === location.epci)

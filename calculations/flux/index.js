@@ -138,13 +138,76 @@ function getAnnualFluxes (location, options) {
       }
     }
   })
+  const biomassSummary = forestBiomassGrowthSummary(allFluxes, options)
+  // update change flag for forests based on if the area used in biomass growth
+  // calculations is defined by the user.
+  const biomassGrowthAreaModified = biomassSummary.some((subtype) => subtype.areaModified)
+  summary.forêts.areaModified = summary.forêts.areaModified || biomassGrowthAreaModified
+  summary.forêts.hasModifications = summary.forêts.hasModifications || biomassGrowthAreaModified
   return {
     allFlux: allFluxes,
     summary,
+    biomassSummary,
     total
   }
 }
 
+function forestBiomassGrowthSummary (allFlux, options) {
+  // aggregate forest biomass data which is by commune, not EPCI
+  const forestBiomassSummaryByType = []
+  const forestSubtypes = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
+  for (const subtype of forestSubtypes) {
+    const subtypeFluxes =
+      allFlux.filter((flux) => flux.to === subtype && flux.reservoir === 'biomasse')
+    const originalArea = sumByProperty(subtypeFluxes, 'area')
+    const summary = {
+      to: subtype,
+      area: originalArea,
+      co2e: sumByProperty(subtypeFluxes, 'co2e')
+    }
+    const fluxProperties = [
+      'growth',
+      'mortality',
+      'timberExtraction',
+      'fluxMeterCubed',
+      'conversionFactor',
+      'annualFluxEquivalent'
+    ]
+    for (const property of fluxProperties) {
+      // the property of interest can have quite different values for different geo locations
+      // and the surface area within that location can be quite different
+      // so use a weighted sum, not an average, to get closer to a reasonable 'average' value
+      summary[property] = weightedAverage(subtypeFluxes, property, 'area')
+    }
+    forestBiomassSummaryByType.push(summary)
+    if (options.areas[subtype]) {
+      summary.originalArea = originalArea
+      summary.area = options.areas[subtype]
+      summary.areaModified = true
+      summary.co2e = summary.area * summary.annualFluxEquivalent
+    }
+  }
+  return forestBiomassSummaryByType
+}
+
+function sumByProperty (objArray, key) {
+  let sum = 0
+  objArray.forEach((obj) => {
+    sum += obj[key]
+  })
+  return sum
+}
+
+function weightedAverage (objArray, key, keyForWeighting) {
+  let weightedSum = 0
+  objArray.forEach((obj) => {
+    weightedSum += obj[key] * obj[keyForWeighting]
+  })
+  const total = sumByProperty(objArray, keyForWeighting)
+  return total ? weightedSum / total : 0
+}
+
 module.exports = {
-  getAnnualFluxes
+  getAnnualFluxes,
+  forestBiomassGrowthSummary
 }
