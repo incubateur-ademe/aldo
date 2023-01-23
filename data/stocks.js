@@ -166,8 +166,9 @@ function getBiomassCarbonDensity (location, groundType) {
   if (groundType.startsWith('forêt')) {
     return
   }
-  // TODO: ask more about this calculation - reusing forest carbon density?
-  if (groundType === 'haies') groundType = 'forêt mixte'
+  if (groundType === 'haies') {
+    return getLiveBiomassCarbonDensity(location, 'forêt mixte')
+  }
   const csvFilePath = './dataByEpci/biomass-hors-forets.csv'
   const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)
