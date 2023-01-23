@@ -40,11 +40,10 @@
                 <input
                   class="fr-input fr-text--lg"
                   type="number"
-                  inputmode="numeric"
                   step="0.1"
                   min="0"
                   placeholder="<%= thisFlux?.originalArea ? formatNumber(thisFlux.originalArea, 1) : '-' %>"
-                  value="<%= thisFlux?.areaModified ? formatNumber(thisFlux.area, 1) : '-' %>"
+                  value="<%= thisFlux?.areaModified ? thisFlux.area : undefined %>"
                   id="change_<%= from %>_<%= to %>"
                   name="change_<%= from %>_<%= to %>"
                 >
