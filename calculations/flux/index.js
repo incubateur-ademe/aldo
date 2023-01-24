@@ -180,7 +180,7 @@ function forestBiomassGrowthSummary (allFlux, options) {
       summary[property] = weightedAverage(subtypeFluxes, property, 'area')
     }
     forestBiomassSummaryByType.push(summary)
-    if (options.areas[subtype]) {
+    if (options.areas && options.areas[subtype]) {
       summary.originalArea = originalArea
       summary.area = options.areas[subtype]
       summary.areaModified = true
