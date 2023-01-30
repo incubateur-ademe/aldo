@@ -65,7 +65,7 @@ async function excelExportHandler (req, res) {
   let pageUrl = `${process.env.PROTOCOL.toLowerCase()}://${process.env.HOSTNAME}/epci/${epci.code}`
   if (req._parsedUrl.search) pageUrl += `${req._parsedUrl.search}`
   ws.cell(row, thirdColumn)
-    .link(pageUrl, 'Outil Aldo en ligne')
+    .link(pageUrl, 'Outil ALDO en ligne')
   row++
   ws.cell(row, secondColumn)
     .string('Date d\'export')

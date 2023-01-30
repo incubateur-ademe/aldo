@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const path = require('path')
 
-const appName = 'Aldo'
+const appName = 'ALDO'
 const appDescription = 'Calculer le stock et les flux de carbone sur votre territoire'
 const appRepo = 'https://github.com/datagir/aldo'
 

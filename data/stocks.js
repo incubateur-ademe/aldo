@@ -9,7 +9,7 @@ function getCarbonDensity (location, groundType) {
 }
 
 // Gets the area in hectares (ha) of a given ground type in a location.
-// The ground types Corine Land Cover uses are different from the types used by Aldo,
+// The ground types Corine Land Cover uses are different from the types used by ALDO,
 // so a mapping is used and the sum of ha of all matching CLC types is returned.
 // NB: in the lookup the type names for ground data and the more specific biomass data
 // are placed on the same level, so some CLC codes are used in two types.
