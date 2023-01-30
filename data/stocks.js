@@ -1,3 +1,5 @@
+const { getIgnLocalisation } = require('./shared')
+
 // Gets the carbon area density of a given ground type.
 function getCarbonDensity (location, groundType) {
   const csvFilePath = './dataByEpci/ground.csv'
@@ -115,8 +117,7 @@ function getCarbonDataForCommuneAndComposition (communeData, carbonData, forestS
   const localisationLevels = ['groupeser', 'greco', 'rad13', 'bassin_populicole']
   let carbonDataForCommuneAndComposition
   for (const i in localisationLevels) {
-    const localisationCodeColumn = `code_${localisationLevels[i]}`
-    const localisationCode = communeData[localisationCodeColumn]
+    const { localisationCode } = getIgnLocalisation(communeData, localisationLevels[i], composition)
     carbonDataForCommuneAndComposition =
       compositionCarbonData.find((data) => data.code_localisation === localisationCode)
     if (carbonDataForCommuneAndComposition) {

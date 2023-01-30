@@ -1,3 +1,5 @@
+const { getIgnLocalisation } = require('./shared')
+
 // TODO: move this file to a folder that both layers can rely on to not completely break
 // dependency tree
 const { GroundTypes } = require('../calculations/constants')
@@ -368,11 +370,11 @@ function getForestBiomassFluxesByCommune (location) {
         significantCarbonData.filter((data) => data.composition === subtype)
       for (const i in localisationLevels) {
         const level = localisationLevels[i]
-        const localisationCode = communeData[`code_${level}`]
+        const { localisationCode, localisationLevel } = getIgnLocalisation(communeData, level, subtype)
         carbonDataForCommuneAndLocalisation =
           compositionCarbonData.find((data) => data.code_localisation === localisationCode)
         if (carbonDataForCommuneAndLocalisation) {
-          flux.ignLocalisationLevel = level
+          flux.ignLocalisationLevel = localisationLevel
           flux.ignLocalisationCode = localisationCode
           break
         }
@@ -383,6 +385,7 @@ function getForestBiomassFluxesByCommune (location) {
         flux.ignLocalisationCode = france
         carbonDataForCommuneAndLocalisation =
           compositionCarbonData.find((data) => data.code_localisation === france)
+        console.log(flux)
         if (!carbonDataForCommuneAndLocalisation) {
           // this is unexpected
           const message =
