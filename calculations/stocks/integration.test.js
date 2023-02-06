@@ -1,6 +1,8 @@
 const { getStocks } = require('./index')
 const { getEpci } = require('../epcis')
 
+// -------- old tests
+
 // test('returns stocks by ground type for a valid EPCI', () => {
 //   const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') })
 
@@ -185,3 +187,41 @@ test('option to modify split of sols artificiels', () => {
 //   const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') }, {})
 //   expect(stocks.total).toBeCloseTo(1593631, 0)
 // })
+
+// --- new tests
+
+// mock data function return values (defining the API essentially)
+// test that has data in stocks for all ground types (without checking values)
+// test that a random child type has the parent type specified
+// test that a random parent type has the children defined ?
+// test that a standalone type has neither children nor parent
+// test that a groundStock for a type has a value that is equal to the area * density
+// test that a biomassStock for a type has a value that is equal to the area * density
+// test that totalReservoirStock is groundStock + biomassStock
+// test that totalDensity is groundD + biomassD
+// test that forest type has live and dead biomass as well as forest litter
+// test that parent stock is sum of children stock (ground, biomass, forest litter, live b, dead b)
+// test the sols art formulae
+// test cultures area override
+// test display aggregations
+
+describe('The stocks calculation module', () => {
+  jest.mock('../../data/stocks', () => {
+    const originalModule = jest.requireActual('../../data/stocks')
+
+    return {
+      __esModule: true,
+      ...originalModule,
+      getArea: jest.fn(() => 5),
+      getCarbonDensity: jest.fn(() => 2)
+    }
+  })
+
+  it('calculates ground stock by multiplying density by area', () => {
+    // stocksData.getArea.mockReturnValue(5)
+    // stocksData.getCarbonDensity.mockReturnValue(2)
+    const stocks = getStocks({ epci: getEpci('CC Faucigny-Glières') })
+    const groundStock = stocks.cultures.groundStock
+    expect(groundStock).toEqual(10)
+  })
+})
