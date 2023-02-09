@@ -10,7 +10,12 @@ jest.mock('../../data/stocks', () => {
     ...originalModule,
     getArea: jest.fn(() => 50),
     getCarbonDensity: jest.fn(() => 2),
-    getBiomassCarbonDensity: jest.fn(() => 3),
+    getBiomassCarbonDensity: jest.fn((location, keyword) => {
+      // TODO: maybe refactor getStocksByKeyword to only fetch biomss for non-forest
+      if (!keyword.startsWith('forêt ')) {
+        return 3
+      }
+    }),
     getLiveBiomassCarbonDensity: jest.fn(() => 4),
     getDeadBiomassCarbonDensity: jest.fn(() => 5),
     getForestLitterCarbonDensity: jest.fn(() => 6),
@@ -37,13 +42,9 @@ jest.mock('../../data/stocks', () => {
 })
 
 describe('The stocks calculation module', () => {
-  const overrides = {
-    areas: { vignes: 70 }
-  }
   const epci = getEpci('CC Faucigny-Glières')
-  const stocks = getStocks({ epci }, overrides)
-
   it('has data for all ground types', () => {
+    const stocks = getStocks({ epci })
     expect(stocks.cultures).toBeDefined()
     expect(stocks.prairies).toBeDefined()
     expect(stocks['prairies zones arborées']).toBeDefined()
@@ -66,6 +67,10 @@ describe('The stocks calculation module', () => {
   })
 
   describe('for simple ground types', () => {
+    const overrides = {
+      areas: { vignes: 70 }
+    }
+    const stocks = getStocks({ epci }, overrides)
     const simpleStock = stocks.cultures // has neither parent nor children
 
     it('calculates ground stock by multiplying density by area', () => {
@@ -96,6 +101,12 @@ describe('The stocks calculation module', () => {
       expect(overriddenStock.area).toEqual(70)
       expect(overriddenStock.originalArea).toEqual(50)
       expect(overriddenStock.groundStock).toEqual(140)
+      expect(overriddenStock.hasModifications).toBe(true)
+    })
+
+    it('indicates that an area has not been modified', () => {
+      const nonOverridenStock = stocks.cultures
+      expect(nonOverridenStock.hasModifications).toBeFalsy()
     })
 
     it('does not have neither parent nor children', () => {
@@ -106,12 +117,15 @@ describe('The stocks calculation module', () => {
 
   describe('for child ground types', () => {
     it('returns parent type for child type', () => {
+      const stocks = getStocks({ epci })
       expect(stocks['prairies zones arborées'].parent).toBe('prairies')
       expect(stocks['prairies zones arborées'].children).not.toBeDefined()
     })
   })
 
   describe('for parent ground types', () => {
+    const stocks = getStocks({ epci })
+
     it('returns children for parent type', () => {
       expect(stocks.forêts.children.length).toEqual(4)
       expect(stocks.forêts.parent).not.toBeDefined()
@@ -120,9 +134,22 @@ describe('The stocks calculation module', () => {
     it('has a total stock of a sum of the children stock', () => {
       expect(stocks.prairies.totalStock).toEqual(750)
     })
+
+    it('has a biomass stock of the sum of the biomass stock of children', () => {
+      // 3 * 50 * 3
+      expect(stocks.prairies.biomassStock).toEqual(450)
+    })
+
+    it('has sum of live and dead biomass stocks of children if forest', () => {
+      // 4 * 50 * 4
+      expect(stocks.forêts.liveBiomassStock).toEqual(800)
+      // 4 * 50 * 5
+      expect(stocks.forêts.deadBiomassStock).toEqual(1000)
+    })
   })
 
   describe('for forest subtype', () => {
+    const stocks = getStocks({ epci })
     const forestChild = stocks['forêt mixte']
 
     it('has live biomass stock', () => {
@@ -141,15 +168,15 @@ describe('The stocks calculation module', () => {
     })
 
     it('calculates the total stock with the extra reservoirs', () => {
-      // since we have mocked biomassDensity to return 4 for all sources,
-      // this 1000 'inaccurately' takes simple biomass into account
-      expect(forestChild.totalStock).toEqual(1000)
+      // ground + live and dead biomass + litter
+      // 50 * 2 + 50 * (4 + 5) + 50 * 6
+      expect(forestChild.totalStock).toEqual(850)
     })
   })
 
   describe('for wood products', () => {
     // implicit test: the default wood calculation setting is by harvest
-    const stocksByHarvest = stocks
+    const stocksByHarvest = getStocks({ epci })
 
     it('for harvest, calculates stock by multiplying France stocks with the proportion of all m^3 of wood harvested locally', () => {
       expect(stocksByHarvest['produits bois'].boStock).toEqual(50)
@@ -173,17 +200,17 @@ describe('The stocks calculation module', () => {
 
     describe('the tree area', () => {
       it('can be set by the user', () => {
-        const testStocks = getStocks({ epci }, {
+        const stocks = getStocks({ epci }, {
           areas: {
             'sols artificiels arborés et buissonants': 20
           }
         })
-        expect(testStocks[treeKey].area).toEqual(20)
+        expect(stocks[treeKey].area).toEqual(20)
       })
 
       it('can be fetched from the data', () => {
-        const testStocks = getStocks({ epci })
-        expect(testStocks[treeKey].area).toEqual(50)
+        const stocks = getStocks({ epci })
+        expect(stocks[treeKey].area).toEqual(50)
       })
     })
 
@@ -202,41 +229,40 @@ describe('The stocks calculation module', () => {
       it('is the product of the proportion and the total when there are not many trees', () => {
         const areas = {}
         areas[treeKey] = 0
-        const testStocks = getStocks({ epci }, { areas })
+        const stocks = getStocks({ epci }, { areas })
         // proportion defaults to 0.8, or 80%. 80% of 50 is 40.
-        expect(testStocks[impermeableKey].area).toEqual(40)
+        expect(stocks[impermeableKey].area).toEqual(40)
       })
 
       it('is the product of the proportion and the total when there are not many trees, and the proportion can be customised', () => {
         const areas = {}
         areas[treeKey] = 0
-        const testStocks = getStocks({ epci }, { areas, proportionSolsImpermeables: 0.5 })
-        expect(testStocks[impermeableKey].area).toEqual(25)
+        const stocks = getStocks({ epci }, { areas, proportionSolsImpermeables: 0.5 })
+        expect(stocks[impermeableKey].area).toEqual(25)
       })
 
       it('is the area without trees minus the area with trees if there are >= 0.2 * area trees', () => {
-        const areas = {}
-        areas[treeKey] = 40
-        const testStocks = getStocks({ epci }, { areas })
-        expect(testStocks[impermeableKey].area).toEqual(10)
+        // with the trees area mocked at 50 we trigger this condition
+        const stocks = getStocks({ epci })
+        expect(stocks[impermeableKey].area).toEqual(0)
       })
     })
 
     describe('the shrubby area', () => {
       it('can be set by the user', () => {
-        const testStocks = getStocks({ epci }, {
+        const stocks = getStocks({ epci }, {
           areas: {
             'sols artificiels arbustifs': 20
           }
         })
-        expect(testStocks[shrubbyKey].area).toEqual(20)
+        expect(stocks[shrubbyKey].area).toEqual(20)
       })
 
       // TODO: question the logic of this
       it('is the green portion of the total area minus the area with trees if there are not many trees', () => {
         const areas = {}
         areas[treeKey] = 5
-        const testStocks = getStocks({ epci }, { areas })
+        const stocks = getStocks({ epci }, { areas })
         // areaWithoutTrees = 50 (from mocked getArea fn)
         // areaWithTrees = 5
         // 5 < 0.2 * (areaWithoutTrees + areaWithTrees)
@@ -246,22 +272,66 @@ describe('The stocks calculation module', () => {
         // 5 < 0.2 * 49 === TRUE
         // 0.2 (default green portion) * (areaWithoutTrees + areaWithTrees) - areaWithTrees
         // 0.2 * 55 - 5
-        expect(testStocks[shrubbyKey].area).toBeCloseTo(6, 0)
+        expect(stocks[shrubbyKey].area).toBeCloseTo(6, 0)
         // TODO: fix resolve floating point inaccuracy to be able to use the below
-        // expect(testStocks[shrubbyKey].area).toEqual(6)
+        // expect(stocks[shrubbyKey].area).toEqual(6)
       })
 
       // TODO: green portion is customised relative to impermeable portion set by user
 
       it('is zero if there are proportionally a lot of trees', () => {
-        const areas = {}
-        areas[treeKey] = 40
-        const testStocks = getStocks({ epci }, { areas })
-        expect(testStocks[shrubbyKey].area).toEqual(0)
+        // with the trees area mocked at 50 we trigger this condition
+        const stocks = getStocks({ epci })
+        expect(stocks[shrubbyKey].area).toEqual(0)
       })
     })
     // TODO: test to override to override proportionSolsImpermeables (NB the hardcoded 0.2 in the code which is a bug)
   })
-})
 
-// TODO: test display aggregations
+  describe('data aggregations', () => {
+    it('returns sum of stocks', () => {
+      const stocks = getStocks({ epci })
+      expect(stocks.total).toBeDefined()
+      // smoke test - 50 * 16 (ground type count) * 2
+      // not hardcoding the calculation because have previously tested all the stock calculations
+      // and the value will change if those calculations end up changing.
+      expect(stocks.total).toBeGreaterThan(1600)
+    })
+
+    describe('percentage of stock per reservoir', () => {
+      const stocks = getStocks({ epci })
+      const percentageByReservoir = stocks.percentageByReservoir
+
+      it('contains all reservoir types', () => {
+        expect(percentageByReservoir['Sol (30 cm)']).toBeDefined()
+        expect(percentageByReservoir['Biomasse sur pied']).toBeDefined()
+        expect(percentageByReservoir['Litière']).toBeDefined()
+        expect(percentageByReservoir['Matériaux bois']).toBeDefined()
+      })
+
+      it('includes live and dead biomass in biomass calculation', () => {
+        // there are:
+        // 16 stock sources (inc haies, prod bois; not inc parent types)
+        // 7 of which use straightforward area * density calculations
+
+        // mocking means that:
+        // biomass stock per ground subtype = 50 * 3
+        // live biomass stock per ground subtype = 50 * 4
+        // dead biomass stock per ground subtype = 50 * 5
+
+        // 8 * 50 * 3 = 1200 stock for 7 standard sources + haies
+        // 50 * 4 * (4 + 5) = 200 * 9 = 1800 for forest live and dead inc
+        // 50 * 3 = 150 for the only sols art that has area with the mocked data
+        // 0 for prod bois
+        const expectedBiomassStockTotal = 3150
+        const total = stocks.total
+        const expectedPercentage = expectedBiomassStockTotal / total * 100
+        expect(percentageByReservoir['Biomasse sur pied']).toBeCloseTo(expectedPercentage, 1)
+      })
+    })
+    // TODO: percentages per level 1 ground type
+    //      (stocks[key].stockPercentage .groundAndLitterStockPercentage .biomassStockPercentage)
+
+    // TODO: stocks.byDensity
+  })
+})
