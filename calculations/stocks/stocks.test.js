@@ -298,6 +298,20 @@ describe('The stocks calculation module', () => {
       expect(stocks.total).toBeGreaterThan(1600)
     })
 
+    it('for each parent type, calculates the proportion of the stock for that type against the total', () => {
+      // TODO: could improve these tests with expected values
+      const stocks = getStocks({ epci })
+      expect(stocks.cultures.stockPercentage).toBeDefined()
+      expect(stocks.cultures.groundAndLitterStockPercentage).toBeDefined()
+      expect(stocks.cultures.biomassStockPercentage).toBeDefined()
+    })
+
+    it('provides the total carbon densities for all sources', () => {
+      const stocks = getStocks({ epci })
+      expect(stocks.byDensity.cultures).toBe(5)
+      expect(stocks.byDensity['forêt mixte']).toBe(17)
+    })
+
     describe('percentage of stock per reservoir', () => {
       const stocks = getStocks({ epci })
       const percentageByReservoir = stocks.percentageByReservoir
@@ -329,9 +343,5 @@ describe('The stocks calculation module', () => {
         expect(percentageByReservoir['Biomasse sur pied']).toBeCloseTo(expectedPercentage, 1)
       })
     })
-    // TODO: percentages per level 1 ground type
-    //      (stocks[key].stockPercentage .groundAndLitterStockPercentage .biomassStockPercentage)
-
-    // TODO: stocks.byDensity
   })
 })
