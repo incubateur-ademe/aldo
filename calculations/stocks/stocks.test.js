@@ -171,26 +171,97 @@ describe('The stocks calculation module', () => {
     const shrubbyKey = 'sols artificiels arbustifs'
     const treeKey = 'sols artificiels arborés et buissonants'
 
-    const areas = {}
-    areas[treeKey] = 0
-    const noTreesStocks = getStocks({ epci }, { areas })
-    it('calculates impermeable area using the proportion when there are not many trees', () => {
-      expect(noTreesStocks[impermeableKey].area).toEqual(40)
+    describe('the tree area', () => {
+      it('can be set by the user', () => {
+        const testStocks = getStocks({ epci }, {
+          areas: {
+            'sols artificiels arborés et buissonants': 20
+          }
+        })
+        expect(testStocks[treeKey].area).toEqual(20)
+      })
+
+      it('can be fetched from the data', () => {
+        const testStocks = getStocks({ epci })
+        expect(testStocks[treeKey].area).toEqual(50)
+      })
     })
 
-    // areas[treeKey] = 40
-    // const moreTreesStocks = getStocks({ epci }, { areas })
-    // it('calculates impermeable area by subtracting area with trees from area without if there are >= 0.2 * area trees', () => {
-    //   expect(moreTreesStocks[impermeableKey].area).toEqual(10)
-    // })
-    // TODO: call getStocks with different area overrides each time
-    // 3 x tests to override each subtype
-    // test to override to override proportionSolsImpermeables (NB the hardcoded 0.2 in the code which is a bug)
-    // test when area with trees is < 0.2 of total area, impermeable is 0.8 * total area
-    // test when area with trees is >= 0.2 of total area, impermeable is area without trees - area with trees
-    // 
+    // NB: the 'proportion' in these tests refers to the hypothesis of the proportion of artificial ground
+    //  which is impermeable. The value can be 0 - 1 inclusive.
+    describe('the impermeable area', () => {
+      it('can be set by the user', () => {
+        const fixedImpermeableStocks = getStocks({ epci }, {
+          areas: {
+            'sols artificiels imperméabilisés': 20
+          }
+        })
+        expect(fixedImpermeableStocks[impermeableKey].area).toEqual(20)
+      })
+
+      it('is the product of the proportion and the total when there are not many trees', () => {
+        const areas = {}
+        areas[treeKey] = 0
+        const testStocks = getStocks({ epci }, { areas })
+        // proportion defaults to 0.8, or 80%. 80% of 50 is 40.
+        expect(testStocks[impermeableKey].area).toEqual(40)
+      })
+
+      it('is the product of the proportion and the total when there are not many trees, and the proportion can be customised', () => {
+        const areas = {}
+        areas[treeKey] = 0
+        const testStocks = getStocks({ epci }, { areas, proportionSolsImpermeables: 0.5 })
+        expect(testStocks[impermeableKey].area).toEqual(25)
+      })
+
+      it('is the area without trees minus the area with trees if there are >= 0.2 * area trees', () => {
+        const areas = {}
+        areas[treeKey] = 40
+        const testStocks = getStocks({ epci }, { areas })
+        expect(testStocks[impermeableKey].area).toEqual(10)
+      })
+    })
+
+    describe('the shrubby area', () => {
+      it('can be set by the user', () => {
+        const testStocks = getStocks({ epci }, {
+          areas: {
+            'sols artificiels arbustifs': 20
+          }
+        })
+        expect(testStocks[shrubbyKey].area).toEqual(20)
+      })
+
+      // TODO: question the logic of this
+      it('is the green portion of the total area minus the area with trees if there are not many trees', () => {
+        const areas = {}
+        areas[treeKey] = 5
+        const testStocks = getStocks({ epci }, { areas })
+        // areaWithoutTrees = 50 (from mocked getArea fn)
+        // areaWithTrees = 5
+        // 5 < 0.2 * (areaWithoutTrees + areaWithTrees)
+        // 5 < 0.2 * 55 === TRUE
+        // areaImpermeable = 0.8 * 55 = 44
+        // threshold for condition : areaWithTrees < 0.2 * (areaImpermeable + areaWithTrees)
+        // 5 < 0.2 * 49 === TRUE
+        // 0.2 (default green portion) * (areaWithoutTrees + areaWithTrees) - areaWithTrees
+        // 0.2 * 55 - 5
+        expect(testStocks[shrubbyKey].area).toBeCloseTo(6, 0)
+        // TODO: fix resolve floating point inaccuracy to be able to use the below
+        // expect(testStocks[shrubbyKey].area).toEqual(6)
+      })
+
+      // TODO: green portion is customised relative to impermeable portion set by user
+
+      it('is zero if there are proportionally a lot of trees', () => {
+        const areas = {}
+        areas[treeKey] = 40
+        const testStocks = getStocks({ epci }, { areas })
+        expect(testStocks[shrubbyKey].area).toEqual(0)
+      })
+    })
+    // TODO: test to override to override proportionSolsImpermeables (NB the hardcoded 0.2 in the code which is a bug)
   })
 })
 
-// test the sols art formulae
-// test display aggregations
+// TODO: test display aggregations

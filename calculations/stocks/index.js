@@ -121,12 +121,14 @@ function getAreasSolsArtificiels (location, options) {
   let areaShrubby = options.areas[shrubbyKey]
   if (isNaN(areaShrubby)) {
     if (areaWithTrees < 0.2 * (areaImpermeable + areaWithTrees)) {
+      // TODO: can use totalArea instead of sum
       areaShrubby = estimatedPortionGreen * (areaWithoutTrees + areaWithTrees) - areaWithTrees
     } else {
       areaShrubby = 0
     }
   }
 
+  // TODO: what is this 'area' key doing?
   const areas = { area: areaImpermeable + areaShrubby + areaWithTrees }
   areas[impermeableKey] = areaImpermeable
   areas[shrubbyKey] = areaShrubby
