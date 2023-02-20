@@ -114,6 +114,7 @@ module.exports = {
       shortName: 'Mixte',
       parentType: 'forêts',
       color: 'bourgeon',
+      // fluxId: 'for_mix',
       clcCodes: ['313', '324']
     },
     {
@@ -122,6 +123,7 @@ module.exports = {
       shortName: 'Feuillu',
       parentType: 'forêts',
       color: 'bourgeon',
+      // fluxId: 'for_feu',
       clcCodes: ['311']
     },
     {
@@ -130,6 +132,7 @@ module.exports = {
       shortName: 'Conifère',
       parentType: 'forêts',
       color: 'bourgeon',
+      // fluxId: 'for_con',
       clcCodes: ['312']
     },
     {
@@ -137,6 +140,7 @@ module.exports = {
       name: 'Forêt peupleraie',
       shortName: 'Peupleraie',
       parentType: 'forêts',
+      // fluxId: 'for_peu',
       color: 'bourgeon'
     },
     {

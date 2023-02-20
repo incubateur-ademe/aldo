@@ -84,3 +84,13 @@ test('returns expected area change for sols artificiels', () => {
 // has a co2e
 
 // proportion impermeable is overrideable (to another number and to 0)
+
+// How to mock data files:
+// jest.mock('../dataByEpci/ground.csv.json', () => {
+//   return [
+//     {
+//       siren: '243000643',
+//       'f_for_vign_%zpc': 2
+//     }
+//   ]
+// })

@@ -11,7 +11,7 @@ jest.mock('../../data/stocks', () => {
     getArea: jest.fn(() => 50),
     getCarbonDensity: jest.fn(() => 2),
     getBiomassCarbonDensity: jest.fn((location, keyword) => {
-      // TODO: maybe refactor getStocksByKeyword to only fetch biomss for non-forest
+      // TODO: maybe refactor getStocksByKeyword to only fetch biomass for non-forest
       if (!keyword.startsWith('forêt ')) {
         return 3
       }

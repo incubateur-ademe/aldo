@@ -241,10 +241,6 @@ function cToCo2e (valueC) {
 }
 
 function getAnnualSurfaceChange (location, options, from, to) {
-  if (to.startsWith('forêt ')) {
-    // not elegant error management but shouldn't happen
-    throw new Error('Change to forest is only measured at parent-type level, not subtype')
-  }
   const csvFilePath = './dataByEpci/clc18-change.csv'
   const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)
