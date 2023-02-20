@@ -104,7 +104,6 @@ module.exports = {
       stocksId: 'forêts',
       name: 'Forêts',
       color: 'bourgeon',
-      fluxId: 'for',
       clcCodes: ['311', '312', '313', '324'],
       children: ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
     },
@@ -114,7 +113,7 @@ module.exports = {
       shortName: 'Mixte',
       parentType: 'forêts',
       color: 'bourgeon',
-      // fluxId: 'for_mix',
+      fluxId: 'for',
       clcCodes: ['313', '324']
     },
     {
@@ -123,7 +122,7 @@ module.exports = {
       shortName: 'Feuillu',
       parentType: 'forêts',
       color: 'bourgeon',
-      // fluxId: 'for_feu',
+      fluxId: 'for',
       clcCodes: ['311']
     },
     {
@@ -132,7 +131,7 @@ module.exports = {
       shortName: 'Conifère',
       parentType: 'forêts',
       color: 'bourgeon',
-      // fluxId: 'for_con',
+      fluxId: 'for',
       clcCodes: ['312']
     },
     {
@@ -140,7 +139,7 @@ module.exports = {
       name: 'Forêt peupleraie',
       shortName: 'Peupleraie',
       parentType: 'forêts',
-      // fluxId: 'for_peu',
+      fluxId: 'for',
       color: 'bourgeon'
     },
     {

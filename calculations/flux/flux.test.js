@@ -17,6 +17,9 @@ jest.mock('../../data/flux', () => {
         },
         'forêt mixte': {
           vignes: 10
+        },
+        'forêt feuillu': {
+          'forêt conifere': 3
         }
       }[from]
       return areaChanges ? areaChanges[to] : undefined
@@ -93,8 +96,8 @@ jest.mock('../../data/flux', () => {
         {
           from: 'forêt feuillu',
           to: 'forêt conifere',
-          annualFlux: -2,
-          annualFluxEquivalent: -10,
+          annualFlux: 2,
+          annualFluxEquivalent: 6,
           yearsForFlux: 20,
           reservoir: 'sol',
           gas: 'C'
@@ -212,6 +215,12 @@ describe('The flux calculation module', () => {
     const fluxes = getAnnualFluxes({ epci })
     expect(fluxes.summary.vignes).toBeDefined()
     expect(fluxes.summary.forêts).toBeDefined()
+  })
+
+  it('contains flux entries per forest subtype', () => {
+    const fluxes = getAnnualFluxes({ epci })
+    const conifer = fluxes.allFlux.find((f) => f.to === 'forêt conifere')
+    expect(conifer.value).toBe(120)
   })
 
   describe('the forest biomass summary', () => {
