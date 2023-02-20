@@ -108,6 +108,7 @@ function getAreasSolsArtificiels (location, options) {
   const estimatedPortionGreen = 1 - estimatedPortionImpermeable
 
   let areaImpermeable = options.areas[impermeableKey]
+  // TODO: replace hardcoded 0.2 in this function with estimatedPortionGreen + write test
   if (isNaN(areaImpermeable)) {
     // TODO: ask why proportion of areaWithTrees in both cases is important
     if (areaWithTrees < 0.2 * totalArea) {
@@ -121,12 +122,14 @@ function getAreasSolsArtificiels (location, options) {
   let areaShrubby = options.areas[shrubbyKey]
   if (isNaN(areaShrubby)) {
     if (areaWithTrees < 0.2 * (areaImpermeable + areaWithTrees)) {
+      // TODO: can use totalArea instead of sum
       areaShrubby = estimatedPortionGreen * (areaWithoutTrees + areaWithTrees) - areaWithTrees
     } else {
       areaShrubby = 0
     }
   }
 
+  // TODO: what is this 'area' key doing?
   const areas = { area: areaImpermeable + areaShrubby + areaWithTrees }
   areas[impermeableKey] = areaImpermeable
   areas[shrubbyKey] = areaShrubby
