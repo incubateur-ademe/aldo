@@ -45,6 +45,46 @@ jest.mock('../../data/flux', () => {
           yearsForFlux: 20,
           reservoir: 'sol',
           gas: 'C'
+        },
+        {
+          from: 'cultures',
+          to: 'forêt mixte',
+          reservoir: 'biomasse',
+          area: 1,
+          annualFlux: 4,
+          annualFluxEquivalent: 12,
+          growth: 1,
+          mortality: 1,
+          timberExtraction: 1,
+          fluxMeterCubed: 1,
+          conversionFactor: 1
+        },
+        {
+          from: 'vergers',
+          to: 'forêt mixte',
+          reservoir: 'biomasse',
+          area: 2,
+          annualFlux: 1,
+          annualFluxEquivalent: 3,
+          growth: 0.1,
+          mortality: 0.1,
+          timberExtraction: 0.1,
+          fluxMeterCubed: 0.1,
+          conversionFactor: 0.1
+        },
+        // add this one in to check filtering on biomass summary calculations
+        {
+          from: 'cultures',
+          to: 'forêt feuillu',
+          reservoir: 'biomasse',
+          area: 20,
+          annualFlux: 100,
+          annualFluxEquivalent: 300,
+          growth: 20,
+          mortality: 20,
+          timberExtraction: 20,
+          fluxMeterCubed: 20,
+          conversionFactor: 20
         }
       ]
     }),
@@ -60,6 +100,8 @@ jest.mock('../../data/flux', () => {
     // }),
   }
 })
+
+const ORIGINAL_FLUX_COUNT = 6
 
 jest.mock('../../data/stocks', () => {
   const originalModule = jest.requireActual('../../data/stocks')
@@ -96,7 +138,7 @@ describe('The flux calculation module', () => {
 
   it('adds N2O entries for emissions', () => {
     const fluxes = getAnnualFluxes({ epci })
-    const flux = fluxes.allFlux[3]
+    const flux = fluxes.allFlux[ORIGINAL_FLUX_COUNT]
     expect(flux.gas).toEqual('N2O')
     expect(flux.reservoir).toEqual('sol et litière')
     // value calculated from original spreadsheet
@@ -105,13 +147,13 @@ describe('The flux calculation module', () => {
 
   it('does not add N2O entries for sequestrations', () => {
     const fluxes = getAnnualFluxes({ epci })
-    const flux = fluxes.allFlux[4]
+    const flux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 1]
     expect(flux.gas).not.toEqual('N2O')
   })
 
   it('adds sequestrations from wood products by harvest', () => {
     const fluxes = getAnnualFluxes({ epci })
-    const boFlux = fluxes.allFlux[4]
+    const boFlux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 1]
     expect(boFlux.to).toEqual('produits bois')
     expect(boFlux.from).toEqual(undefined)
     expect(boFlux.category).toEqual('bo')
@@ -121,7 +163,7 @@ describe('The flux calculation module', () => {
     expect(boFlux).toHaveProperty('franceSequestration')
     expect(boFlux.value).toEqual(100)
     expect(boFlux.co2e).toEqual(100)
-    const biFlux = fluxes.allFlux[5]
+    const biFlux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 2]
     expect(biFlux.to).toEqual('produits bois')
     expect(biFlux.from).toEqual(undefined)
     expect(biFlux.category).toEqual('bi')
@@ -131,7 +173,7 @@ describe('The flux calculation module', () => {
 
   it('adds sequestrations from wood products by consumption', () => {
     const fluxes = getAnnualFluxes({ epci }, { woodCalculation: 'consommation' })
-    const boFlux = fluxes.allFlux[4]
+    const boFlux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 1]
     expect(boFlux.to).toEqual('produits bois')
     expect(boFlux.from).toEqual(undefined)
     expect(boFlux.category).toEqual('bo')
@@ -139,7 +181,7 @@ describe('The flux calculation module', () => {
     expect(boFlux).toHaveProperty('francePopulation')
     expect(boFlux).toHaveProperty('localPortion')
     expect(boFlux).toHaveProperty('franceSequestration')
-    const biFlux = fluxes.allFlux[5]
+    const biFlux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 2]
     expect(biFlux.to).toEqual('produits bois')
     expect(biFlux.from).toEqual(undefined)
     expect(biFlux.category).toEqual('bi')
@@ -158,19 +200,36 @@ describe('The flux calculation module', () => {
     expect(fluxes.summary.forêts).toBeDefined()
   })
 
-  it('has a forest biomass summary', () => {
-    const fluxes = getAnnualFluxes({ epci })
-    expect(fluxes.biomassSummary).toBeDefined()
+  describe('the forest biomass summary', () => {
+    it('contains an entry for each forest subtype', () => {
+      const fluxes = getAnnualFluxes({ epci })
+      expect(fluxes.biomassSummary.length).toBe(4)
+      expect(fluxes.biomassSummary[0].to).toBe('forêt mixte')
+    })
+
+    it('provides the area as a sum of the areas of the same type', () => {
+      const fluxes = getAnnualFluxes({ epci })
+      const mixed = fluxes.biomassSummary[0]
+      expect(mixed.area).toBe(3)
+      expect(mixed.co2e).toBeDefined()
+    })
+
+    it('returns the average weighted against the area for annualFlux per type', () => {
+      const fluxes = getAnnualFluxes({ epci })
+      const mixed = fluxes.biomassSummary[0]
+      // (4 * 1 + 1 * 2)/3 = 6/3
+      expect(mixed.annualFlux).toBe(2)
+      // the following should also be weighted averages, smoke test to check they exist
+      expect(mixed.growth).toBeDefined()
+      expect(mixed.mortality).toBeDefined()
+      expect(mixed.timberExtraction).toBeDefined()
+      expect(mixed.fluxMeterCubed).toBeDefined()
+      expect(mixed.conversionFactor).toBeDefined()
+      expect(mixed.annualFluxEquivalent).toBeDefined()
+    })
+
+    // TODO: if area is overridden for subtype, add areaModified and co2e of area * original weighted flux equiv.
   })
-
-  // TODO: biomass summary:
-
-  // an array of 4 entries, one for each subtype
-  // each entry:
-  // has a area which is the sum of the area of the entries for that type
-  // has a co2e which is the sum of the co2e of the entries for that type
-  // has an annualFluxEquivalent which is a weighted average over the area for that type
-  // if area is overridden for subtype, add areaModified and co2e of area * original weighted flux equiv.
 
   // TODO: test that forest total includes this biomass growth in summary total
 

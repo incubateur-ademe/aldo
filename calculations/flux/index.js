@@ -171,6 +171,7 @@ function forestBiomassGrowthSummary (allFlux, options) {
       'timberExtraction',
       'fluxMeterCubed',
       'conversionFactor',
+      'annualFlux',
       'annualFluxEquivalent'
     ]
     for (const property of fluxProperties) {
