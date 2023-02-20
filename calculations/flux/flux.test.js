@@ -132,7 +132,7 @@ jest.mock('../../data/stocks', () => {
         return 4
       }
     }),
-    getLiveBiomassCarbonDensity: jest.fn(() => 3),
+    getLiveBiomassCarbonDensity: jest.fn((type) => type === 'forêt conifere' ? 13 : 3),
     getDeadBiomassCarbonDensity: jest.fn(() => 7)
   }
 })
@@ -271,21 +271,19 @@ describe('The flux calculation module', () => {
     expect(flux.co2e).toBeDefined()
   })
 
-  // TODO: separate forest fluxes into subtypes, which will then allow this next feature to exist
-  // it('adds deforestation biomass changes between forest types too', () => {
-  //   const fluxes = getAnnualFluxes({ epci: '243000643' })
-  //   const flux = fluxes.allFlux.find((f) => f.from === 'forêt conifere' && f.to === 'forêt feuillu' && f.reservoir === 'biomasse')
-  //   // a test above checks that the annualFlux for mixed is 2
-  //   // the mocking ensures vignes biomass is 1
-  //   expect(flux.annualFlux).toEqual(-1)
-  // })
+  it('adds deforestation biomass changes between forest types too', () => {
+    const fluxes = getAnnualFluxes({ epci: '243000643' })
+    const flux = fluxes.allFlux.find((f) => f.from === 'forêt feuillu' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
+    expect(flux.annualFlux).toEqual(10)
+  })
 
-  // TODO: enable this
-  // it('allows area to be overridden', () => {
-  //   const fluxes = getAnnualFluxes({ epci: '243000643' }, { areaChanges: { for_mix_vign: 20 } })
-  //   const flux = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
-  //   expect(flux.area).toBe(20)
-  //   expect(flux.originalArea).toBe(10)
-  //   expect(flux.areaModified).toBe(true)
-  // })
+  it('allows forest subtype area to be overridden', () => {
+    const fluxes = getAnnualFluxes({ epci: '243000643' }, { areaChanges: { for_mix_vign: 20 } })
+    const flux = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
+    expect(flux.area).toBe(20)
+    expect(flux.originalArea).toBe(10)
+    expect(flux.areaModified).toBe(true)
+    expect(fluxes.summary.forêts.areaModified).toBe(true)
+  })
+  // TODO: should be able to override area from a prairie subtype to another
 })

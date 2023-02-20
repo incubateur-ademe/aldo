@@ -114,6 +114,7 @@ module.exports = {
       parentType: 'forêts',
       color: 'bourgeon',
       fluxId: 'for',
+      altFluxId: 'for_mix',
       clcCodes: ['313', '324']
     },
     {
@@ -123,6 +124,7 @@ module.exports = {
       parentType: 'forêts',
       color: 'bourgeon',
       fluxId: 'for',
+      altFluxId: 'for_feu',
       clcCodes: ['311']
     },
     {
@@ -132,6 +134,7 @@ module.exports = {
       parentType: 'forêts',
       color: 'bourgeon',
       fluxId: 'for',
+      altFluxId: 'for_con',
       clcCodes: ['312']
     },
     {
@@ -140,6 +143,7 @@ module.exports = {
       shortName: 'Peupleraie',
       parentType: 'forêts',
       fluxId: 'for',
+      altFluxId: 'for_peu',
       color: 'bourgeon'
     },
     {

@@ -226,7 +226,12 @@ function deforestationFlux (location, options) {
         continue
       }
       const forestBiomassDensity = getLiveBiomassCarbonDensity(location, from) + getDeadBiomassCarbonDensity(location, from)
-      const annualFlux = getBiomassCarbonDensity(location, to) - forestBiomassDensity
+      let annualFlux
+      if (forestSubtypes.includes(to)) {
+        annualFlux = getLiveBiomassCarbonDensity(location, to) + getDeadBiomassCarbonDensity(location, to)
+      } else {
+        annualFlux = getBiomassCarbonDensity(location, to) - forestBiomassDensity
+      }
       const annualFluxEquivalent = convertCToCo2e(annualFlux)
       const { area, areaModified, originalArea } = getAnnualSurfaceChange(location, options, from, to)
       if (area && annualFlux) {
