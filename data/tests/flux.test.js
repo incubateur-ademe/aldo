@@ -63,3 +63,22 @@ test('returns expected area change for sols artificiels', () => {
 //   expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, undefined, 'forêt peupleraie')).toBeCloseTo(150, 0)
 //   expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, undefined, 'forêt mixte')).toBeCloseTo(14, 0)
 // })
+
+// ---------- NEW TESTS
+
+// the flux data module
+
+// returns an array of flux items
+
+// a flux entry:
+// has a from
+// has a to
+// has a area
+// has a originalArea
+// has a areaModified
+// has a reservoir
+// has a gas
+// has a flux
+// has a fluxEquivalent
+// has a value
+// has a co2e

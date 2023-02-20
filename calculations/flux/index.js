@@ -58,8 +58,8 @@ function getAnnualFluxes (location, options) {
     }
     const area = flux.area
     flux.flux = flux.annualFlux
-    // TODO: is flux ever used, or is it only annualFlux?
     if (flux.yearsForFlux) flux.flux *= flux.yearsForFlux
+    // TODO: refactor the following so it is just flux.value = flux.flux * flux.area
     if (flux.to.startsWith('forêt ')) {
       flux.value = flux.flux * flux.area
     } else if (flux.reservoir === 'sol') {
