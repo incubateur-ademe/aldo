@@ -126,9 +126,11 @@ jest.mock('../../data/stocks', () => {
     })),
     getBiomassCarbonDensity: jest.fn((location, keyword) => {
       if (!keyword.startsWith('forêt ')) {
-        return 1
+        return 4
       }
-    })
+    }),
+    getLiveBiomassCarbonDensity: jest.fn(() => 3),
+    getDeadBiomassCarbonDensity: jest.fn(() => 7)
   }
 })
 
@@ -250,16 +252,13 @@ describe('The flux calculation module', () => {
   // TODO: can provide areas for agricultural practices
   // test per practice?
 
-  // TODO: add tests and code for loss of biomass from forest loss
-  it('adds deforestation biomass loss when change to non-forest types', () => {
+  it('adds deforestation biomass loss when change to non-forest types, using the stock biomass densities for both ground types', () => {
     const fluxes = getAnnualFluxes({ epci: '243000643' })
     const flux = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
-    // a test above checks that the annualFlux for mixed is 2
-    // the mocking ensures vignes biomass is 1
-    expect(flux.annualFlux).toEqual(-1)
+    expect(flux.annualFlux).toEqual(-6)
     expect(flux.annualFluxEquivalent).toBeDefined()
     expect(flux.area).toEqual(10)
-    expect(flux.value).toEqual(-10)
+    expect(flux.value).toEqual(-60)
     expect(flux.co2e).toBeDefined()
   })
 

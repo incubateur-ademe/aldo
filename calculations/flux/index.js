@@ -5,7 +5,7 @@ const {
 const { GroundTypes } = require('../constants')
 const { getFluxWoodProducts } = require('./woodProducts')
 const { getFluxAgriculturalPractices } = require('./agriculturalPractices')
-const { getBiomassCarbonDensity } = require('../../data/stocks')
+const { getBiomassCarbonDensity, getLiveBiomassCarbonDensity, getDeadBiomassCarbonDensity } = require('../../data/stocks')
 
 function convertCToCo2e (valueC) {
   return valueC * 44 / 12
@@ -96,8 +96,7 @@ function getAnnualFluxes (location, options) {
   allFluxes.push(...woodFluxes)
   const agriculturalPracticesFlux = getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas)
   allFluxes.push(...agriculturalPracticesFlux)
-  const biomassSummary = forestBiomassGrowthSummary(allFluxes, options)
-  allFluxes.push(...deforestationFlux(location, options, biomassSummary))
+  allFluxes.push(...deforestationFlux(location, options))
 
   const summary = {}
   let total = 0
@@ -145,6 +144,7 @@ function getAnnualFluxes (location, options) {
       }
     }
   })
+  const biomassSummary = forestBiomassGrowthSummary(allFluxes, options)
   // update change flag for forests based on if the area used in biomass growth
   // calculations is defined by the user.
   const biomassGrowthAreaModified = biomassSummary.some((subtype) => subtype.areaModified)
@@ -215,7 +215,7 @@ function weightedAverage (objArray, key, keyForWeighting) {
   return total ? weightedSum / total : 0
 }
 
-function deforestationFlux (location, options, biomassSummary) {
+function deforestationFlux (location, options) {
   // can add flux from deforestation now that have weighted averages of biomass per forest subtype for EPCI
   const deforestationFluxes = []
   const forestSubtypes = GroundTypes.find((gt) => gt.stocksId === 'forêts').children
@@ -225,8 +225,8 @@ function deforestationFlux (location, options, biomassSummary) {
       if (from === to) {
         continue
       }
-      const forestBiomassAverages = biomassSummary.find((summary) => summary.to === from)
-      const annualFlux = getBiomassCarbonDensity(location, to) - forestBiomassAverages.annualFlux
+      const forestBiomassDensity = getLiveBiomassCarbonDensity(location, from) + getDeadBiomassCarbonDensity(location, from)
+      const annualFlux = getBiomassCarbonDensity(location, to) - forestBiomassDensity
       const annualFluxEquivalent = convertCToCo2e(annualFlux)
       const { area, areaModified, originalArea } = getAnnualSurfaceChange(location, options, from, to)
       if (area && annualFlux) {
