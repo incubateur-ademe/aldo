@@ -64,7 +64,7 @@ test('returns expected area change for sols artificiels', () => {
 //   expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, undefined, 'forêt mixte')).toBeCloseTo(14, 0)
 // })
 
-// ---------- NEW TESTS
+// ---------- TODO: NEW TESTS
 
 // the flux data module
 
@@ -82,3 +82,5 @@ test('returns expected area change for sols artificiels', () => {
 // has a fluxEquivalent
 // has a value
 // has a co2e
+
+// proportion impermeable is overrideable (to another number and to 0)

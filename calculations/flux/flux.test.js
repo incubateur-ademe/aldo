@@ -151,6 +151,7 @@ describe('The flux calculation module', () => {
     expect(fluxes.total).toBeGreaterThan(60)
   })
 
+  // TODO: test totalSequestration in the summary for prairies, sols art, forêts
   it('has a summary with totals by ground type, including parent types', () => {
     const fluxes = getAnnualFluxes({ epci }, { areaChanges: {} })
     expect(fluxes.summary.vignes).toBeDefined()
@@ -162,7 +163,7 @@ describe('The flux calculation module', () => {
     expect(fluxes.biomassSummary).toBeDefined()
   })
 
-  // biomass summary:
+  // TODO: biomass summary:
 
   // an array of 4 entries, one for each subtype
   // each entry:
@@ -170,4 +171,13 @@ describe('The flux calculation module', () => {
   // has a co2e which is the sum of the co2e of the entries for that type
   // has an annualFluxEquivalent which is a weighted average over the area for that type
   // if area is overridden for subtype, add areaModified and co2e of area * original weighted flux equiv.
+
+  // TODO: test that forest total includes this biomass growth in summary total
+
+  // TODO: area changes can be overridden
+
+  // TODO: can provide areas for agricultural practices
+  // test per practice?
+
+  // TODO: add tests and code for loss of biomass from forest loss
 })

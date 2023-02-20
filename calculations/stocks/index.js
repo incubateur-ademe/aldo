@@ -108,6 +108,7 @@ function getAreasSolsArtificiels (location, options) {
   const estimatedPortionGreen = 1 - estimatedPortionImpermeable
 
   let areaImpermeable = options.areas[impermeableKey]
+  // TODO: replace hardcoded 0.2 in this function with estimatedPortionGreen + write test
   if (isNaN(areaImpermeable)) {
     // TODO: ask why proportion of areaWithTrees in both cases is important
     if (areaWithTrees < 0.2 * totalArea) {
