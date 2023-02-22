@@ -158,8 +158,8 @@ function getForestBiomassCarbonDensities (location, forestSubtype) {
     weightedDeadSum += +carbonData['bois_mort_volume_(m3∙ha-1)'] * area
     totalArea += area
   })
-  const live = weightedLiveSum / totalArea
-  const dead = weightedDeadSum / totalArea
+  const live = totalArea ? weightedLiveSum / totalArea : 0
+  const dead = totalArea ? weightedDeadSum / totalArea : 0
   return { live, dead }
 }
 
