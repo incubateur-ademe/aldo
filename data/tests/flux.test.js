@@ -210,7 +210,7 @@ describe('The flux data module', () => {
         expect(fromCultures).toBe(48)
       })
     })
-
+    // TODO: test if doubling up on changes to shrubby and impermeable since they use the same CLC codes
     describe('when final occupation is shrubby', () => {
       it('always returns 0 when initial occupation is impermeable', () => {
         const siren = '200007177'
@@ -226,14 +226,104 @@ describe('The flux data module', () => {
         const toShrubby = getAnnualSurfaceChange({ epci: siren }, {}, 'sols artificiels imperméabilisés', 'sols artificiels arbustifs')
         expect(toShrubby).toBe(0)
       })
-      // mock data for the two to have a change, check that it is 0
       // TODO: what about if has data overrides?
 
-      // it('for forest subtypes, if the change to sols art trees is smaller than the green portion of the shrubby change, return the green portion of the shrubby change')
-      // it('for forest subtypes, if the change to sols art trees is smaller than the green portion of the shrubby change, return the green portion of the shrubby change, with custom portion')
+      it('for forest subtypes, if the change to sols art trees is smaller than the green portion of remaining sols art, return the green portion of remaining sols art', () => {
+        const siren = '200007177'
+        const from = 'forêt mixte'
+        jest.doMock(areaChangePath, () => {
+          return [
+            {
+              siren,
+              '313-112': 100, // forêt mixte -> sols art
+              '324-122': 200, // forêt mixte -> sols art
+              '324-141': 6 // forêt mixte -> sols art arborés
+            }
+          ]
+        })
+        // proportion green = 0.2; change sols art = 50
+        // => threshold = 0.2 * 50 = 10
+        const fromForestMixed = getAnnualSurfaceChange({ epci: siren }, {}, from, 'sols artificiels arbustifs')
+        expect(fromForestMixed).toBeCloseTo(10, 0)
+      })
 
-      // it('if the change to sols art trees is smaller than the green portion of the tree and shrubby change, return the green portion of the tree and shrubby change, minus the tree change')
-      // it('if the change to sols art trees is smaller than the green portion of the tree and shrubby change, return the green portion of the tree and shrubby change, minus the tree change, with custom portion')
+      it('for forest subtypes, if the change to sols art trees is smaller than the green portion of remaining sols art, return the green portion of remaining sols art, with custom portion', () => {
+        const siren = '200007177'
+        const from = 'forêt mixte'
+        jest.doMock(areaChangePath, () => {
+          return [
+            {
+              siren,
+              '313-112': 100, // forêt mixte -> sols art
+              '324-122': 200, // forêt mixte -> sols art
+              '324-141': 6 // forêt mixte -> sols art arborés
+            }
+          ]
+        })
+        // proportion green = 0.4; change sols art = 50
+        // => threshold = 0.4 * 50 = 20
+        const fromForestMixed = getAnnualSurfaceChange({ epci: siren }, { proportionSolsImpermeables: 0.6 }, from, 'sols artificiels arbustifs')
+        expect(fromForestMixed).toBeCloseTo(20, 0)
+      })
+
+      // TODO: in the code, changeSolsArbores is set as 0, meaning this test cannot pass
+      // check what the actual behaviour should be
+      // it('for forest subtypes, return 0 if change to sols art trees is greater than green portion of remaining sols art', () => {
+      //   const siren = '200007177'
+      //   const from = 'forêt mixte'
+      //   jest.doMock(areaChangePath, () => {
+      //     return [
+      //       {
+      //         siren,
+      //         '313-112': 100, // forêt mixte -> sols art
+      //         '324-122': 200, // forêt mixte -> sols art
+      //         '324-141': 600 // forêt mixte -> sols art arborés
+      //       }
+      //     ]
+      //   })
+      //   // proportion green = 0.4; change sols art = 50
+      //   // => threshold = 0.4 * 50 = 20
+      //   const fromForestMixed = getAnnualSurfaceChange({ epci: siren }, {}, from, 'sols artificiels arbustifs')
+      //   expect(fromForestMixed).toBe(0)
+      // })
+
+      it('if the change to sols art trees is smaller than the green portion of the total change to sols art, return the green portion of the total change to sols art, minus the tree change', () => {
+        const siren = '200007177'
+        const from = 'cultures'
+        jest.doMock(areaChangePath, () => {
+          return [
+            {
+              siren,
+              '243-112': 100, // cultures -> sols art
+              '243-122': 200, // cultures -> sols art
+              '243-141': 6 // cultures -> sols art arborés
+            }
+          ]
+        })
+        // proportion green = 0.4; change sols art = 50
+        // => threshold = 0.2 * 50 = 10 (10 - 1)
+        const fromCultures = getAnnualSurfaceChange({ epci: siren }, {}, from, 'sols artificiels arbustifs')
+        expect(fromCultures).toBeCloseTo(9, 0)
+      })
+
+      it('if the change to sols art trees is smaller than the green portion of the total change to sols art, return the green portion of the total change to sols art, minus the tree change, with custom proportion', () => {
+        const siren = '200007177'
+        const from = 'cultures'
+        jest.doMock(areaChangePath, () => {
+          return [
+            {
+              siren,
+              '243-112': 100, // cultures -> sols art
+              '243-122': 200, // cultures -> sols art
+              '243-141': 6 // cultures -> sols art arborés
+            }
+          ]
+        })
+        // proportion green = 0.4; change sols art = 50
+        // => threshold = 0.4 * 50 = 20 (20 - 1)
+        const fromCultures = getAnnualSurfaceChange({ epci: siren }, { proportionSolsImpermeables: 0.6 }, from, 'sols artificiels arbustifs')
+        expect(fromCultures).toBeCloseTo(19, 0)
+      })
     })
 
     describe('when final occupation is sols art trees', () => {

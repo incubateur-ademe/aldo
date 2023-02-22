@@ -292,7 +292,7 @@ function getSolsArtificielsException (location, options, from, to, clcAnnualChan
       }
     }
     const changeSolsArbores = getAnnualSurfaceChange(location, options, from, 'sols artificiels arborés et buissonants')
-    // TODO: rename this variable to changeArboresAndArbustifs
+    // NB: the CLC codes for impermeable and arbustifs are the same, hence the variable name
     const changeArboresAndImpermeables = clcAnnualChange + changeSolsArbores
     if (changeSolsArbores < estimatedPortionGreen * changeArboresAndImpermeables) {
       return changeArboresAndImpermeables * estimatedPortionGreen - changeSolsArbores
