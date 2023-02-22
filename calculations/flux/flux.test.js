@@ -262,45 +262,47 @@ describe('The flux calculation module', () => {
   // TODO: can provide areas for agricultural practices
   // test per practice?
 
-  it('adds deforestation biomass loss when change to non-forest types, using the stock biomass densities for both ground types', () => {
-    const fluxes = getAnnualFluxes({ epci: '243000643' })
-    const flux = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
-    expect(flux.annualFlux).toEqual(-6)
-    expect(flux.annualFluxEquivalent).toBeDefined()
-    expect(flux.area).toEqual(10)
-    expect(flux.value).toEqual(-60)
-    expect(flux.co2e).toBeDefined()
-  })
+  describe('the biomass fluxes linked to de- and reforestation', () => {
+    it('adds for changes to non-forest types, using the stock biomass densities for both ground types', () => {
+      const fluxes = getAnnualFluxes({ epci: '243000643' })
+      const flux = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
+      expect(flux.annualFlux).toEqual(-6)
+      expect(flux.annualFluxEquivalent).toBeDefined()
+      expect(flux.area).toEqual(10)
+      expect(flux.value).toEqual(-60)
+      expect(flux.co2e).toBeDefined()
+    })
 
-  it('adds deforestation biomass changes between forest types too', () => {
-    const fluxes = getAnnualFluxes({ epci: '243000643' })
-    const flux = fluxes.allFlux.find((f) => f.from === 'forêt feuillu' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
-    expect(flux.annualFlux).toEqual(10)
-  })
+    it('adds for changes between forest types too', () => {
+      const fluxes = getAnnualFluxes({ epci: '243000643' })
+      const flux = fluxes.allFlux.find((f) => f.from === 'forêt feuillu' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
+      expect(flux.annualFlux).toEqual(10)
+    })
 
-  it('adds reforestation biomass changes to forest types', () => {
-    const fluxes = getAnnualFluxes({ epci: '243000643' })
-    const toConifer = fluxes.allFlux.find((f) => f.from === 'cultures' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
-    expect(toConifer.area).toBe(5)
-    expect(toConifer.annualFlux).toEqual(16)
-    expect(toConifer.value).toEqual(80)
-  })
+    it('adds reforestation for changes to forest types', () => {
+      const fluxes = getAnnualFluxes({ epci: '243000643' })
+      const toConifer = fluxes.allFlux.find((f) => f.from === 'cultures' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
+      expect(toConifer.area).toBe(5)
+      expect(toConifer.annualFlux).toEqual(16)
+      expect(toConifer.value).toEqual(80)
+    })
 
-  it('allows change from forest type to be overridden', () => {
-    const fluxes = getAnnualFluxes({ epci: '243000643' }, { areaChanges: { for_mix_vign: 20 } })
-    const toVineyard = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
-    expect(toVineyard.area).toBe(20)
-    expect(toVineyard.originalArea).toBe(10)
-    expect(toVineyard.areaModified).toBe(true)
-  })
+    it('allows change from forest type to be overridden', () => {
+      const fluxes = getAnnualFluxes({ epci: '243000643' }, { areaChanges: { for_mix_vign: 20 } })
+      const toVineyard = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
+      expect(toVineyard.area).toBe(20)
+      expect(toVineyard.originalArea).toBe(10)
+      expect(toVineyard.areaModified).toBe(true)
+    })
 
-  it('allows change to forest type to be overridden', () => {
-    const fluxes = getAnnualFluxes({ epci: '243000643' }, { areaChanges: { cult_for_con: 20 } })
-    const toConifer = fluxes.allFlux.find((f) => f.from === 'cultures' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
-    expect(toConifer.area).toBe(20)
-    expect(toConifer.originalArea).toBe(5)
-    expect(toConifer.areaModified).toBe(true)
-    expect(fluxes.summary.forêts.areaModified).toBe(true)
+    it('allows change to forest type to be overridden', () => {
+      const fluxes = getAnnualFluxes({ epci: '243000643' }, { areaChanges: { cult_for_con: 20 } })
+      const toConifer = fluxes.allFlux.find((f) => f.from === 'cultures' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
+      expect(toConifer.area).toBe(20)
+      expect(toConifer.originalArea).toBe(5)
+      expect(toConifer.areaModified).toBe(true)
+      expect(fluxes.summary.forêts.areaModified).toBe(true)
+    })
   })
   // TODO: should be able to override area from a prairie subtype to another
 })
