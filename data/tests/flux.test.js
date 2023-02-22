@@ -5,10 +5,6 @@ const {
   getForestLitterFlux
 } = require('../flux')
 
-test('returns carbon flux in tC/(ha.year) for ground for given area and from -> to combination', () => {
-  expect(getAnnualGroundCarbonFlux({ epci: '200007177' }, 'prairies zones arborées', 'cultures')).toBeCloseTo(-14.8 / 20, 1)
-})
-
 test('returns all carbon flux in tc/(ha.year) for ground cultures', () => {
   const fluxes = getAllAnnualFluxes({ epci: '200007177' })
   const groundFluxes = fluxes.filter(f => f.reservoir === 'sol')
@@ -77,10 +73,26 @@ test('returns expected area change for sols artificiels', () => {
 // proportion impermeable is overrideable (to another number and to 0)
 
 describe('The flux module', () => {
+  beforeEach(() => {
+    jest.resetModules()
+  })
+
+  const groundDataPath = '../dataByEpci/ground.csv.json'
+  it('given a location, initial ground and final ground, returns the carbon flux in tC/(ha.year) from data file', () => {
+    jest.doMock(groundDataPath, () => {
+      return [
+        {
+          siren: '200007177',
+          'f_prai_cult_%zpc': -2
+        }
+      ]
+    })
+    expect(getAnnualGroundCarbonFlux({ epci: '200007177' }, 'prairies zones arborées', 'cultures')).toBe(-2)
+  })
+
   describe('for forests', () => {
     it('provides data per-subtype', () => {
-      // the ground carbon density is the same for all forest types
-      jest.mock('../dataByEpci/ground.csv.json', () => {
+      jest.doMock(groundDataPath, () => {
         return [
           {
             siren: '200007177',
@@ -90,34 +102,34 @@ describe('The flux module', () => {
         ]
       })
       const fluxes = getAllAnnualFluxes({ epci: '200007177' })
-      const forestFlux = fluxes.find((f) => f.from === 'forêts' && f.to === 'vignes')
+      const forestFlux = fluxes.find((f) => f.from === 'forêts' && f.to === 'vignes' && f.reservoir === 'sol')
       expect(forestFlux).toBeUndefined()
-      const mixedFlux = fluxes.find((f) => f.from === 'forêt mixte' && f.to === 'vignes')
+      const mixedFlux = fluxes.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'sol')
       expect(mixedFlux).toBeDefined()
       expect(mixedFlux.annualFlux).toBe(-2)
-      const coniferFlux = fluxes.find((f) => f.from === 'forêt conifere' && f.to === 'vignes')
+      const coniferFlux = fluxes.find((f) => f.from === 'forêt conifere' && f.to === 'vignes' && f.reservoir === 'sol')
       expect(coniferFlux).toBeDefined()
-      const leafyFlux = fluxes.find((f) => f.from === 'forêt feuillu' && f.to === 'vignes')
+      const leafyFlux = fluxes.find((f) => f.from === 'forêt feuillu' && f.to === 'vignes' && f.reservoir === 'sol')
       expect(leafyFlux).toBeDefined()
-      const poplarFlux = fluxes.find((f) => f.from === 'forêt peupleraie' && f.to === 'vignes')
+      const poplarFlux = fluxes.find((f) => f.from === 'forêt peupleraie' && f.to === 'vignes' && f.reservoir === 'sol')
       expect(poplarFlux).toBeDefined()
     })
 
     it('adds a multiplier of 20', () => {
       // the ground carbon density is the same for all forest types
-      jest.mock('../dataByEpci/ground.csv.json', () => {
+      jest.doMock(groundDataPath, () => {
         return [
           {
             siren: '200007177',
             'f_for_vign_%zpc': -2,
-            'f_cult_for_%zpc': 3
+            'f_prai_for_%zpc': 3
           }
         ]
       })
       const fluxes = getAllAnnualFluxes({ epci: '200007177' })
       const toVineyards = fluxes.find((f) => f.from === 'forêt mixte' && f.to === 'vignes')
       expect(toVineyards.yearsForFlux).toBe(20)
-      const toLeafy = fluxes.find((f) => f.from === 'cultures' && f.to === 'forêt feuillu')
+      const toLeafy = fluxes.find((f) => f.from === 'prairies zones arborées' && f.to === 'forêt feuillu')
       expect(toLeafy.yearsForFlux).toBe(20)
     })
 
