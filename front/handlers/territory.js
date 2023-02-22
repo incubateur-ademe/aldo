@@ -31,12 +31,21 @@ async function territoryHandler (req, res) {
         }
         agriculturalPracticeDetail[f.to].push(f)
       } else {
-        if (!fluxDetail[f.to]) {
-          fluxDetail[f.to] = []
-        }
-        fluxDetail[f.to].push(f)
+        if (!fluxDetail[f.to]) fluxDetail[f.to] = []
+        // biomass growth in forests is displayed elsewhere
+        if (f.growth === undefined) fluxDetail[f.to].push(f)
       }
     }
+  })
+  // order the details by initial occupation
+  Object.keys(fluxDetail).forEach((k) => {
+    fluxDetail[k].sort((a, b) => {
+      const aName = GroundTypes.find((gt) => gt.stocksId === a.from)?.name
+      const bName = GroundTypes.find((gt) => gt.stocksId === b.from)?.name
+      if (aName < bName) return -1
+      else if (aName === bName) return 0
+      else return 1
+    })
   })
   // ordering for display greatest stocks/flux (seq or emission) descending
   const groundTypes = GroundTypes.filter(type => !type.parentType)

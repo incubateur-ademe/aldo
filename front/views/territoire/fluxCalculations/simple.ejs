@@ -11,11 +11,6 @@
   <tbody>
     <% if(fluxDetail[groundType]) { %>
       <% for( const detail of fluxDetail[groundType] ) { %>
-        <% if (!detail.from) {
-          // assuming that the fluxes without a from are related to biomass growth in forests
-          // and shouldn't be displayed in this table
-          continue
-        } %>
         <tr>
           <td><%= detail.from %></td>
           <td><%= detail.reservoir || '-' %></td>

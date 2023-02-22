@@ -110,7 +110,7 @@
                     if (!child.startsWith('forêt ')) {
                       return Math.abs(fluxSummary[child]?.totalSequestration) > 0.5
                     } else {
-                      return fluxDetail[child].some((f) => !!f.from)
+                      return !!fluxDetail[child].length
                     }
                   }
                   const hasDataForMultipleChildren = groundType.children.filter(child => hasData(child)).length > 1 %>
