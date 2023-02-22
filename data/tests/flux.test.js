@@ -127,19 +127,105 @@ describe('The flux data module', () => {
   describe('sols artificiels area changes', () => {
     // NB: in constants arbustifs and impermeable are the same codes
     describe('when final occupation is impermeable', () => {
-      // it('always returns 0 when initial occupation is shrubby')
-      // mock data for the two to have a change, check that it is 0
+      it('always returns 0 when initial occupation is shrubby', () => {
+        const siren = '200007177'
+        jest.doMock(areaChangePath, () => {
+          return [
+            {
+              siren,
+              '111-112': 100,
+              '121-122': 200
+            }
+          ]
+        })
+        const fromShrubby = getAnnualSurfaceChange({ epci: siren }, {}, 'sols artificiels arbustifs', 'sols artificiels imperméabilisés')
+        expect(fromShrubby).toBe(0)
+      })
       // TODO: what about if has data overrides?
-  
-      // it('returns CLC change data when, for the same initial occupation, there is a large change to sols art with trees')
-      // it('returns CLC change data when, for the same initial occupation, there is a large change to sols art with trees, with custom portion')
-  
-      // it('returns the impermeable portion of the sum of changes to impermeable and to sols art with trees')
-      // it('returns the impermeable portion of the sum of changes to impermeable and to sols art with trees, with custom portion')
+
+      it('returns CLC change data when, for the same initial occupation, there is a large change to sols art with trees', () => {
+        const siren = '200007177'
+        const from = 'cultures'
+        jest.doMock(areaChangePath, () => {
+          return [
+            {
+              siren,
+              '213-112': 100, // cultures -> sols art
+              '241-122': 200, // cultures -> sols art
+              '242-141': 600 // cultures -> sols art arborés
+            }
+          ]
+        })
+        const fromCultures = getAnnualSurfaceChange({ epci: siren }, {}, from, 'sols artificiels imperméabilisés')
+        expect(fromCultures).toBe(50)
+      })
+      it('returns CLC change data when, for the same initial occupation, there is a large change to sols art with trees, with custom portion', () => {
+        const siren = '200007177'
+        const from = 'cultures'
+        jest.doMock(areaChangePath, () => {
+          return [
+            {
+              siren,
+              '213-112': 100, // cultures -> sols art
+              '241-122': 200, // cultures -> sols art
+              '242-141': 600 // cultures -> sols art arborés
+            }
+          ]
+        })
+        const fromCultures = getAnnualSurfaceChange({ epci: siren }, { proportionSolsImpermeables: 0.34 }, from, 'sols artificiels imperméabilisés')
+        expect(fromCultures).toBe(50)
+      })
+
+      it('returns the impermeable portion of the sum of changes to impermeable and to sols art with trees, with custom portion', () => {
+        const siren = '200007177'
+        const from = 'cultures'
+        jest.doMock(areaChangePath, () => {
+          return [
+            {
+              siren,
+              '213-112': 100, // cultures -> sols art
+              '241-122': 200, // cultures -> sols art
+              '242-141': 600 // cultures -> sols art arborés
+            }
+          ]
+        })
+        const fromCultures = getAnnualSurfaceChange({ epci: siren }, { proportionSolsImpermeables: 0.33 }, from, 'sols artificiels imperméabilisés')
+        expect(fromCultures).toBe(49.5)
+      })
+
+      it('returns the impermeable portion of the sum of changes to impermeable and to sols art with trees', () => {
+        const siren = '200007177'
+        const from = 'cultures'
+        jest.doMock(areaChangePath, () => {
+          return [
+            {
+              siren,
+              '213-112': 100, // cultures -> sols art
+              '241-122': 200, // cultures -> sols art
+              '242-141': 60 // cultures -> sols art arborés
+            }
+          ]
+        })
+        const fromCultures = getAnnualSurfaceChange({ epci: siren }, {}, from, 'sols artificiels imperméabilisés')
+        expect(fromCultures).toBe(48)
+      })
     })
 
     describe('when final occupation is shrubby', () => {
-      // it('always returns 0 when initial occupation is impermeable')
+      it('always returns 0 when initial occupation is impermeable', () => {
+        const siren = '200007177'
+        jest.doMock(areaChangePath, () => {
+          return [
+            {
+              siren,
+              '111-112': 100,
+              '121-122': 200
+            }
+          ]
+        })
+        const toShrubby = getAnnualSurfaceChange({ epci: siren }, {}, 'sols artificiels imperméabilisés', 'sols artificiels arbustifs')
+        expect(toShrubby).toBe(0)
+      })
       // mock data for the two to have a change, check that it is 0
       // TODO: what about if has data overrides?
 
@@ -169,18 +255,18 @@ describe('The flux data module', () => {
           ]
         })
         const to = 'sols artificiels arborés et buissonants'
-        const toSolsArtArbustifs = getAnnualSurfaceChange({ epci: siren }, {}, 'sols artificiels arbustifs', to)
-        expect(toSolsArtArbustifs).toBe(0)
-        const toPraiArbo = getAnnualSurfaceChange({ epci: siren }, {}, 'prairies zones arborées', to)
-        expect(toPraiArbo).toBe(0)
-        const toPraiArbu = getAnnualSurfaceChange({ epci: siren }, {}, 'prairies zones arbustives', to)
-        expect(toPraiArbu).toBe(0)
-        const toVergers = getAnnualSurfaceChange({ epci: siren }, {}, 'vergers', to)
-        expect(toVergers).toBe(0)
-        const toVignes = getAnnualSurfaceChange({ epci: siren }, {}, 'vignes', to)
-        expect(toVignes).toBe(0)
-        const toZonesHumides = getAnnualSurfaceChange({ epci: siren }, {}, 'zones humides', to)
-        expect(toZonesHumides).toBe(0)
+        const fromSolsArtArbustifs = getAnnualSurfaceChange({ epci: siren }, {}, 'sols artificiels arbustifs', to)
+        expect(fromSolsArtArbustifs).toBe(0)
+        const fromPraiArbo = getAnnualSurfaceChange({ epci: siren }, {}, 'prairies zones arborées', to)
+        expect(fromPraiArbo).toBe(0)
+        const fromPraiArbu = getAnnualSurfaceChange({ epci: siren }, {}, 'prairies zones arbustives', to)
+        expect(fromPraiArbu).toBe(0)
+        const fromVergers = getAnnualSurfaceChange({ epci: siren }, {}, 'vergers', to)
+        expect(fromVergers).toBe(0)
+        const fromVignes = getAnnualSurfaceChange({ epci: siren }, {}, 'vignes', to)
+        expect(fromVignes).toBe(0)
+        const fromZonesHumides = getAnnualSurfaceChange({ epci: siren }, {}, 'zones humides', to)
+        expect(fromZonesHumides).toBe(0)
       })
 
       it('returns CLC yearly change for remaining initial types', () => {
@@ -195,8 +281,8 @@ describe('The flux data module', () => {
             }
           ]
         })
-        const toCultures = getAnnualSurfaceChange({ epci: siren }, {}, 'cultures', 'sols artificiels arborés et buissonants')
-        expect(toCultures).toBe(10)
+        const fromCultures = getAnnualSurfaceChange({ epci: siren }, {}, 'cultures', 'sols artificiels arborés et buissonants')
+        expect(fromCultures).toBe(10)
       })
     })
   })
