@@ -22,20 +22,7 @@ const {
 //   expect(forestFluxes.length).toBe(4)
 // })
 
-// test('returns expected area change for forest types', () => {
-//   expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, undefined, 'forêt feuillu')).toBeCloseTo(2220, 0)
-//   expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, undefined, 'forêt conifere')).toBeCloseTo(18, 0)
-//   expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, undefined, 'forêt peupleraie')).toBeCloseTo(150, 0)
-//   expect(getAnnualSurfaceChange({ epci: '200007177' }, {}, undefined, 'forêt mixte')).toBeCloseTo(14, 0)
-// })
-
-// ---------- TODO: NEW TESTS
-
-// the flux data module
-
-// returns an array of flux items
-
-// a flux entry:
+// TODO: a flux entry has a good format:
 // has a from
 // has a to
 // has a area
@@ -47,8 +34,6 @@ const {
 // has a fluxEquivalent
 // has a value
 // has a co2e
-
-// portion impermeable is overrideable (to another number and to 0)
 
 describe('The flux data module', () => {
   beforeEach(() => {
@@ -104,25 +89,6 @@ describe('The flux data module', () => {
     expect(getAnnualSurfaceChange({ epci: siren }, {}, 'prairies zones arborées', 'cultures')).toBeCloseTo(4.1, 1)
     expect(getAnnualSurfaceChange({ epci: siren }, {}, 'prairies zones arbustives', 'cultures')).toBe(0)
   })
-
-  // test('returns expected area change for sols artificiels', () => {
-  //   const siren = '200007177'
-  //   jest.doMock(areaChangePath, () => {
-  //     return [
-  //       {
-  //         siren,
-  //         // from constants.json:
-  //         // prairies zones arborées = 323
-  //         // cultures = 211, 212...
-  //         '211-211': '20',
-  //         '323-212': '4.6',
-  //         '323-999': '100'
-  //       }
-  //     ]
-  //   })
-  //   expect(getAnnualSurfaceChange({ epci: siren }, {}, 'cultures', 'sols artificiels imperméabilisés')).toBeCloseTo(1.69, 2)
-  //   expect(getAnnualSurfaceChange({ epci: siren }, {}, 'cultures', 'sols artificiels arbustifs')).toBeCloseTo(0.42, 2)
-  // })
 
   describe('sols artificiels area changes', () => {
     // NB: in constants arbustifs and impermeable are the same codes
