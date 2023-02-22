@@ -216,22 +216,33 @@ function weightedAverage (objArray, key, keyForWeighting) {
 }
 
 function deforestationFlux (location, options) {
-  // can add flux from deforestation now that have weighted averages of biomass per forest subtype for EPCI
   const deforestationFluxes = []
   const forestSubtypes = GroundTypes.find((gt) => gt.stocksId === 'forêts').children
-  for (const from of forestSubtypes) {
+  for (const fromGt of GroundTypes) {
+    const from = fromGt.stocksId
     for (const toGt of GroundTypes) {
       const to = toGt.stocksId
       if (from === to) {
         continue
       }
-      const forestBiomassDensity = getLiveBiomassCarbonDensity(location, from) + getDeadBiomassCarbonDensity(location, from)
+
       let annualFlux
-      if (forestSubtypes.includes(to)) {
-        annualFlux = getLiveBiomassCarbonDensity(location, to) + getDeadBiomassCarbonDensity(location, to)
-      } else {
-        annualFlux = getBiomassCarbonDensity(location, to) - forestBiomassDensity
+      if (forestSubtypes.includes(from)) {
+        if (forestSubtypes.includes(to)) { // change from one forest to another
+          annualFlux = getLiveBiomassCarbonDensity(location, to) + getDeadBiomassCarbonDensity(location, to)
+        } else { // deforestation
+          annualFlux = getBiomassCarbonDensity(location, to)
+        }
+        const initialBiomassDensity = getLiveBiomassCarbonDensity(location, from) + getDeadBiomassCarbonDensity(location, from)
+        annualFlux -= initialBiomassDensity
+      } else if (forestSubtypes.includes(to)) { // reforestation
+        const finalBiomassDensity = getLiveBiomassCarbonDensity(location, to) + getDeadBiomassCarbonDensity(location, to)
+        // the case above handles from forest subtypes
+        annualFlux = finalBiomassDensity - getBiomassCarbonDensity(location, from)
       }
+      // de/reforestation fluxes only relevant from and/or to forest subtypes
+      if (!annualFlux) continue
+
       const annualFluxEquivalent = convertCToCo2e(annualFlux)
       const { area, areaModified, originalArea } = getAnnualSurfaceChange(location, options, from, to)
       if (area && annualFlux) {
