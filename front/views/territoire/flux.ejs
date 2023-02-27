@@ -107,10 +107,10 @@
               <% } else { %>
                 <% if (hasFluxFromAreaChange) { %>
                   <% function hasData(child) {
-                    if (!child.startsWith('forêt ')) {
-                      return Math.abs(fluxSummary[child]?.totalSequestration) > 0.5
+                    if (child.startsWith('forêt ')) {
+                      return !!fluxDetail[child]?.length
                     } else {
-                      return !!fluxDetail[child].length
+                      return Math.abs(fluxSummary[child]?.totalSequestration) > 0.5
                     }
                   }
                   const hasDataForMultipleChildren = groundType.children.filter(child => hasData(child)).length > 1 %>
