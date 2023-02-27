@@ -2,51 +2,182 @@ const {
   getCarbonDensity,
   getArea,
   getBiomassCarbonDensity,
-  getFranceStocksWoodProducts,
-  getAnnualWoodProductsHarvest,
-  getAnnualFranceWoodProductsHarvest,
+  // getCommuneAreaDataForEpci,
+  // getLiveBiomassCarbonDensity,
+  // getDeadBiomassCarbonDensity,
+  // getFranceStocksWoodProducts,
+  // getAnnualWoodProductsHarvest,
+  // getAnnualFranceWoodProductsHarvest,
   getForestLitterCarbonDensity
 } = require('../stocks')
-// TODO: mock data sources?
 
-test('returns ground carbon density (as tC/ha) given valid ground type and EPCI SIREN', () => {
-  expect(getCarbonDensity({ epci: '200000172' }, 'cultures')).toBe(54.63076734)
+describe('The stocks data module', () => {
+  beforeEach(() => {
+    jest.resetModules()
+  })
+
+  const groundDataPath = '../dataByEpci/ground.csv.json'
+  it('given an EPCI, initial ground and final ground, returns the carbon flux in tC/(ha.year) from data file', () => {
+    jest.doMock(groundDataPath, () => {
+      return [
+        {
+          siren: '200007177',
+          cultures: 50
+        }
+      ]
+    })
+    expect(getCarbonDensity({ epci: '200007177' }, 'cultures')).toBe(50)
+  })
+
+  const areaPath = '../dataByEpci/clc18.csv.json'
+  it('returns area in hectares (ha) for ground type "cultures" and valid EPCI SIREN', () => {
+    jest.doMock(areaPath, () => {
+      return [
+        {
+          siren: '200000172',
+          211: 10,
+          212: 10,
+          213: 10,
+          241: 10,
+          242: 10,
+          243: 10,
+          244: 10
+        }
+      ]
+    })
+    expect(getArea({ epci: '200000172' }, 'cultures')).toBe(70)
+  })
+
+  it('returns area in hectares (ha) for ground type "prairies zones herbacées" and valid EPCI SIREN', () => {
+    jest.doMock(areaPath, () => {
+      return [
+        {
+          siren: '200000172',
+          231: 10,
+          321: 10,
+          323: 100 // should be ignored
+        }
+      ]
+    })
+    expect(getArea({ epci: '200000172' }, 'prairies zones herbacées')).toBe(20)
+  })
+
+  it('throws useful error when attempting to get area for ground type without type to CLC type mapping', () => {
+    jest.doMock(areaPath, () => {
+      return [
+        {
+          siren: '200000172',
+          231: 10
+        }
+      ]
+    })
+    let error
+    try {
+      getArea({ epci: '200000172' }, 'lake')
+    } catch (e) {
+      error = e
+    }
+    expect(error.message).toBe("No CLC code mapping found for ground type 'lake'")
+  })
+
+  it('returns biomass carbon density (as tC/ha) given valid ground type and EPCI SIREN', () => {
+    jest.doMock('../dataByEpci/biomass-hors-forets.csv.json', () => {
+      return [
+        {
+          siren: '200000172',
+          'prairies zones arborées': 10
+        }
+      ]
+    })
+    expect(getBiomassCarbonDensity({ epci: '200000172' }, 'prairies zones arborées')).toBe(10)
+  })
+
+  // it('returns forest biomass carbon density (as tC/ha) given valid forest type and EPCI SIREN', () => {
+  it('relies on a different biomass function for forest biomass', () => {
+    expect(getBiomassCarbonDensity({ epci: '200000172' }, 'forêt mixte')).toBeUndefined()
+  })
+
+  // TODO: tests for all the forest biomass functions
+  // it('returns an array of area information per commune for an EPCI', () => {
+  //   const epci = '200000172'
+  //   jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
+  //     return [
+  //       {
+  //         CODE_EPCI: epci,
+  //         SUR_FEUILLUS: '20',
+  //         SUR_RESINEUX: '100',
+  //       }
+  //     ]
+  //   })
+  //   const data = getCommuneAreaDataForEpci({ epci })
+  // })
+
+  // it('returns live biomass carbon density for a relevant forest type', () => {
+  //   const epci = '200000172'
+  //   jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
+  //     return [
+  //       {
+  //         CODE_EPCI: epci,
+  //         SUR_FEUILLUS: '20',
+  //         SUR_RESINEUX: '100',
+  //       }
+  //     ]
+  //   })
+  //   expect(getLiveBiomassCarbonDensity({ epci: '200000172' }, 'forêt mixte')).toBe(20)
+  // })
+
+  // it('returns dead biomass carbon density for a relevant forest type', () => {
+  //   expect(getDeadBiomassCarbonDensity({ epci: '200000172' }, 'forêt conifer')).toBe(10)
+  // })
+
+  // it('returns biomass carbon density (as tC/ha) for poplar groves', () => {
+  //   expect(getBiomassCarbonDensity({ epci: '200000172' }, 'forêt peupleraie')).toBe(51.79684346)
+  // })
+
+  it('returns area of forest subtype (as ha) given valid EPCI SIREN', () => {
+    jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
+      return [
+        {
+          INSEE_COM: '00000',
+          CODE_EPCI: '249500513',
+          SUR_PEUPLERAIES: '30'
+        },
+        {
+          INSEE_COM: '00001',
+          CODE_EPCI: '249500513',
+          SUR_PEUPLERAIES: '20'
+        }
+      ]
+    })
+    expect(getArea({ epci: '249500513' }, 'forêt peupleraie')).toBe(50)
+  })
+
+  it('returns area of haies (as ha) given valid EPCI SIREN', () => {
+    jest.doMock('../dataByEpci/surface-haies.csv.json', () => {
+      return [
+        {
+          siren: '249500513',
+          area: '20'
+        }
+      ]
+    })
+    expect(getArea({ epci: '249500513' }, 'haies')).toBe(20)
+  })
+
+  it('returns forest litter carbon density (tC/ha) for valid forest subtype', () => {
+    expect(getForestLitterCarbonDensity('feuillu')).toBe(9)
+  })
+
+  it('throws error when attempting to get forest litter carbon density for invalid forest subtype', () => {
+    let error
+    try {
+      getForestLitterCarbonDensity('invalid')
+    } catch (e) {
+      error = e
+    }
+    expect(error.message).toBe("No forest litter carbon density found for forest subtype 'invalid'")
+  })
 })
-
-test('returns area in hectares (ha) for ground type "cultures" and valid EPCI SIREN', () => {
-  expect(getArea({ epci: '200000172' }, 'cultures')).toBe(1740.7313534999998)
-})
-
-test('returns area in hectares (ha) for ground type "prairies zones herbacées" and valid EPCI SIREN', () => {
-  expect(getArea({ epci: '200000172' }, 'prairies zones herbacées')).toBe(2522.1652952)
-})
-
-test('throws useful error when attempting to get area for ground type without type to CLC type mapping', () => {
-  let error
-  try {
-    getArea({ epci: '200000172' }, 'lake')
-  } catch (e) {
-    error = e
-  }
-  expect(error.message).toBe("No CLC code mapping found for ground type 'lake'")
-})
-
-// TODO: Ask about source of that data, and why many ground types don't have values, others appear to be constant.
-test('returns biomass carbon density (as tC/ha) given valid ground type and EPCI SIREN', () => {
-  expect(getBiomassCarbonDensity({ epci: '200000172' }, 'prairies zones arborées')).toBe(57)
-})
-
-// test('returns forest biomass carbon density (as tC/ha) given valid forest type and EPCI SIREN', () => {
-//   expect(getBiomassCarbonDensity({ epci: '200000172' }, 'forêt mixte')).toBe(82.4445416)
-// })
-
-test('returns area of haies (as ha) given valid EPCI SIREN', () => {
-  expect(getArea({ epci: '249500513' }, 'haies')).toBe(33.79485686)
-})
-
-// test('returns area of poplars (as ha) given valid EPCI SIREN', () => {
-//   expect(getArea({ epci: '249500513' }, 'forêt peupleraie')).toBe(212.4)
-// })
 
 // test('returns stocks of produits bois for France', () => {
 //   expect(getFranceStocksWoodProducts()).toStrictEqual({
@@ -79,22 +210,4 @@ test('returns area of haies (as ha) given valid EPCI SIREN', () => {
 //       bi: 1324.09871367348
 //     }
 //   })
-// })
-
-test('returns forest litter carbon density (tC/ha) for valid forest subtype', () => {
-  expect(getForestLitterCarbonDensity('feuillu')).toBe(9)
-})
-
-test('throws error when attempting to get forest litter carbon density for invalid forest subtype', () => {
-  let error
-  try {
-    getForestLitterCarbonDensity('invalid')
-  } catch (e) {
-    error = e
-  }
-  expect(error.message).toBe("No forest litter carbon density found for forest subtype 'invalid'")
-})
-
-// test('returns biomass carbon density (as tC/ha) for poplar groves', () => {
-//   expect(getBiomassCarbonDensity({ epci: '200000172' }, 'forêt peupleraie')).toBe(51.79684346)
 // })
