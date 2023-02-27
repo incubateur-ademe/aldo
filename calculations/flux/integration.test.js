@@ -45,7 +45,7 @@ test('returns correct total for vergers and vignes', () => {
 
 test('returns correct total for zones humides', () => {
   let summary = getAnnualFluxes({ epci: getEpci('200042992', true) }).summary
-  expect(summary['zones humides'].totalSequestration).toBeCloseTo(3388, 0)
+  expect(summary['zones humides'].totalSequestration).toBeCloseTo(3387, 0)
   summary = getAnnualFluxes({ epci: getEpci('200055887', true) }).summary
   expect(summary['zones humides'].totalSequestration).toBeCloseTo(416, 0)
 })

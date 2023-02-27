@@ -8,7 +8,7 @@ const {
 jest.mock('../communes', () => {
   return {
     getCommunes: jest.fn(() => {
-      return ['01234', '01235']
+      return [{ insee: '01234' }, { insee: '01235' }]
     })
   }
 })
