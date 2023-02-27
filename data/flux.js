@@ -1,4 +1,5 @@
 const { getIgnLocalisation } = require('./shared')
+const { getCommunes } = require('./communes')
 
 // TODO: move this file to a folder that both layers can rely on to not completely break
 // dependency tree
@@ -239,23 +240,22 @@ function cToCo2e (valueC) {
 }
 
 function getAnnualSurfaceChange (location, options, from, to) {
-  const csvFilePath = './dataByEpci/clc18-change.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci)
+  const csvFilePath = './dataByCommune/clc18-change.csv'
+  const dataByCommune = require(csvFilePath + '.json')
+  const communesForEpci = getCommunes({ epci: location.epci })
+  const areaChangesForEpci = dataByCommune.filter(data => communesForEpci.includes(data.commune))
+
   const fromClcCodes = GroundTypes.find(groundType => groundType.stocksId === from).clcCodes
   const toClcCodes = GroundTypes.find(groundType => groundType.stocksId === to).clcCodes
-  let totalAreaChange = 0
   if (!fromClcCodes || !toClcCodes) {
     return 0
   }
-  for (const fromCode of fromClcCodes) {
-    for (const toCode of toClcCodes) {
-      const key = `${fromCode}-${toCode}`
-      if (data[key]) {
-        totalAreaChange += parseFloat(data[key])
-      }
-    }
-  }
+
+  const changesForGroundTypes = areaChangesForEpci.filter((change) => {
+    return fromClcCodes.includes(change.code12) && toClcCodes.includes(change.code18)
+  })
+  const totalAreaChange = changesForGroundTypes.reduce((acc, change) => acc + Number(change.area), 0)
+
   const yearsBetweenStudies = 6
   const yearlyAreaChange = totalAreaChange / yearsBetweenStudies
   const solsArtificielsException = getSolsArtificielsException(location, options, from, to, yearlyAreaChange)
