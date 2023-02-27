@@ -242,7 +242,7 @@ function cToCo2e (valueC) {
 function getAnnualSurfaceChange (location, options, from, to) {
   const csvFilePath = './dataByCommune/clc18-change.csv'
   const dataByCommune = require(csvFilePath + '.json')
-  const communesForEpci = getCommunes({ epci: location.epci })
+  const communesForEpci = getCommunes({ epci: location.epci }).map((c) => c.insee)
   const areaChangesForEpci = dataByCommune.filter(data => communesForEpci.includes(data.commune))
 
   const fromClcCodes = GroundTypes.find(groundType => groundType.stocksId === from).clcCodes
