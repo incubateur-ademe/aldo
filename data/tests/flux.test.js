@@ -5,6 +5,14 @@ const {
   getForestLitterFlux
 } = require('../flux')
 
+jest.mock('../communes', () => {
+  return {
+    getCommunes: jest.fn(() => {
+      return ['01234', '01235']
+    })
+  }
+})
+
 // test('returns all carbon flux in tc/(ha.year) for biomass cultures', () => {
 //   const fluxes = getAllAnnualFluxes({ epci: '200007177' })
 //   const biomassFlux = fluxes.filter(f => f.reservoir === 'biomasse')
@@ -70,19 +78,43 @@ describe('The flux data module', () => {
     expect(cultureFluxes.length).toBe(5)
   })
 
-  const areaChangePath = '../dataByEpci/clc18-change.csv.json'
-  test('returns change in surface area for given ground types from data file divided by 6, the number of years between studies', () => {
+  const areaChangePath = '../dataByCommune/clc18-change.csv.json'
+  it('returns change in surface area for given ground types from data file divided by 6, the number of years between studies', () => {
     const siren = '200007177'
     jest.doMock(areaChangePath, () => {
       return [
+        // from constants.json:
+        // prairies zones arborées = 323
+        // cultures = 211, 212...
         {
-          siren,
-          // from constants.json:
-          // prairies zones arborées = 323
-          // cultures = 211, 212...
-          '323-211': '20',
-          '323-212': '4.6',
-          '323-999': '100'
+          commune: '01234',
+          code12: '323',
+          code18: '211',
+          area: '5'
+        },
+        {
+          commune: '01235',
+          code12: '323',
+          code18: '211',
+          area: '15'
+        },
+        {
+          commune: '01235',
+          code12: '323',
+          code18: '212',
+          area: '4.6'
+        },
+        {
+          commune: '01234',
+          code12: '323',
+          code18: '999', // uninteresting code for this change
+          area: '100'
+        },
+        {
+          commune: '09999', // uninteresting commune for this EPCI
+          code12: '323',
+          code18: '211',
+          area: '100'
         }
       ]
     })
@@ -98,9 +130,16 @@ describe('The flux data module', () => {
         jest.doMock(areaChangePath, () => {
           return [
             {
-              siren,
-              '111-112': 100,
-              '121-122': 200
+              commune: '01234',
+              code12: '111',
+              code18: '112',
+              area: '100'
+            },
+            {
+              commune: '01235',
+              code12: '121',
+              code18: '122',
+              area: '200'
             }
           ]
         })
@@ -115,26 +154,51 @@ describe('The flux data module', () => {
         jest.doMock(areaChangePath, () => {
           return [
             {
-              siren,
-              '213-112': 100, // cultures -> sols art
-              '241-122': 200, // cultures -> sols art
-              '242-141': 600 // cultures -> sols art arborés
+              commune: '01234',
+              code12: '213', // cultures
+              code18: '112', // sols art
+              area: '100'
+            },
+            {
+              commune: '01235',
+              code12: '241', // cultures
+              code18: '122', // sols art
+              area: '200'
+            },
+            {
+              commune: '01235',
+              code12: '242', // cultures
+              code18: '141', // sols art arborés
+              area: '600'
             }
           ]
         })
         const fromCultures = getAnnualSurfaceChange({ epci: siren }, {}, from, 'sols artificiels imperméabilisés')
         expect(fromCultures).toBe(50)
       })
+
       it('returns CLC change data when, for the same initial occupation, there is a large change to sols art with trees, with custom portion', () => {
         const siren = '200007177'
         const from = 'cultures'
         jest.doMock(areaChangePath, () => {
           return [
             {
-              siren,
-              '213-112': 100, // cultures -> sols art
-              '241-122': 200, // cultures -> sols art
-              '242-141': 600 // cultures -> sols art arborés
+              commune: '01234',
+              code12: '213', // cultures
+              code18: '112', // sols art
+              area: '100'
+            },
+            {
+              commune: '01235',
+              code12: '241', // cultures
+              code18: '122', // sols art
+              area: '200'
+            },
+            {
+              commune: '01235',
+              code12: '242', // cultures
+              code18: '141', // sols art arborés
+              area: '600'
             }
           ]
         })
@@ -148,10 +212,22 @@ describe('The flux data module', () => {
         jest.doMock(areaChangePath, () => {
           return [
             {
-              siren,
-              '213-112': 100, // cultures -> sols art
-              '241-122': 200, // cultures -> sols art
-              '242-141': 600 // cultures -> sols art arborés
+              commune: '01234',
+              code12: '213', // cultures
+              code18: '112', // sols art
+              area: '100'
+            },
+            {
+              commune: '01235',
+              code12: '241', // cultures
+              code18: '122', // sols art
+              area: '200'
+            },
+            {
+              commune: '01235',
+              code12: '242', // cultures
+              code18: '141', // sols art arborés
+              area: '600'
             }
           ]
         })
@@ -165,10 +241,22 @@ describe('The flux data module', () => {
         jest.doMock(areaChangePath, () => {
           return [
             {
-              siren,
-              '213-112': 100, // cultures -> sols art
-              '241-122': 200, // cultures -> sols art
-              '242-141': 60 // cultures -> sols art arborés
+              commune: '01234',
+              code12: '213', // cultures
+              code18: '112', // sols art
+              area: '100'
+            },
+            {
+              commune: '01235',
+              code12: '241', // cultures
+              code18: '122', // sols art
+              area: '200'
+            },
+            {
+              commune: '01235',
+              code12: '242', // cultures
+              code18: '141', // sols art arborés
+              area: '60'
             }
           ]
         })
@@ -183,9 +271,16 @@ describe('The flux data module', () => {
         jest.doMock(areaChangePath, () => {
           return [
             {
-              siren,
-              '111-112': 100,
-              '121-122': 200
+              commune: '01234',
+              code12: '111', // sols art
+              code18: '112', // sols art
+              area: '100'
+            },
+            {
+              commune: '01235',
+              code12: '121', // sols art
+              code18: '122', // sols art
+              area: '200'
             }
           ]
         })
@@ -200,10 +295,22 @@ describe('The flux data module', () => {
         jest.doMock(areaChangePath, () => {
           return [
             {
-              siren,
-              '313-112': 100, // forêt mixte -> sols art
-              '324-122': 200, // forêt mixte -> sols art
-              '324-141': 6 // forêt mixte -> sols art arborés
+              commune: '01234',
+              code12: '313', // forêt mixte
+              code18: '112', // sols art
+              area: '100'
+            },
+            {
+              commune: '01235',
+              code12: '324', // forêt mixte
+              code18: '122', // sols art
+              area: '200'
+            },
+            {
+              commune: '01235',
+              code12: '324', // forêt mixte
+              code18: '141', // sols art arborés
+              area: '6'
             }
           ]
         })
@@ -219,10 +326,22 @@ describe('The flux data module', () => {
         jest.doMock(areaChangePath, () => {
           return [
             {
-              siren,
-              '313-112': 100, // forêt mixte -> sols art
-              '324-122': 200, // forêt mixte -> sols art
-              '324-141': 6 // forêt mixte -> sols art arborés
+              commune: '01234',
+              code12: '313', // forêt mixte
+              code18: '112', // sols art
+              area: '100'
+            },
+            {
+              commune: '01235',
+              code12: '324', // forêt mixte
+              code18: '122', // sols art
+              area: '200'
+            },
+            {
+              commune: '01235',
+              code12: '324', // forêt mixte
+              code18: '141', // sols art arborés
+              area: '6'
             }
           ]
         })
@@ -259,10 +378,22 @@ describe('The flux data module', () => {
         jest.doMock(areaChangePath, () => {
           return [
             {
-              siren,
-              '243-112': 100, // cultures -> sols art
-              '243-122': 200, // cultures -> sols art
-              '243-141': 6 // cultures -> sols art arborés
+              commune: '01234',
+              code12: '243', // cultures
+              code18: '112', // sols art
+              area: '100'
+            },
+            {
+              commune: '01235',
+              code12: '243', // cultures
+              code18: '122', // sols art
+              area: '200'
+            },
+            {
+              commune: '01235',
+              code12: '243', // cultures
+              code18: '141', // sols art arborés
+              area: '6'
             }
           ]
         })
@@ -278,10 +409,22 @@ describe('The flux data module', () => {
         jest.doMock(areaChangePath, () => {
           return [
             {
-              siren,
-              '243-112': 100, // cultures -> sols art
-              '243-122': 200, // cultures -> sols art
-              '243-141': 6 // cultures -> sols art arborés
+              commune: '01234',
+              code12: '243', // cultures
+              code18: '112', // sols art
+              area: '100'
+            },
+            {
+              commune: '01235',
+              code12: '243', // cultures
+              code18: '122', // sols art
+              area: '200'
+            },
+            {
+              commune: '01235',
+              code12: '243', // cultures
+              code18: '141', // sols art arborés
+              area: '6'
             }
           ]
         })
@@ -298,15 +441,40 @@ describe('The flux data module', () => {
         jest.doMock(areaChangePath, () => {
           return [
             {
-              siren,
-              // from constants.json:
-              // sols art arborés = 141
-              '111-141': '60', // to sols art arbustifs
-              '323-141': '60', // to prai_arbo
-              '322-141': '60', // to prai_arbu
-              '222-141': '60', // to vergers
-              '221-141': '60', // to vignes
-              '411-141': '60' // to zones humides
+              commune: '01234',
+              code12: '111', // sols art
+              code18: '141', // sols art arborés
+              area: '60'
+            },
+            {
+              commune: '01234',
+              code12: '323', // prai_arbo
+              code18: '141', // sols art arborés
+              area: '60'
+            },
+            {
+              commune: '01234',
+              code12: '322', // prai_arbu
+              code18: '141', // sols art arborés
+              area: '60'
+            },
+            {
+              commune: '01234',
+              code12: '222', // vergers
+              code18: '141', // sols art arborés
+              area: '60'
+            },
+            {
+              commune: '01234',
+              code12: '221', // vignes
+              code18: '141', // sols art arborés
+              area: '60'
+            },
+            {
+              commune: '01234',
+              code12: '411', // zones humides
+              code18: '141', // sols art arborés
+              area: '60'
             }
           ]
         })
@@ -330,10 +498,10 @@ describe('The flux data module', () => {
         jest.doMock(areaChangePath, () => {
           return [
             {
-              siren,
-              // from constants.json:
-              // sols art arborés = 141
-              '244-141': '60' // to cultures
+              commune: '01234',
+              code12: '244', // cultures
+              code18: '141', // sols art
+              area: '60'
             }
           ]
         })
