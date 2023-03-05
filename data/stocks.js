@@ -1,4 +1,5 @@
 const { getIgnLocalisation } = require('./shared')
+const { getCommunes } = require('./communes')
 
 // Gets the carbon area density of a given ground type.
 function getCarbonDensity (location, groundType) {
@@ -40,17 +41,15 @@ function getArea (location, groundType) {
   if (!clcCodes) {
     throw new Error(`No CLC code mapping found for ground type '${groundType}'`)
   }
-  const csvFilePath = './dataByEpci/clc18.csv'
-  const areasByClcType = require(csvFilePath + '.json')
-  const areaForSiren = areasByClcType.find(data => data.siren === location.epci)
+  const csvFilePath = './dataByCommune/clc18.csv'
+  const areasByCommuneAndClcType = require(csvFilePath + '.json')
+  const communeCodes = getCommunes(location).map((c) => c.insee)
   let totalArea = 0
-  for (const clcCode of clcCodes) {
-    const area = areaForSiren[clcCode]
-    // TODO: output warnings for codes that aren't in data at all? As opposed to empty value
-    if (area) {
-      totalArea += parseFloat(area)
+  areasByCommuneAndClcType.forEach((areaData) => {
+    if (communeCodes.includes(areaData.insee) && clcCodes.includes(areaData.code18)) {
+      totalArea += +areaData.area
     }
-  }
+  })
   return totalArea
 }
 
