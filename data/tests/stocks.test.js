@@ -13,6 +13,14 @@ const {
   getForestLitterCarbonDensity
 } = require('../stocks')
 
+jest.mock('../communes', () => {
+  return {
+    getCommunes: jest.fn(() => {
+      return [{ insee: '01234' }, { insee: '01235' }]
+    })
+  }
+})
+
 describe('The stocks data module', () => {
   beforeEach(() => {
     jest.resetModules()
@@ -31,33 +39,89 @@ describe('The stocks data module', () => {
     expect(getCarbonDensity({ epci: '200007177' }, 'cultures')).toBe(50)
   })
 
-  const areaPath = '../dataByEpci/clc18.csv.json'
+  const areaPath = '../dataByCommune/clc18.csv.json'
   it('returns area in hectares (ha) for ground type "cultures" and valid EPCI SIREN', () => {
     jest.doMock(areaPath, () => {
       return [
         {
-          siren: '200000172',
-          211: 10,
-          212: 10,
-          213: 10,
-          241: 10,
-          242: 10,
-          243: 10,
-          244: 10
+          insee: '01234',
+          code18: '211',
+          area: '10'
+        },
+        {
+          insee: '01235',
+          code18: '212',
+          area: '10'
+        },
+        {
+          insee: '01235',
+          code18: '211',
+          area: '10'
+        },
+        {
+          insee: '01234',
+          code18: '213',
+          area: '10'
+        },
+        {
+          insee: '01234',
+          code18: '241',
+          area: '10'
+        },
+        {
+          insee: '01234',
+          code18: '242',
+          area: '10'
+        },
+        {
+          insee: '01234',
+          code18: '243',
+          area: '10'
+        },
+        {
+          insee: '01234',
+          code18: '244',
+          area: '10'
+        },
+        // the following should be ignored
+        {
+          insee: '01234',
+          code18: '999',
+          area: '99'
+        },
+        {
+          insee: '9999',
+          code18: '244',
+          area: '99'
         }
       ]
     })
-    expect(getArea({ epci: '200000172' }, 'cultures')).toBe(70)
+    expect(getArea({ epci: '200000172' }, 'cultures')).toBe(80)
   })
 
   it('returns area in hectares (ha) for ground type "prairies zones herbacées" and valid EPCI SIREN', () => {
     jest.doMock(areaPath, () => {
       return [
         {
-          siren: '200000172',
-          231: 10,
-          321: 10,
-          323: 100 // should be ignored
+          insee: '01234',
+          code18: '231',
+          area: '10'
+        },
+        {
+          insee: '01234',
+          code18: '321',
+          area: '5'
+        },
+        {
+          insee: '01235',
+          code18: '321',
+          area: '5'
+        },
+        // to be ignored
+        {
+          insee: '01235',
+          code18: '323',
+          area: '99'
         }
       ]
     })
@@ -68,8 +132,9 @@ describe('The stocks data module', () => {
     jest.doMock(areaPath, () => {
       return [
         {
-          siren: '200000172',
-          231: 10
+          insee: '01234',
+          code18: '231',
+          area: '10'
         }
       ]
     })
@@ -94,7 +159,6 @@ describe('The stocks data module', () => {
     expect(getBiomassCarbonDensity({ epci: '200000172' }, 'prairies zones arborées')).toBe(10)
   })
 
-  // it('returns forest biomass carbon density (as tC/ha) given valid forest type and EPCI SIREN', () => {
   it('relies on a different biomass function for forest biomass', () => {
     expect(getBiomassCarbonDensity({ epci: '200000172' }, 'forêt mixte')).toBeUndefined()
   })
