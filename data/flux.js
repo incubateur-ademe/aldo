@@ -326,7 +326,7 @@ function getFranceFluxWoodProducts () {
 //     because the land can be split by different ignLocalisationCode
 // So a flux entry is unique on commune, to, ignLocalisationCode keys.
 function getForestBiomassFluxesByCommune (location) {
-  let csvFilePath = './dataByEpci/surface-foret-par-commune.csv'
+  let csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
   csvFilePath = './dataByEpci/bilan-carbone-foret-par-localisation.csv'
   const carbonData = require(csvFilePath + '.json')

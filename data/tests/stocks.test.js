@@ -101,7 +101,7 @@ describe('The stocks data module', () => {
 
   it('returns an array of area information per commune for an EPCI', () => {
     const epci = '200000172'
-    jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
+    jest.doMock('../dataByCommune/surface-foret.csv.json', () => {
       return [
         {
           INSEE_COM: '1001',
@@ -281,7 +281,7 @@ describe('The stocks data module', () => {
 
   it('returns live biomass carbon density for a relevant forest type, weighted by area communes for an EPCI', () => {
     const epci = '200000172'
-    jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
+    jest.doMock('../dataByCommune/surface-foret.csv.json', () => {
       return [
         {
           INSEE_COM: '1001',
@@ -318,7 +318,7 @@ describe('The stocks data module', () => {
 
   it('returns dead biomass carbon density for a relevant forest type, weighted by area communes for an EPCI', () => {
     const epci = '200000172'
-    jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
+    jest.doMock('../dataByCommune/surface-foret.csv.json', () => {
       return [
         {
           INSEE_COM: '1001',
@@ -354,7 +354,7 @@ describe('The stocks data module', () => {
   })
 
   it('returns area of forest subtype (as ha) given valid EPCI SIREN', () => {
-    jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
+    jest.doMock('../dataByCommune/surface-foret.csv.json', () => {
       return [
         {
           INSEE_COM: '00000',

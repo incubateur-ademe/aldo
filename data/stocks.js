@@ -68,7 +68,7 @@ function getAreaHaies (location) {
 // side effect being that the sum of the areas could be different to the
 // recorded size of the EPCI.
 function getAreaForests (location, forestType) {
-  const csvFilePath = './dataByEpci/surface-foret-par-commune.csv'
+  const csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
   const areaDataForEpci = areaData.filter(data => data.CODE_EPCI === location.epci)
   let sum = 0
@@ -93,7 +93,7 @@ function getSignificantCarbonData () {
 }
 
 function getCommuneAreaDataForEpci (location) {
-  const csvFilePath = './dataByEpci/surface-foret-par-commune.csv'
+  const csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
   return areaData.filter(data => data.CODE_EPCI === location.epci)
 }
