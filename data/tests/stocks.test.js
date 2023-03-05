@@ -7,7 +7,7 @@ const {
   getCarbonDataForCommuneAndComposition,
   getLiveBiomassCarbonDensity,
   getDeadBiomassCarbonDensity,
-  // getFranceStocksWoodProducts,
+  getFranceStocksWoodProducts,
   // getAnnualWoodProductsHarvest,
   // getAnnualFranceWoodProductsHarvest,
   getForestLitterCarbonDensity
@@ -396,37 +396,16 @@ describe('The stocks data module', () => {
     }
     expect(error.message).toBe("No forest litter carbon density found for forest subtype 'invalid'")
   })
+
+  it('returns stocks of produits bois for France', () => {
+    const franceStocks = getFranceStocksWoodProducts()
+    // these are hard coded so not much point testing imo
+    expect(franceStocks).toHaveProperty('bo')
+    expect(franceStocks).toHaveProperty('bi')
+  })
+
+  // TODO: test getRegionProportionData
+  // TODO: test harvestProportion
+  // TODO: getAnnualWoodProductsHarvest
+  // 4 x forest subtypes
 })
-
-// test('returns stocks of produits bois for France', () => {
-//   expect(getFranceStocksWoodProducts()).toStrictEqual({
-//     bo: 177419001,
-//     bi: 258680001
-//   })
-// })
-
-// test('returns stocks of produits bois for France by composition and category', () => {
-//   expect(getAnnualFranceWoodProductsHarvest()).toStrictEqual({
-//     feuillus: {
-//       bo: 15462933.6725767,
-//       bi: 6835439.59931826
-//     },
-//     coniferes: {
-//       bo: 4642351.6311988,
-//       bi: 4351545.84347542
-//     }
-//   })
-// })
-
-// test('returns stocks of produits bois for location by composition and category', () => {
-//   expect(getAnnualWoodProductsHarvest({ epci: '200000172' })).toStrictEqual({
-//     feuillus: {
-//       bo: 393.017426088703,
-//       bi: 214.082662991407
-//     },
-//     coniferes: {
-//       bo: 15745.2607908564,
-//       bi: 1324.09871367348
-//     }
-//   })
-// })
