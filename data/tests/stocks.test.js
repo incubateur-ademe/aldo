@@ -2,7 +2,9 @@ const {
   getCarbonDensity,
   getArea,
   getBiomassCarbonDensity,
-  // getCommuneAreaDataForEpci,
+  getCommuneAreaDataForEpci,
+  getSignificantCarbonData,
+  getCarbonDataForCommuneAndComposition,
   // getLiveBiomassCarbonDensity,
   // getDeadBiomassCarbonDensity,
   // getFranceStocksWoodProducts,
@@ -97,33 +99,219 @@ describe('The stocks data module', () => {
     expect(getBiomassCarbonDensity({ epci: '200000172' }, 'forêt mixte')).toBeUndefined()
   })
 
-  // TODO: tests for all the forest biomass functions
-  // it('returns an array of area information per commune for an EPCI', () => {
-  //   const epci = '200000172'
-  //   jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
-  //     return [
-  //       {
-  //         CODE_EPCI: epci,
-  //         SUR_FEUILLUS: '20',
-  //         SUR_RESINEUX: '100',
-  //       }
-  //     ]
-  //   })
-  //   const data = getCommuneAreaDataForEpci({ epci })
-  // })
+  it('returns an array of area information per commune for an EPCI', () => {
+    const epci = '200000172'
+    jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
+      return [
+        {
+          INSEE_COM: '1001',
+          CODE_EPCI: epci
+        },
+        {
+          INSEE_COM: '1002',
+          CODE_EPCI: epci
+        },
+        {
+          INSEE_COM: '9999',
+          CODE_EPCI: '249500513'
+        }
+      ]
+    })
+    const data = getCommuneAreaDataForEpci({ epci })
+    expect(data.length).toBe(2)
+  })
+
+  it('returns the significant carbon data', () => {
+    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
+      return [
+        {
+          surface_ic: 's'
+        },
+        {
+          surface_ic: 'n.s'
+        },
+        {
+          surface_ic: 's'
+        }
+      ]
+    })
+    const data = getSignificantCarbonData()
+    expect(data.length).toBe(2)
+  })
+
+  it('for a matching groupser, returns data on the live and dead biomass carbon densities and wood product harvest for a given commune and composition', () => {
+    const communeData = {
+      code_groupeser: 'C5'
+    }
+    const carbonData = [
+      {
+        composition: 'Feuillu',
+        code_localisation: 'A1'
+      },
+      {
+        composition: 'Feuillu',
+        code_localisation: 'C5',
+        'carbone_(tC∙ha-1)': '10',
+        'bois_mort_volume_(m3∙ha-1)': '20',
+        'prelevement_volume_(m3∙ha-1∙an-1)': '30'
+      },
+      {
+        composition: 'Mixte',
+        code_localisation: 'C5'
+      }
+    ]
+    const data = getCarbonDataForCommuneAndComposition(communeData, carbonData, 'forêt feuillu')
+    expect(data['carbone_(tC∙ha-1)']).toBe('10')
+    expect(data['bois_mort_volume_(m3∙ha-1)']).toBe('20')
+    expect(data['prelevement_volume_(m3∙ha-1∙an-1)']).toBe('30')
+  })
+
+  it('for a matching greco, returns data on the live and dead biomass carbon densities and wood product harvest for a given commune and composition', () => {
+    const communeData = {
+      code_groupeser: 'C5',
+      code_greco: 'C'
+    }
+    const carbonData = [
+      {
+        composition: 'Feuillu',
+        code_localisation: 'A1'
+      },
+      {
+        composition: 'Feuillu',
+        code_localisation: 'C',
+        'carbone_(tC∙ha-1)': '10',
+        'bois_mort_volume_(m3∙ha-1)': '20',
+        'prelevement_volume_(m3∙ha-1∙an-1)': '30'
+      },
+      {
+        composition: 'Mixte',
+        code_localisation: 'C'
+      }
+    ]
+    const data = getCarbonDataForCommuneAndComposition(communeData, carbonData, 'forêt feuillu')
+    expect(data['carbone_(tC∙ha-1)']).toBe('10')
+    expect(data['bois_mort_volume_(m3∙ha-1)']).toBe('20')
+    expect(data['prelevement_volume_(m3∙ha-1∙an-1)']).toBe('30')
+  })
+
+  it('for a matching rad13, returns data on the live and dead biomass carbon densities and wood product harvest for a given commune and composition', () => {
+    const communeData = {
+      code_groupeser: 'C5',
+      code_greco: 'C',
+      code_rad13: 'ARA'
+    }
+    const carbonData = [
+      {
+        composition: 'Feuillu',
+        code_localisation: 'A1'
+      },
+      {
+        composition: 'Feuillu',
+        code_localisation: 'ARA',
+        'carbone_(tC∙ha-1)': '10',
+        'bois_mort_volume_(m3∙ha-1)': '20',
+        'prelevement_volume_(m3∙ha-1∙an-1)': '30'
+      },
+      {
+        composition: 'Mixte',
+        code_localisation: 'ARA'
+      }
+    ]
+    const data = getCarbonDataForCommuneAndComposition(communeData, carbonData, 'forêt feuillu')
+    expect(data['carbone_(tC∙ha-1)']).toBe('10')
+    expect(data['bois_mort_volume_(m3∙ha-1)']).toBe('20')
+    expect(data['prelevement_volume_(m3∙ha-1∙an-1)']).toBe('30')
+  })
+
+  it('for a matching bassin populicole, returns data on the live and dead biomass carbon densities and wood product harvest for a given commune and composition', () => {
+    const communeData = {
+      code_groupeser: 'C5',
+      code_greco: 'C',
+      code_rad13: 'ARA',
+      code_bassin_populicole: 'Sud'
+    }
+    const carbonData = [
+      {
+        composition: 'Feuillu',
+        code_localisation: 'Sud'
+      },
+      {
+        composition: 'Peupleraie',
+        code_localisation: 'Sud',
+        'carbone_(tC∙ha-1)': '10',
+        'bois_mort_volume_(m3∙ha-1)': '20',
+        'prelevement_volume_(m3∙ha-1∙an-1)': '30'
+      },
+      {
+        composition: 'Peupleraie',
+        code_localisation: 'Nord'
+      }
+    ]
+    const data = getCarbonDataForCommuneAndComposition(communeData, carbonData, 'forêt peupleraie')
+    expect(data['carbone_(tC∙ha-1)']).toBe('10')
+    expect(data['bois_mort_volume_(m3∙ha-1)']).toBe('20')
+    expect(data['prelevement_volume_(m3∙ha-1∙an-1)']).toBe('30')
+  })
+
+  it('falls back to France data with no matching carbon data, returns data on the live and dead biomass carbon densities and wood product harvest for a given commune and composition', () => {
+    const communeData = {
+      code_groupeser: 'C5',
+      code_greco: 'C',
+      code_rad13: 'ARA',
+      code_bassin_populicole: 'Sud'
+    }
+    const carbonData = [
+      {
+        composition: 'Feuillu',
+        code_localisation: 'France'
+      },
+      {
+        composition: 'Conifere',
+        code_localisation: 'France',
+        'carbone_(tC∙ha-1)': '10',
+        'bois_mort_volume_(m3∙ha-1)': '20',
+        'prelevement_volume_(m3∙ha-1∙an-1)': '30'
+      }
+    ]
+    const data = getCarbonDataForCommuneAndComposition(communeData, carbonData, 'forêt conifere')
+    expect(data['carbone_(tC∙ha-1)']).toBe('10')
+    expect(data['bois_mort_volume_(m3∙ha-1)']).toBe('20')
+    expect(data['prelevement_volume_(m3∙ha-1∙an-1)']).toBe('30')
+  })
+
+  // fetch area data for commune
 
   // it('returns live biomass carbon density for a relevant forest type', () => {
   //   const epci = '200000172'
   //   jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
   //     return [
   //       {
+  //         INSEE_COM: '1001',
+  //         CODE_EPCI: epci,
+  //         SUR_FEUILLUS: '10',
+  //         SUR_RESINEUX: '20',
+  //         SUR_MIXTES: '30',
+  //         SUR_PEUPLERAIES: '40'
+  //       },
+  //       {
+  //         INSEE_COM: '1002',
   //         CODE_EPCI: epci,
   //         SUR_FEUILLUS: '20',
-  //         SUR_RESINEUX: '100',
+  //         SUR_RESINEUX: '30',
+  //         SUR_MIXTES: '40',
+  //         SUR_PEUPLERAIES: '50'
+  //       },
+  //       {
+  //         INSEE_COM: '9999',
+  //         CODE_EPCI: '249500513',
+  //         SUR_FEUILLUS: '99',
+  //         SUR_RESINEUX: '99',
+  //         SUR_MIXTES: '99',
+  //         SUR_PEUPLERAIES: '99'
   //       }
   //     ]
   //   })
-  //   expect(getLiveBiomassCarbonDensity({ epci: '200000172' }, 'forêt mixte')).toBe(20)
+  //   expect(getLiveBiomassCarbonDensity({ epci }, 'forêt mixte')).toBe(70)
   // })
 
   // it('returns dead biomass carbon density for a relevant forest type', () => {

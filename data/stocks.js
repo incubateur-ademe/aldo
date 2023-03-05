@@ -255,6 +255,9 @@ function getForestLitterCarbonDensity (subtype) {
 module.exports = {
   getCarbonDensity,
   getArea,
+  getCommuneAreaDataForEpci,
+  getSignificantCarbonData,
+  getCarbonDataForCommuneAndComposition,
   getBiomassCarbonDensity,
   getForestBiomassCarbonDensities,
   getFranceStocksWoodProducts,
