@@ -5,8 +5,8 @@ const {
   getCommuneAreaDataForEpci,
   getSignificantCarbonData,
   getCarbonDataForCommuneAndComposition,
-  // getLiveBiomassCarbonDensity,
-  // getDeadBiomassCarbonDensity,
+  getLiveBiomassCarbonDensity,
+  getDeadBiomassCarbonDensity,
   // getFranceStocksWoodProducts,
   // getAnnualWoodProductsHarvest,
   // getAnnualFranceWoodProductsHarvest,
@@ -279,48 +279,79 @@ describe('The stocks data module', () => {
     expect(data['prelevement_volume_(m3∙ha-1∙an-1)']).toBe('30')
   })
 
-  // fetch area data for commune
+  it('returns live biomass carbon density for a relevant forest type, weighted by area communes for an EPCI', () => {
+    const epci = '200000172'
+    jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
+      return [
+        {
+          INSEE_COM: '1001',
+          CODE_EPCI: epci,
+          code_groupeser: 'A1',
+          SUR_MIXTES: '10'
+        },
+        {
+          INSEE_COM: '1002',
+          CODE_EPCI: epci,
+          code_rad13: 'CVL',
+          SUR_MIXTES: '30'
+        }
+      ]
+    })
+    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
+      return [
+        {
+          surface_ic: 's',
+          code_localisation: 'A1',
+          composition: 'Mixte',
+          'carbone_(tC∙ha-1)': '2'
+        },
+        {
+          surface_ic: 's',
+          code_localisation: 'CVL',
+          composition: 'Mixte',
+          'carbone_(tC∙ha-1)': '4'
+        }
+      ]
+    })
+    expect(getLiveBiomassCarbonDensity({ epci }, 'forêt mixte')).toBe(3.5)
+  })
 
-  // it('returns live biomass carbon density for a relevant forest type', () => {
-  //   const epci = '200000172'
-  //   jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
-  //     return [
-  //       {
-  //         INSEE_COM: '1001',
-  //         CODE_EPCI: epci,
-  //         SUR_FEUILLUS: '10',
-  //         SUR_RESINEUX: '20',
-  //         SUR_MIXTES: '30',
-  //         SUR_PEUPLERAIES: '40'
-  //       },
-  //       {
-  //         INSEE_COM: '1002',
-  //         CODE_EPCI: epci,
-  //         SUR_FEUILLUS: '20',
-  //         SUR_RESINEUX: '30',
-  //         SUR_MIXTES: '40',
-  //         SUR_PEUPLERAIES: '50'
-  //       },
-  //       {
-  //         INSEE_COM: '9999',
-  //         CODE_EPCI: '249500513',
-  //         SUR_FEUILLUS: '99',
-  //         SUR_RESINEUX: '99',
-  //         SUR_MIXTES: '99',
-  //         SUR_PEUPLERAIES: '99'
-  //       }
-  //     ]
-  //   })
-  //   expect(getLiveBiomassCarbonDensity({ epci }, 'forêt mixte')).toBe(70)
-  // })
-
-  // it('returns dead biomass carbon density for a relevant forest type', () => {
-  //   expect(getDeadBiomassCarbonDensity({ epci: '200000172' }, 'forêt conifer')).toBe(10)
-  // })
-
-  // it('returns biomass carbon density (as tC/ha) for poplar groves', () => {
-  //   expect(getBiomassCarbonDensity({ epci: '200000172' }, 'forêt peupleraie')).toBe(51.79684346)
-  // })
+  it('returns dead biomass carbon density for a relevant forest type, weighted by area communes for an EPCI', () => {
+    const epci = '200000172'
+    jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
+      return [
+        {
+          INSEE_COM: '1001',
+          CODE_EPCI: epci,
+          code_bassin_populicole: 'Nord',
+          SUR_PEUPLERAIES: '10'
+        },
+        {
+          INSEE_COM: '1002',
+          CODE_EPCI: epci,
+          code_bassin_populicole: 'Nord-Ouest',
+          SUR_PEUPLERAIES: '30'
+        }
+      ]
+    })
+    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
+      return [
+        {
+          surface_ic: 's',
+          code_localisation: 'Nord',
+          composition: 'Peupleraie',
+          'bois_mort_volume_(m3∙ha-1)': '2'
+        },
+        {
+          surface_ic: 's',
+          code_localisation: 'Nord-Ouest',
+          composition: 'Peupleraie',
+          'bois_mort_volume_(m3∙ha-1)': '4'
+        }
+      ]
+    })
+    expect(getDeadBiomassCarbonDensity({ epci }, 'forêt peupleraie')).toBe(3.5)
+  })
 
   it('returns area of forest subtype (as ha) given valid EPCI SIREN', () => {
     jest.doMock('../dataByEpci/surface-foret-par-commune.csv.json', () => {
