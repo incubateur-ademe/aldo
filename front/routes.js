@@ -9,15 +9,25 @@ const { territoryHandler } = require('./handlers/territory')
 const { excelExportHandler } = require('./handlers/excelExport')
 
 router.get('/', async (req, res) => {
-  if (req.query.epci) {
-    res.redirect('/epci/' + req.query.epci)
-  } else {
-    res.render('landing', {
-      epcis: epciList(),
-      communes: communeList(),
-      isHomepage: true
-    })
+  res.render('landing', {
+    epcis: epciList(),
+    communes: communeList(),
+    isHomepage: true
+  })
+})
+
+router.get('/regroupement', async (req, res) => {
+  if (req.query.epcis && !req.query.communes) {
+    if (req.query.epcis.length === 1) {
+      res.redirect('/epci/' + req.query.epcis[0])
+    }
   }
+  if (req.query.communes && !req.query.epcis) {
+    if (req.query.communes.length === 1) {
+      res.redirect('/commune/' + req.query.communes[0])
+    }
+  }
+  return territoryHandler(req, res)
 })
 
 router.get('/epci/:epci', territoryHandler)
