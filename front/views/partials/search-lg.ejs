@@ -5,13 +5,13 @@
         <label class="fr-label" for="epci-search">
           Nom/SIREN de l'EPCI
         </label>
-        <input class="fr-input" placeholder="Taper le nom ou SIREN de l'EPCI..." type="search" id="epci-search" name="epci" list="epci-names" required>
+        <input class="fr-input" placeholder="Taper le nom ou SIREN de l'EPCI..." type="search" id="epci-search" name="epci" list="epci-names" autocomplete="off" required>
         <button class="fr-btn" title="Rechercher" type="submit">
           Rechercher
         </button>
         <datalist id="epci-names">
           <% for (let index = 0; index < epcis.length; index++) {%>
-            <option value="<%= epcis[index].code %>"><%= epcis[index].nom %> (<%= epcis[index].code %>)</option>
+          <option value="<%= epcis[index].code %>"><%= epcis[index].nom %> (<%= epcis[index].code %>)</option>
           <%} %>
         </datalist>
       </div>
