@@ -1,20 +1,20 @@
 <%- include('page-setup') -%>
 <div class="fr-skiplinks">
   <nav class="fr-container" role="navigation" aria-label="Accès rapide">
-      <ul class="fr-skiplinks__list">
-          <li>
-              <a class="fr-nav__link" href="#contenu">Contenu</a>
-          </li>
-          <li>
-              <a class="fr-nav__link" href="#header-navigation">Menu</a>
-          </li>
-          <li>
-              <a class="fr-nav__link" href="#header-search">Recherche</a>
-          </li>
-          <li>
-              <a class="fr-nav__link" href="#footer">Pied de page</a>
-          </li>
-      </ul>
+    <ul class="fr-skiplinks__list">
+      <li>
+        <a class="fr-nav__link" href="#contenu">Contenu</a>
+      </li>
+      <li>
+        <a class="fr-nav__link" href="#header-navigation">Menu</a>
+      </li>
+      <li>
+        <a class="fr-nav__link" href="#header-search">Recherche</a>
+      </li>
+      <li>
+        <a class="fr-nav__link" href="#footer">Pied de page</a>
+      </li>
+    </ul>
   </nav>
 </div>
 
@@ -48,13 +48,13 @@
               <form action="/" method="GET">
                 <div class="fr-search-bar" id="search-850" role="search">
                   <label class="fr-label" for="search-850-input">Nom/SIREN de l'EPCI</label>
-                  <input class="fr-input" placeholder="Nom/SIREN de l'EPCI" type="search" id="search-850-input" name="epci" list="epci-names" required>
+                  <input class="fr-input" placeholder="Nom/SIREN de l'EPCI" type="search" id="search-850-input" name="epci" list="epci-names" autocomplete="off" required>
                   <button class="fr-btn" title="Rechercher">
-                      Rechercher
+                    Rechercher
                   </button>
                   <datalist id="epci-names">
                     <% for (let index = 0; index < epcis.length; index++) {%>
-                      <option value="<%= epcis[index].code %>"><%= epcis[index].nom %> (<%= epcis[index].code %>)</option>
+                    <option value="<%= epcis[index].code %>"><%= epcis[index].nom %> (<%= epcis[index].code %>)</option>
                     <%} %>
                   </datalist>
                 </div>
