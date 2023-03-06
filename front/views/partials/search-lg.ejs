@@ -1,21 +1,114 @@
 <div class="fr-container-fluid fr-my-6w">
-  <div class="fr-grid-row fr-grid-row--gutters">
-    <form action="/" method="GET" class="fr-col-12 fr-col-md-8">
-      <div class="fr-search-bar fr-search-bar--lg" id="search-2" role="search">
-        <label class="fr-label" for="epci-search">
-          Nom/SIREN de l'EPCI
-        </label>
-        <input class="fr-input" placeholder="Taper le nom ou SIREN de l'EPCI..." type="search" id="epci-search" name="epci" list="epci-names" autocomplete="off" required>
-        <button class="fr-btn" title="Rechercher" type="submit">
-          Rechercher
-        </button>
-        <datalist id="epci-names">
-          <% for (let index = 0; index < epcis.length; index++) {%>
-          <option value="<%= epcis[index].code %>"><%= epcis[index].nom %> (<%= epcis[index].code %>)</option>
-          <%} %>
-        </datalist>
-      </div>
-    </form>
+  <div class1="fr-search-bar fr-search-bar--lg" id="search-2" role="search">
+    <label class="fr-label fr-mb-1w" for="location-search">
+      Choisir un ou plusieurs térritoires
+    </label>
+    <ul id="locations" class="fr-tags-group">
+    </ul>
+    <div class="fr-grid-row">
+      <input class="fr-input fr-col-12 fr-col-md-6" placeholder="Taper le nom, SIREN, ou code INSEE..." type="search" id="location-search" list="location-names" autocomplete="off" required>
+      <button id="add-tag" class="fr-btn fr-btn--secondary fr-mx-1w" title="Ajouter">
+        Ajouter
+      </button>
+      <button class="fr-btn" title="Rechercher">
+        Rechercher
+      </button>
+    </div>
+    <datalist id="location-names">
+      <% for (let index = 0; index < communes.length; index++) {%>
+      <option value="<%= communes[index].code %> "><%= communes[index].nom %> (<%= communes[index].code %>)</option>
+      <%} %>
+      <% for (let index = 0; index < epcis.length; index++) {%>
+      <option value="<%= epcis[index].code %> "><%= epcis[index].nom %> (<%= epcis[index].code %>)</option>
+      <%} %>
+    </datalist>
   </div>
-  <p class="fr-text--xs fr-mt-1w">Nous utilisons les noms d'EPCI de la fin de 2018</p>
+  <p class="fr-text--xs fr-my-1w">Nous utilisons les noms d'EPCI de la fin de 2018</p>
 </div>
+<script>
+  let locations
+  $(document).ready(() => {
+    locations = {}
+    $.getJSON("static/data/communes_17122018.csv.json", (data) => {
+      data.forEach(loc => {
+        locations[loc.insee] = loc.nom
+      })
+    })
+    $.getJSON("static/data/epci.csv.json", (data) => {
+      data.forEach(loc => {
+        locations[loc.code] = loc.nom
+      })
+    })
+  })
+
+  function getLocationData(code) {
+    if (!code) return
+    const name = locations[code]
+    if (name) {
+      return {
+        code,
+        name
+      }
+    }
+  }
+
+  const selectedLocationCodes = []
+
+  function addLocationTag(location) {
+    if (selectedLocationCodes.includes(location.code)) return
+    selectedLocationCodes.push(location.code)
+
+    $('ul#locations').append($('<li>', {
+      id: location.code
+    }))
+    $('<button>', {
+        "class": "fr-tag fr-tag--dismiss",
+        text: `${location.name} (${location.code})`,
+        value: location.code,
+        ariaLabel: `Retirer ${location.name}`,
+        click: removeTag
+      })
+      .appendTo(`li#${location.code}`)
+  }
+
+  $('#location-search').on('change input', (event) => {
+    // it isn't possible to add an event handler on option select so I've set the option values
+    // to end in a space as a hacky workaround for detecting datalist selections
+    const dataEntryCompleted = event.target.value.endsWith(" ")
+    // this relies on all codes being convertible to truthy numbers
+    const isValidCode = +event.target.value
+    if (!dataEntryCompleted || !isValidCode) return
+    handleInputChange(event.target.value)
+  })
+
+  // monitor pressing enter key
+  $("#location-search").keypress((event) => {
+    if (event.which == 13) {
+      event.preventDefault();
+      handleInputChange(event.target.value)
+    }
+  })
+
+  $("button#add-tag").click((event) => {
+    handleInputChange($('#location-search')[0].value)
+  })
+
+  function handleInputChange(value) {
+    if (!value) return
+    const code = value.trim()
+    const location = getLocationData(code)
+    if (location) {
+      addLocationTag(location)
+      document.getElementById('location-search').value = ""
+    }
+  }
+
+  function removeTag() {
+    event.preventDefault()
+    const idx = selectedLocationCodes.indexOf(event.target.value)
+    selectedLocationCodes.splice(idx, 1)
+    event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+  }
+
+  $('option').click(() => console.log('hi'))
+</script>

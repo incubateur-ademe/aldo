@@ -1,7 +1,7 @@
 const path = require('path')
 const rootFolder = path.join(__dirname, '../../')
 const { getEpci } = require(path.join(rootFolder, './calculations/epcis'))
-const { epciList } = require(path.join(rootFolder, './data'))
+const { epciList, communeList } = require(path.join(rootFolder, './data'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
@@ -14,6 +14,7 @@ async function territoryHandler (req, res) {
     res.status(404)
     res.render('404-epci', {
       epcis,
+      communes: communeList(),
       attemptedSearch: req.params.epci
     })
     return
