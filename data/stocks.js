@@ -94,7 +94,14 @@ function getSignificantCarbonData () {
 function getCommuneAreaDataForEpci (location) {
   const csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
-  return areaData.filter(data => data.CODE_EPCI === location.epci)
+  if (location.epci) {
+    return areaData.filter(data => data.CODE_EPCI === location.epci)
+  }
+  // TODO: fix file to append 0 to all the codes that are just 4 characters long
+  if (location.commune) {
+    return areaData.filter(data => data.INSEE_COM === location.commune)
+  }
+  return areaData.filter(data => location.communes?.includes(data.INSEE_COM) || location.epcis?.includes(data.CODE_EPCI))
 }
 
 // communeData is one entry from the array returned by getCommuneAreaDataForEpci

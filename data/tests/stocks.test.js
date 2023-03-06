@@ -184,6 +184,31 @@ describe('The stocks data module', () => {
     expect(data.length).toBe(2)
   })
 
+  it('returns an array of area for a combination of epcis and communes', () => {
+    jest.doMock('../dataByCommune/surface-foret.csv.json', () => {
+      return [
+        {
+          INSEE_COM: '1001',
+          CODE_EPCI: '200000172'
+        },
+        {
+          INSEE_COM: '1003',
+          CODE_EPCI: '249500513'
+        },
+        {
+          INSEE_COM: '2001',
+          CODE_EPCI: '999999999'
+        },
+        {
+          INSEE_COM: '2002',
+          CODE_EPCI: '999999999'
+        }
+      ]
+    })
+    const data = getCommuneAreaDataForEpci({ epcis: ['200000172', '249500513'], communes: ['1003', '2001'] })
+    expect(data.length).toBe(3)
+  })
+
   it('returns the significant carbon data', () => {
     jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
       return [
