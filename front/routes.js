@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const rootFolder = path.join(__dirname, '../')
-const { epciList } = require(path.join(rootFolder, './data'))
+const { epciList, communeList } = require(path.join(rootFolder, './data'))
 const sendinblue = require(path.join(rootFolder, './sendinblue'))
 const { territoryHandler } = require('./handlers/territory')
 const { excelExportHandler } = require('./handlers/excelExport')
@@ -14,6 +14,7 @@ router.get('/', async (req, res) => {
   } else {
     res.render('landing', {
       epcis: epciList(),
+      communes: communeList(),
       isHomepage: true
     })
   }

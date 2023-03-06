@@ -1,0 +1,1722 @@
+[
+{"code":"1","Commune":"","Nom unique":"","nom":"Île-de-Bréhat","nature":"Comm","nombreCommunes":"1","populationTotale":"361"}
+,
+{"code":"2","Commune":"","Nom unique":"","nom":"Île-de-Sein & Ouessant","nature":"Comm","nombreCommunes":"2","populationTotale":"684"}
+,
+{"code":"3","Commune":"","Nom unique":"","nom":"Loire-Authion","nature":"Comm","nombreCommunes":"1","populationTotale":"15702"},
+{"code":"4","Commune":"","Nom unique":"","nom":"L'Île-d'Yeu","nature":"Comm","nombreCommunes":"1","populationTotale":"4809"}
+,
+{"code":"200000172","Commune":"","Nom unique":"","nom":"CC Faucigny-Glières","nature":"CC","nombreCommunes":"7","populationTotale":"27164"}
+,
+{"code":"200000438","Commune":"","Nom unique":"","nom":"CC du Pays de Pontchâteau Saint-Gildas-des-Bois","nature":"CC","nombreCommunes":"9","populationTotale":"35548"}
+,
+{"code":"200000545","Commune":"","Nom unique":"","nom":"CC des Portes de Romilly-sur-Seine","nature":"CC","nombreCommunes":"6","populationTotale":"19108"},
+{"code":"200000628","Commune":"","Nom unique":"","nom":"CC Rhône Lez Provence","nature":"CC","nombreCommunes":"5","populationTotale":"24502"}
+,
+{"code":"200000800","Commune":"","Nom unique":"","nom":"CC Coeur de Sologne","nature":"CC","nombreCommunes":"6","populationTotale":"10861"},
+{"code":"200000925","Commune":"","Nom unique":"","nom":"CC de la Plaine Dijonnaise","nature":"CC","nombreCommunes":"25","populationTotale":"22507"},
+{"code":"200000933","Commune":"","Nom unique":"","nom":"CC Sauldre et Sologne","nature":"CC","nombreCommunes":"13","populationTotale":"14423"},
+{"code":"200004802","Commune":"","Nom unique":"","nom":"CC du Pays de Fayence","nature":"CC","nombreCommunes":"9","populationTotale":"28039"},
+{"code":"200005932","Commune":"","Nom unique":"","nom":"CC des Portes de Sologne","nature":"CC","nombreCommunes":"7","populationTotale":"15652"},
+{"code":"200005957","Commune":"","Nom unique":"","nom":"CC de la Région de Rambervillers","nature":"CC","nombreCommunes":"30","populationTotale":"14002"}
+,
+{"code":"200006682","Commune":"","Nom unique":"","nom":"CA Beaune, Côte et Sud - Communauté Beaune-Chagny-Nolay","nature":"CA","nombreCommunes":"53","populationTotale":"53930"}
+,
+{"code":"200006716","Commune":"","Nom unique":"","nom":"CC du Nogentais","nature":"CC","nombreCommunes":"23","populationTotale":"17083"},
+{"code":"200006930","Commune":"","Nom unique":"","nom":"CC du Haut-Allier","nature":"CC","nombreCommunes":"11","populationTotale":"5484"},
+{"code":"200006971","Commune":"","Nom unique":"","nom":"CC du Perche","nature":"CC","nombreCommunes":"22","populationTotale":"19075"},
+{"code":"200007052","Commune":"","Nom unique":"","nom":"CC de la Marche Berrichonne","nature":"CC","nombreCommunes":"9","populationTotale":"5832"},
+{"code":"200007177","Commune":"","Nom unique":"","nom":"CC Pays de Nérondes","nature":"CC","nombreCommunes":"12","populationTotale":"5148"}
+,
+{"code":"200010650","Commune":"","Nom unique":"","nom":"CA du Grand Dole","nature":"CA","nombreCommunes":"47","populationTotale":"55763"},
+{"code":"200010700","Commune":"","Nom unique":"","nom":"CA Caux Seine Agglo","nature":"CA","nombreCommunes":"50","populationTotale":"78274"},
+{"code":"200011773","Commune":"","Nom unique":"","nom":"CA Annemasse-les Voirons-Agglomération","nature":"CA","nombreCommunes":"12","populationTotale":"90932"}
+,
+{"code":"200011781","Commune":"","Nom unique":"","nom":"CC Portes du Berry entre Loire et Val d'Aubois","nature":"CC","nombreCommunes":"12","populationTotale":"10086"},
+{"code":"200012060","Commune":"","Nom unique":"","nom":"CC Petite Montagne","nature":"CC","nombreCommunes":"26","populationTotale":"6882"},
+{"code":"200013050","Commune":"","Nom unique":"","nom":"CC Sauer-Pechelbronn","nature":"CC","nombreCommunes":"24","populationTotale":"17945"},
+{"code":"200015162","Commune":"","Nom unique":"","nom":"CC de l'Oriente","nature":"CC","nombreCommunes":"22","populationTotale":"6187"},
+{"code":"200016905","Commune":"","Nom unique":"","nom":"CC du Pays de Lamastre","nature":"CC","nombreCommunes":"11","populationTotale":"6814"},
+{"code":"200017341","Commune":"","Nom unique":"","nom":"CC Lodévois et Larzac","nature":"CC","nombreCommunes":"28","populationTotale":"14910"}
+,
+{"code":"200017846","Commune":"","Nom unique":"","nom":"CA Étampois Sud-Essonne","nature":"CA","nombreCommunes":"38","populationTotale":"54360"}
+,
+{"code":"200018083","Commune":"","Nom unique":"","nom":"CC de Desvres-Samer","nature":"CC","nombreCommunes":"31","populationTotale":"23215"},
+{"code":"200018166","Commune":"","Nom unique":"","nom":"CC Le Grésivaudan","nature":"CC","nombreCommunes":"46","populationTotale":"104039"}
+,
+{"code":"200018406","Commune":"","Nom unique":"","nom":"CC du Romorantinais et du Monestois","nature":"CC","nombreCommunes":"15","populationTotale":"34508"},
+{"code":"200018521","Commune":"","Nom unique":"","nom":"CC du Val de Bouzanne","nature":"CC","nombreCommunes":"12","populationTotale":"6172"},
+{"code":"200022986","Commune":"","Nom unique":"","nom":"CC du Grand Pic Saint-Loup","nature":"CC","nombreCommunes":"36","populationTotale":"48510"},
+{"code":"200023075","Commune":"","Nom unique":"","nom":"CC du Pays de Maîche","nature":"CC","nombreCommunes":"43","populationTotale":"19102"}
+,
+{"code":"200023125","Commune":"","Nom unique":"","nom":"CC Les Portes Briardes entre Villes et Forêts","nature":"CC","nombreCommunes":"5","populationTotale":"46758"}
+,
+{"code":"200023240","Commune":"","Nom unique":"","nom":"CC Pays de Nemours","nature":"CC","nombreCommunes":"21","populationTotale":"30936"},
+{"code":"200023299","Commune":"","Nom unique":"","nom":"CC Coeur de Tarentaise","nature":"CC","nombreCommunes":"7","populationTotale":"9897"},
+{"code":"200023307","Commune":"","Nom unique":"","nom":"CA du Grand Villeneuvois","nature":"CA","nombreCommunes":"19","populationTotale":"49586"},
+{"code":"200023372","Commune":"","Nom unique":"","nom":"CC de la Vallée de Chamonix-Mont-Blanc","nature":"CC","nombreCommunes":"4","populationTotale":"13681"}
+,
+{"code":"200023414","Commune":"","Nom unique":"","nom":"Métropole Rouen Normandie","nature":"ME","nombreCommunes":"71","populationTotale":"498822"}
+,
+{"code":"200023620","Commune":"","Nom unique":"","nom":"CC de la Gascogne Toulousaine","nature":"CC","nombreCommunes":"14","populationTotale":"21409"},
+{"code":"200023737","Commune":"","Nom unique":"","nom":"CA du Grand Cahors","nature":"CA","nombreCommunes":"36","populationTotale":"42395"},
+{"code":"200023778","Commune":"","Nom unique":"","nom":"CC du Pays de Saint-Gilles-Croix-de-Vie","nature":"CC","nombreCommunes":"14","populationTotale":"48730"},
+{"code":"200023794","Commune":"","Nom unique":"","nom":"CC de Blaye","nature":"CC","nombreCommunes":"21","populationTotale":"21016"},
+{"code":"200023919","Commune":"","Nom unique":"","nom":"CC Gâtinais Val de Loing","nature":"CC","nombreCommunes":"20","populationTotale":"19364"}
+,
+{"code":"200026573","Commune":"","Nom unique":"","nom":"CC Haut-Jura Saint-Claude","nature":"CC","nombreCommunes":"25","populationTotale":"22197"},
+{"code":"200027027","Commune":"","Nom unique":"","nom":"CC Arc Sud Bretagne","nature":"CC","nombreCommunes":"12","populationTotale":"27558"},
+{"code":"200027076","Commune":"","Nom unique":"","nom":"CC Arnon Boischaut Cher","nature":"CC","nombreCommunes":"19","populationTotale":"8446"},
+{"code":"200027100","Commune":"","Nom unique":"","nom":"CC Méditerranée Porte des Maures","nature":"CC","nombreCommunes":"6","populationTotale":"43068"}
+,
+{"code":"200027183","Commune":"","Nom unique":"","nom":"CU Perpignan Méditerranée Métropole","nature":"CU","nombreCommunes":"36","populationTotale":"271238"}
+,
+{"code":"200027217","Commune":"","Nom unique":"","nom":"CC Sarlat-Périgord Noir","nature":"CC","nombreCommunes":"13","populationTotale":"17411"}
+,
+{"code":"200027308","Commune":"","Nom unique":"","nom":"CC d'Auberive Vingeanne et Montsaugeonnais","nature":"CC","nombreCommunes":"51","populationTotale":"8635"},
+{"code":"200029734","Commune":"","Nom unique":"","nom":"CC des 4B Sud Charente","nature":"CC","nombreCommunes":"41","populationTotale":"20692"},
+{"code":"200029999","Commune":"","Nom unique":"","nom":"CC Rives de l'Ain - Pays du Cerdon","nature":"CC","nombreCommunes":"14","populationTotale":"14632"},
+{"code":"200030195","Commune":"","Nom unique":"","nom":"Métropole Nice Côte d'Azur","nature":"ME","nombreCommunes":"49","populationTotale":"544819"}
+,
+{"code":"200030385","Commune":"","Nom unique":"","nom":"CA de Blois Agglopolys","nature":"CA","nombreCommunes":"43","populationTotale":"109080"},
+{"code":"200030435","Commune":"","Nom unique":"","nom":"CC d'Aire-sur-l'Adour","nature":"CC","nombreCommunes":"22","populationTotale":"13566"},
+{"code":"200030526","Commune":"","Nom unique":"","nom":"CC du Ried de Marckolsheim","nature":"CC","nombreCommunes":"18","populationTotale":"20340"},
+{"code":"200030633","Commune":"","Nom unique":"","nom":"CC du Caudrésis et du Catésis","nature":"CC","nombreCommunes":"46","populationTotale":"66373"}
+,
+{"code":"200030658","Commune":"","Nom unique":"","nom":"CC du Trièves","nature":"CC","nombreCommunes":"27","populationTotale":"10233"}
+,
+{"code":"200030674","Commune":"","Nom unique":"","nom":"CA Val de Garonne Agglomération","nature":"CA","nombreCommunes":"43","populationTotale":"62370"}
+,
+{"code":"200032514","Commune":"","Nom unique":"","nom":"CC Berry-Loire-Vauvise","nature":"CC","nombreCommunes":"14","populationTotale":"5831"},
+{"code":"200033025","Commune":"","Nom unique":"","nom":"CA de Bar-le-Duc - Sud Meuse","nature":"CA","nombreCommunes":"33","populationTotale":"37077"},
+{"code":"200033090","Commune":"","Nom unique":"","nom":"CC Plaines et Monts de France","nature":"CC","nombreCommunes":"20","populationTotale":"24407"},
+{"code":"200033116","Commune":"","Nom unique":"","nom":"CC Cluses-Arve et Montagnes","nature":"CC","nombreCommunes":"10","populationTotale":"46764"},
+{"code":"200033173","Commune":"","Nom unique":"","nom":"CC de la Haute Vallée de Chevreuse","nature":"CC","nombreCommunes":"10","populationTotale":"25632"}
+,
+{"code":"200033181","Commune":"","Nom unique":"","nom":"CA Chartres Métropole","nature":"CA","nombreCommunes":"66","populationTotale":"140763"}
+,
+{"code":"200033207","Commune":"","Nom unique":"","nom":"CC Vierzon-Sologne-Berry","nature":"CC","nombreCommunes":"10","populationTotale":"33155"},
+{"code":"200033298","Commune":"","Nom unique":"","nom":"CC des Coëvrons","nature":"CC","nombreCommunes":"36","populationTotale":"28326"}
+,
+{"code":"200033579","Commune":"","Nom unique":"","nom":"CU d'Arras","nature":"CU","nombreCommunes":"46","populationTotale":"109781"},
+{"code":"200033827","Commune":"","Nom unique":"","nom":"CC de Fium'orbu Castellu","nature":"CC","nombreCommunes":"13","populationTotale":"13029"},
+{"code":"200033868","Commune":"","Nom unique":"","nom":"CC des Ballons des Hautes-Vosges","nature":"CC","nombreCommunes":"8","populationTotale":"15744"},
+{"code":"200034023","Commune":"","Nom unique":"","nom":"CC Tarn-Agout","nature":"CC","nombreCommunes":"22","populationTotale":"31711"},
+{"code":"200034031","Commune":"","Nom unique":"","nom":"CC des Monts d'Alban et du Villefranchois","nature":"CC","nombreCommunes":"14","populationTotale":"6485"},
+{"code":"200034049","Commune":"","Nom unique":"","nom":"CC Centre Tarn","nature":"CC","nombreCommunes":"16","populationTotale":"11187"},
+{"code":"200034056","Commune":"","Nom unique":"","nom":"CC du Lautrécois et du Pays d'Agout","nature":"CC","nombreCommunes":"28","populationTotale":"14864"}
+,
+{"code":"200034064","Commune":"","Nom unique":"","nom":"CC du Cordais et du Causse (4 C)","nature":"CC","nombreCommunes":"19","populationTotale":"4840"},
+{"code":"200034098","Commune":"","Nom unique":"","nom":"CC des Montagnes du Giffre","nature":"CC","nombreCommunes":"8","populationTotale":"12279"},
+{"code":"200034130","Commune":"","Nom unique":"","nom":"CC Gally Mauldre","nature":"CC","nombreCommunes":"11","populationTotale":"22658"},
+{"code":"200034197","Commune":"","Nom unique":"","nom":"CC de Montaigne Montravel et Gurson","nature":"CC","nombreCommunes":"18","populationTotale":"12245"},
+{"code":"200034205","Commune":"","Nom unique":"","nom":"CC de la Costa Verde","nature":"CC","nombreCommunes":"23","populationTotale":"10085"},
+{"code":"200034270","Commune":"","Nom unique":"","nom":"CC du Pays de Barr","nature":"CC","nombreCommunes":"20","populationTotale":"24593"},
+{"code":"200034379","Commune":"","Nom unique":"","nom":"CC Pays d'Uzès","nature":"CC","nombreCommunes":"32","populationTotale":"29081"}
+,
+{"code":"200034411","Commune":"","Nom unique":"","nom":"CC du Piémont Cévenol","nature":"CC","nombreCommunes":"34","populationTotale":"21888"}
+,
+{"code":"200034601","Commune":"","Nom unique":"","nom":"CC Causses Aigoual Cévennes","nature":"CC","nombreCommunes":"16","populationTotale":"5692"}
+,
+{"code":"200034635","Commune":"","Nom unique":"","nom":"CC du Kochersberg","nature":"CC","nombreCommunes":"23","populationTotale":"25210"},
+{"code":"200034692","Commune":"","Nom unique":"","nom":"CA du Gard Rhodanien","nature":"CA","nombreCommunes":"44","populationTotale":"75095"},
+{"code":"200034700","Commune":"","Nom unique":"","nom":"CA Durance-Lubéron-Verdon Agglomération","nature":"CA","nombreCommunes":"25","populationTotale":"62813"}
+,
+{"code":"200034718","Commune":"","Nom unique":"","nom":"CC de Vitry, Champagne et Der","nature":"CC","nombreCommunes":"35","populationTotale":"26007"},
+{"code":"200034726","Commune":"","Nom unique":"","nom":"CC Bastides de Lomagne","nature":"CC","nombreCommunes":"41","populationTotale":"11494"},
+{"code":"200034825","Commune":"","Nom unique":"","nom":"CA du Grand Guéret","nature":"CA","nombreCommunes":"25","populationTotale":"30683"}
+,
+{"code":"200034833","Commune":"","Nom unique":"","nom":"CC des Bastides Dordogne-Périgord","nature":"CC","nombreCommunes":"47","populationTotale":"19340"}
+,
+{"code":"200034874","Commune":"","Nom unique":"","nom":"CC Côtes de Meuse Woëvre","nature":"CC","nombreCommunes":"25","populationTotale":"6213"}
+,
+{"code":"200034882","Commune":"","Nom unique":"","nom":"CC Pays du Mont-Blanc","nature":"CC","nombreCommunes":"10","populationTotale":"45997"},
+{"code":"200034957","Commune":"","Nom unique":"","nom":"CC du Frontonnais","nature":"CC","nombreCommunes":"10","populationTotale":"25945"},
+{"code":"200035087","Commune":"","Nom unique":"","nom":"CA Terre de Provence","nature":"CA","nombreCommunes":"13","populationTotale":"59893"},
+{"code":"200035103","Commune":"","Nom unique":"","nom":"CC de la Vallée de la Haute-Sarthe","nature":"CC","nombreCommunes":"31","populationTotale":"8133"}
+,
+{"code":"200035111","Commune":"","Nom unique":"","nom":"CC des Sources de l'Orne","nature":"CC","nombreCommunes":"24","populationTotale":"12776"},
+{"code":"200035129","Commune":"","Nom unique":"","nom":"CC de Cèze Cévennes","nature":"CC","nombreCommunes":"23","populationTotale":"19787"}
+,
+{"code":"200035137","Commune":"","Nom unique":"","nom":"CC Marche Occitane - Val d'Anglin","nature":"CC","nombreCommunes":"17","populationTotale":"7154"},
+{"code":"200035202","Commune":"","Nom unique":"","nom":"CC Charlieu-Belmont","nature":"CC","nombreCommunes":"25","populationTotale":"24341"},
+{"code":"200035319","Commune":"","Nom unique":"","nom":"CA Var Esterel Méditerranée (Cavem)","nature":"CA","nombreCommunes":"5","populationTotale":"113488"}
+,
+{"code":"200035327","Commune":"","Nom unique":"","nom":"CC Cazals-Salviac","nature":"CC","nombreCommunes":"15","populationTotale":"5434"},
+{"code":"200035442","Commune":"","Nom unique":"","nom":"CC du Sud-Artois","nature":"CC","nombreCommunes":"64","populationTotale":"28229"},
+{"code":"200035459","Commune":"","Nom unique":"","nom":"CA d'Agen","nature":"CA","nombreCommunes":"31","populationTotale":"99488"},
+{"code":"200035533","Commune":"","Nom unique":"","nom":"CC du Grand Saint-Émilionnais","nature":"CC","nombreCommunes":"22","populationTotale":"15400"}
+,
+{"code":"200035541","Commune":"","Nom unique":"","nom":"CC des Landes d'Armagnac","nature":"CC","nombreCommunes":"27","populationTotale":"11310"},
+{"code":"200035632","Commune":"","Nom unique":"","nom":"CC Armagnac Adour","nature":"CC","nombreCommunes":"25","populationTotale":"7092"},
+{"code":"200035665","Commune":"","Nom unique":"","nom":"CA Seine Eure","nature":"CA","nombreCommunes":"40","populationTotale":"72894"},
+{"code":"200035707","Commune":"","Nom unique":"","nom":"CC Piège Lauragais Malepère","nature":"CC","nombreCommunes":"38","populationTotale":"16299"}
+,
+{"code":"200035715","Commune":"","Nom unique":"","nom":"CA Carcassonne Agglo","nature":"CA","nombreCommunes":"82","populationTotale":"114392"},
+{"code":"200035723","Commune":"","Nom unique":"","nom":"CC Ventoux Sud","nature":"CC","nombreCommunes":"11","populationTotale":"9574"},
+{"code":"200035731","Commune":"","Nom unique":"","nom":"CA Roannais Agglomération","nature":"CA","nombreCommunes":"40","populationTotale":"103721"}
+,
+{"code":"200035756","Commune":"","Nom unique":"","nom":"CC Astarac Arros en Gascogne","nature":"CC","nombreCommunes":"37","populationTotale":"7624"},
+{"code":"200035764","Commune":"","Nom unique":"","nom":"CC de la Beauce Loirétaine","nature":"CC","nombreCommunes":"23","populationTotale":"16817"}
+,
+{"code":"200035772","Commune":"","Nom unique":"","nom":"CC du Pays du Saintois","nature":"CC","nombreCommunes":"55","populationTotale":"14713"},
+{"code":"200035814","Commune":"","Nom unique":"","nom":"CA Flers Agglo","nature":"CA","nombreCommunes":"42","populationTotale":"56264"},
+{"code":"200035848","Commune":"","Nom unique":"","nom":"CC du Châtillonnais en Berry","nature":"CC","nombreCommunes":"10","populationTotale":"6415"}
+,
+{"code":"200035855","Commune":"","Nom unique":"","nom":"CC Castelnaudary Lauragais Audois","nature":"CC","nombreCommunes":"43","populationTotale":"26910"},
+{"code":"200035863","Commune":"","Nom unique":"","nom":"CC Région Lézignanaise, Corbières et Minervois","nature":"CC","nombreCommunes":"54","populationTotale":"33528"}
+,
+{"code":"200035970","Commune":"","Nom unique":"","nom":"CC Vexin Centre","nature":"CC","nombreCommunes":"34","populationTotale":"25228"},
+{"code":"200036069","Commune":"","Nom unique":"","nom":"CC du Pays de Mortagne-au-Perche","nature":"CC","nombreCommunes":"33","populationTotale":"14672"},
+{"code":"200036077","Commune":"","Nom unique":"","nom":"CC du Golfe de Saint-Tropez","nature":"CC","nombreCommunes":"12","populationTotale":"58571"},
+{"code":"200036135","Commune":"","Nom unique":"","nom":"CC Coeur de France","nature":"CC","nombreCommunes":"19","populationTotale":"19442"},
+{"code":"200036150","Commune":"","Nom unique":"","nom":"CC des Hauts du Val de Saône","nature":"CC","nombreCommunes":"48","populationTotale":"8978"}
+,
+{"code":"200036465","Commune":"","Nom unique":"","nom":"CC de Thann-Cernay","nature":"CC","nombreCommunes":"16","populationTotale":"38632"},
+{"code":"200036473","Commune":"","Nom unique":"","nom":"CA de Saintes","nature":"CA","nombreCommunes":"36","populationTotale":"62095"},
+{"code":"200036499","Commune":"","Nom unique":"","nom":"CC de Marana-Golo","nature":"CC","nombreCommunes":"10","populationTotale":"23520"},
+{"code":"200036523","Commune":"","Nom unique":"","nom":"CC des Bastides en Haut-Agenais Périgord","nature":"CC","nombreCommunes":"43","populationTotale":"17544"}
+,
+{"code":"200036549","Commune":"","Nom unique":"","nom":"CC Val de Gray","nature":"CC","nombreCommunes":"48","populationTotale":"21428"},
+{"code":"200036572","Commune":"","Nom unique":"","nom":"CC Porte d'Aquitaine en Pays de Serres","nature":"CC","nombreCommunes":"13","populationTotale":"5412"},
+{"code":"200037059","Commune":"","Nom unique":"","nom":"CC de la Haute Somme (Combles - Péronne - Roisel)","nature":"CC","nombreCommunes":"60","populationTotale":"28736"}
+,
+{"code":"200037133","Commune":"","Nom unique":"","nom":"CC du Provinois","nature":"CC","nombreCommunes":"40","populationTotale":"35723"},
+{"code":"200038958","Commune":"","Nom unique":"","nom":"CC de la Pieve de l'Ornano","nature":"CC","nombreCommunes":"28","populationTotale":"12247"},
+{"code":"200038990","Commune":"","Nom unique":"","nom":"CC de Saint-Méen Montauban","nature":"CC","nombreCommunes":"18","populationTotale":"26907"}
+,
+{"code":"200039022","Commune":"","Nom unique":"","nom":"CA Vitré Communauté","nature":"CA","nombreCommunes":"46","populationTotale":"81931"}
+,
+{"code":"200039055","Commune":"","Nom unique":"","nom":"CC Ouche et Montagne","nature":"CC","nombreCommunes":"32","populationTotale":"10918"},
+{"code":"200039063","Commune":"","Nom unique":"","nom":"CC Forêts, Seine et Suzon","nature":"CC","nombreCommunes":"25","populationTotale":"6941"}
+,
+{"code":"200039204","Commune":"","Nom unique":"","nom":"CC de Lacq-Orthez","nature":"CC","nombreCommunes":"61","populationTotale":"55060"},
+{"code":"200039519","Commune":"","Nom unique":"","nom":"CC du Quercy Blanc","nature":"CC","nombreCommunes":"15","populationTotale":"7981"},
+{"code":"200039642","Commune":"","Nom unique":"","nom":"CC Le Tonnerrois en Bourgogne","nature":"CC","nombreCommunes":"52","populationTotale":"17295"},
+{"code":"200039709","Commune":"","Nom unique":"","nom":"CC du Serein","nature":"CC","nombreCommunes":"39","populationTotale":"7822"},
+{"code":"200039758","Commune":"","Nom unique":"","nom":"CC Avallon, Vézelay, Morvan","nature":"CC","nombreCommunes":"48","populationTotale":"19967"}
+,
+{"code":"200039808","Commune":"","Nom unique":"","nom":"CC des Gorges de l'Ardèche","nature":"CC","nombreCommunes":"20","populationTotale":"15225"}
+,
+{"code":"200039824","Commune":"","Nom unique":"","nom":"CC Ardèche des Sources et Volcans","nature":"CC","nombreCommunes":"16","populationTotale":"9934"}
+,
+{"code":"200039832","Commune":"","Nom unique":"","nom":"CC Pays des Vans en Cévennes","nature":"CC","nombreCommunes":"15","populationTotale":"9339"}
+,
+{"code":"200039857","Commune":"","Nom unique":"","nom":"CA du Pays de Grasse","nature":"CA","nombreCommunes":"23","populationTotale":"104017"},
+{"code":"200039865","Commune":"","Nom unique":"","nom":"Metz Métropole","nature":"ME","nombreCommunes":"44","populationTotale":"224904"}
+,
+{"code":"200039907","Commune":"","Nom unique":"","nom":"CC du Sud Messin","nature":"CC","nombreCommunes":"34","populationTotale":"16411"},
+{"code":"200039915","Commune":"","Nom unique":"","nom":"CA Cannes Pays de Lérins","nature":"CA","nombreCommunes":"5","populationTotale":"160173"}
+,
+{"code":"200039931","Commune":"","Nom unique":"","nom":"CC Alpes d'Azur","nature":"CC","nombreCommunes":"34","populationTotale":"9838"},
+{"code":"200039949","Commune":"","Nom unique":"","nom":"CC Rives de Moselle","nature":"CC","nombreCommunes":"20","populationTotale":"51955"},
+{"code":"200040038","Commune":"","Nom unique":"","nom":"CC Saône Doubs Bresse","nature":"CC","nombreCommunes":"27","populationTotale":"12393"}
+,
+{"code":"200040095","Commune":"","Nom unique":"","nom":"CC Isle Vern Salembre en Périgord","nature":"CC","nombreCommunes":"16","populationTotale":"19423"}
+,
+{"code":"200040111","Commune":"","Nom unique":"","nom":"CC Coeur de Chartreuse","nature":"CC","nombreCommunes":"17","populationTotale":"17290"},
+{"code":"200040137","Commune":"","Nom unique":"","nom":"CC des Lacs de Champagne","nature":"CC","nombreCommunes":"43","populationTotale":"9923"},
+{"code":"200040178","Commune":"","Nom unique":"","nom":"CC de l'Outre-Forêt","nature":"CC","nombreCommunes":"13","populationTotale":"16325"}
+,
+{"code":"200040202","Commune":"","Nom unique":"","nom":"CC Provence Verdon","nature":"CC","nombreCommunes":"15","populationTotale":"22384"},
+{"code":"200040210","Commune":"","Nom unique":"","nom":"CC Lacs et Gorges du Verdon","nature":"CC","nombreCommunes":"16","populationTotale":"9039"},
+{"code":"200040244","Commune":"","Nom unique":"","nom":"CA du Bocage Bressuirais","nature":"CA","nombreCommunes":"38","populationTotale":"75644"},
+{"code":"200040251","Commune":"","Nom unique":"","nom":"CC Bassée-Montois","nature":"CC","nombreCommunes":"42","populationTotale":"24096"}
+,
+{"code":"200040277","Commune":"","Nom unique":"","nom":"CA du Pays de Dreux","nature":"CA","nombreCommunes":"81","populationTotale":"117052"},
+{"code":"200040293","Commune":"","Nom unique":"","nom":"CC du Clunisois","nature":"CC","nombreCommunes":"42","populationTotale":"14475"},
+{"code":"200040350","Commune":"","Nom unique":"","nom":"CC Bugey Sud","nature":"CC","nombreCommunes":"50","populationTotale":"34637"},
+{"code":"200040384","Commune":"","Nom unique":"","nom":"CC Isle Double Landais","nature":"CC","nombreCommunes":"9","populationTotale":"12074"},
+{"code":"200040392","Commune":"","Nom unique":"","nom":"CA Le Grand Périgueux","nature":"CA","nombreCommunes":"43","populationTotale":"107362"}
+,
+{"code":"200040400","Commune":"","Nom unique":"","nom":"CC du Pays Ribéracois","nature":"CC","nombreCommunes":"44","populationTotale":"20376"}
+,
+{"code":"200040418","Commune":"","Nom unique":"","nom":"CC du Pays de Serres en Quercy","nature":"CC","nombreCommunes":"22","populationTotale":"8812"},
+{"code":"200040426","Commune":"","Nom unique":"","nom":"CC du Val de l'Oise","nature":"CC","nombreCommunes":"32","populationTotale":"16533"},
+{"code":"200040442","Commune":"","Nom unique":"","nom":"CA Luberon Monts de Vaucluse","nature":"CA","nombreCommunes":"16","populationTotale":"56256"},
+{"code":"200040459","Commune":"","Nom unique":"","nom":"CA Montélimar Agglomération","nature":"CA","nombreCommunes":"26","populationTotale":"66227"}
+,
+{"code":"200040475","Commune":"","Nom unique":"","nom":"CC Loué - Brûlon - Noyen","nature":"CC","nombreCommunes":"29","populationTotale":"19007"}
+,
+{"code":"200040491","Commune":"","Nom unique":"","nom":"CC Porte de Drômardèche","nature":"CC","nombreCommunes":"35","populationTotale":"47934"}
+,
+{"code":"200040509","Commune":"","Nom unique":"","nom":"CC du Crestois et de Pays de Saillans Coeur de Drôme","nature":"CC","nombreCommunes":"15","populationTotale":"15453"}
+,
+{"code":"200040558","Commune":"","Nom unique":"","nom":"CC Écueillé-Valençay","nature":"CC","nombreCommunes":"19","populationTotale":"11757"}
+,
+{"code":"200040566","Commune":"","Nom unique":"","nom":"CA de l'Ouest Rhodanien","nature":"CA","nombreCommunes":"34","populationTotale":"52013"},
+{"code":"200040574","Commune":"","Nom unique":"","nom":"CC Beaujolais Pierres Dorées","nature":"CC","nombreCommunes":"32","populationTotale":"51901"}
+,
+{"code":"200040590","Commune":"","Nom unique":"","nom":"CA Villefranche Beaujolais Saône","nature":"CA","nombreCommunes":"19","populationTotale":"74422"}
+,
+{"code":"200040624","Commune":"","Nom unique":"","nom":"CC Pays d'Apt-Luberon","nature":"CC","nombreCommunes":"25","populationTotale":"30850"},
+{"code":"200040657","Commune":"","Nom unique":"","nom":"CC de la Matheysine","nature":"CC","nombreCommunes":"44","populationTotale":"19727"},
+{"code":"200040681","Commune":"","Nom unique":"","nom":"CC Enclave des Papes-Pays de Grignan","nature":"CC","nombreCommunes":"19","populationTotale":"23629"},
+{"code":"200040715","Commune":"","Nom unique":"","nom":"Métropole Grenoble-Alpes-Métropole","nature":"ME","nombreCommunes":"49","populationTotale":"452687"}
+,
+{"code":"200040764","Commune":"","Nom unique":"","nom":"CC du Sud Corse","nature":"CC","nombreCommunes":"7","populationTotale":"21041"},
+{"code":"200040772","Commune":"","Nom unique":"","nom":"CC du Perche et Haut Vendômois","nature":"CC","nombreCommunes":"23","populationTotale":"9396"}
+,
+{"code":"200040798","Commune":"","Nom unique":"","nom":"CC Val Vanoise","nature":"CC","nombreCommunes":"9","populationTotale":"9566"},
+{"code":"200040814","Commune":"","Nom unique":"","nom":"CC Briance Sud Haute Vienne","nature":"CC","nombreCommunes":"11","populationTotale":"9321"},
+{"code":"200040830","Commune":"","Nom unique":"","nom":"CC du Pays de Fénelon","nature":"CC","nombreCommunes":"19","populationTotale":"9952"}
+,
+{"code":"200040889","Commune":"","Nom unique":"","nom":"CC de Portes Sud Périgord","nature":"CC","nombreCommunes":"28","populationTotale":"8821"}
+,
+{"code":"200040905","Commune":"","Nom unique":"","nom":"CC Carmausin-Ségala","nature":"CC","nombreCommunes":"32","populationTotale":"30298"}
+,
+{"code":"200040947","Commune":"","Nom unique":"","nom":"CC de Flandre Intérieure","nature":"CC","nombreCommunes":"50","populationTotale":"103916"}
+,
+{"code":"200040954","Commune":"","Nom unique":"","nom":"CC des Hauts de Flandre","nature":"CC","nombreCommunes":"40","populationTotale":"54637"},
+{"code":"200041010","Commune":"","Nom unique":"","nom":"CC Coeur de Savoie","nature":"CC","nombreCommunes":"43","populationTotale":"37149"},
+{"code":"200041051","Commune":"","Nom unique":"","nom":"CC Vallée de la Dordogne et Forêt Bessède","nature":"CC","nombreCommunes":"20","populationTotale":"9318"}
+,
+{"code":"200041150","Commune":"","Nom unique":"","nom":"CC du Terrassonnais en Périgord Noir Thenon Hautefort","nature":"CC","nombreCommunes":"38","populationTotale":"23349"}
+,
+{"code":"200041168","Commune":"","Nom unique":"","nom":"CC de la Vallée de l'Homme","nature":"CC","nombreCommunes":"28","populationTotale":"16033"}
+,
+{"code":"200041283","Commune":"","Nom unique":"","nom":"CC de la Plaine du Rhin","nature":"CC","nombreCommunes":"19","populationTotale":"18721"},
+{"code":"200041317","Commune":"","Nom unique":"","nom":"CA du Niortais","nature":"CA","nombreCommunes":"42","populationTotale":"124435"},
+{"code":"200041325","Commune":"","Nom unique":"","nom":"CC du Pays Rhénan","nature":"CC","nombreCommunes":"18","populationTotale":"36744"}
+,
+{"code":"200041333","Commune":"","Nom unique":"","nom":"CC de Parthenay-Gâtine","nature":"CC","nombreCommunes":"39","populationTotale":"39021"}
+,
+{"code":"200041366","Commune":"","Nom unique":"","nom":"CC Rhône Crussol","nature":"CC","nombreCommunes":"13","populationTotale":"34289"}
+,
+{"code":"200041416","Commune":"","Nom unique":"","nom":"CC Airvaudais-Val du Thouet","nature":"CC","nombreCommunes":"10","populationTotale":"7099"},
+{"code":"200041440","Commune":"","Nom unique":"","nom":"CC de Domme - Villefranche du Périgord","nature":"CC","nombreCommunes":"23","populationTotale":"9018"}
+,
+{"code":"200041465","Commune":"","Nom unique":"","nom":"CC Val Eyrieux","nature":"CC","nombreCommunes":"31","populationTotale":"13369"},
+{"code":"200041499","Commune":"","Nom unique":"","nom":"CC Aunis Atlantique","nature":"CC","nombreCommunes":"20","populationTotale":"29729"},
+{"code":"200041515","Commune":"","Nom unique":"","nom":"CC du Bassin de Pont-à-Mousson","nature":"CC","nombreCommunes":"31","populationTotale":"41327"}
+,
+{"code":"200041523","Commune":"","Nom unique":"","nom":"CC de la Haute-Saintonge","nature":"CC","nombreCommunes":"129","populationTotale":"70034"},
+{"code":"200041556","Commune":"","Nom unique":"","nom":"CC Portes de la Creuse en Marche","nature":"CC","nombreCommunes":"17","populationTotale":"6800"},
+{"code":"200041572","Commune":"","Nom unique":"","nom":"CC Dronne et Belle","nature":"CC","nombreCommunes":"22","populationTotale":"11650"},
+{"code":"200041614","Commune":"","Nom unique":"","nom":"CC Aunis Sud","nature":"CC","nombreCommunes":"25","populationTotale":"31943"},
+{"code":"200041622","Commune":"","Nom unique":"","nom":"CC Ardennes Thiérache","nature":"CC","nombreCommunes":"37","populationTotale":"10217"}
+,
+{"code":"200041630","Commune":"","Nom unique":"","nom":"CA Ardenne Métropole","nature":"CA","nombreCommunes":"61","populationTotale":"129082"}
+,
+{"code":"200041689","Commune":"","Nom unique":"","nom":"CC Vals de Saintonge","nature":"CC","nombreCommunes":"111","populationTotale":"54457"},
+{"code":"200041721","Commune":"","Nom unique":"","nom":"CC de la Haute Comté","nature":"CC","nombreCommunes":"38","populationTotale":"18634"}
+,
+{"code":"200041762","Commune":"","Nom unique":"","nom":"CA Rochefort Océan","nature":"CA","nombreCommunes":"25","populationTotale":"64952"}
+,
+{"code":"200041853","Commune":"","Nom unique":"","nom":"CC du Pays de Montbozon et du Chanois","nature":"CC","nombreCommunes":"27","populationTotale":"6774"},
+{"code":"200041861","Commune":"","Nom unique":"","nom":"CC du Triangle Vert","nature":"CC","nombreCommunes":"42","populationTotale":"11331"},
+{"code":"200041879","Commune":"","Nom unique":"","nom":"CC Terres de Saône","nature":"CC","nombreCommunes":"38","populationTotale":"13707"}
+,
+{"code":"200041887","Commune":"","Nom unique":"","nom":"CC du Val Marnaysien","nature":"CC","nombreCommunes":"45","populationTotale":"14301"},
+{"code":"200041960","Commune":"","Nom unique":"","nom":"CC Pévèle-Carembault","nature":"CC","nombreCommunes":"38","populationTotale":"95891"}
+,
+{"code":"200041994","Commune":"","Nom unique":"","nom":"CC Haut Val de Sèvre","nature":"CC","nombreCommunes":"19","populationTotale":"30608"}
+,
+{"code":"200042000","Commune":"","Nom unique":"","nom":"CC Bruyères-Vallons des Vosges","nature":"CC","nombreCommunes":"34","populationTotale":"15827"}
+,
+{"code":"200042174","Commune":"","Nom unique":"","nom":"CA Lorient Agglomération","nature":"CA","nombreCommunes":"25","populationTotale":"207293"}
+,
+{"code":"200042182","Commune":"","Nom unique":"","nom":"CC du Mont des Avaloirs","nature":"CC","nombreCommunes":"26","populationTotale":"16950"},
+{"code":"200042190","Commune":"","Nom unique":"","nom":"CA de la Porte du Hainaut","nature":"CA","nombreCommunes":"46","populationTotale":"159883"},
+{"code":"200042372","Commune":"","Nom unique":"","nom":"CC des Coteaux Arrats Gimone","nature":"CC","nombreCommunes":"30","populationTotale":"10735"},
+{"code":"200042414","Commune":"","Nom unique":"","nom":"CC Bresse Revermont 71","nature":"CC","nombreCommunes":"17","populationTotale":"10043"},
+{"code":"200042463","Commune":"","Nom unique":"","nom":"CC de la Montagne Noire","nature":"CC","nombreCommunes":"23","populationTotale":"6058"},
+{"code":"200042497","Commune":"","Nom unique":"","nom":"CC Dombes Saône Vallée","nature":"CC","nombreCommunes":"19","populationTotale":"38120"}
+,
+{"code":"200042604","Commune":"","Nom unique":"","nom":"CC de Granville, Terre et Mer","nature":"CC","nombreCommunes":"32","populationTotale":"46379"},
+{"code":"200042620","Commune":"","Nom unique":"","nom":"CC de la Région de Suippes","nature":"CC","nombreCommunes":"16","populationTotale":"8005"}
+,
+{"code":"200042646","Commune":"","Nom unique":"","nom":"CC Grand Orb CC en Languedoc","nature":"CC","nombreCommunes":"24","populationTotale":"21015"},
+{"code":"200042653","Commune":"","Nom unique":"","nom":"CC Sud-Hérault","nature":"CC","nombreCommunes":"17","populationTotale":"17874"}
+,
+{"code":"200042703","Commune":"","Nom unique":"","nom":"CC de l'Argonne Champenoise","nature":"CC","nombreCommunes":"60","populationTotale":"12546"},
+{"code":"200042729","Commune":"","Nom unique":"","nom":"CC de la Baie du Cotentin","nature":"CC","nombreCommunes":"30","populationTotale":"24174"},
+{"code":"200042901","Commune":"","Nom unique":"","nom":"CC Drôme Sud Provence","nature":"CC","nombreCommunes":"14","populationTotale":"42670"}
+,
+{"code":"200042935","Commune":"","Nom unique":"","nom":"CA Haut - Bugey Agglomération","nature":"CA","nombreCommunes":"36","populationTotale":"58985"}
+,
+{"code":"200042943","Commune":"","Nom unique":"","nom":"CC du Cap Corse","nature":"CC","nombreCommunes":"18","populationTotale":"6935"},
+{"code":"200042992","Commune":"","Nom unique":"","nom":"CC Perthois-Bocage et Der","nature":"CC","nombreCommunes":"25","populationTotale":"5792"},
+{"code":"200043016","Commune":"","Nom unique":"","nom":"CC Val de Charente","nature":"CC","nombreCommunes":"34","populationTotale":"14778"},
+{"code":"200043065","Commune":"","Nom unique":"","nom":"CC du Val d'Amboise","nature":"CC","nombreCommunes":"14","populationTotale":"29057"},
+{"code":"200043081","Commune":"","Nom unique":"","nom":"CC Chinon, Vienne et Loire","nature":"CC","nombreCommunes":"19","populationTotale":"24375"},
+{"code":"200043123","Commune":"","Nom unique":"","nom":"CC Auray Quiberon Terre Atlantique","nature":"CC","nombreCommunes":"24","populationTotale":"88373"},
+{"code":"200043156","Commune":"","Nom unique":"","nom":"CC du Pays Rethélois","nature":"CC","nombreCommunes":"65","populationTotale":"30681"}
+,
+{"code":"200043172","Commune":"","Nom unique":"","nom":"CA du Bassin de Brive","nature":"CA","nombreCommunes":"48","populationTotale":"110812"},
+{"code":"200043263","Commune":"","Nom unique":"","nom":"CC Coeur de l'Avesnois","nature":"CC","nombreCommunes":"43","populationTotale":"31083"},
+{"code":"200043321","Commune":"","Nom unique":"","nom":"CC du Pays de Mormal","nature":"CC","nombreCommunes":"53","populationTotale":"49315"},
+{"code":"200043354","Commune":"","Nom unique":"","nom":"CC de Villedieu Intercom","nature":"CC","nombreCommunes":"27","populationTotale":"16168"},
+{"code":"200043396","Commune":"","Nom unique":"","nom":"CA Maubeuge Val de Sambre","nature":"CA","nombreCommunes":"43","populationTotale":"127897"},
+{"code":"200043404","Commune":"","Nom unique":"","nom":"CC du Sud Avesnois","nature":"CC","nombreCommunes":"12","populationTotale":"26653"},
+{"code":"200043438","Commune":"","Nom unique":"","nom":"CC de la Moivre à la Coole","nature":"CC","nombreCommunes":"28","populationTotale":"10079"}
+,
+{"code":"200043495","Commune":"","Nom unique":"","nom":"CA du Pays de Laon","nature":"CA","nombreCommunes":"38","populationTotale":"44421"},
+{"code":"200043602","Commune":"","Nom unique":"","nom":"CC des Albères, de la Côte Vermeille et de l'Illibéris","nature":"CC","nombreCommunes":"15","populationTotale":"55960"}
+,
+{"code":"200043628","Commune":"","Nom unique":"","nom":"CC des Vallées du Clain","nature":"CC","nombreCommunes":"16","populationTotale":"26486"}
+,
+{"code":"200043693","Commune":"","Nom unique":"","nom":"CC Terre Lorraine du Longuyonnais","nature":"CC","nombreCommunes":"27","populationTotale":"15870"},
+{"code":"200043776","Commune":"","Nom unique":"","nom":"CC Pyrénées Audoises","nature":"CC","nombreCommunes":"62","populationTotale":"14603"}
+,
+{"code":"200043974","Commune":"","Nom unique":"","nom":"CC du Sud Gironde","nature":"CC","nombreCommunes":"37","populationTotale":"39148"},
+{"code":"200043982","Commune":"","Nom unique":"","nom":"CC du Bazadais","nature":"CC","nombreCommunes":"31","populationTotale":"16234"},
+{"code":"200043990","Commune":"","Nom unique":"","nom":"CC Vallons de Haute-Bretagne Communauté","nature":"CC","nombreCommunes":"18","populationTotale":"43843"}
+,
+{"code":"200044014","Commune":"","Nom unique":"","nom":"CC Creuse Grand Sud","nature":"CC","nombreCommunes":"26","populationTotale":"12887"},
+{"code":"200044030","Commune":"","Nom unique":"","nom":"CC des Sept Vallées","nature":"CC","nombreCommunes":"69","populationTotale":"30451"}
+,
+{"code":"200044048","Commune":"","Nom unique":"","nom":"CC Osartis Marquion","nature":"CC","nombreCommunes":"49","populationTotale":"42317"},
+{"code":"200044253","Commune":"","Nom unique":"","nom":"CC du Bassin de Joinville en Champagne","nature":"CC","nombreCommunes":"59","populationTotale":"13371"},
+{"code":"200044394","Commune":"","Nom unique":"","nom":"CC du Réolais en Sud Gironde","nature":"CC","nombreCommunes":"41","populationTotale":"23994"}
+,
+{"code":"200044469","Commune":"","Nom unique":"","nom":"CC du Pays de Mirepoix","nature":"CC","nombreCommunes":"33","populationTotale":"10802"},
+{"code":"200044618","Commune":"","Nom unique":"","nom":"CA du Douaisis (C.A.D.)","nature":"CA","nombreCommunes":"35","populationTotale":"151662"},
+{"code":"200046977","Commune":"","Nom unique":"","nom":"Métropole de LYON","nature":"ME","nombreCommunes":"59","populationTotale":"1390240"}
+,
+{"code":"200048551","Commune":"","Nom unique":"","nom":"CC du Pays de Craon","nature":"CC","nombreCommunes":"37","populationTotale":"29353"},
+{"code":"200049187","Commune":"","Nom unique":"","nom":"CA du Grand Verdun","nature":"CA","nombreCommunes":"26","populationTotale":"30146"},
+{"code":"200049211","Commune":"","Nom unique":"","nom":"CC Conflent-Canigó","nature":"CC","nombreCommunes":"47","populationTotale":"21340"}
+,
+{"code":"200049484","Commune":"","Nom unique":"","nom":"CC Berry Grand Sud","nature":"CC","nombreCommunes":"32","populationTotale":"12447"},
+{"code":"200054781","Commune":"","Nom unique":"","nom":"Métropole du Grand Paris","nature":"ME","nombreCommunes":"131","populationTotale":"7086571"}
+,
+{"code":"200054807","Commune":"","Nom unique":"","nom":"Métropole d'Aix-Marseille-Provence","nature":"ME","nombreCommunes":"92","populationTotale":"1895060"}
+,
+{"code":"200055481","Commune":"","Nom unique":"","nom":"CC Beauce Val de Loire","nature":"CC","nombreCommunes":"30","populationTotale":"20352"},
+{"code":"200055655","Commune":"","Nom unique":"","nom":"CA Roissy Pays de France","nature":"CA","nombreCommunes":"42","populationTotale":"352112"},
+{"code":"200055887","Commune":"","Nom unique":"","nom":"CC Mayenne Communauté","nature":"CC","nombreCommunes":"33","populationTotale":"38434"}
+,
+{"code":"200056232","Commune":"","Nom unique":"","nom":"CA Communauté Paris-Saclay","nature":"CA","nombreCommunes":"27","populationTotale":"315498"}
+,
+{"code":"200056380","Commune":"","Nom unique":"","nom":"CA Plaine Vallée","nature":"CA","nombreCommunes":"18","populationTotale":"183806"}
+,
+{"code":"200057859","Commune":"","Nom unique":"","nom":"CA Coeur d'Essonne Agglomération","nature":"CA","nombreCommunes":"21","populationTotale":"198060"}
+,
+{"code":"200057958","Commune":"","Nom unique":"","nom":"CA Paris - Vallée de la Marne","nature":"CA","nombreCommunes":"12","populationTotale":"229695"}
+,
+{"code":"200058360","Commune":"","Nom unique":"","nom":"CC Entre Beauce et Perche","nature":"CC","nombreCommunes":"33","populationTotale":"22063"},
+{"code":"200058477","Commune":"","Nom unique":"","nom":"CA Val d'Yerres Val de Seine","nature":"CA","nombreCommunes":"9","populationTotale":"178011"},
+{"code":"200058485","Commune":"","Nom unique":"","nom":"CA Val Parisis","nature":"CA","nombreCommunes":"15","populationTotale":"273000"},
+{"code":"200058519","Commune":"","Nom unique":"","nom":"CA Saint-Germain Boucles de Seine","nature":"CA","nombreCommunes":"20","populationTotale":"341945"},
+{"code":"200058782","Commune":"","Nom unique":"","nom":"CA de Saint-Quentin-en-Yvelines","nature":"CA","nombreCommunes":"12","populationTotale":"231606"},
+{"code":"200059228","Commune":"","Nom unique":"","nom":"CA Grand Paris Sud Seine Essonne Sénart","nature":"CA","nombreCommunes":"24","populationTotale":"350953"}
+,
+{"code":"200059392","Commune":"","Nom unique":"","nom":"CC Bièvre Isère","nature":"CC","nombreCommunes":"54","populationTotale":"55274"}
+,
+{"code":"200059400","Commune":"","Nom unique":"","nom":"CC Porte Océane du Limousin","nature":"CC","nombreCommunes":"13","populationTotale":"26491"}
+,
+{"code":"200059889","Commune":"","Nom unique":"","nom":"CU Grand Paris Seine et Oise","nature":"CU","nombreCommunes":"73","populationTotale":"413904"},
+{"code":"200060010","Commune":"","Nom unique":"","nom":"CA Mauges Communauté","nature":"CA","nombreCommunes":"6","populationTotale":"123455"}
+,
+{"code":"200065563","Commune":"","Nom unique":"","nom":"CC Normandie-Cabourg-Pays d'Auge","nature":"CC","nombreCommunes":"39","populationTotale":"31762"},
+{"code":"200065589","Commune":"","Nom unique":"","nom":"CC Val Ès Dunes","nature":"CC","nombreCommunes":"18","populationTotale":"17825"}
+,
+{"code":"200065597","Commune":"","Nom unique":"","nom":"CU Caen la Mer","nature":"CU","nombreCommunes":"50","populationTotale":"270557"},
+{"code":"200065647","Commune":"","Nom unique":"","nom":"CA Pays de Montbéliard Agglomération","nature":"CA","nombreCommunes":"72","populationTotale":"143494"}
+,
+{"code":"200065787","Commune":"","Nom unique":"","nom":"CC de Pont-Audemer / Val de Risle","nature":"CC","nombreCommunes":"26","populationTotale":"28593"},
+{"code":"200065886","Commune":"","Nom unique":"","nom":"CA Loire Forez Agglomération Lfa","nature":"CA","nombreCommunes":"88","populationTotale":"111207"}
+,
+{"code":"200065894","Commune":"","Nom unique":"","nom":"CC de Forez-Est","nature":"CC","nombreCommunes":"42","populationTotale":"64413"},
+{"code":"200065928","Commune":"","Nom unique":"","nom":"CA Lannion-Trégor Communauté","nature":"CA","nombreCommunes":"60","populationTotale":"104085"}
+,
+{"code":"200066009","Commune":"","Nom unique":"","nom":"CA Mulhouse Alsace Agglomération","nature":"CA","nombreCommunes":"39","populationTotale":"277640"}
+,
+{"code":"200066017","Commune":"","Nom unique":"","nom":"CC Lieuvin Pays d'Auge","nature":"CC","nombreCommunes":"47","populationTotale":"18859"},
+{"code":"200066025","Commune":"","Nom unique":"","nom":"CC Pays Rhin - Brisach","nature":"CC","nombreCommunes":"29","populationTotale":"33414"},
+{"code":"200066033","Commune":"","Nom unique":"","nom":"CC Sud Alsace Largue","nature":"CC","nombreCommunes":"44","populationTotale":"22549"},
+{"code":"200066041","Commune":"","Nom unique":"","nom":"CC Sundgau","nature":"CC","nombreCommunes":"64","populationTotale":"48634"},
+{"code":"200066058","Commune":"","Nom unique":"","nom":"CA Saint-Louis Agglomération","nature":"CA","nombreCommunes":"40","populationTotale":"79063"}
+,
+{"code":"200066108","Commune":"","Nom unique":"","nom":"CC Haute Saulx et Perthois-Val d'Ornois","nature":"CC","nombreCommunes":"52","populationTotale":"17484"},
+{"code":"200066116","Commune":"","Nom unique":"","nom":"CC Argonne-Meuse","nature":"CC","nombreCommunes":"38","populationTotale":"7490"},
+{"code":"200066124","Commune":"","Nom unique":"","nom":"CA Gaillac-Graulhet","nature":"CA","nombreCommunes":"61","populationTotale":"74654"},
+{"code":"200066132","Commune":"","Nom unique":"","nom":"CC du Pays de Stenay et du Val Dunois","nature":"CC","nombreCommunes":"41","populationTotale":"10444"},
+{"code":"200066140","Commune":"","Nom unique":"","nom":"CC de l'Aire à l'Argonne","nature":"CC","nombreCommunes":"47","populationTotale":"6763"}
+,
+{"code":"200066157","Commune":"","Nom unique":"","nom":"CC de Commercy - Void - Vaucouleurs","nature":"CC","nombreCommunes":"54","populationTotale":"23647"},
+{"code":"200066165","Commune":"","Nom unique":"","nom":"CC Val de Meuse - Voie Sacrée","nature":"CC","nombreCommunes":"25","populationTotale":"9251"}
+,
+{"code":"200066173","Commune":"","Nom unique":"","nom":"CC de Damvillers Spincourt","nature":"CC","nombreCommunes":"41","populationTotale":"8575"},
+{"code":"200066223","Commune":"","Nom unique":"","nom":"CC Arize Lèze","nature":"CC","nombreCommunes":"27","populationTotale":"10859"}
+,
+{"code":"200066231","Commune":"","Nom unique":"","nom":"CC des Portes d'Ariège Pyrénées","nature":"CC","nombreCommunes":"35","populationTotale":"40471"}
+,
+{"code":"200066280","Commune":"","Nom unique":"","nom":"CC du Pithiverais","nature":"CC","nombreCommunes":"31","populationTotale":"30104"},
+{"code":"200066322","Commune":"","Nom unique":"","nom":"CC Terres des Confluences","nature":"CC","nombreCommunes":"22","populationTotale":"41874"},
+{"code":"200066330","Commune":"","Nom unique":"","nom":"CC Terres du Haut-Berry","nature":"CC","nombreCommunes":"29","populationTotale":"25277"},
+{"code":"200066348","Commune":"","Nom unique":"","nom":"CC Minervois Saint-Ponais Orb-Jaur","nature":"CC","nombreCommunes":"36","populationTotale":"15149"},
+{"code":"200066355","Commune":"","Nom unique":"","nom":"CA du Bassin de Thau","nature":"CA","nombreCommunes":"14","populationTotale":"126613"},
+{"code":"200066363","Commune":"","Nom unique":"","nom":"CC de la Haute Ariège","nature":"CC","nombreCommunes":"56","populationTotale":"7498"}
+,
+{"code":"200066371","Commune":"","Nom unique":"","nom":"CC Causses et Vallée de la Dordogne","nature":"CC","nombreCommunes":"79","populationTotale":"47236"}
+,
+{"code":"200066389","Commune":"","Nom unique":"","nom":"CA Saint-Lô Agglo","nature":"CA","nombreCommunes":"63","populationTotale":"79404"}
+,
+{"code":"200066405","Commune":"","Nom unique":"","nom":"CC Roumois Seine","nature":"CC","nombreCommunes":"56","populationTotale":"52162"},
+{"code":"200066413","Commune":"","Nom unique":"","nom":"CC Intercom Bernay Terres de Normandie","nature":"CC","nombreCommunes":"78","populationTotale":"57668"},
+{"code":"200066462","Commune":"","Nom unique":"","nom":"CC Interco Normandie Sud Eure","nature":"CC","nombreCommunes":"45","populationTotale":"40547"},
+{"code":"200066512","Commune":"","Nom unique":"","nom":"CC Élan Limousin Avenir Nature","nature":"CC","nombreCommunes":"24","populationTotale":"28313"}
+,
+{"code":"200066520","Commune":"","Nom unique":"","nom":"CC Ouest Limousin","nature":"CC","nombreCommunes":"16","populationTotale":"11879"},
+{"code":"200066553","Commune":"","Nom unique":"","nom":"CC des Monts de Lacaune et de la Montagne du Haut Languedoc","nature":"CC","nombreCommunes":"19","populationTotale":"8153"},
+{"code":"200066561","Commune":"","Nom unique":"","nom":"CC Sidobre Vals et Plateaux","nature":"CC","nombreCommunes":"17","populationTotale":"13225"},
+{"code":"200066587","Commune":"","Nom unique":"","nom":"CC des Monts du Lyonnais","nature":"CC","nombreCommunes":"32","populationTotale":"35999"},
+{"code":"200066603","Commune":"","Nom unique":"","nom":"CC du Pays de Lubersac-Pompadour","nature":"CC","nombreCommunes":"12","populationTotale":"7805"},
+{"code":"200066637","Commune":"","Nom unique":"","nom":"CC Hautes Terres","nature":"CC","nombreCommunes":"39","populationTotale":"13577"},
+{"code":"200066645","Commune":"","Nom unique":"","nom":"CC Vézère-Monédières-Millesources","nature":"CC","nombreCommunes":"19","populationTotale":"5187"}
+,
+{"code":"200066652","Commune":"","Nom unique":"","nom":"CC Grand Sud Tarn et Garonne","nature":"CC","nombreCommunes":"26","populationTotale":"42461"},
+{"code":"200066660","Commune":"","Nom unique":"","nom":"CC de Saint-Flour","nature":"CC","nombreCommunes":"53","populationTotale":"24763"},
+{"code":"200066678","Commune":"","Nom unique":"","nom":"CC de la Châtaigneraie Cantalienne","nature":"CC","nombreCommunes":"51","populationTotale":"22030"}
+,
+{"code":"200066710","Commune":"","Nom unique":"","nom":"CC Cingal-Suisse Normande","nature":"CC","nombreCommunes":"47","populationTotale":"24302"},
+{"code":"200066728","Commune":"","Nom unique":"","nom":"CC Vallées de l'Orne et de l'Odon","nature":"CC","nombreCommunes":"23","populationTotale":"25126"}
+,
+{"code":"200066744","Commune":"","Nom unique":"","nom":"CC Haute-Corrèze Communauté","nature":"CC","nombreCommunes":"71","populationTotale":"35013"}
+,
+{"code":"200066751","Commune":"","Nom unique":"","nom":"CC Xaintrie Val'dordogne","nature":"CC","nombreCommunes":"30","populationTotale":"12047"},
+{"code":"200066769","Commune":"","Nom unique":"","nom":"CC Midi Corrézien","nature":"CC","nombreCommunes":"35","populationTotale":"13548"}
+,
+{"code":"200066777","Commune":"","Nom unique":"","nom":"CC Ploërmel Communauté","nature":"CC","nombreCommunes":"32","populationTotale":"43952"}
+,
+{"code":"200066785","Commune":"","Nom unique":"","nom":"CC de l'Oust à Brocéliande Communauté","nature":"CC","nombreCommunes":"26","populationTotale":"40207"}
+,
+{"code":"200066793","Commune":"","Nom unique":"","nom":"CA du Grand Annecy","nature":"CA","nombreCommunes":"34","populationTotale":"205214"},
+{"code":"200066801","Commune":"","Nom unique":"","nom":"CC Isigny-Omaha Intercom","nature":"CC","nombreCommunes":"59","populationTotale":"27423"},
+{"code":"200066819","Commune":"","Nom unique":"","nom":"CC du Volvestre","nature":"CC","nombreCommunes":"32","populationTotale":"30237"},
+{"code":"200066827","Commune":"","Nom unique":"","nom":"CC du Pays de Honfleur-Beuzeville","nature":"CC","nombreCommunes":"27","populationTotale":"29642"},
+{"code":"200066835","Commune":"","Nom unique":"","nom":"CC de Sézanne-Sud Ouest Marnais","nature":"CC","nombreCommunes":"62","populationTotale":"22347"}
+,
+{"code":"200066850","Commune":"","Nom unique":"","nom":"CC des Paysages de la Champagne","nature":"CC","nombreCommunes":"54","populationTotale":"22185"},
+{"code":"200066868","Commune":"","Nom unique":"","nom":"CC Presqu'île de Crozon-Aulne Maritime","nature":"CC","nombreCommunes":"10","populationTotale":"23994"}
+,
+{"code":"200066876","Commune":"","Nom unique":"","nom":"CA de Châlons-en-Champagne","nature":"CA","nombreCommunes":"46","populationTotale":"82958"}
+,
+{"code":"200066884","Commune":"","Nom unique":"","nom":"CC Quercy Vert-Aveyron","nature":"CC","nombreCommunes":"13","populationTotale":"22219"},
+{"code":"200066892","Commune":"","Nom unique":"","nom":"CC de Vendeuvre-Soulaines","nature":"CC","nombreCommunes":"38","populationTotale":"8055"},
+{"code":"200066918","Commune":"","Nom unique":"","nom":"CA Alès Agglomération","nature":"CA","nombreCommunes":"73","populationTotale":"131559"}
+,
+{"code":"200066926","Commune":"","Nom unique":"","nom":"CA Grand Auch Coeur de Gascogne","nature":"CA","nombreCommunes":"34","populationTotale":"40479"},
+{"code":"200066975","Commune":"","Nom unique":"","nom":"CC Senlis Sud Oise","nature":"CC","nombreCommunes":"18","populationTotale":"25322"},
+{"code":"200067023","Commune":"","Nom unique":"","nom":"CC Coutances Mer et Bocage","nature":"CC","nombreCommunes":"64","populationTotale":"50511"},
+{"code":"200067031","Commune":"","Nom unique":"","nom":"CC Côte Ouest Centre Manche","nature":"CC","nombreCommunes":"31","populationTotale":"22958"}
+,
+{"code":"200067049","Commune":"","Nom unique":"","nom":"CC Spelunca-Liamone","nature":"CC","nombreCommunes":"33","populationTotale":"7715"},
+{"code":"200067064","Commune":"","Nom unique":"","nom":"CC Decazeville Communauté","nature":"CC","nombreCommunes":"12","populationTotale":"19865"}
+,
+{"code":"200067072","Commune":"","Nom unique":"","nom":"CC Haut-Léon Communauté","nature":"CC","nombreCommunes":"14","populationTotale":"32461"}
+,
+{"code":"200067080","Commune":"","Nom unique":"","nom":"CC Chablis, Villages et Terroirs","nature":"CC","nombreCommunes":"36","populationTotale":"15676"},
+{"code":"200067106","Commune":"","Nom unique":"","nom":"CA du Pays Basque","nature":"CA","nombreCommunes":"158","populationTotale":"312178"},
+{"code":"200067114","Commune":"","Nom unique":"","nom":"CA de l'Auxerrois","nature":"CA","nombreCommunes":"29","populationTotale":"71268"},
+{"code":"200067122","Commune":"","Nom unique":"","nom":"CC Coteaux et Plaines du Pays Lafrançaisain","nature":"CC","nombreCommunes":"11","populationTotale":"11264"}
+,
+{"code":"200067130","Commune":"","Nom unique":"","nom":"CC de Puisaye-Forterre","nature":"CC","nombreCommunes":"58","populationTotale":"36382"},
+{"code":"200067155","Commune":"","Nom unique":"","nom":"CC Saint Affricain, Roquefort, Sept Vallons","nature":"CC","nombreCommunes":"14","populationTotale":"14692"},
+{"code":"200067163","Commune":"","Nom unique":"","nom":"CC Monts, Rance et Rougier","nature":"CC","nombreCommunes":"23","populationTotale":"6635"},
+{"code":"200067171","Commune":"","Nom unique":"","nom":"CC Aubrac, Carladez et Viadène","nature":"CC","nombreCommunes":"21","populationTotale":"10539"}
+,
+{"code":"200067189","Commune":"","Nom unique":"","nom":"CC Creuse Sud Ouest","nature":"CC","nombreCommunes":"44","populationTotale":"14659"},
+{"code":"200067197","Commune":"","Nom unique":"","nom":"CC Monts d'Arrée Communauté","nature":"CC","nombreCommunes":"13","populationTotale":"8552"}
+,
+{"code":"200067205","Commune":"","Nom unique":"","nom":"CA du Cotentin","nature":"CA","nombreCommunes":"132","populationTotale":"186896"},
+{"code":"200067213","Commune":"","Nom unique":"","nom":"CU du Grand Reims","nature":"CU","nombreCommunes":"143","populationTotale":"300690"},
+{"code":"200067221","Commune":"","Nom unique":"","nom":"CC Centre Morbihan Communauté","nature":"CC","nombreCommunes":"19","populationTotale":"43643"}
+,
+{"code":"200067239","Commune":"","Nom unique":"","nom":"CC des Luys en Béarn","nature":"CC","nombreCommunes":"66","populationTotale":"28763"}
+,
+{"code":"200067247","Commune":"","Nom unique":"","nom":"CC Pleyben-Châteaulin-Porzay","nature":"CC","nombreCommunes":"17","populationTotale":"24487"}
+,
+{"code":"200067254","Commune":"","Nom unique":"","nom":"CA Pau Béarn Pyrénées","nature":"CA","nombreCommunes":"31","populationTotale":"166360"}
+,
+{"code":"200067262","Commune":"","Nom unique":"","nom":"CC du Haut-Béarn","nature":"CC","nombreCommunes":"48","populationTotale":"33690"}
+,
+{"code":"200067288","Commune":"","Nom unique":"","nom":"CC du Béarn des Gaves","nature":"CC","nombreCommunes":"53","populationTotale":"18465"}
+,
+{"code":"200067296","Commune":"","Nom unique":"","nom":"CC du Nord Est Béarn","nature":"CC","nombreCommunes":"73","populationTotale":"34661"}
+,
+{"code":"200067304","Commune":"","Nom unique":"","nom":"CC Serein et Armance","nature":"CC","nombreCommunes":"29","populationTotale":"25090"},
+{"code":"200067320","Commune":"","Nom unique":"","nom":"CC Serre-Ponçon Val d'Avance","nature":"CC","nombreCommunes":"16","populationTotale":"7618"}
+,
+{"code":"200067346","Commune":"","Nom unique":"","nom":"CA Pornic Agglo Pays de Retz","nature":"CA","nombreCommunes":"14","populationTotale":"56858"},
+{"code":"200067361","Commune":"","Nom unique":"","nom":"CC Grand-Figeac","nature":"CC","nombreCommunes":"92","populationTotale":"45065"},
+{"code":"200067379","Commune":"","Nom unique":"","nom":"CC Côtes de Champagne et Val de Saulx","nature":"CC","nombreCommunes":"40","populationTotale":"12360"}
+,
+{"code":"200067429","Commune":"","Nom unique":"","nom":"CC Haut Nivernais-Val d'Yonne","nature":"CC","nombreCommunes":"30","populationTotale":"13508"},
+{"code":"200067437","Commune":"","Nom unique":"","nom":"CA Provence-Alpes-Agglomération","nature":"CA","nombreCommunes":"46","populationTotale":"48916"}
+,
+{"code":"200067445","Commune":"","Nom unique":"","nom":"CC Buëch-Dévoluy","nature":"CC","nombreCommunes":"20","populationTotale":"9598"}
+,
+{"code":"200067452","Commune":"","Nom unique":"","nom":"CC du Guillestrois et du Queyras","nature":"CC","nombreCommunes":"16","populationTotale":"8168"},
+{"code":"200067460","Commune":"","Nom unique":"","nom":"CC Loudéac Communauté - Bretagne Centre","nature":"CC","nombreCommunes":"42","populationTotale":"53139"}
+,
+{"code":"200067478","Commune":"","Nom unique":"","nom":"CC Comtal Lot et Truyère","nature":"CC","nombreCommunes":"21","populationTotale":"19716"}
+,
+{"code":"200067486","Commune":"","Nom unique":"","nom":"CC Bouzonvillois-Trois Frontières","nature":"CC","nombreCommunes":"43","populationTotale":"25632"}
+,
+{"code":"200067502","Commune":"","Nom unique":"","nom":"CA Saint-Avold Synergie","nature":"CA","nombreCommunes":"41","populationTotale":"55095"},
+{"code":"200067510","Commune":"","Nom unique":"","nom":"CC Monts et Vallées Ouest Creuse","nature":"CC","nombreCommunes":"43","populationTotale":"26013"}
+,
+{"code":"200067544","Commune":"","Nom unique":"","nom":"CC Creuse Confluence","nature":"CC","nombreCommunes":"42","populationTotale":"17416"},
+{"code":"200067551","Commune":"","Nom unique":"","nom":"CA Thonon Agglomération","nature":"CA","nombreCommunes":"25","populationTotale":"88203"}
+,
+{"code":"200067593","Commune":"","Nom unique":"","nom":"CC Chénérailles, Auzances/Bellegarde et Haut Pays Marchois","nature":"CC","nombreCommunes":"50","populationTotale":"14193"}
+,
+{"code":"200067627","Commune":"","Nom unique":"","nom":"CC Billom Communauté","nature":"CC","nombreCommunes":"26","populationTotale":"26100"}
+,
+{"code":"200067635","Commune":"","Nom unique":"","nom":"CA Clisson Sèvre et Maine Agglo","nature":"CA","nombreCommunes":"16","populationTotale":"54924"}
+,
+{"code":"200067643","Commune":"","Nom unique":"","nom":"CC Meurthe, Mortagne, Moselle","nature":"CC","nombreCommunes":"37","populationTotale":"17030"},
+{"code":"200067650","Commune":"","Nom unique":"","nom":"CC Houve-Pays Boulageois","nature":"CC","nombreCommunes":"37","populationTotale":"23631"},
+{"code":"200067668","Commune":"","Nom unique":"","nom":"CC de la Cléry, du Betz et de l'Ouanne","nature":"CC","nombreCommunes":"24","populationTotale":"21257"}
+,
+{"code":"200067676","Commune":"","Nom unique":"","nom":"CC Canaux et Forêts en Gâtinais","nature":"CC","nombreCommunes":"38","populationTotale":"28806"}
+,
+{"code":"200067684","Commune":"","Nom unique":"","nom":"CA Épernay, Coteaux et Plaine de Champagne","nature":"CA","nombreCommunes":"47","populationTotale":"49897"}
+,
+{"code":"200067692","Commune":"","Nom unique":"","nom":"CC Tannay-Brinon-Corbigny","nature":"CC","nombreCommunes":"58","populationTotale":"10386"},
+{"code":"200067700","Commune":"","Nom unique":"","nom":"CC Sud Nivernais","nature":"CC","nombreCommunes":"20","populationTotale":"22274"},
+{"code":"200067742","Commune":"","Nom unique":"","nom":"CC Serre-Ponçon","nature":"CC","nombreCommunes":"17","populationTotale":"16599"}
+,
+{"code":"200067759","Commune":"","Nom unique":"","nom":"CC Vallées et Plateau d'Ardenne","nature":"CC","nombreCommunes":"31","populationTotale":"26069"}
+,
+{"code":"200067767","Commune":"","Nom unique":"","nom":"CC du Royans-Vercors","nature":"CC","nombreCommunes":"18","populationTotale":"10117"},
+{"code":"200067783","Commune":"","Nom unique":"","nom":"CC de Hanau-la Petite Pierre","nature":"CC","nombreCommunes":"38","populationTotale":"27601"},
+{"code":"200067791","Commune":"","Nom unique":"","nom":"CA Pays Foix-Varilhes","nature":"CA","nombreCommunes":"42","populationTotale":"33082"},
+{"code":"200067817","Commune":"","Nom unique":"","nom":"CC Saône-Beaujolais","nature":"CC","nombreCommunes":"42","populationTotale":"44679"}
+,
+{"code":"200067825","Commune":"","Nom unique":"","nom":"CA Gap-Tallard-Durance","nature":"CA","nombreCommunes":"17","populationTotale":"52241"},
+{"code":"200067841","Commune":"","Nom unique":"","nom":"CC de l'Alsace Bossue","nature":"CC","nombreCommunes":"45","populationTotale":"25334"},
+{"code":"200067866","Commune":"","Nom unique":"","nom":"CC Sèvre et Loire","nature":"CC","nombreCommunes":"11","populationTotale":"47573"}
+,
+{"code":"200067874","Commune":"","Nom unique":"","nom":"CA de Haguenau","nature":"CA","nombreCommunes":"36","populationTotale":"96959"},
+{"code":"200067882","Commune":"","Nom unique":"","nom":"CC Bazois Loire Morvan","nature":"CC","nombreCommunes":"46","populationTotale":"16118"},
+{"code":"200067890","Commune":"","Nom unique":"","nom":"CC Morvan Sommets et Grands Lacs","nature":"CC","nombreCommunes":"34","populationTotale":"13347"},
+{"code":"200067908","Commune":"","Nom unique":"","nom":"CC Amognes Coeur du Nivernais","nature":"CC","nombreCommunes":"28","populationTotale":"9001"},
+{"code":"200067916","Commune":"","Nom unique":"","nom":"CC Loire, Vignobles et Nohain","nature":"CC","nombreCommunes":"30","populationTotale":"26928"},
+{"code":"200067924","Commune":"","Nom unique":"","nom":"CC du Canton d'Erstein","nature":"CC","nombreCommunes":"28","populationTotale":"48539"},
+{"code":"200067932","Commune":"","Nom unique":"","nom":"CA Golfe du Morbihan - Vannes Agglomération","nature":"CA","nombreCommunes":"34","populationTotale":"171295"}
+,
+{"code":"200067940","Commune":"","Nom unique":"","nom":"CC Couserans-Pyrénées","nature":"CC","nombreCommunes":"94","populationTotale":"30779"}
+,
+{"code":"200067957","Commune":"","Nom unique":"","nom":"CC Haut Chemin-Pays de Pange","nature":"CC","nombreCommunes":"28","populationTotale":"19634"},
+{"code":"200067965","Commune":"","Nom unique":"","nom":"CA de la Région de Compiègne et de la Basse Automne","nature":"CA","nombreCommunes":"22","populationTotale":"84703"}
+,
+{"code":"200067973","Commune":"","Nom unique":"","nom":"CC Thelloise","nature":"CC","nombreCommunes":"41","populationTotale":"62189"},
+{"code":"200067981","Commune":"","Nom unique":"","nom":"CA Guingamp-Paimpol Armor-Argoat Agglomération","nature":"CA","nombreCommunes":"57","populationTotale":"76453"}
+,
+{"code":"200067999","Commune":"","Nom unique":"","nom":"CA du Beauvaisis","nature":"CA","nombreCommunes":"53","populationTotale":"103168"},
+{"code":"200068005","Commune":"","Nom unique":"","nom":"CC de l'Oise Picarde","nature":"CC","nombreCommunes":"52","populationTotale":"21919"},
+{"code":"200068047","Commune":"","Nom unique":"","nom":"CA Creil Sud Oise","nature":"CA","nombreCommunes":"11","populationTotale":"87313"},
+{"code":"200068070","Commune":"","Nom unique":"","nom":"CC Loue-Lison","nature":"CC","nombreCommunes":"75","populationTotale":"25726"},
+{"code":"200068088","Commune":"","Nom unique":"","nom":"CC Loire, Nièvre et Bertranges","nature":"CC","nombreCommunes":"32","populationTotale":"20891"}
+,
+{"code":"200068096","Commune":"","Nom unique":"","nom":"CC Champsaur-Valgaudemar","nature":"CC","nombreCommunes":"25","populationTotale":"11479"},
+{"code":"200068104","Commune":"","Nom unique":"","nom":"CA de la Provence Verte","nature":"CA","nombreCommunes":"28","populationTotale":"98671"},
+{"code":"200068112","Commune":"","Nom unique":"","nom":"CC du Pays de Saverne","nature":"CC","nombreCommunes":"35","populationTotale":"36461"},
+{"code":"200068120","Commune":"","Nom unique":"","nom":"CA Quimper Bretagne Occidentale","nature":"CA","nombreCommunes":"14","populationTotale":"105123"},
+{"code":"200068146","Commune":"","Nom unique":"","nom":"CC Sarrebourg Moselle Sud","nature":"CC","nombreCommunes":"76","populationTotale":"46927"},
+{"code":"200068229","Commune":"","Nom unique":"","nom":"CC des Baronnies en Drôme Provençale","nature":"CC","nombreCommunes":"67","populationTotale":"21756"}
+,
+{"code":"200068278","Commune":"","Nom unique":"","nom":"CC Berry Loire Puisaye","nature":"CC","nombreCommunes":"20","populationTotale":"19227"},
+{"code":"200068294","Commune":"","Nom unique":"","nom":"CC des Deux Vallées Vertes","nature":"CC","nombreCommunes":"55","populationTotale":"16644"}
+,
+{"code":"200068369","Commune":"","Nom unique":"","nom":"CC de Mirecourt Dompaire","nature":"CC","nombreCommunes":"76","populationTotale":"20189"},
+{"code":"200068377","Commune":"","Nom unique":"","nom":"CC de la Porte des Vosges Méridionales","nature":"CC","nombreCommunes":"10","populationTotale":"30735"}
+,
+{"code":"200068435","Commune":"","Nom unique":"","nom":"CC Coeur du Perche","nature":"CC","nombreCommunes":"12","populationTotale":"11918"},
+{"code":"200068443","Commune":"","Nom unique":"","nom":"CC Andaine - Passais","nature":"CC","nombreCommunes":"12","populationTotale":"13695"},
+{"code":"200068450","Commune":"","Nom unique":"","nom":"CC Argentan Intercom","nature":"CC","nombreCommunes":"49","populationTotale":"35234"},
+{"code":"200068468","Commune":"","Nom unique":"","nom":"CC des Pays de l'Aigle","nature":"CC","nombreCommunes":"32","populationTotale":"26794"},
+{"code":"200068484","Commune":"","Nom unique":"","nom":"CC des Causses à l'Aubrac","nature":"CC","nombreCommunes":"17","populationTotale":"15053"}
+,
+{"code":"200068500","Commune":"","Nom unique":"","nom":"CA de Cambrai","nature":"CA","nombreCommunes":"55","populationTotale":"83828"},
+{"code":"200068534","Commune":"","Nom unique":"","nom":"CC Terroir de Caux","nature":"CC","nombreCommunes":"81","populationTotale":"38581"},
+{"code":"200068542","Commune":"","Nom unique":"","nom":"CC Les Balcons du Dauphiné","nature":"CC","nombreCommunes":"47","populationTotale":"76702"}
+,
+{"code":"200068559","Commune":"","Nom unique":"","nom":"CC de l'Ouest Vosgien","nature":"CC","nombreCommunes":"70","populationTotale":"24336"},
+{"code":"200068567","Commune":"","Nom unique":"","nom":"CC Les Vals du Dauphiné","nature":"CC","nombreCommunes":"37","populationTotale":"63194"}
+,
+{"code":"200068625","Commune":"","Nom unique":"","nom":"CC Alpes-Provence-Verdon \"sources de Lumière\"","nature":"CC","nombreCommunes":"41","populationTotale":"11469"}
+,
+{"code":"200068641","Commune":"","Nom unique":"","nom":"CA Le Muretain Agglo","nature":"CA","nombreCommunes":"26","populationTotale":"120998"},
+{"code":"200068658","Commune":"","Nom unique":"","nom":"CA de Chaumont, du Bassin Nogentais et du Bassin de Bologne Vignory Froncles","nature":"CA","nombreCommunes":"63","populationTotale":"47473"},
+{"code":"200068666","Commune":"","Nom unique":"","nom":"CA de Saint-Dizier Der et Blaise","nature":"CA","nombreCommunes":"60","populationTotale":"61076"},
+{"code":"200068674","Commune":"","Nom unique":"","nom":"CA Grand Lac - CA du Lac du Bourget","nature":"CA","nombreCommunes":"28","populationTotale":"75438"},
+{"code":"200068682","Commune":"","Nom unique":"","nom":"CC Terre d'Eau","nature":"CC","nombreCommunes":"45","populationTotale":"18893"},
+{"code":"200068757","Commune":"","Nom unique":"","nom":"CA d'Épinal","nature":"CA","nombreCommunes":"78","populationTotale":"116020"}
+,
+{"code":"200068765","Commune":"","Nom unique":"","nom":"CC du Sisteronais-Buëch","nature":"CC","nombreCommunes":"60","populationTotale":"25397"}
+,
+{"code":"200068773","Commune":"","Nom unique":"","nom":"CC des Vosges Côté Sud Ouest","nature":"CC","nombreCommunes":"60","populationTotale":"12737"}
+,
+{"code":"200068781","Commune":"","Nom unique":"","nom":"CA Valence Romans Agglo","nature":"CA","nombreCommunes":"56","populationTotale":"225262"},
+{"code":"200068799","Commune":"","Nom unique":"","nom":"CC Intercom de la Vire au Noireau","nature":"CC","nombreCommunes":"17","populationTotale":"49760"},
+{"code":"200068807","Commune":"","Nom unique":"","nom":"CC Lèze Ariège","nature":"CC","nombreCommunes":"19","populationTotale":"31457"}
+,
+{"code":"200068815","Commune":"","Nom unique":"","nom":"CC Coeur de Garonne","nature":"CC","nombreCommunes":"48","populationTotale":"35094"},
+{"code":"200068831","Commune":"","Nom unique":"","nom":"CC Pays Ségali","nature":"CC","nombreCommunes":"23","populationTotale":"18599"}
+,
+{"code":"200068856","Commune":"","Nom unique":"","nom":"CC des Hauts du Perche","nature":"CC","nombreCommunes":"10","populationTotale":"8618"},
+{"code":"200068864","Commune":"","Nom unique":"","nom":"CC de la Mossig et du Vignoble","nature":"CC","nombreCommunes":"24","populationTotale":"24847"},
+{"code":"200068872","Commune":"","Nom unique":"","nom":"CC Éguzon - Argenton - Vallée de la Creuse","nature":"CC","nombreCommunes":"21","populationTotale":"20439"}
+,
+{"code":"200068880","Commune":"","Nom unique":"","nom":"CC Champagne Boischauts","nature":"CC","nombreCommunes":"30","populationTotale":"10281"},
+{"code":"200068914","Commune":"","Nom unique":"","nom":"CC La Rochefoucauld - Porte du Périgord","nature":"CC","nombreCommunes":"29","populationTotale":"22427"}
+,
+{"code":"200068922","Commune":"","Nom unique":"","nom":"CC du Confluent et des Coteaux de Prayssas","nature":"CC","nombreCommunes":"29","populationTotale":"18764"},
+{"code":"200068930","Commune":"","Nom unique":"","nom":"CC Fumel Vallée du Lot","nature":"CC","nombreCommunes":"27","populationTotale":"25055"}
+,
+{"code":"200068948","Commune":"","Nom unique":"","nom":"CC Albret Communauté","nature":"CC","nombreCommunes":"33","populationTotale":"27449"}
+,
+{"code":"200068955","Commune":"","Nom unique":"","nom":"CC Anjou Loir et Sarthe","nature":"CC","nombreCommunes":"18","populationTotale":"27978"},
+{"code":"200068963","Commune":"","Nom unique":"","nom":"CC Maine Coeur de Sarthe","nature":"CC","nombreCommunes":"13","populationTotale":"21545"},
+{"code":"200068989","Commune":"","Nom unique":"","nom":"CA Dinan Agglomération","nature":"CA","nombreCommunes":"64","populationTotale":"98952"}
+,
+{"code":"200068997","Commune":"","Nom unique":"","nom":"CA Arlysère","nature":"CA","nombreCommunes":"39","populationTotale":"62593"}
+,
+{"code":"200069003","Commune":"","Nom unique":"","nom":"CC du Barséquanais en Champagne","nature":"CC","nombreCommunes":"53","populationTotale":"19695"}
+,
+{"code":"200069029","Commune":"","Nom unique":"","nom":"CA des Deux Baies en Montreuillois","nature":"CA","nombreCommunes":"46","populationTotale":"68567"},
+{"code":"200069037","Commune":"","Nom unique":"","nom":"CA du Pays de Saint-Omer","nature":"CA","nombreCommunes":"53","populationTotale":"108082"},
+{"code":"200069052","Commune":"","Nom unique":"","nom":"CA Grand Belfort","nature":"CA","nombreCommunes":"53","populationTotale":"107869"},
+{"code":"200069060","Commune":"","Nom unique":"","nom":"CC des Vosges du Sud","nature":"CC","nombreCommunes":"22","populationTotale":"15867"},
+{"code":"200069086","Commune":"","Nom unique":"","nom":"CC Leff Armor Communauté","nature":"CC","nombreCommunes":"28","populationTotale":"31865"}
+,
+{"code":"200069094","Commune":"","Nom unique":"","nom":"CC Isle et Crempse-en-Périgord","nature":"CC","nombreCommunes":"28","populationTotale":"14571"}
+,
+{"code":"200069102","Commune":"","Nom unique":"","nom":"CC Randon - Margeride","nature":"CC","nombreCommunes":"20","populationTotale":"5482"},
+{"code":"200069110","Commune":"","Nom unique":"","nom":"CA Chambéry Métropole-Coeur des Bauges","nature":"CA","nombreCommunes":"38","populationTotale":"137552"}
+,
+{"code":"200069128","Commune":"","Nom unique":"","nom":"CC Mont Lozère","nature":"CC","nombreCommunes":"21","populationTotale":"5657"}
+,
+{"code":"200069136","Commune":"","Nom unique":"","nom":"CC des Cévennes Au Mont Lozère","nature":"CC","nombreCommunes":"19","populationTotale":"5340"}
+,
+{"code":"200069144","Commune":"","Nom unique":"","nom":"CC des Hautes Terres de l'Aubrac","nature":"CC","nombreCommunes":"17","populationTotale":"5307"},
+{"code":"200069151","Commune":"","Nom unique":"","nom":"CC Gorges Causses Cévennes","nature":"CC","nombreCommunes":"17","populationTotale":"7388"}
+,
+{"code":"200069169","Commune":"","Nom unique":"","nom":"CC Dômes Sancy Artense","nature":"CC","nombreCommunes":"26","populationTotale":"12605"}
+,
+{"code":"200069177","Commune":"","Nom unique":"","nom":"CC Mond'Arverne Communauté","nature":"CC","nombreCommunes":"28","populationTotale":"40712"}
+,
+{"code":"200069185","Commune":"","Nom unique":"","nom":"CC des Terres d'Apcher-Margeride-Aubrac","nature":"CC","nombreCommunes":"20","populationTotale":"11469"},
+{"code":"200069193","Commune":"","Nom unique":"","nom":"CC de la Dombes","nature":"CC","nombreCommunes":"36","populationTotale":"38857"},
+{"code":"200069227","Commune":"","Nom unique":"","nom":"CC Pays Fort Sancerrois Val de Loire","nature":"CC","nombreCommunes":"36","populationTotale":"19271"},
+{"code":"200069235","Commune":"","Nom unique":"","nom":"CC du Haut Pays du Montreuillois","nature":"CC","nombreCommunes":"49","populationTotale":"16538"},
+{"code":"200069250","Commune":"","Nom unique":"","nom":"CA Troyes Champagne Métropole","nature":"CA","nombreCommunes":"81","populationTotale":"174221"}
+,
+{"code":"200069268","Commune":"","Nom unique":"","nom":"CC Aubrac Lot Causses Tarn","nature":"CC","nombreCommunes":"15","populationTotale":"8088"},
+{"code":"200069300","Commune":"","Nom unique":"","nom":"CA Tarbes-Lourdes-Pyrénées","nature":"CA","nombreCommunes":"86","populationTotale":"126391"}
+,
+{"code":"200069383","Commune":"","Nom unique":"","nom":"CC du Grand Villefranchois","nature":"CC","nombreCommunes":"29","populationTotale":"28733"},
+{"code":"200069391","Commune":"","Nom unique":"","nom":"CC Lamballe Terre et Mer","nature":"CC","nombreCommunes":"40","populationTotale":"68937"},
+{"code":"200069409","Commune":"","Nom unique":"","nom":"CA Saint-Brieuc Armor Agglomération","nature":"CA","nombreCommunes":"32","populationTotale":"156532"}
+,
+{"code":"200069417","Commune":"","Nom unique":"","nom":"CC Pays d'Orthe et Arrigans","nature":"CC","nombreCommunes":"24","populationTotale":"24170"},
+{"code":"200069425","Commune":"","Nom unique":"","nom":"CA Mont-Saint-Michel-Normandie","nature":"CA","nombreCommunes":"97","populationTotale":"91560"},
+{"code":"200069433","Commune":"","Nom unique":"","nom":"CC de Vezouze en Piémont","nature":"CC","nombreCommunes":"51","populationTotale":"12105"}
+,
+{"code":"200069441","Commune":"","Nom unique":"","nom":"CC du Pays de Bitche","nature":"CC","nombreCommunes":"46","populationTotale":"35537"},
+{"code":"200069458","Commune":"","Nom unique":"","nom":"CC des Vallées d'Auge et du Merlerault","nature":"CC","nombreCommunes":"46","populationTotale":"15545"}
+,
+{"code":"200069482","Commune":"","Nom unique":"","nom":"CC des Campagnes de l'Artois","nature":"CC","nombreCommunes":"96","populationTotale":"34744"},
+{"code":"200069516","Commune":"","Nom unique":"","nom":"CC Seulles Terre et Mer","nature":"CC","nombreCommunes":"28","populationTotale":"17188"},
+{"code":"200069524","Commune":"","Nom unique":"","nom":"CC Pré-Bocage Intercom","nature":"CC","nombreCommunes":"27","populationTotale":"25188"}
+,
+{"code":"200069532","Commune":"","Nom unique":"","nom":"CA Lisieux Normandie","nature":"CA","nombreCommunes":"54","populationTotale":"77871"},
+{"code":"200069540","Commune":"","Nom unique":"","nom":"CC Norge et Tille","nature":"CC","nombreCommunes":"14","populationTotale":"16099"},
+{"code":"200069565","Commune":"","Nom unique":"","nom":"CC des Lacs et Montagnes du Haut-Doubs","nature":"CC","nombreCommunes":"32","populationTotale":"15852"},
+{"code":"200069581","Commune":"","Nom unique":"","nom":"CC Convergence Garonne","nature":"CC","nombreCommunes":"27","populationTotale":"32670"},
+{"code":"200069599","Commune":"","Nom unique":"","nom":"CC Rurales de l'Entre-deux-Mers","nature":"CC","nombreCommunes":"51","populationTotale":"16843"},
+{"code":"200069615","Commune":"","Nom unique":"","nom":"CC Bresse Haute Seille","nature":"CC","nombreCommunes":"56","populationTotale":"19444"},
+{"code":"200069623","Commune":"","Nom unique":"","nom":"CC Champagnole Nozeroy Jura","nature":"CC","nombreCommunes":"63","populationTotale":"23020"},
+{"code":"200069631","Commune":"","Nom unique":"","nom":"CC Terres de Chalosse","nature":"CC","nombreCommunes":"34","populationTotale":"18703"},
+{"code":"200069649","Commune":"","Nom unique":"","nom":"CC Chalosse Tursan","nature":"CC","nombreCommunes":"50","populationTotale":"26700"},
+{"code":"200069656","Commune":"","Nom unique":"","nom":"CC Coeur Haute Lande","nature":"CC","nombreCommunes":"26","populationTotale":"15879"},
+{"code":"200069664","Commune":"","Nom unique":"","nom":"CC Meuse Rognon","nature":"CC","nombreCommunes":"60","populationTotale":"11480"},
+{"code":"200069672","Commune":"","Nom unique":"","nom":"CC du Ternois","nature":"CC","nombreCommunes":"104","populationTotale":"39235"},
+{"code":"200069698","Commune":"","Nom unique":"","nom":"CC Mâconnais - Tournugeois","nature":"CC","nombreCommunes":"24","populationTotale":"16535"}
+,
+{"code":"200069722","Commune":"","Nom unique":"","nom":"CC Interrégionale Aumale - Blangy-sur-Bresle","nature":"CC","nombreCommunes":"44","populationTotale":"22503"}
+,
+{"code":"200069730","Commune":"","Nom unique":"","nom":"CC des Quatre Rivières","nature":"CC","nombreCommunes":"53","populationTotale":"30860"}
+,
+{"code":"200069748","Commune":"","Nom unique":"","nom":"CC Val de Gâtine","nature":"CC","nombreCommunes":"33","populationTotale":"21948"}
+,
+{"code":"200069755","Commune":"","Nom unique":"","nom":"CC Mellois-en-Poitou","nature":"CC","nombreCommunes":"78","populationTotale":"49691"},
+{"code":"200069763","Commune":"","Nom unique":"","nom":"CC du Haut-Poitou","nature":"CC","nombreCommunes":"31","populationTotale":"42229"},
+{"code":"200069821","Commune":"","Nom unique":"","nom":"CA Fécamp Caux Littoral Agglomération","nature":"CA","nombreCommunes":"33","populationTotale":"40358"}
+,
+{"code":"200069839","Commune":"","Nom unique":"","nom":"CC de la Côte d'Albâtre","nature":"CC","nombreCommunes":"63","populationTotale":"28791"}
+,
+{"code":"200069847","Commune":"","Nom unique":"","nom":"CC Plateau de Caux-Doudeville-Yerville","nature":"CC","nombreCommunes":"40","populationTotale":"21332"},
+{"code":"200069854","Commune":"","Nom unique":"","nom":"CU du Grand-Poitiers","nature":"CU","nombreCommunes":"40","populationTotale":"196155"},
+{"code":"200069912","Commune":"","Nom unique":"","nom":"CC des Forêts du Perche","nature":"CC","nombreCommunes":"15","populationTotale":"8077"}
+,
+{"code":"200069953","Commune":"","Nom unique":"","nom":"CC des Portes Euréliennes d'Ile-de-France","nature":"CC","nombreCommunes":"39","populationTotale":"49335"}
+,
+{"code":"200069961","Commune":"","Nom unique":"","nom":"CC du Grand Châteaudun","nature":"CC","nombreCommunes":"24","populationTotale":"41994"}
+,
+{"code":"200069995","Commune":"","Nom unique":"","nom":"CC Médoc Coeur de Presqu'ile","nature":"CC","nombreCommunes":"19","populationTotale":"30257"}
+,
+{"code":"200070035","Commune":"","Nom unique":"","nom":"CC du Civraisien en Poitou","nature":"CC","nombreCommunes":"40","populationTotale":"28315"},
+{"code":"200070043","Commune":"","Nom unique":"","nom":"CC Vienne et Gartempe","nature":"CC","nombreCommunes":"55","populationTotale":"40970"},
+{"code":"200070068","Commune":"","Nom unique":"","nom":"CC Communauté Bray-Eawy","nature":"CC","nombreCommunes":"46","populationTotale":"26288"}
+,
+{"code":"200070092","Commune":"","Nom unique":"","nom":"CA du Libournais","nature":"CA","nombreCommunes":"45","populationTotale":"92267"},
+{"code":"200070100","Commune":"","Nom unique":"","nom":"CC du Val de Sully","nature":"CC","nombreCommunes":"19","populationTotale":"25163"},
+{"code":"200070118","Commune":"","Nom unique":"","nom":"CC Val de Saône Centre","nature":"CC","nombreCommunes":"15","populationTotale":"20613"}
+,
+{"code":"200070126","Commune":"","Nom unique":"","nom":"CC Seine et Aube","nature":"CC","nombreCommunes":"25","populationTotale":"10386"},
+{"code":"200070142","Commune":"","Nom unique":"","nom":"CC Lyons Andelle","nature":"CC","nombreCommunes":"30","populationTotale":"21287"},
+{"code":"200070159","Commune":"","Nom unique":"","nom":"CC Coeur de Beauce","nature":"CC","nombreCommunes":"51","populationTotale":"25436"},
+{"code":"200070167","Commune":"","Nom unique":"","nom":"CC Terres de Perche","nature":"CC","nombreCommunes":"24","populationTotale":"15459"},
+{"code":"200070183","Commune":"","Nom unique":"","nom":"CC des Terres du Val de Loire","nature":"CC","nombreCommunes":"25","populationTotale":"49360"},
+{"code":"200070233","Commune":"","Nom unique":"","nom":"CC Terres de Montaigu, Cc Montaigu-Rocheservière","nature":"CC","nombreCommunes":"14","populationTotale":"48817"}
+,
+{"code":"200070282","Commune":"","Nom unique":"","nom":"CC Lavalette Tude Dronne","nature":"CC","nombreCommunes":"50","populationTotale":"18652"},
+{"code":"200070290","Commune":"","Nom unique":"","nom":"CC Pays de l'Audunois et du Bassin de Landres","nature":"CC","nombreCommunes":"25","populationTotale":"23861"},
+{"code":"200070308","Commune":"","Nom unique":"","nom":"CA Mâconnais Beaujolais Agglomération","nature":"CA","nombreCommunes":"39","populationTotale":"78852"}
+,
+{"code":"200070316","Commune":"","Nom unique":"","nom":"CC Entre Arroux, Loire et Somme","nature":"CC","nombreCommunes":"30","populationTotale":"23873"},
+{"code":"200070324","Commune":"","Nom unique":"","nom":"CC du Territoire de Lunéville à Baccarat","nature":"CC","nombreCommunes":"43","populationTotale":"43464"}
+,
+{"code":"200070332","Commune":"","Nom unique":"","nom":"CC du Pays de Chalindrey, de Vannier Amance et de la Région de Bourbonne-Les-Bains","nature":"CC","nombreCommunes":"63","populationTotale":"16171"}
+,
+{"code":"200070340","Commune":"","Nom unique":"","nom":"CC Haute-Maurienne Vanoise","nature":"CC","nombreCommunes":"10","populationTotale":"9012"},
+{"code":"200070365","Commune":"","Nom unique":"","nom":"CC Corbières Salanque Méditerranée","nature":"CC","nombreCommunes":"21","populationTotale":"21658"}
+,
+{"code":"200070373","Commune":"","Nom unique":"","nom":"CC Loir-Lucé-Bercé","nature":"CC","nombreCommunes":"24","populationTotale":"24915"}
+,
+{"code":"200070407","Commune":"","Nom unique":"","nom":"CA Pays d'Issoire","nature":"CA","nombreCommunes":"90","populationTotale":"57188"},
+{"code":"200070431","Commune":"","Nom unique":"","nom":"CC Saint-Marcellin Vercors Isère Communauté","nature":"CC","nombreCommunes":"47","populationTotale":"45534"}
+,
+{"code":"200070449","Commune":"","Nom unique":"","nom":"CC Inter-Caux-Vexin","nature":"CC","nombreCommunes":"64","populationTotale":"54922"},
+{"code":"200070464","Commune":"","Nom unique":"","nom":"CC Coeur de Maurienne Arvan","nature":"CC","nombreCommunes":"16","populationTotale":"15440"},
+{"code":"200070506","Commune":"","Nom unique":"","nom":"CC Pays de Nexon Monts de Chalus","nature":"CC","nombreCommunes":"15","populationTotale":"13396"},
+{"code":"200070514","Commune":"","Nom unique":"","nom":"CA du Grand Cognac","nature":"CA","nombreCommunes":"58","populationTotale":"71935"},
+{"code":"200070530","Commune":"","Nom unique":"","nom":"CC du Grand Autunois Morvan","nature":"CC","nombreCommunes":"55","populationTotale":"38342"},
+{"code":"200070548","Commune":"","Nom unique":"","nom":"CC La Clayette Chauffailles en Brionnais","nature":"CC","nombreCommunes":"29","populationTotale":"15724"},
+{"code":"200070555","Commune":"","Nom unique":"","nom":"CC de la Veyle","nature":"CC","nombreCommunes":"18","populationTotale":"22335"},
+{"code":"200070563","Commune":"","Nom unique":"","nom":"CC Terres Touloises","nature":"CC","nombreCommunes":"42","populationTotale":"45901"},
+{"code":"200070571","Commune":"","Nom unique":"","nom":"CC Coeur de Berry","nature":"CC","nombreCommunes":"15","populationTotale":"18568"},
+{"code":"200070589","Commune":"","Nom unique":"","nom":"CC de Seille et Grand Couronné","nature":"CC","nombreCommunes":"42","populationTotale":"18806"}
+,
+{"code":"200070647","Commune":"","Nom unique":"","nom":"CA Bergeracoise","nature":"CA","nombreCommunes":"38","populationTotale":"62615"},
+{"code":"200070662","Commune":"","Nom unique":"","nom":"CC Bretagne Porte de Loire Communauté","nature":"CC","nombreCommunes":"20","populationTotale":"32373"}
+,
+{"code":"200070670","Commune":"","Nom unique":"","nom":"CC du Pays de Dol et de la Baie du Mont-Saint-Michel","nature":"CC","nombreCommunes":"19","populationTotale":"24107"},
+{"code":"200070688","Commune":"","Nom unique":"","nom":"CC Couesnon Marches de Bretagne","nature":"CC","nombreCommunes":"19","populationTotale":"22400"},
+{"code":"200070712","Commune":"","Nom unique":"","nom":"CC Thiers Dore et Montagne","nature":"CC","nombreCommunes":"30","populationTotale":"38683"},
+{"code":"200070720","Commune":"","Nom unique":"","nom":"CC Médoc Atlantique","nature":"CC","nombreCommunes":"14","populationTotale":"26008"}
+,
+{"code":"200070738","Commune":"","Nom unique":"","nom":"CC Mad et Moselle","nature":"CC","nombreCommunes":"49","populationTotale":"20660"},
+{"code":"200070746","Commune":"","Nom unique":"","nom":"CA Sarreguemines Confluences","nature":"CA","nombreCommunes":"38","populationTotale":"67024"},
+{"code":"200070753","Commune":"","Nom unique":"","nom":"CA Riom Limagne et Volcans","nature":"CA","nombreCommunes":"31","populationTotale":"68136"},
+{"code":"200070761","Commune":"","Nom unique":"","nom":"CC Ambert Livradois Forez","nature":"CC","nombreCommunes":"58","populationTotale":"28552"},
+{"code":"200070779","Commune":"","Nom unique":"","nom":"CC Brie des Rivières et Châteaux","nature":"CC","nombreCommunes":"31","populationTotale":"39081"}
+,
+{"code":"200070787","Commune":"","Nom unique":"","nom":"CC du Plateau de Lannemezan","nature":"CC","nombreCommunes":"57","populationTotale":"18451"},
+{"code":"200070795","Commune":"","Nom unique":"","nom":"CC du Pays de Trie et du Magnoac","nature":"CC","nombreCommunes":"50","populationTotale":"7342"},
+{"code":"200070803","Commune":"","Nom unique":"","nom":"CC des Coteaux du Val-d'Arros","nature":"CC","nombreCommunes":"53","populationTotale":"11575"},
+{"code":"200070811","Commune":"","Nom unique":"","nom":"CC Pyrénées Vallées des Gaves","nature":"CC","nombreCommunes":"46","populationTotale":"16122"}
+,
+{"code":"200070829","Commune":"","Nom unique":"","nom":"CC Neste Barousse","nature":"CC","nombreCommunes":"43","populationTotale":"7435"},
+{"code":"200070845","Commune":"","Nom unique":"","nom":"CC Orne Lorraine Confluences","nature":"CC","nombreCommunes":"41","populationTotale":"54196"},
+{"code":"200070852","Commune":"","Nom unique":"","nom":"CC Usses et Rhône","nature":"CC","nombreCommunes":"26","populationTotale":"20396"}
+,
+{"code":"200070894","Commune":"","Nom unique":"","nom":"CC de Gevrey-Chambertin et de Nuits-Saint-Georges","nature":"CC","nombreCommunes":"56","populationTotale":"30510"},
+{"code":"200070902","Commune":"","Nom unique":"","nom":"CC Auxonne Pontailler Val de Saône","nature":"CC","nombreCommunes":"35","populationTotale":"23745"}
+,
+{"code":"200070910","Commune":"","Nom unique":"","nom":"CC Tille et Venelle","nature":"CC","nombreCommunes":"18","populationTotale":"5089"},
+{"code":"200070928","Commune":"","Nom unique":"","nom":"CC Terre de Picardie","nature":"CC","nombreCommunes":"44","populationTotale":"18586"},
+{"code":"200070936","Commune":"","Nom unique":"","nom":"CC Ponthieu-Marquenterre","nature":"CC","nombreCommunes":"71","populationTotale":"33879"},
+{"code":"200070944","Commune":"","Nom unique":"","nom":"CC du Vimeu","nature":"CC","nombreCommunes":"25","populationTotale":"23654"},
+{"code":"200070951","Commune":"","Nom unique":"","nom":"CC du Territoire Nord Picardie","nature":"CC","nombreCommunes":"65","populationTotale":"32444"},
+{"code":"200070969","Commune":"","Nom unique":"","nom":"CC Avre Luce Noye","nature":"CC","nombreCommunes":"49","populationTotale":"23354"},
+{"code":"200070977","Commune":"","Nom unique":"","nom":"CC du Grand Roye","nature":"CC","nombreCommunes":"62","populationTotale":"25217"},
+{"code":"200070985","Commune":"","Nom unique":"","nom":"CC de l'Est de la Somme","nature":"CC","nombreCommunes":"42","populationTotale":"21076"},
+{"code":"200070993","Commune":"","Nom unique":"","nom":"CA de la Baie de Somme","nature":"CA","nombreCommunes":"43","populationTotale":"51060"},
+{"code":"200071017","Commune":"","Nom unique":"","nom":"CC des Terres d'Auxois","nature":"CC","nombreCommunes":"77","populationTotale":"16568"},
+{"code":"200071025","Commune":"","Nom unique":"","nom":"CC Haute-Provence-Pays de Banon","nature":"CC","nombreCommunes":"21","populationTotale":"9828"},
+{"code":"200071033","Commune":"","Nom unique":"","nom":"CC Jabron-Lure-Vançon-Durance","nature":"CC","nombreCommunes":"14","populationTotale":"5440"}
+,
+{"code":"200071041","Commune":"","Nom unique":"","nom":"CC du Chaourçois et du Val d'Armance","nature":"CC","nombreCommunes":"42","populationTotale":"10864"}
+,
+{"code":"200071058","Commune":"","Nom unique":"","nom":"CC Les Avant-Monts","nature":"CC","nombreCommunes":"25","populationTotale":"26662"},
+{"code":"200071066","Commune":"","Nom unique":"","nom":"CA de Saint-Dié-Des-Vosges","nature":"CA","nombreCommunes":"77","populationTotale":"78694"}
+,
+{"code":"200071074","Commune":"","Nom unique":"","nom":"CC Les Portes de l'Ile de France","nature":"CC","nombreCommunes":"19","populationTotale":"22782"},
+{"code":"200071082","Commune":"","Nom unique":"","nom":"CA Montluçon Communauté","nature":"CA","nombreCommunes":"21","populationTotale":"65212"}
+,
+{"code":"200071116","Commune":"","Nom unique":"","nom":"CA Ecla (Espace Communautaire Lons Agglomération)","nature":"CA","nombreCommunes":"31","populationTotale":"36041"}
+,
+{"code":"200071140","Commune":"","Nom unique":"","nom":"CA Moulins Communauté","nature":"CA","nombreCommunes":"44","populationTotale":"67879"}
+,
+{"code":"200071157","Commune":"","Nom unique":"","nom":"CC des Hautes-Vosges","nature":"CC","nombreCommunes":"22","populationTotale":"38276"},
+{"code":"200071165","Commune":"","Nom unique":"","nom":"CA Les Sables d'Olonne Agglomération","nature":"CA","nombreCommunes":"7","populationTotale":"52900"}
+,
+{"code":"200071173","Commune":"","Nom unique":"","nom":"CC du Pays Arnay Liernais","nature":"CC","nombreCommunes":"34","populationTotale":"7521"},
+{"code":"200071181","Commune":"","Nom unique":"","nom":"CC Somme Sud-Ouest","nature":"CC","nombreCommunes":"121","populationTotale":"39317"},
+{"code":"200071199","Commune":"","Nom unique":"","nom":"CC Plaine Limagne","nature":"CC","nombreCommunes":"25","populationTotale":"21387"},
+{"code":"200071207","Commune":"","Nom unique":"","nom":"CC de Pouilly-en-Auxois/Bligny-sur-Ouche","nature":"CC","nombreCommunes":"47","populationTotale":"8966"},
+{"code":"200071215","Commune":"","Nom unique":"","nom":"CC Chavanon Combrailles et Volcans","nature":"CC","nombreCommunes":"36","populationTotale":"13280"},
+{"code":"200071223","Commune":"","Nom unique":"","nom":"CC Nièvre et Somme","nature":"CC","nombreCommunes":"36","populationTotale":"28717"}
+,
+{"code":"200071298","Commune":"","Nom unique":"","nom":"CC des Terres du Lauragais","nature":"CC","nombreCommunes":"58","populationTotale":"39279"},
+{"code":"200071314","Commune":"","Nom unique":"","nom":"CC Save Garonne et Côteaux de Cadours","nature":"CC","nombreCommunes":"29","populationTotale":"33189"}
+,
+{"code":"200071363","Commune":"","Nom unique":"","nom":"CA Vichy Communauté","nature":"CA","nombreCommunes":"39","populationTotale":"85699"}
+,
+{"code":"200071371","Commune":"","Nom unique":"","nom":"CC Bresse et Saône","nature":"CC","nombreCommunes":"20","populationTotale":"25739"}
+,
+{"code":"200071389","Commune":"","Nom unique":"","nom":"CC Saint-Pourçain Sioule Limagne","nature":"CC","nombreCommunes":"60","populationTotale":"34750"}
+,
+{"code":"200071405","Commune":"","Nom unique":"","nom":"CC Ardèche Rhône Coiron","nature":"CC","nombreCommunes":"15","populationTotale":"22887"}
+,
+{"code":"200071413","Commune":"","Nom unique":"","nom":"CA Privas Centre Ardèche","nature":"CA","nombreCommunes":"42","populationTotale":"44942"}
+,
+{"code":"200071454","Commune":"","Nom unique":"","nom":"CA Evreux Portes de Normandie","nature":"CA","nombreCommunes":"74","populationTotale":"116341"},
+{"code":"200071470","Commune":"","Nom unique":"","nom":"CC Entr'Allier Besbre et Loire","nature":"CC","nombreCommunes":"44","populationTotale":"25917"},
+{"code":"200071496","Commune":"","Nom unique":"","nom":"CC du Bocage Bourbonnais","nature":"CC","nombreCommunes":"25","populationTotale":"14204"},
+{"code":"200071504","Commune":"","Nom unique":"","nom":"CC des Collines du Perche Normand","nature":"CC","nombreCommunes":"16","populationTotale":"13158"},
+{"code":"200071512","Commune":"","Nom unique":"","nom":"CC Commentry Montmarault Néris Communauté","nature":"CC","nombreCommunes":"33","populationTotale":"27133"}
+,
+{"code":"200071520","Commune":"","Nom unique":"","nom":"CC Domfront Tinchebray Interco","nature":"CC","nombreCommunes":"15","populationTotale":"16667"},
+{"code":"200071538","Commune":"","Nom unique":"","nom":"CC Terres de Bresse","nature":"CC","nombreCommunes":"25","populationTotale":"22504"},
+{"code":"200071546","Commune":"","Nom unique":"","nom":"CC Sud Retz Atlantique","nature":"CC","nombreCommunes":"9","populationTotale":"29724"},
+{"code":"200071553","Commune":"","Nom unique":"","nom":"CC Loire Layon Aubance","nature":"CC","nombreCommunes":"19","populationTotale":"57421"},
+{"code":"200071579","Commune":"","Nom unique":"","nom":"CC Bresse Louhannaise Intercom'","nature":"CC","nombreCommunes":"30","populationTotale":"29293"},
+{"code":"200071587","Commune":"","Nom unique":"","nom":"CC Loches Sud Touraine","nature":"CC","nombreCommunes":"67","populationTotale":"54212"},
+{"code":"200071595","Commune":"","Nom unique":"","nom":"CC Arbois, Poligny, Salins, Coeur du Jura","nature":"CC","nombreCommunes":"66","populationTotale":"23317"},
+{"code":"200071629","Commune":"","Nom unique":"","nom":"CC Challans-Gois Communauté","nature":"CC","nombreCommunes":"11","populationTotale":"46820"}
+,
+{"code":"200071645","Commune":"","Nom unique":"","nom":"CC Saint Cyr Mère Boitier entre Charolais et Mâconnais","nature":"CC","nombreCommunes":"18","populationTotale":"8127"}
+,
+{"code":"200071652","Commune":"","Nom unique":"","nom":"CC du Pays Fertois et du Bocage Carrougien","nature":"CC","nombreCommunes":"19","populationTotale":"5146"},
+{"code":"200071678","Commune":"","Nom unique":"","nom":"CA du Choletais","nature":"CA","nombreCommunes":"26","populationTotale":"106468"},
+{"code":"200071751","Commune":"","Nom unique":"","nom":"CA du Bassin de Bourg-en-Bresse","nature":"CA","nombreCommunes":"75","populationTotale":"135121"},
+{"code":"200071769","Commune":"","Nom unique":"","nom":"CC Picardie des Châteaux","nature":"CC","nombreCommunes":"39","populationTotale":"18067"}
+,
+{"code":"200071777","Commune":"","Nom unique":"","nom":"CC d'Arcis, Mailly, Ramerupt","nature":"CC","nombreCommunes":"39","populationTotale":"11835"},
+{"code":"200071785","Commune":"","Nom unique":"","nom":"CA Chauny Tergnier la Fère","nature":"CA","nombreCommunes":"48","populationTotale":"57194"}
+,
+{"code":"200071819","Commune":"","Nom unique":"","nom":"CC du Périgord Nontronnais","nature":"CC","nombreCommunes":"28","populationTotale":"15839"}
+,
+{"code":"200071827","Commune":"","Nom unique":"","nom":"CA du Grand Angoulême","nature":"CA","nombreCommunes":"38","populationTotale":"147878"}
+,
+{"code":"200071843","Commune":"","Nom unique":"","nom":"CC du Vexin Normand","nature":"CC","nombreCommunes":"41","populationTotale":"34133"},
+{"code":"200071850","Commune":"","Nom unique":"","nom":"CC du Pithiverais-Gâtinais","nature":"CC","nombreCommunes":"32","populationTotale":"26564"}
+,
+{"code":"200071868","Commune":"","Nom unique":"","nom":"CC des Vallées du Haut-Anjou","nature":"CC","nombreCommunes":"17","populationTotale":"36569"}
+,
+{"code":"200071876","Commune":"","Nom unique":"","nom":"CA Saumur Val de Loire","nature":"CA","nombreCommunes":"47","populationTotale":"103956"},
+{"code":"200071884","Commune":"","Nom unique":"","nom":"CC Le Grand Charolais","nature":"CC","nombreCommunes":"44","populationTotale":"42063"},
+{"code":"200071892","Commune":"","Nom unique":"","nom":"CA du Saint-Quentinois","nature":"CA","nombreCommunes":"39","populationTotale":"84934"},
+{"code":"200071900","Commune":"","Nom unique":"","nom":"CC Vendée Grand Littoral","nature":"CC","nombreCommunes":"20","populationTotale":"33761"}
+,
+{"code":"200071918","Commune":"","Nom unique":"","nom":"CC du Pays de Saint-Fulgent - les Essarts","nature":"CC","nombreCommunes":"10","populationTotale":"27974"},
+{"code":"200071926","Commune":"","Nom unique":"","nom":"CC du Limouxin","nature":"CC","nombreCommunes":"78","populationTotale":"29584"},
+{"code":"200071934","Commune":"","Nom unique":"","nom":"CC Pays de Fontenay-Vendée","nature":"CC","nombreCommunes":"26","populationTotale":"36629"}
+,
+{"code":"200071942","Commune":"","Nom unique":"","nom":"CC Haut Limousin en Marche","nature":"CC","nombreCommunes":"43","populationTotale":"24626"},
+{"code":"200071967","Commune":"","Nom unique":"","nom":"CC Pays d'Évian Vallée d'Abondance","nature":"CC","nombreCommunes":"22","populationTotale":"40661"}
+,
+{"code":"200071983","Commune":"","Nom unique":"","nom":"CC Thiérache Sambre et Oise","nature":"CC","nombreCommunes":"36","populationTotale":"17576"}
+,
+{"code":"200071991","Commune":"","Nom unique":"","nom":"CC Retz-en-Valois","nature":"CC","nombreCommunes":"54","populationTotale":"30987"},
+{"code":"200072007","Commune":"","Nom unique":"","nom":"CC de la Montagne d'Ardèche","nature":"CC","nombreCommunes":"29","populationTotale":"5104"}
+,
+{"code":"200072015","Commune":"","Nom unique":"","nom":"CA Annonay Rhône Agglo","nature":"CA","nombreCommunes":"29","populationTotale":"49675"}
+,
+{"code":"200072023","Commune":"","Nom unique":"","nom":"CC Coeur de Charente","nature":"CC","nombreCommunes":"52","populationTotale":"22629"},
+{"code":"200072031","Commune":"","Nom unique":"","nom":"CA de la Région de Château-Thierry","nature":"CA","nombreCommunes":"87","populationTotale":"55228"}
+,
+{"code":"200072049","Commune":"","Nom unique":"","nom":"CC de Charente Limousine","nature":"CC","nombreCommunes":"62","populationTotale":"36961"},
+{"code":"200072056","Commune":"","Nom unique":"","nom":"CC Porte du Jura","nature":"CC","nombreCommunes":"24","populationTotale":"10909"},
+{"code":"200072064","Commune":"","Nom unique":"","nom":"CC Val-de-Cher-Controis","nature":"CC","nombreCommunes":"37","populationTotale":"49268"},
+{"code":"200072072","Commune":"","Nom unique":"","nom":"CA Territoires Vendômois","nature":"CA","nombreCommunes":"66","populationTotale":"56782"}
+,
+{"code":"200072080","Commune":"","Nom unique":"","nom":"CC du Pays de Saint-Éloy","nature":"CC","nombreCommunes":"34","populationTotale":"16693"}
+,
+{"code":"200072098","Commune":"","Nom unique":"","nom":"CC Combrailles Sioule et Morge","nature":"CC","nombreCommunes":"29","populationTotale":"19021"},
+{"code":"200072106","Commune":"","Nom unique":"","nom":"CC Adour Madiran","nature":"CC","nombreCommunes":"72","populationTotale":"25368"},
+{"code":"200072122","Commune":"","Nom unique":"","nom":"CC Pays de Coulommiers","nature":"CC","nombreCommunes":"24","populationTotale":"45667"},
+{"code":"200072130","Commune":"","Nom unique":"","nom":"CA du Pays de Meaux","nature":"CA","nombreCommunes":"22","populationTotale":"97586"},
+{"code":"200072304","Commune":"","Nom unique":"","nom":"CC Vallée de l'Ubaye - Serre-Ponçon","nature":"CC","nombreCommunes":"13","populationTotale":"8276"}
+,
+{"code":"200072312","Commune":"","Nom unique":"","nom":"CA Seine Normandie Agglomération","nature":"CA","nombreCommunes":"64","populationTotale":"87544"}
+,
+{"code":"200072320","Commune":"","Nom unique":"","nom":"CC Val de Gers","nature":"CC","nombreCommunes":"45","populationTotale":"10838"},
+{"code":"200072346","Commune":"","Nom unique":"","nom":"CA du Pays de Fontainebleau","nature":"CA","nombreCommunes":"26","populationTotale":"70362"},
+{"code":"200072452","Commune":"","Nom unique":"","nom":"CA Fougères Agglomération","nature":"CA","nombreCommunes":"33","populationTotale":"57089"}
+,
+{"code":"200072460","Commune":"","Nom unique":"","nom":"CA de Béthune-Bruay, Artois-Lys Romane","nature":"CA","nombreCommunes":"100","populationTotale":"281249"}
+,
+{"code":"200072478","Commune":"","Nom unique":"","nom":"CC Pays d'Opale","nature":"CC","nombreCommunes":"27","populationTotale":"28044"},
+{"code":"200072544","Commune":"","Nom unique":"","nom":"CC des Deux Morin","nature":"CC","nombreCommunes":"31","populationTotale":"26817"},
+{"code":"200072635","Commune":"","Nom unique":"","nom":"CC Pyrénées Haut Garonnaises","nature":"CC","nombreCommunes":"77","populationTotale":"16230"}
+,
+{"code":"200072643","Commune":"","Nom unique":"","nom":"CC Coeur et Coteaux du Comminges","nature":"CC","nombreCommunes":"104","populationTotale":"45478"},
+{"code":"200072650","Commune":"","Nom unique":"","nom":"CC Touraine Vallée de l'Indre","nature":"CC","nombreCommunes":"22","populationTotale":"52276"}
+,
+{"code":"200072668","Commune":"","Nom unique":"","nom":"CC Touraine Val de Vienne","nature":"CC","nombreCommunes":"40","populationTotale":"25997"},
+{"code":"200072676","Commune":"","Nom unique":"","nom":"CC Maine Saosnois","nature":"CC","nombreCommunes":"52","populationTotale":"28939"},
+{"code":"200072684","Commune":"","Nom unique":"","nom":"CC Le Gesnois Bilurien","nature":"CC","nombreCommunes":"23","populationTotale":"31266"},
+{"code":"200072692","Commune":"","Nom unique":"","nom":"CC des Vallées de la Braye et de l'Anille","nature":"CC","nombreCommunes":"20","populationTotale":"16151"}
+,
+{"code":"200072700","Commune":"","Nom unique":"","nom":"CC Haute Sarthe Alpes Mancelles","nature":"CC","nombreCommunes":"40","populationTotale":"23641"},
+{"code":"200072718","Commune":"","Nom unique":"","nom":"CC de la Champagne Conlinoise et du Pays de Sillé","nature":"CC","nombreCommunes":"25","populationTotale":"19186"}
+,
+{"code":"200072726","Commune":"","Nom unique":"","nom":"CC Châteaubriant-Derval","nature":"CC","nombreCommunes":"26","populationTotale":"45983"}
+,
+{"code":"200072734","Commune":"","Nom unique":"","nom":"CC Estuaire et Sillon","nature":"CC","nombreCommunes":"11","populationTotale":"38633"},
+{"code":"200072825","Commune":"","Nom unique":"","nom":"CC Mirebellois et Fontenois","nature":"CC","nombreCommunes":"32","populationTotale":"12733"},
+{"code":"200072874","Commune":"","Nom unique":"","nom":"CC Val Briard","nature":"CC","nombreCommunes":"21","populationTotale":"27668"},
+{"code":"200072882","Commune":"","Nom unique":"","nom":"CC de Vie et Boulogne","nature":"CC","nombreCommunes":"15","populationTotale":"43645"},
+{"code":"200072981","Commune":"","Nom unique":"","nom":"CC Touraine Ouest Val de Loire","nature":"CC","nombreCommunes":"28","populationTotale":"34039"},
+{"code":"200072999","Commune":"","Nom unique":"","nom":"CC du Grand Langres","nature":"CC","nombreCommunes":"54","populationTotale":"22123"},
+{"code":"200073013","Commune":"","Nom unique":"","nom":"CC Carnelle Pays-De-France","nature":"CC","nombreCommunes":"19","populationTotale":"32096"},
+{"code":"200073096","Commune":"","Nom unique":"","nom":"CA Hermitage-Tournonais-Herbasse-Pays de Saint-Félicien","nature":"CA","nombreCommunes":"41","populationTotale":"58376"}
+,
+{"code":"200073104","Commune":"","Nom unique":"","nom":"CC de l'Ile-Rousse - Balagne","nature":"CC","nombreCommunes":"22","populationTotale":"10665"},
+{"code":"200073112","Commune":"","Nom unique":"","nom":"CC Sud Sarthe","nature":"CC","nombreCommunes":"19","populationTotale":"24083"},
+{"code":"200073120","Commune":"","Nom unique":"","nom":"CC Nebbiu - Conca d'Oro","nature":"CC","nombreCommunes":"15","populationTotale":"7191"},
+{"code":"200073138","Commune":"","Nom unique":"","nom":"CC Pasquale Paoli","nature":"CC","nombreCommunes":"42","populationTotale":"6339"},
+{"code":"200073146","Commune":"","Nom unique":"","nom":"CC Cagire Garonne Salat","nature":"CC","nombreCommunes":"55","populationTotale":"18319"},
+{"code":"200073161","Commune":"","Nom unique":"","nom":"CC Touraine-Est Vallées","nature":"CC","nombreCommunes":"10","populationTotale":"39668"}
+,
+{"code":"200073237","Commune":"","Nom unique":"","nom":"CC de Gâtine et Choisilles - Pays de Racan","nature":"CC","nombreCommunes":"19","populationTotale":"21760"}
+,
+{"code":"200073245","Commune":"","Nom unique":"","nom":"CC du Bassin d'Aubenas","nature":"CC","nombreCommunes":"29","populationTotale":"40997"},
+{"code":"200073252","Commune":"","Nom unique":"","nom":"CC de la Castagniccia-Casinca","nature":"CC","nombreCommunes":"42","populationTotale":"12489"},
+{"code":"200073260","Commune":"","Nom unique":"","nom":"CC Sud Vendée Littoral","nature":"CC","nombreCommunes":"44","populationTotale":"56233"}
+,
+{"code":"200073344","Commune":"","Nom unique":"","nom":"CA Rambouillet Territoires","nature":"CA","nombreCommunes":"36","populationTotale":"79700"},
+{"code":"200073393","Commune":"","Nom unique":"","nom":"CC des Rives du Haut-Allier","nature":"CC","nombreCommunes":"59","populationTotale":"17823"},
+{"code":"200073401","Commune":"","Nom unique":"","nom":"CC Mézenc-Loire-Meygal","nature":"CC","nombreCommunes":"22","populationTotale":"11324"}
+,
+{"code":"200073419","Commune":"","Nom unique":"","nom":"CA du Puy-en-Velay","nature":"CA","nombreCommunes":"73","populationTotale":"85350"},
+{"code":"200073427","Commune":"","Nom unique":"","nom":"CC Marches du Velay-Rochebaron","nature":"CC","nombreCommunes":"14","populationTotale":"31219"},
+{"code":"240100578","Commune":"","Nom unique":"","nom":"CC du Plateau d'Hauteville","nature":"CC","nombreCommunes":"9","populationTotale":"6428"},
+{"code":"240100610","Commune":"","Nom unique":"","nom":"CC de la Côtière à Montluel","nature":"CC","nombreCommunes":"9","populationTotale":"25100"}
+,
+{"code":"240100750","Commune":"","Nom unique":"","nom":"CC du Pays de Gex","nature":"CC","nombreCommunes":"27","populationTotale":"92344"},
+{"code":"240100800","Commune":"","Nom unique":"","nom":"CC de Miribel et du Plateau","nature":"CC","nombreCommunes":"6","populationTotale":"23669"},
+{"code":"240100883","Commune":"","Nom unique":"","nom":"CC de la Plaine de l'Ain","nature":"CC","nombreCommunes":"53","populationTotale":"78706"},
+{"code":"240100891","Commune":"","Nom unique":"","nom":"CC du Pays Bellegardien (Ccpb)","nature":"CC","nombreCommunes":"15","populationTotale":"22168"},
+{"code":"240200444","Commune":"","Nom unique":"","nom":"CC de la Thiérache du Centre","nature":"CC","nombreCommunes":"68","populationTotale":"27808"}
+,
+{"code":"240200469","Commune":"","Nom unique":"","nom":"CC du Pays de la Serre","nature":"CC","nombreCommunes":"42","populationTotale":"14951"},
+{"code":"240200477","Commune":"","Nom unique":"","nom":"CA du Soissonnais","nature":"CA","nombreCommunes":"28","populationTotale":"53472"},
+{"code":"240200493","Commune":"","Nom unique":"","nom":"CC du Pays du Vermandois","nature":"CC","nombreCommunes":"54","populationTotale":"32107"},
+{"code":"240200501","Commune":"","Nom unique":"","nom":"CC du Val de l'Aisne","nature":"CC","nombreCommunes":"58","populationTotale":"20773"},
+{"code":"240200519","Commune":"","Nom unique":"","nom":"CC du Canton d'Oulchy-le-Château","nature":"CC","nombreCommunes":"26","populationTotale":"5839"}
+,
+{"code":"240200576","Commune":"","Nom unique":"","nom":"CC de la Champagne Picarde","nature":"CC","nombreCommunes":"47","populationTotale":"21501"},
+{"code":"240200584","Commune":"","Nom unique":"","nom":"CC du Canton de Charly-sur-Marne","nature":"CC","nombreCommunes":"21","populationTotale":"15998"},
+{"code":"240200592","Commune":"","Nom unique":"","nom":"CC du Chemin des Dames","nature":"CC","nombreCommunes":"30","populationTotale":"5498"},
+{"code":"240200600","Commune":"","Nom unique":"","nom":"CC des Trois Rivières","nature":"CC","nombreCommunes":"26","populationTotale":"22293"}
+,
+{"code":"240200634","Commune":"","Nom unique":"","nom":"CC des Portes de la Thiérache","nature":"CC","nombreCommunes":"30","populationTotale":"7269"}
+,
+{"code":"240300491","Commune":"","Nom unique":"","nom":"CC du Pays de Lapalisse","nature":"CC","nombreCommunes":"14","populationTotale":"8702"},
+{"code":"240300558","Commune":"","Nom unique":"","nom":"CC du Pays de Tronçais","nature":"CC","nombreCommunes":"15","populationTotale":"7667"}
+,
+{"code":"240300566","Commune":"","Nom unique":"","nom":"CC du Val de Cher","nature":"CC","nombreCommunes":"7","populationTotale":"5689"},
+{"code":"240300657","Commune":"","Nom unique":"","nom":"CC du Pays d'Huriel","nature":"CC","nombreCommunes":"14","populationTotale":"7827"},
+{"code":"240400440","Commune":"","Nom unique":"","nom":"CC Pays Forcalquier et Montagne de Lure","nature":"CC","nombreCommunes":"13","populationTotale":"9827"},
+{"code":"240500439","Commune":"","Nom unique":"","nom":"CC du Briançonnais","nature":"CC","nombreCommunes":"13","populationTotale":"21625"}
+,
+{"code":"240500462","Commune":"","Nom unique":"","nom":"CC du Pays des Ecrins","nature":"CC","nombreCommunes":"8","populationTotale":"6913"},
+{"code":"240600551","Commune":"","Nom unique":"","nom":"CA de la Riviera Française","nature":"CA","nombreCommunes":"15","populationTotale":"72738"}
+,
+{"code":"240600585","Commune":"","Nom unique":"","nom":"CA de Sophia Antipolis","nature":"CA","nombreCommunes":"24","populationTotale":"179170"},
+{"code":"240600593","Commune":"","Nom unique":"","nom":"CC du Pays des Paillons","nature":"CC","nombreCommunes":"13","populationTotale":"26801"},
+{"code":"240700302","Commune":"","Nom unique":"","nom":"CC du Pays Beaume-Drobie","nature":"CC","nombreCommunes":"19","populationTotale":"8858"},
+{"code":"240700617","Commune":"","Nom unique":"","nom":"CC Val de Ligne","nature":"CC","nombreCommunes":"11","populationTotale":"6417"},
+{"code":"240700716","Commune":"","Nom unique":"","nom":"CC du Val d'Ay","nature":"CC","nombreCommunes":"8","populationTotale":"6015"},
+{"code":"240700815","Commune":"","Nom unique":"","nom":"CC Berg et Coiron","nature":"CC","nombreCommunes":"13","populationTotale":"7802"},
+{"code":"240700864","Commune":"","Nom unique":"","nom":"CC du Rhône aux Gorges de l'Ardèche","nature":"CC","nombreCommunes":"9","populationTotale":"19440"}
+,
+{"code":"240800821","Commune":"","Nom unique":"","nom":"CC Ardenne, Rives de Meuse","nature":"CC","nombreCommunes":"19","populationTotale":"28030"},
+{"code":"240800847","Commune":"","Nom unique":"","nom":"CC des Portes du Luxembourg","nature":"CC","nombreCommunes":"50","populationTotale":"20874"},
+{"code":"240800862","Commune":"","Nom unique":"","nom":"CC des Crêtes Préardennaises","nature":"CC","nombreCommunes":"94","populationTotale":"22573"}
+,
+{"code":"240800920","Commune":"","Nom unique":"","nom":"CC de l'Argonne Ardennaise","nature":"CC","nombreCommunes":"95","populationTotale":"18086"},
+{"code":"240900431","Commune":"","Nom unique":"","nom":"CC du Pays de Tarascon","nature":"CC","nombreCommunes":"20","populationTotale":"8766"},
+{"code":"240900464","Commune":"","Nom unique":"","nom":"CC du Pays d'Olmes","nature":"CC","nombreCommunes":"24","populationTotale":"15647"},
+{"code":"241000223","Commune":"","Nom unique":"","nom":"CC Forêts, Lacs, Terres en Champagne","nature":"CC","nombreCommunes":"15","populationTotale":"7046"}
+,
+{"code":"241000405","Commune":"","Nom unique":"","nom":"CC de la Région de Bar-sur-Aube","nature":"CC","nombreCommunes":"27","populationTotale":"11926"}
+,
+{"code":"241000447","Commune":"","Nom unique":"","nom":"CC du Pays d'Othe","nature":"CC","nombreCommunes":"14","populationTotale":"8043"},
+{"code":"241000488","Commune":"","Nom unique":"","nom":"CC de l'Orvin et de l'Ardusson","nature":"CC","nombreCommunes":"25","populationTotale":"8703"},
+{"code":"241100593","Commune":"","Nom unique":"","nom":"CA Le Grand Narbonne","nature":"CA","nombreCommunes":"37","populationTotale":"129725"},
+{"code":"241200187","Commune":"","Nom unique":"","nom":"CA Rodez Agglomération","nature":"CA","nombreCommunes":"8","populationTotale":"58582"}
+,
+{"code":"241200542","Commune":"","Nom unique":"","nom":"CC du Réquistanais","nature":"CC","nombreCommunes":"11","populationTotale":"5616"}
+,
+{"code":"241200567","Commune":"","Nom unique":"","nom":"CC de Millau Grands Causses","nature":"CC","nombreCommunes":"15","populationTotale":"30872"},
+{"code":"241200625","Commune":"","Nom unique":"","nom":"CC du Pays Rignacois","nature":"CC","nombreCommunes":"8","populationTotale":"5719"},
+{"code":"241200641","Commune":"","Nom unique":"","nom":"CC Conques-Marcillac","nature":"CC","nombreCommunes":"12","populationTotale":"12200"},
+{"code":"241200658","Commune":"","Nom unique":"","nom":"CC du Pays de Salars","nature":"CC","nombreCommunes":"9","populationTotale":"8046"},
+{"code":"241200674","Commune":"","Nom unique":"","nom":"CC du Plateau de Montbazens","nature":"CC","nombreCommunes":"13","populationTotale":"6386"},
+{"code":"241200765","Commune":"","Nom unique":"","nom":"CC de Lévézou Pareloup","nature":"CC","nombreCommunes":"10","populationTotale":"5626"}
+,
+{"code":"241200807","Commune":"","Nom unique":"","nom":"CC Aveyron Bas Ségala Viaur","nature":"CC","nombreCommunes":"7","populationTotale":"5806"}
+,
+{"code":"241200906","Commune":"","Nom unique":"","nom":"CC Larzac et Vallées","nature":"CC","nombreCommunes":"16","populationTotale":"5464"}
+,
+{"code":"241200914","Commune":"","Nom unique":"","nom":"CC de la Muse et des Raspes du Tarn","nature":"CC","nombreCommunes":"13","populationTotale":"5540"},
+{"code":"241300375","Commune":"","Nom unique":"","nom":"CC Vallée des Baux-Alpilles (Cc Vba)","nature":"CC","nombreCommunes":"10","populationTotale":"28346"}
+,
+{"code":"241300417","Commune":"","Nom unique":"","nom":"CA d'Arles-Crau-Camargue-Montagnette","nature":"CA","nombreCommunes":"6","populationTotale":"87365"},
+{"code":"241400415","Commune":"","Nom unique":"","nom":"CC Coeur Côte Fleurie","nature":"CC","nombreCommunes":"12","populationTotale":"21759"}
+,
+{"code":"241400514","Commune":"","Nom unique":"","nom":"CC du Pays de Falaise","nature":"CC","nombreCommunes":"58","populationTotale":"28962"},
+{"code":"241400555","Commune":"","Nom unique":"","nom":"CC de Bayeux Intercom","nature":"CC","nombreCommunes":"36","populationTotale":"30884"},
+{"code":"241400761","Commune":"","Nom unique":"","nom":"CC de Cambremer","nature":"CC","nombreCommunes":"22","populationTotale":"5731"},
+{"code":"241400860","Commune":"","Nom unique":"","nom":"CC Coeur de Nacre","nature":"CC","nombreCommunes":"12","populationTotale":"24533"},
+{"code":"241400878","Commune":"","Nom unique":"","nom":"CC Blangy-Pont-l'Evêque Intercom","nature":"CC","nombreCommunes":"45","populationTotale":"19916"}
+,
+{"code":"241500230","Commune":"","Nom unique":"","nom":"CA du Bassin d'Aurillac","nature":"CA","nombreCommunes":"25","populationTotale":"55891"},
+{"code":"241500255","Commune":"","Nom unique":"","nom":"CC du Pays Gentiane","nature":"CC","nombreCommunes":"13","populationTotale":"5687"},
+{"code":"241500271","Commune":"","Nom unique":"","nom":"CC du Pays de Mauriac","nature":"CC","nombreCommunes":"11","populationTotale":"7133"},
+{"code":"241501055","Commune":"","Nom unique":"","nom":"CC Sumène - Artense","nature":"CC","nombreCommunes":"16","populationTotale":"8802"}
+,
+{"code":"241501089","Commune":"","Nom unique":"","nom":"CC Cère et Goul en Carladès","nature":"CC","nombreCommunes":"11","populationTotale":"5088"}
+,
+{"code":"241501139","Commune":"","Nom unique":"","nom":"CC du Pays de Salers","nature":"CC","nombreCommunes":"27","populationTotale":"8906"},
+{"code":"241600303","Commune":"","Nom unique":"","nom":"CC du Rouillacais","nature":"CC","nombreCommunes":"17","populationTotale":"10337"},
+{"code":"241700434","Commune":"","Nom unique":"","nom":"CA de la Rochelle","nature":"CA","nombreCommunes":"28","populationTotale":"172851"},
+{"code":"241700459","Commune":"","Nom unique":"","nom":"CC de l'Ile de Ré","nature":"CC","nombreCommunes":"10","populationTotale":"17920"}
+,
+{"code":"241700517","Commune":"","Nom unique":"","nom":"CC Charente-Arnoult-Coeur de Saintonge","nature":"CC","nombreCommunes":"18","populationTotale":"17660"},
+{"code":"241700624","Commune":"","Nom unique":"","nom":"CC de l'Ile d'Oléron","nature":"CC","nombreCommunes":"8","populationTotale":"22643"}
+,
+{"code":"241700632","Commune":"","Nom unique":"","nom":"CC de Gémozac et de la Saintonge Viticole","nature":"CC","nombreCommunes":"16","populationTotale":"14346"}
+,
+{"code":"241700640","Commune":"","Nom unique":"","nom":"CA Royan Atlantique","nature":"CA","nombreCommunes":"33","populationTotale":"84156"},
+{"code":"241700699","Commune":"","Nom unique":"","nom":"CC du Bassin de Marennes","nature":"CC","nombreCommunes":"7","populationTotale":"15743"},
+{"code":"241800325","Commune":"","Nom unique":"","nom":"CC Les Villages de la Forêt","nature":"CC","nombreCommunes":"5","populationTotale":"5444"}
+,
+{"code":"241800374","Commune":"","Nom unique":"","nom":"CC La Septaine","nature":"CC","nombreCommunes":"17","populationTotale":"11028"},
+{"code":"241800424","Commune":"","Nom unique":"","nom":"CC Le Dunois","nature":"CC","nombreCommunes":"17","populationTotale":"7963"},
+{"code":"241800432","Commune":"","Nom unique":"","nom":"CC Les Trois Provinces","nature":"CC","nombreCommunes":"11","populationTotale":"5356"},
+{"code":"241800457","Commune":"","Nom unique":"","nom":"CC Fercher Pays Florentais","nature":"CC","nombreCommunes":"9","populationTotale":"12074"},
+{"code":"241800507","Commune":"","Nom unique":"","nom":"CA Bourges Plus","nature":"CA","nombreCommunes":"16","populationTotale":"100383"},
+{"code":"241900133","Commune":"","Nom unique":"","nom":"CC de Ventadour - Egletons - Monédières","nature":"CC","nombreCommunes":"20","populationTotale":"11218"}
+,
+{"code":"241927201","Commune":"","Nom unique":"","nom":"CA Tulle Agglo","nature":"CA","nombreCommunes":"45","populationTotale":"46092"},
+{"code":"241927243","Commune":"","Nom unique":"","nom":"CC du Pays d'Uzerche","nature":"CC","nombreCommunes":"12","populationTotale":"9977"},
+{"code":"242000354","Commune":"","Nom unique":"","nom":"CA de Bastia","nature":"CA","nombreCommunes":"5","populationTotale":"59150"},
+{"code":"242000495","Commune":"","Nom unique":"","nom":"CC de l'Alta Rocca","nature":"CC","nombreCommunes":"18","populationTotale":"8656"},
+{"code":"242000503","Commune":"","Nom unique":"","nom":"CC Celavu-Prunelli","nature":"CC","nombreCommunes":"10","populationTotale":"8651"},
+{"code":"242010056","Commune":"","Nom unique":"","nom":"CA du Pays Ajaccien","nature":"CA","nombreCommunes":"10","populationTotale":"85235"},
+{"code":"242010130","Commune":"","Nom unique":"","nom":"CC du Sartenais Valinco","nature":"CC","nombreCommunes":"18","populationTotale":"11740"},
+{"code":"242020071","Commune":"","Nom unique":"","nom":"CC du Centre Corse","nature":"CC","nombreCommunes":"10","populationTotale":"9862"},
+{"code":"242020105","Commune":"","Nom unique":"","nom":"CC de Calvi Balagne","nature":"CC","nombreCommunes":"14","populationTotale":"11986"},
+{"code":"242100154","Commune":"","Nom unique":"","nom":"CC des Vallées de la Tille et de l'Ignon","nature":"CC","nombreCommunes":"23","populationTotale":"13648"}
+,
+{"code":"242100410","Commune":"","Nom unique":"","nom":"Dijon Métropole","nature":"ME","nombreCommunes":"24","populationTotale":"257843"}
+,
+{"code":"242101434","Commune":"","Nom unique":"","nom":"CC du Pays Châtillonnais","nature":"CC","nombreCommunes":"107","populationTotale":"21212"}
+,
+{"code":"242101442","Commune":"","Nom unique":"","nom":"CC de Saulieu","nature":"CC","nombreCommunes":"12","populationTotale":"5672"},
+{"code":"242101459","Commune":"","Nom unique":"","nom":"CC du Pays d'Alésia et de la Seine","nature":"CC","nombreCommunes":"24","populationTotale":"7817"}
+,
+{"code":"242101491","Commune":"","Nom unique":"","nom":"CC du Montbardois","nature":"CC","nombreCommunes":"33","populationTotale":"11300"},
+{"code":"242101509","Commune":"","Nom unique":"","nom":"CC Rives de Saône","nature":"CC","nombreCommunes":"38","populationTotale":"21204"}
+,
+{"code":"242200715","Commune":"","Nom unique":"","nom":"CC du Kreiz-Breizh (Cckb)","nature":"CC","nombreCommunes":"23","populationTotale":"19486"},
+{"code":"242400752","Commune":"","Nom unique":"","nom":"CC Périgord-Limousin","nature":"CC","nombreCommunes":"22","populationTotale":"14705"}
+,
+{"code":"242400935","Commune":"","Nom unique":"","nom":"CC du Pays de Saint-Aulaye","nature":"CC","nombreCommunes":"6","populationTotale":"6791"},
+{"code":"242401024","Commune":"","Nom unique":"","nom":"CC Isle-Loue-Auvézère en Périgord","nature":"CC","nombreCommunes":"28","populationTotale":"14213"}
+,
+{"code":"242500320","Commune":"","Nom unique":"","nom":"CC de Montbenoît","nature":"CC","nombreCommunes":"16","populationTotale":"7642"}
+,
+{"code":"242500338","Commune":"","Nom unique":"","nom":"CC du Grand Pontarlier","nature":"CC","nombreCommunes":"10","populationTotale":"27650"},
+{"code":"242500361","Commune":"","Nom unique":"","nom":"CA du Grand Besançon","nature":"CA","nombreCommunes":"69","populationTotale":"198248"}
+,
+{"code":"242504116","Commune":"","Nom unique":"","nom":"CC du Val de Morteau","nature":"CC","nombreCommunes":"8","populationTotale":"20895"},
+{"code":"242504181","Commune":"","Nom unique":"","nom":"CC des Portes du Haut-Doubs","nature":"CC","nombreCommunes":"47","populationTotale":"26070"},
+{"code":"242504355","Commune":"","Nom unique":"","nom":"CC du Plateau de Russey","nature":"CC","nombreCommunes":"17","populationTotale":"6790"},
+{"code":"242504371","Commune":"","Nom unique":"","nom":"CC du Pays de Sancey-Belleherbe","nature":"CC","nombreCommunes":"27","populationTotale":"5555"},
+{"code":"242504447","Commune":"","Nom unique":"","nom":"CC du Doubs Baumois","nature":"CC","nombreCommunes":"58","populationTotale":"16600"},
+{"code":"242504488","Commune":"","Nom unique":"","nom":"CC Altitude 800","nature":"CC","nombreCommunes":"11","populationTotale":"6566"},
+{"code":"242504496","Commune":"","Nom unique":"","nom":"CC du Plateau de Frasne et du Val de Drugeon (Cfd)","nature":"CC","nombreCommunes":"10","populationTotale":"6066"},
+{"code":"242600252","Commune":"","Nom unique":"","nom":"CC du Val de Drôme","nature":"CC","nombreCommunes":"30","populationTotale":"31134"}
+,
+{"code":"242600492","Commune":"","Nom unique":"","nom":"CC Dieulefit-Bourdeaux","nature":"CC","nombreCommunes":"21","populationTotale":"9682"},
+{"code":"242600534","Commune":"","Nom unique":"","nom":"CC du Diois","nature":"CC","nombreCommunes":"51","populationTotale":"11828"},
+{"code":"242700276","Commune":"","Nom unique":"","nom":"CC du Pays de Conches","nature":"CC","nombreCommunes":"25","populationTotale":"19263"},
+{"code":"242700607","Commune":"","Nom unique":"","nom":"CC du Pays du Neubourg","nature":"CC","nombreCommunes":"36","populationTotale":"19476"},
+{"code":"242700623","Commune":"","Nom unique":"","nom":"CC Eure-Madrie-Seine","nature":"CC","nombreCommunes":"16","populationTotale":"27705"},
+{"code":"242852465","Commune":"","Nom unique":"","nom":"CC du Bonnevalais","nature":"CC","nombreCommunes":"19","populationTotale":"12830"},
+{"code":"242900074","Commune":"","Nom unique":"","nom":"CC du Pays d'Iroise","nature":"CC","nombreCommunes":"19","populationTotale":"48810"},
+{"code":"242900314","Commune":"","Nom unique":"","nom":"Brest Métropole","nature":"ME","nombreCommunes":"8","populationTotale":"213462"}
+,
+{"code":"242900553","Commune":"","Nom unique":"","nom":"CC du Pays des Abers","nature":"CC","nombreCommunes":"13","populationTotale":"41372"},
+{"code":"242900561","Commune":"","Nom unique":"","nom":"CC de Haute-Cornouaille","nature":"CC","nombreCommunes":"11","populationTotale":"15332"},
+{"code":"242900629","Commune":"","Nom unique":"","nom":"CC Cap Sizun - Pointe du Raz","nature":"CC","nombreCommunes":"10","populationTotale":"15878"},
+{"code":"242900645","Commune":"","Nom unique":"","nom":"CC Douarnenez Communauté","nature":"CC","nombreCommunes":"5","populationTotale":"19113"}
+,
+{"code":"242900660","Commune":"","Nom unique":"","nom":"CC du Pays Fouesnantais","nature":"CC","nombreCommunes":"7","populationTotale":"28405"},
+{"code":"242900694","Commune":"","Nom unique":"","nom":"CA Quimperlé Communauté","nature":"CA","nombreCommunes":"16","populationTotale":"57064"}
+,
+{"code":"242900702","Commune":"","Nom unique":"","nom":"CC du Pays Bigouden Sud","nature":"CC","nombreCommunes":"12","populationTotale":"38688"},
+{"code":"242900710","Commune":"","Nom unique":"","nom":"CC du Haut Pays Bigouden","nature":"CC","nombreCommunes":"10","populationTotale":"18439"},
+{"code":"242900744","Commune":"","Nom unique":"","nom":"CC Poher Communauté","nature":"CC","nombreCommunes":"11","populationTotale":"16251"}
+,
+{"code":"242900751","Commune":"","Nom unique":"","nom":"CC du Pays de Landivisiau","nature":"CC","nombreCommunes":"19","populationTotale":"33987"},
+{"code":"242900769","Commune":"","Nom unique":"","nom":"CA Concarneau Cornouaille Agglomération","nature":"CA","nombreCommunes":"9","populationTotale":"51688"}
+,
+{"code":"242900793","Commune":"","Nom unique":"","nom":"CC Communauté Lesneven Côte des Légendes","nature":"CC","nombreCommunes":"14","populationTotale":"28135"}
+,
+{"code":"242900801","Commune":"","Nom unique":"","nom":"CC du Pays de Landerneau-Daoulas","nature":"CC","nombreCommunes":"22","populationTotale":"49384"},
+{"code":"242900835","Commune":"","Nom unique":"","nom":"CA Morlaix Communauté","nature":"CA","nombreCommunes":"27","populationTotale":"66726"}
+,
+{"code":"243000270","Commune":"","Nom unique":"","nom":"CC du Pays Viganais","nature":"CC","nombreCommunes":"22","populationTotale":"10545"},
+{"code":"243000296","Commune":"","Nom unique":"","nom":"CC du Pays de Sommières","nature":"CC","nombreCommunes":"18","populationTotale":"22962"}
+,
+{"code":"243000569","Commune":"","Nom unique":"","nom":"CC Rhony, Vistre, Vidourle","nature":"CC","nombreCommunes":"10","populationTotale":"26621"},
+{"code":"243000585","Commune":"","Nom unique":"","nom":"CC Beaucaire Terre d'Argence","nature":"CC","nombreCommunes":"5","populationTotale":"31272"},
+{"code":"243000593","Commune":"","Nom unique":"","nom":"CC de Petite Camargue","nature":"CC","nombreCommunes":"5","populationTotale":"26747"},
+{"code":"243000643","Commune":"","Nom unique":"","nom":"CA de Nîmes Métropole","nature":"CA","nombreCommunes":"39","populationTotale":"261754"}
+,
+{"code":"243000650","Commune":"","Nom unique":"","nom":"CC Terre de Camargue","nature":"CC","nombreCommunes":"3","populationTotale":"20482"},
+{"code":"243000684","Commune":"","Nom unique":"","nom":"CC du Pont du Gard","nature":"CC","nombreCommunes":"17","populationTotale":"26424"},
+{"code":"243100518","Commune":"","Nom unique":"","nom":"Toulouse Métropole","nature":"ME","nombreCommunes":"37","populationTotale":"768494"}
+,
+{"code":"243100567","Commune":"","Nom unique":"","nom":"CC Lauragais Revel Sorezois","nature":"CC","nombreCommunes":"28","populationTotale":"22075"},
+{"code":"243100633","Commune":"","Nom unique":"","nom":"CA du Sicoval","nature":"CA","nombreCommunes":"36","populationTotale":"77596"},
+{"code":"243100732","Commune":"","Nom unique":"","nom":"CC des Coteaux du Girou","nature":"CC","nombreCommunes":"18","populationTotale":"21376"},
+{"code":"243100773","Commune":"","Nom unique":"","nom":"CC Val'Aïgo","nature":"CC","nombreCommunes":"8","populationTotale":"14574"}
+,
+{"code":"243100781","Commune":"","Nom unique":"","nom":"CC de la Save au Touch","nature":"CC","nombreCommunes":"7","populationTotale":"39918"},
+{"code":"243100815","Commune":"","Nom unique":"","nom":"CC des Coteaux Bellevue","nature":"CC","nombreCommunes":"7","populationTotale":"20219"},
+{"code":"243200391","Commune":"","Nom unique":"","nom":"CC de la Lomagne Gersoise","nature":"CC","nombreCommunes":"43","populationTotale":"20249"},
+{"code":"243200409","Commune":"","Nom unique":"","nom":"CC du Bas Armagnac","nature":"CC","nombreCommunes":"26","populationTotale":"8905"},
+{"code":"243200417","Commune":"","Nom unique":"","nom":"CC de la Tenarèze","nature":"CC","nombreCommunes":"26","populationTotale":"15324"}
+,
+{"code":"243200425","Commune":"","Nom unique":"","nom":"CC Coeur d'Astarac en Gascogne","nature":"CC","nombreCommunes":"19","populationTotale":"8293"},
+{"code":"243200458","Commune":"","Nom unique":"","nom":"CC du Grand Armagnac","nature":"CC","nombreCommunes":"25","populationTotale":"13485"},
+{"code":"243200508","Commune":"","Nom unique":"","nom":"CC Bastides et Vallons du Gers","nature":"CC","nombreCommunes":"30","populationTotale":"7542"},
+{"code":"243200599","Commune":"","Nom unique":"","nom":"CC du Saves","nature":"CC","nombreCommunes":"32","populationTotale":"9845"},
+{"code":"243200607","Commune":"","Nom unique":"","nom":"CC Artagnan de Fezensac","nature":"CC","nombreCommunes":"25","populationTotale":"7289"},
+{"code":"243300316","Commune":"","Nom unique":"","nom":"Bordeaux Métropole","nature":"ME","nombreCommunes":"28","populationTotale":"787107"}
+,
+{"code":"243300563","Commune":"","Nom unique":"","nom":"CA Bassin d'Arcachon Sud-Pôle Atlantique (Cobas)","nature":"CA","nombreCommunes":"4","populationTotale":"66816"}
+,
+{"code":"243300811","Commune":"","Nom unique":"","nom":"CC de l'Estuaire - Canton de Saint-Ciers-sur-Gironde","nature":"CC","nombreCommunes":"15","populationTotale":"15959"},
+{"code":"243301165","Commune":"","Nom unique":"","nom":"CC Jalle-Eau-Bourde","nature":"CC","nombreCommunes":"3","populationTotale":"30140"},
+{"code":"243301181","Commune":"","Nom unique":"","nom":"CC Latitude Nord Gironde","nature":"CC","nombreCommunes":"11","populationTotale":"19583"},
+{"code":"243301215","Commune":"","Nom unique":"","nom":"CC du Créonnais","nature":"CC","nombreCommunes":"15","populationTotale":"16999"}
+,
+{"code":"243301223","Commune":"","Nom unique":"","nom":"CC Grand Cubzaguais","nature":"CC","nombreCommunes":"16","populationTotale":"34431"},
+{"code":"243301249","Commune":"","Nom unique":"","nom":"CC du Secteur de Saint-Loubès","nature":"CC","nombreCommunes":"6","populationTotale":"26692"}
+,
+{"code":"243301264","Commune":"","Nom unique":"","nom":"CC de Montesquieu","nature":"CC","nombreCommunes":"13","populationTotale":"42981"},
+{"code":"243301355","Commune":"","Nom unique":"","nom":"CC des Coteaux Bordelais","nature":"CC","nombreCommunes":"8","populationTotale":"19135"},
+{"code":"243301371","Commune":"","Nom unique":"","nom":"CC du Pays Foyen","nature":"CC","nombreCommunes":"20","populationTotale":"16932"},
+{"code":"243301389","Commune":"","Nom unique":"","nom":"CC Médullienne","nature":"CC","nombreCommunes":"10","populationTotale":"20443"}
+,
+{"code":"243301397","Commune":"","Nom unique":"","nom":"CC du Fronsadais","nature":"CC","nombreCommunes":"18","populationTotale":"17198"},
+{"code":"243301405","Commune":"","Nom unique":"","nom":"CC du Val de l'Eyre","nature":"CC","nombreCommunes":"5","populationTotale":"19582"},
+{"code":"243301439","Commune":"","Nom unique":"","nom":"CC des Portes de l'Entre-deux-Mers","nature":"CC","nombreCommunes":"11","populationTotale":"20908"},
+{"code":"243301447","Commune":"","Nom unique":"","nom":"CC Médoc Estuaire","nature":"CC","nombreCommunes":"10","populationTotale":"27766"}
+,
+{"code":"243301454","Commune":"","Nom unique":"","nom":"CC Castillon/Pujols","nature":"CC","nombreCommunes":"31","populationTotale":"19434"},
+{"code":"243301504","Commune":"","Nom unique":"","nom":"CA du Bassin Nord","nature":"CA","nombreCommunes":"8","populationTotale":"65369"},
+{"code":"243400017","Commune":"","Nom unique":"","nom":"Montpellier Méditerranée Métropole","nature":"ME","nombreCommunes":"31","populationTotale":"465407"}
+,
+{"code":"243400355","Commune":"","Nom unique":"","nom":"CC du Clermontais","nature":"CC","nombreCommunes":"21","populationTotale":"27794"},
+{"code":"243400470","Commune":"","Nom unique":"","nom":"CA du Pays de l'Or","nature":"CA","nombreCommunes":"8","populationTotale":"45322"},
+{"code":"243400488","Commune":"","Nom unique":"","nom":"CC La Domitienne","nature":"CC","nombreCommunes":"8","populationTotale":"27784"},
+{"code":"243400520","Commune":"","Nom unique":"","nom":"CC du Pays de Lunel","nature":"CC","nombreCommunes":"15","populationTotale":"49190"},
+{"code":"243400694","Commune":"","Nom unique":"","nom":"CC Vallée de l'Hérault","nature":"CC","nombreCommunes":"28","populationTotale":"37773"}
+,
+{"code":"243400736","Commune":"","Nom unique":"","nom":"CC des Cévennes Gangeoises et Suménoises","nature":"CC","nombreCommunes":"13","populationTotale":"13453"}
+,
+{"code":"243400769","Commune":"","Nom unique":"","nom":"CA de Béziers-Méditerranée","nature":"CA","nombreCommunes":"17","populationTotale":"124756"}
+,
+{"code":"243400819","Commune":"","Nom unique":"","nom":"CA Hérault-Méditerranée","nature":"CA","nombreCommunes":"20","populationTotale":"77773"}
+,
+{"code":"243500139","Commune":"","Nom unique":"","nom":"Rennes Métropole","nature":"ME","nombreCommunes":"43","populationTotale":"450593"}
+,
+{"code":"243500550","Commune":"","Nom unique":"","nom":"CC Montfort Communauté","nature":"CC","nombreCommunes":"8","populationTotale":"25637"}
+,
+{"code":"243500618","Commune":"","Nom unique":"","nom":"CC de Brocéliande","nature":"CC","nombreCommunes":"8","populationTotale":"18131"}
+,
+{"code":"243500634","Commune":"","Nom unique":"","nom":"CC Au Pays de la Roche aux Fées","nature":"CC","nombreCommunes":"16","populationTotale":"26791"}
+,
+{"code":"243500659","Commune":"","Nom unique":"","nom":"CC Pays de Châteaugiron Communauté","nature":"CC","nombreCommunes":"6","populationTotale":"25573"}
+,
+{"code":"243500667","Commune":"","Nom unique":"","nom":"CC du Val d'Ille-Aubigné","nature":"CC","nombreCommunes":"19","populationTotale":"35594"}
+,
+{"code":"243500725","Commune":"","Nom unique":"","nom":"CC Côte d'Émeraude","nature":"CC","nombreCommunes":"9","populationTotale":"31423"}
+,
+{"code":"243500733","Commune":"","Nom unique":"","nom":"CC Bretagne Romantique","nature":"CC","nombreCommunes":"27","populationTotale":"35306"},
+{"code":"243500741","Commune":"","Nom unique":"","nom":"CA Redon Agglomération","nature":"CA","nombreCommunes":"31","populationTotale":"68311"}
+,
+{"code":"243500774","Commune":"","Nom unique":"","nom":"CC Liffré-Cormier Communauté","nature":"CC","nombreCommunes":"9","populationTotale":"25772"}
+,
+{"code":"243500782","Commune":"","Nom unique":"","nom":"CA du Pays de Saint-Malo - Saint-Malo Agglomération","nature":"CA","nombreCommunes":"18","populationTotale":"84407"}
+,
+{"code":"243600202","Commune":"","Nom unique":"","nom":"CC Chabris - Pays de Bazelle","nature":"CC","nombreCommunes":"10","populationTotale":"6462"},
+{"code":"243600236","Commune":"","Nom unique":"","nom":"CC du Pays d'Issoudun","nature":"CC","nombreCommunes":"12","populationTotale":"20874"},
+{"code":"243600293","Commune":"","Nom unique":"","nom":"CC de la Région de Levroux","nature":"CC","nombreCommunes":"11","populationTotale":"6504"}
+,
+{"code":"243600301","Commune":"","Nom unique":"","nom":"CC Val de l'Indre - Brenne","nature":"CC","nombreCommunes":"12","populationTotale":"13991"},
+{"code":"243600319","Commune":"","Nom unique":"","nom":"CC Brenne - Val de Creuse","nature":"CC","nombreCommunes":"28","populationTotale":"18870"},
+{"code":"243600327","Commune":"","Nom unique":"","nom":"CA Châteauroux Métropole","nature":"CA","nombreCommunes":"14","populationTotale":"75845"}
+,
+{"code":"243600343","Commune":"","Nom unique":"","nom":"CC Coeur de Brenne","nature":"CC","nombreCommunes":"11","populationTotale":"4997"},
+{"code":"243600350","Commune":"","Nom unique":"","nom":"CC de la Châtre et Sainte-Sévère","nature":"CC","nombreCommunes":"30","populationTotale":"17221"}
+,
+{"code":"243700499","Commune":"","Nom unique":"","nom":"CC du Castelrenaudais","nature":"CC","nombreCommunes":"16","populationTotale":"17211"},
+{"code":"243700754","Commune":"","Nom unique":"","nom":"Tours Métropole Val de Loire","nature":"ME","nombreCommunes":"22","populationTotale":"299177"}
+,
+{"code":"243700820","Commune":"","Nom unique":"","nom":"CC de Bléré Val de Cher","nature":"CC","nombreCommunes":"15","populationTotale":"21879"}
+,
+{"code":"243800455","Commune":"","Nom unique":"","nom":"CA Viennagglo","nature":"CA","nombreCommunes":"18","populationTotale":"69224"},
+{"code":"243800604","Commune":"","Nom unique":"","nom":"CA Porte de l'Isère (C.A.P.I)","nature":"CA","nombreCommunes":"22","populationTotale":"107169"}
+,
+{"code":"243800745","Commune":"","Nom unique":"","nom":"CC de l'Oisans","nature":"CC","nombreCommunes":"19","populationTotale":"10940"},
+{"code":"243800778","Commune":"","Nom unique":"","nom":"CC du Pays Roussillonnais","nature":"CC","nombreCommunes":"22","populationTotale":"53098"},
+{"code":"243800844","Commune":"","Nom unique":"","nom":"CC du Territoire de Beaurepaire","nature":"CC","nombreCommunes":"15","populationTotale":"15687"},
+{"code":"243800935","Commune":"","Nom unique":"","nom":"CC Lyon Saint-Éxupéry-en-Dauphiné","nature":"CC","nombreCommunes":"6","populationTotale":"26977"}
+,
+{"code":"243800984","Commune":"","Nom unique":"","nom":"CA du Pays Voironnais","nature":"CA","nombreCommunes":"31","populationTotale":"95953"},
+{"code":"243801024","Commune":"","Nom unique":"","nom":"CC du Massif du Vercors","nature":"CC","nombreCommunes":"6","populationTotale":"12295"},
+{"code":"243801073","Commune":"","Nom unique":"","nom":"CC de Bièvre Est","nature":"CC","nombreCommunes":"14","populationTotale":"22343"}
+,
+{"code":"243801255","Commune":"","Nom unique":"","nom":"CC des Collines du Nord Dauphiné","nature":"CC","nombreCommunes":"10","populationTotale":"24366"}
+,
+{"code":"243900354","Commune":"","Nom unique":"","nom":"CC de la Station des Rousses-Haut Jura","nature":"CC","nombreCommunes":"4","populationTotale":"7095"},
+{"code":"243900412","Commune":"","Nom unique":"","nom":"CC Jura Sud","nature":"CC","nombreCommunes":"17","populationTotale":"7281"},
+{"code":"243900420","Commune":"","Nom unique":"","nom":"CC du Val d'Amour","nature":"CC","nombreCommunes":"24","populationTotale":"9717"},
+{"code":"243900479","Commune":"","Nom unique":"","nom":"CC du Haut-Jura (Arcade)","nature":"CC","nombreCommunes":"4","populationTotale":"9887"},
+{"code":"243900560","Commune":"","Nom unique":"","nom":"CC Jura Nord","nature":"CC","nombreCommunes":"33","populationTotale":"11751"},
+{"code":"243900610","Commune":"","Nom unique":"","nom":"CC La Grandvallière","nature":"CC","nombreCommunes":"10","populationTotale":"5339"}
+,
+{"code":"243900719","Commune":"","Nom unique":"","nom":"CC du Pays des Lacs","nature":"CC","nombreCommunes":"30","populationTotale":"6303"},
+{"code":"243901071","Commune":"","Nom unique":"","nom":"CC de la Région d'Orgelet","nature":"CC","nombreCommunes":"25","populationTotale":"6017"}
+,
+{"code":"243901089","Commune":"","Nom unique":"","nom":"CC de la Plaine Jurassienne","nature":"CC","nombreCommunes":"21","populationTotale":"9511"},
+{"code":"244000543","Commune":"","Nom unique":"","nom":"CC de Mimizan","nature":"CC","nombreCommunes":"6","populationTotale":"12305"},
+{"code":"244000659","Commune":"","Nom unique":"","nom":"CC du Seignanx","nature":"CC","nombreCommunes":"8","populationTotale":"27241"},
+{"code":"244000675","Commune":"","Nom unique":"","nom":"CA du Grand Dax","nature":"CA","nombreCommunes":"20","populationTotale":"57080"},
+{"code":"244000691","Commune":"","Nom unique":"","nom":"CC du Pays Morcenais","nature":"CC","nombreCommunes":"9","populationTotale":"9808"},
+{"code":"244000766","Commune":"","Nom unique":"","nom":"CC du Pays Tarusate","nature":"CC","nombreCommunes":"17","populationTotale":"17891"},
+{"code":"244000774","Commune":"","Nom unique":"","nom":"CC du Pays de Villeneuve en Armagnac Landais","nature":"CC","nombreCommunes":"12","populationTotale":"6398"},
+{"code":"244000808","Commune":"","Nom unique":"","nom":"CA Mont-de-Marsan Agglomération","nature":"CA","nombreCommunes":"18","populationTotale":"56396"}
+,
+{"code":"244000824","Commune":"","Nom unique":"","nom":"CC du Pays Grenadois","nature":"CC","nombreCommunes":"11","populationTotale":"7920"},
+{"code":"244000857","Commune":"","Nom unique":"","nom":"CC Côte Landes Nature","nature":"CC","nombreCommunes":"10","populationTotale":"11565"}
+,
+{"code":"244000865","Commune":"","Nom unique":"","nom":"CC Maremne Adour Côte Sud","nature":"CC","nombreCommunes":"23","populationTotale":"65319"}
+,
+{"code":"244000873","Commune":"","Nom unique":"","nom":"CC des Grands Lacs","nature":"CC","nombreCommunes":"7","populationTotale":"29620"},
+{"code":"244000881","Commune":"","Nom unique":"","nom":"CC Coteaux et Vallées des Luys","nature":"CC","nombreCommunes":"16","populationTotale":"7823"}
+,
+{"code":"244100293","Commune":"","Nom unique":"","nom":"CC des Collines du Perche","nature":"CC","nombreCommunes":"12","populationTotale":"6374"},
+{"code":"244100780","Commune":"","Nom unique":"","nom":"CC de la Sologne des Étangs","nature":"CC","nombreCommunes":"11","populationTotale":"8123"}
+,
+{"code":"244100798","Commune":"","Nom unique":"","nom":"CC du Grand Chambord","nature":"CC","nombreCommunes":"17","populationTotale":"21566"},
+{"code":"244100806","Commune":"","Nom unique":"","nom":"CC de la Sologne des Rivières","nature":"CC","nombreCommunes":"8","populationTotale":"12092"}
+,
+{"code":"244200614","Commune":"","Nom unique":"","nom":"CC des Vals d'Aix et Isable","nature":"CC","nombreCommunes":"14","populationTotale":"6189"},
+{"code":"244200622","Commune":"","Nom unique":"","nom":"CC des Monts du Pilat","nature":"CC","nombreCommunes":"16","populationTotale":"15570"},
+{"code":"244200630","Commune":"","Nom unique":"","nom":"CC du Pays entre Loire et Rhône","nature":"CC","nombreCommunes":"16","populationTotale":"14063"}
+,
+{"code":"244200770","Commune":"","Nom unique":"","nom":"Saint-Etienne Métropole","nature":"ME","nombreCommunes":"53","populationTotale":"409382"}
+,
+{"code":"244200820","Commune":"","Nom unique":"","nom":"CC du Pays d'Urfé","nature":"CC","nombreCommunes":"11","populationTotale":"5346"}
+,
+{"code":"244200895","Commune":"","Nom unique":"","nom":"CC du Pilat Rhodanien","nature":"CC","nombreCommunes":"14","populationTotale":"17135"},
+{"code":"244300307","Commune":"","Nom unique":"","nom":"CC du Pays de Montfaucon","nature":"CC","nombreCommunes":"8","populationTotale":"8536"},
+{"code":"244301016","Commune":"","Nom unique":"","nom":"CC des Sucs","nature":"CC","nombreCommunes":"9","populationTotale":"18405"},
+{"code":"244301032","Commune":"","Nom unique":"","nom":"CC Brioude Sud Auvergne","nature":"CC","nombreCommunes":"27","populationTotale":"17807"},
+{"code":"244301099","Commune":"","Nom unique":"","nom":"CC Auzon Communauté","nature":"CC","nombreCommunes":"12","populationTotale":"9413"}
+,
+{"code":"244301107","Commune":"","Nom unique":"","nom":"CC du Haut-Lignon","nature":"CC","nombreCommunes":"6","populationTotale":"8450"},
+{"code":"244301123","Commune":"","Nom unique":"","nom":"CC des Pays de Cayres et de Pradelles","nature":"CC","nombreCommunes":"20","populationTotale":"5394"},
+{"code":"244301131","Commune":"","Nom unique":"","nom":"CC Loire et Semène","nature":"CC","nombreCommunes":"7","populationTotale":"20834"}
+,
+{"code":"244400404","Commune":"","Nom unique":"","nom":"Nantes Métropole","nature":"ME","nombreCommunes":"24","populationTotale":"646513"}
+,
+{"code":"244400438","Commune":"","Nom unique":"","nom":"CC de Grand Lieu","nature":"CC","nombreCommunes":"9","populationTotale":"38779"},
+{"code":"244400453","Commune":"","Nom unique":"","nom":"CC de la Région de Blain","nature":"CC","nombreCommunes":"4","populationTotale":"16354"}
+,
+{"code":"244400503","Commune":"","Nom unique":"","nom":"CC d'Erdre et Gesvres","nature":"CC","nombreCommunes":"12","populationTotale":"61452"},
+{"code":"244400537","Commune":"","Nom unique":"","nom":"CC de Nozay","nature":"CC","nombreCommunes":"7","populationTotale":"15829"},
+{"code":"244400552","Commune":"","Nom unique":"","nom":"CC du Pays d'Ancenis","nature":"CC","nombreCommunes":"21","populationTotale":"67506"},
+{"code":"244400586","Commune":"","Nom unique":"","nom":"CC du Sud-Estuaire","nature":"CC","nombreCommunes":"6","populationTotale":"30198"},
+{"code":"244400610","Commune":"","Nom unique":"","nom":"CA de la Presqu'île de Guérande Atlantique (Cap Atlantique)","nature":"CA","nombreCommunes":"15","populationTotale":"75668"}
+,
+{"code":"244400644","Commune":"","Nom unique":"","nom":"CA de la Région Nazairienne et de l'Estuaire (Carene)","nature":"CA","nombreCommunes":"10","populationTotale":"127122"}
+,
+{"code":"244500203","Commune":"","Nom unique":"","nom":"CA Montargoise et Rives du Loing (A.M.E.)","nature":"CA","nombreCommunes":"15","populationTotale":"64215"},
+{"code":"244500211","Commune":"","Nom unique":"","nom":"CC Giennoises","nature":"CC","nombreCommunes":"11","populationTotale":"26345"},
+{"code":"244500419","Commune":"","Nom unique":"","nom":"CC des Quatre Vallées","nature":"CC","nombreCommunes":"19","populationTotale":"17757"}
+,
+{"code":"244500427","Commune":"","Nom unique":"","nom":"CC des Loges","nature":"CC","nombreCommunes":"20","populationTotale":"42440"},
+{"code":"244500468","Commune":"","Nom unique":"","nom":"Orléans Métropole","nature":"ME","nombreCommunes":"22","populationTotale":"289233"}
+,
+{"code":"244500484","Commune":"","Nom unique":"","nom":"CC de la Forêt","nature":"CC","nombreCommunes":"10","populationTotale":"16601"}
+,
+{"code":"244500542","Commune":"","Nom unique":"","nom":"CC de la Plaine du Nord Loiret","nature":"CC","nombreCommunes":"15","populationTotale":"7003"},
+{"code":"244600433","Commune":"","Nom unique":"","nom":"CC de la Vallée du Lot et du Vignoble","nature":"CC","nombreCommunes":"27","populationTotale":"14999"}
+,
+{"code":"244600482","Commune":"","Nom unique":"","nom":"CC Quercy - Bouriane","nature":"CC","nombreCommunes":"20","populationTotale":"10781"},
+{"code":"244600532","Commune":"","Nom unique":"","nom":"CC du Pays de Lalbenque-Limogne","nature":"CC","nombreCommunes":"23","populationTotale":"8407"},
+{"code":"244600573","Commune":"","Nom unique":"","nom":"CC du Causse de Labastide-Murat","nature":"CC","nombreCommunes":"17","populationTotale":"3931"},
+{"code":"244700449","Commune":"","Nom unique":"","nom":"CC du Pays de Duras","nature":"CC","nombreCommunes":"17","populationTotale":"5787"},
+{"code":"244700464","Commune":"","Nom unique":"","nom":"CC du Pays de Lauzun","nature":"CC","nombreCommunes":"20","populationTotale":"10847"},
+{"code":"244701355","Commune":"","Nom unique":"","nom":"CC des Coteaux et Landes de Gascogne","nature":"CC","nombreCommunes":"27","populationTotale":"12791"},
+{"code":"244701405","Commune":"","Nom unique":"","nom":"CC Lot et Tolzac","nature":"CC","nombreCommunes":"15","populationTotale":"7446"},
+{"code":"244800405","Commune":"","Nom unique":"","nom":"CC Coeur de Lozère","nature":"CC","nombreCommunes":"7","populationTotale":"15917"}
+,
+{"code":"244800470","Commune":"","Nom unique":"","nom":"CC du Gévaudan","nature":"CC","nombreCommunes":"12","populationTotale":"10379"}
+,
+{"code":"244900015","Commune":"","Nom unique":"","nom":"CU Angers Loire Métropole","nature":"CU","nombreCommunes":"31","populationTotale":"301245"}
+,
+{"code":"244900809","Commune":"","Nom unique":"","nom":"CC Anjou Bleu Communauté","nature":"CC","nombreCommunes":"11","populationTotale":"36016"}
+,
+{"code":"244900882","Commune":"","Nom unique":"","nom":"CC Baugeois Vallée","nature":"CC","nombreCommunes":"7","populationTotale":"36160"}
+,
+{"code":"245100615","Commune":"","Nom unique":"","nom":"CC de la Grande Vallée de la Marne","nature":"CC","nombreCommunes":"14","populationTotale":"15375"}
+,
+{"code":"245100888","Commune":"","Nom unique":"","nom":"CC de la Brie Champenoise","nature":"CC","nombreCommunes":"19","populationTotale":"7643"},
+{"code":"245100979","Commune":"","Nom unique":"","nom":"CC du Sud Marnais","nature":"CC","nombreCommunes":"14","populationTotale":"6303"},
+{"code":"245200597","Commune":"","Nom unique":"","nom":"CC des Trois Forêts","nature":"CC","nombreCommunes":"29","populationTotale":"7977"}
+,
+{"code":"245300223","Commune":"","Nom unique":"","nom":"CC du Pays de Meslay-Grez","nature":"CC","nombreCommunes":"22","populationTotale":"14324"},
+{"code":"245300306","Commune":"","Nom unique":"","nom":"CC du Pays de Loiron","nature":"CC","nombreCommunes":"14","populationTotale":"17262"},
+{"code":"245300330","Commune":"","Nom unique":"","nom":"CA de Laval","nature":"CA","nombreCommunes":"20","populationTotale":"100039"},
+{"code":"245300355","Commune":"","Nom unique":"","nom":"CC de l'Ernée","nature":"CC","nombreCommunes":"15","populationTotale":"21482"}
+,
+{"code":"245300389","Commune":"","Nom unique":"","nom":"CC du Bocage Mayennais","nature":"CC","nombreCommunes":"27","populationTotale":"19797"},
+{"code":"245300447","Commune":"","Nom unique":"","nom":"CC du Pays de Château-Gontier","nature":"CC","nombreCommunes":"23","populationTotale":"31337"}
+,
+{"code":"245400171","Commune":"","Nom unique":"","nom":"CC Moselle et Madon","nature":"CC","nombreCommunes":"19","populationTotale":"29420"},
+{"code":"245400189","Commune":"","Nom unique":"","nom":"CC des Pays du Sel et du Vermois","nature":"CC","nombreCommunes":"16","populationTotale":"29885"},
+{"code":"245400262","Commune":"","Nom unique":"","nom":"CA de Longwy","nature":"CA","nombreCommunes":"21","populationTotale":"61717"},
+{"code":"245400510","Commune":"","Nom unique":"","nom":"CC du Pays de Colombey et du Sud Toulois","nature":"CC","nombreCommunes":"38","populationTotale":"11613"},
+{"code":"245400601","Commune":"","Nom unique":"","nom":"CC du Bassin de Pompey","nature":"CC","nombreCommunes":"13","populationTotale":"41080"},
+{"code":"245400676","Commune":"","Nom unique":"","nom":"Métropole du Grand Nancy","nature":"ME","nombreCommunes":"20","populationTotale":"262162"}
+,
+{"code":"245400759","Commune":"","Nom unique":"","nom":"CC du Pays du Sanon","nature":"CC","nombreCommunes":"28","populationTotale":"6086"},
+{"code":"245500327","Commune":"","Nom unique":"","nom":"CC du Sammiellois","nature":"CC","nombreCommunes":"19","populationTotale":"8930"},
+{"code":"245501176","Commune":"","Nom unique":"","nom":"CC du Territoire de Fresnes-en-Woëvre","nature":"CC","nombreCommunes":"32","populationTotale":"5063"}
+,
+{"code":"245501184","Commune":"","Nom unique":"","nom":"CC du Pays de Revigny-sur-Ornain","nature":"CC","nombreCommunes":"16","populationTotale":"7578"},
+{"code":"245501242","Commune":"","Nom unique":"","nom":"CC du Pays d'Étain","nature":"CC","nombreCommunes":"26","populationTotale":"7931"}
+,
+{"code":"245501259","Commune":"","Nom unique":"","nom":"CC du Pays de Montmédy","nature":"CC","nombreCommunes":"25","populationTotale":"7430"}
+,
+{"code":"245600440","Commune":"","Nom unique":"","nom":"CC de Blavet Bellevue Océan","nature":"CC","nombreCommunes":"5","populationTotale":"18237"}
+,
+{"code":"245600465","Commune":"","Nom unique":"","nom":"CC de Belle-Ile-en-Mer","nature":"CC","nombreCommunes":"4","populationTotale":"5524"},
+{"code":"245614383","Commune":"","Nom unique":"","nom":"CC Questembert Communauté","nature":"CC","nombreCommunes":"13","populationTotale":"23687"}
+,
+{"code":"245614417","Commune":"","Nom unique":"","nom":"CC Roi Morvan Communauté","nature":"CC","nombreCommunes":"21","populationTotale":"26145"}
+,
+{"code":"245614433","Commune":"","Nom unique":"","nom":"CC Pontivy Communauté","nature":"CC","nombreCommunes":"25","populationTotale":"47569"}
+,
+{"code":"245700133","Commune":"","Nom unique":"","nom":"CC du District Urbain de Faulquemont (Duf)","nature":"CC","nombreCommunes":"33","populationTotale":"25274"},
+{"code":"245700372","Commune":"","Nom unique":"","nom":"CA de Forbach Porte de France","nature":"CA","nombreCommunes":"21","populationTotale":"79566"},
+{"code":"245700398","Commune":"","Nom unique":"","nom":"CC de Freyming-Merlebach","nature":"CC","nombreCommunes":"11","populationTotale":"33069"},
+{"code":"245700695","Commune":"","Nom unique":"","nom":"CC de Cattenom et Environs","nature":"CC","nombreCommunes":"20","populationTotale":"26047"},
+{"code":"245700950","Commune":"","Nom unique":"","nom":"CC du Pays de Phalsbourg","nature":"CC","nombreCommunes":"26","populationTotale":"18159"},
+{"code":"245701164","Commune":"","Nom unique":"","nom":"CC du Warndt","nature":"CC","nombreCommunes":"5","populationTotale":"18472"},
+{"code":"245701206","Commune":"","Nom unique":"","nom":"CC du Saulnois","nature":"CC","nombreCommunes":"128","populationTotale":"30452"},
+{"code":"245701222","Commune":"","Nom unique":"","nom":"CA du Val de Fensch","nature":"CA","nombreCommunes":"10","populationTotale":"70700"},
+{"code":"245701271","Commune":"","Nom unique":"","nom":"CC du Pays Orne Moselle","nature":"CC","nombreCommunes":"13","populationTotale":"54500"},
+{"code":"245701354","Commune":"","Nom unique":"","nom":"CC de l'Arc Mosellan","nature":"CC","nombreCommunes":"26","populationTotale":"34763"},
+{"code":"245701362","Commune":"","Nom unique":"","nom":"CA Portes de France-Thionville","nature":"CA","nombreCommunes":"13","populationTotale":"80389"},
+{"code":"245701404","Commune":"","Nom unique":"","nom":"CC du Pays Haut Val d'Alzette","nature":"CC","nombreCommunes":"8","populationTotale":"28330"},
+{"code":"245801063","Commune":"","Nom unique":"","nom":"CC Loire et Allier","nature":"CC","nombreCommunes":"6","populationTotale":"7494"},
+{"code":"245804406","Commune":"","Nom unique":"","nom":"CA de Nevers","nature":"CA","nombreCommunes":"13","populationTotale":"69973"},
+{"code":"245804497","Commune":"","Nom unique":"","nom":"CC du Nivernais Bourbonnais","nature":"CC","nombreCommunes":"9","populationTotale":"5716"},
+{"code":"245900410","Commune":"","Nom unique":"","nom":"Métropole Européenne de Lille","nature":"ME","nombreCommunes":"90","populationTotale":"1155161"}
+,
+{"code":"245900428","Commune":"","Nom unique":"","nom":"CU de Dunkerque","nature":"CU","nombreCommunes":"17","populationTotale":"203030"},
+{"code":"245900758","Commune":"","Nom unique":"","nom":"CC Flandre Lys","nature":"CC","nombreCommunes":"8","populationTotale":"40239"},
+{"code":"245901038","Commune":"","Nom unique":"","nom":"CC du Pays Solesmois","nature":"CC","nombreCommunes":"15","populationTotale":"15293"},
+{"code":"245901061","Commune":"","Nom unique":"","nom":"CC de la Haute-Deûle","nature":"CC","nombreCommunes":"5","populationTotale":"24526"}
+,
+{"code":"245901152","Commune":"","Nom unique":"","nom":"CC Coeur d'Ostrevent [C.C.C.O.]","nature":"CC","nombreCommunes":"21","populationTotale":"73279"},
+{"code":"245901160","Commune":"","Nom unique":"","nom":"CA Valenciennes Métropole","nature":"CA","nombreCommunes":"35","populationTotale":"194772"}
+,
+{"code":"246000129","Commune":"","Nom unique":"","nom":"CC du Liancourtois","nature":"CC","nombreCommunes":"10","populationTotale":"23895"},
+{"code":"246000376","Commune":"","Nom unique":"","nom":"CC du Clermontois","nature":"CC","nombreCommunes":"19","populationTotale":"38608"},
+{"code":"246000566","Commune":"","Nom unique":"","nom":"CC du Plateau Picard","nature":"CC","nombreCommunes":"52","populationTotale":"30910"},
+{"code":"246000582","Commune":"","Nom unique":"","nom":"CC des Sablons","nature":"CC","nombreCommunes":"21","populationTotale":"36979"},
+{"code":"246000707","Commune":"","Nom unique":"","nom":"CC du Vexin-Thelle","nature":"CC","nombreCommunes":"38","populationTotale":"19967"},
+{"code":"246000749","Commune":"","Nom unique":"","nom":"CC des Lisières de l'Oise","nature":"CC","nombreCommunes":"20","populationTotale":"16958"}
+,
+{"code":"246000756","Commune":"","Nom unique":"","nom":"CC du Pays Noyonnais","nature":"CC","nombreCommunes":"42","populationTotale":"34122"},
+{"code":"246000764","Commune":"","Nom unique":"","nom":"CC de l'Aire Cantilienne","nature":"CC","nombreCommunes":"11","populationTotale":"46199"},
+{"code":"246000772","Commune":"","Nom unique":"","nom":"CC des Deux Vallées_60","nature":"CC","nombreCommunes":"16","populationTotale":"23517"}
+,
+{"code":"246000848","Commune":"","Nom unique":"","nom":"CC de la Picardie Verte","nature":"CC","nombreCommunes":"89","populationTotale":"33738"},
+{"code":"246000855","Commune":"","Nom unique":"","nom":"CC du Pays des Sources","nature":"CC","nombreCommunes":"48","populationTotale":"22622"},
+{"code":"246000871","Commune":"","Nom unique":"","nom":"CC du Pays de Valois","nature":"CC","nombreCommunes":"62","populationTotale":"56216"},
+{"code":"246000897","Commune":"","Nom unique":"","nom":"CC de la Plaine d'Estrées","nature":"CC","nombreCommunes":"19","populationTotale":"18039"}
+,
+{"code":"246000913","Commune":"","Nom unique":"","nom":"CC du Pays de Bray","nature":"CC","nombreCommunes":"23","populationTotale":"18866"},
+{"code":"246000921","Commune":"","Nom unique":"","nom":"CC des Pays d'Oise et d'Halatte","nature":"CC","nombreCommunes":"17","populationTotale":"34798"},
+{"code":"246100390","Commune":"","Nom unique":"","nom":"CC du Val d'Orne","nature":"CC","nombreCommunes":"17","populationTotale":"6174"},
+{"code":"246100663","Commune":"","Nom unique":"","nom":"CU d'Alençon","nature":"CU","nombreCommunes":"34","populationTotale":"58924"}
+,
+{"code":"246200299","Commune":"","Nom unique":"","nom":"CA d'Hénin-Carvin","nature":"CA","nombreCommunes":"14","populationTotale":"126626"}
+,
+{"code":"246200364","Commune":"","Nom unique":"","nom":"CA de Lens - Liévin","nature":"CA","nombreCommunes":"36","populationTotale":"245036"}
+,
+{"code":"246200380","Commune":"","Nom unique":"","nom":"CC de la Terre des Deux Caps","nature":"CC","nombreCommunes":"21","populationTotale":"22425"},
+{"code":"246200729","Commune":"","Nom unique":"","nom":"CA du Boulonnais","nature":"CA","nombreCommunes":"22","populationTotale":"117956"},
+{"code":"246200844","Commune":"","Nom unique":"","nom":"CC de la Région d'Audruicq","nature":"CC","nombreCommunes":"15","populationTotale":"27479"}
+,
+{"code":"246201016","Commune":"","Nom unique":"","nom":"CC du Pays de Lumbres","nature":"CC","nombreCommunes":"36","populationTotale":"24618"},
+{"code":"246201149","Commune":"","Nom unique":"","nom":"CA du Calaisis","nature":"CA","nombreCommunes":"10","populationTotale":"105998"},
+{"code":"246300701","Commune":"","Nom unique":"","nom":"Clermont Auvergne Métropole","nature":"ME","nombreCommunes":"21","populationTotale":"293125"}
+,
+{"code":"246300966","Commune":"","Nom unique":"","nom":"CC du Massif du Sancy","nature":"CC","nombreCommunes":"20","populationTotale":"9817"},
+{"code":"246301097","Commune":"","Nom unique":"","nom":"CC Entre Dore et Allier","nature":"CC","nombreCommunes":"14","populationTotale":"19130"},
+{"code":"246400337","Commune":"","Nom unique":"","nom":"CC de la Vallée d'Ossau","nature":"CC","nombreCommunes":"18","populationTotale":"10127"}
+,
+{"code":"246401756","Commune":"","Nom unique":"","nom":"CC Pays de Nay","nature":"CC","nombreCommunes":"29","populationTotale":"29735"},
+{"code":"246500482","Commune":"","Nom unique":"","nom":"CC de la Haute-Bigorre","nature":"CC","nombreCommunes":"25","populationTotale":"17884"},
+{"code":"246500573","Commune":"","Nom unique":"","nom":"CC Aure-Louron","nature":"CC","nombreCommunes":"47","populationTotale":"7198"},
+{"code":"246600282","Commune":"","Nom unique":"","nom":"CC Sud-Roussillon","nature":"CC","nombreCommunes":"6","populationTotale":"22615"},
+{"code":"246600373","Commune":"","Nom unique":"","nom":"CC du Vallespir","nature":"CC","nombreCommunes":"10","populationTotale":"21014"},
+{"code":"246600399","Commune":"","Nom unique":"","nom":"CC Pyrénées Cerdagne","nature":"CC","nombreCommunes":"19","populationTotale":"9093"}
+,
+{"code":"246600415","Commune":"","Nom unique":"","nom":"CC Roussillon-Conflent","nature":"CC","nombreCommunes":"16","populationTotale":"18598"},
+{"code":"246600423","Commune":"","Nom unique":"","nom":"CC Agly Fenouillèdes","nature":"CC","nombreCommunes":"22","populationTotale":"6085"}
+,
+{"code":"246600449","Commune":"","Nom unique":"","nom":"CC des Aspres","nature":"CC","nombreCommunes":"19","populationTotale":"20886"},
+{"code":"246600464","Commune":"","Nom unique":"","nom":"CC Pyrénées Catalanes","nature":"CC","nombreCommunes":"19","populationTotale":"6331"}
+,
+{"code":"246600548","Commune":"","Nom unique":"","nom":"CC du Haut Vallespir","nature":"CC","nombreCommunes":"14","populationTotale":"9893"},
+{"code":"246700306","Commune":"","Nom unique":"","nom":"CC de la Vallée de la Bruche","nature":"CC","nombreCommunes":"26","populationTotale":"21834"}
+,
+{"code":"246700488","Commune":"","Nom unique":"","nom":"Eurométropole de Strasbourg","nature":"ME","nombreCommunes":"33","populationTotale":"494272"}
+,
+{"code":"246700744","Commune":"","Nom unique":"","nom":"CC des Portes de Rosheim","nature":"CC","nombreCommunes":"9","populationTotale":"18232"},
+{"code":"246700777","Commune":"","Nom unique":"","nom":"CC de la Vallée de Villé","nature":"CC","nombreCommunes":"18","populationTotale":"11231"}
+,
+{"code":"246700843","Commune":"","Nom unique":"","nom":"CC de la Basse-Zorn","nature":"CC","nombreCommunes":"7","populationTotale":"17239"},
+{"code":"246700926","Commune":"","Nom unique":"","nom":"CC du Pays de Wissembourg","nature":"CC","nombreCommunes":"12","populationTotale":"16718"},
+{"code":"246700959","Commune":"","Nom unique":"","nom":"CC du Pays de la Zorn","nature":"CC","nombreCommunes":"21","populationTotale":"16182"},
+{"code":"246700967","Commune":"","Nom unique":"","nom":"CC de Sélestat","nature":"CC","nombreCommunes":"12","populationTotale":"37183"}
+,
+{"code":"246701064","Commune":"","Nom unique":"","nom":"CC de la Région de Molsheim-Mutzig","nature":"CC","nombreCommunes":"18","populationTotale":"40399"}
+,
+{"code":"246701080","Commune":"","Nom unique":"","nom":"CC du Pays de Sainte-Odile","nature":"CC","nombreCommunes":"6","populationTotale":"18389"},
+{"code":"246701098","Commune":"","Nom unique":"","nom":"CC du Pays de Niederbronn-les-Bains","nature":"CC","nombreCommunes":"13","populationTotale":"23655"},
+{"code":"246800205","Commune":"","Nom unique":"","nom":"CC de la Vallée de Saint-Amarin","nature":"CC","nombreCommunes":"15","populationTotale":"12757"}
+,
+{"code":"246800395","Commune":"","Nom unique":"","nom":"CC du Val d'Argent","nature":"CC","nombreCommunes":"4","populationTotale":"9875"},
+{"code":"246800445","Commune":"","Nom unique":"","nom":"CC du Centre du Haut-Rhin","nature":"CC","nombreCommunes":"9","populationTotale":"15439"},
+{"code":"246800494","Commune":"","Nom unique":"","nom":"CC du Pays de Rouffach, Vignobles et Châteaux","nature":"CC","nombreCommunes":"11","populationTotale":"13747"}
+,
+{"code":"246800551","Commune":"","Nom unique":"","nom":"CC de la Vallée de Kaysersberg","nature":"CC","nombreCommunes":"8","populationTotale":"17268"}
+,
+{"code":"246800569","Commune":"","Nom unique":"","nom":"CC de la Région de Guebwiller","nature":"CC","nombreCommunes":"19","populationTotale":"39397"}
+,
+{"code":"246800577","Commune":"","Nom unique":"","nom":"CC du Pays de Ribeauvillé","nature":"CC","nombreCommunes":"16","populationTotale":"18563"}
+,
+{"code":"246800585","Commune":"","Nom unique":"","nom":"CC de la Vallée de Munster","nature":"CC","nombreCommunes":"16","populationTotale":"16667"}
+,
+{"code":"246800676","Commune":"","Nom unique":"","nom":"CC de la Vallée de la Doller et du Soultzbach","nature":"CC","nombreCommunes":"15","populationTotale":"16631"}
+,
+{"code":"246800726","Commune":"","Nom unique":"","nom":"CA Colmar Agglomération","nature":"CA","nombreCommunes":"20","populationTotale":"116782"}
+,
+{"code":"246900575","Commune":"","Nom unique":"","nom":"CC de l'Est Lyonnais (Ccel)","nature":"CC","nombreCommunes":"8","populationTotale":"40993"},
+{"code":"246900625","Commune":"","Nom unique":"","nom":"CC du Pays de l'Arbresle (Ccpa)","nature":"CC","nombreCommunes":"17","populationTotale":"38128"},
+{"code":"246900633","Commune":"","Nom unique":"","nom":"CC de la Région de Condrieu","nature":"CC","nombreCommunes":"11","populationTotale":"14026"}
+,
+{"code":"246900724","Commune":"","Nom unique":"","nom":"CC des Vallons du Lyonnais (Ccvl)","nature":"CC","nombreCommunes":"8","populationTotale":"29373"},
+{"code":"246900740","Commune":"","Nom unique":"","nom":"CC du Pays Mornantais (Copamo)","nature":"CC","nombreCommunes":"11","populationTotale":"28609"},
+{"code":"246900757","Commune":"","Nom unique":"","nom":"CC de la Vallée du Garon (Ccvg)","nature":"CC","nombreCommunes":"5","populationTotale":"30855"}
+,
+{"code":"246900765","Commune":"","Nom unique":"","nom":"CC du Pays de l'Ozon","nature":"CC","nombreCommunes":"7","populationTotale":"25696"},
+{"code":"247000011","Commune":"","Nom unique":"","nom":"CA de Vesoul","nature":"CA","nombreCommunes":"20","populationTotale":"34092"},
+{"code":"247000367","Commune":"","Nom unique":"","nom":"CC des Combes","nature":"CC","nombreCommunes":"27","populationTotale":"7807"},
+{"code":"247000623","Commune":"","Nom unique":"","nom":"CC des Quatre Rivières_70","nature":"CC","nombreCommunes":"42","populationTotale":"9992"}
+,
+{"code":"247000664","Commune":"","Nom unique":"","nom":"CC du Pays de Lure","nature":"CC","nombreCommunes":"24","populationTotale":"20178"},
+{"code":"247000698","Commune":"","Nom unique":"","nom":"CC des Monts de Gy","nature":"CC","nombreCommunes":"25","populationTotale":"6326"},
+{"code":"247000706","Commune":"","Nom unique":"","nom":"CC du Pays Riolais","nature":"CC","nombreCommunes":"33","populationTotale":"12677"},
+{"code":"247000714","Commune":"","Nom unique":"","nom":"CC du Pays de Villersexel","nature":"CC","nombreCommunes":"34","populationTotale":"8173"},
+{"code":"247000722","Commune":"","Nom unique":"","nom":"CC du Pays d'Héricourt","nature":"CC","nombreCommunes":"24","populationTotale":"21585"}
+,
+{"code":"247000755","Commune":"","Nom unique":"","nom":"CC du Pays de Luxeuil","nature":"CC","nombreCommunes":"16","populationTotale":"15989"},
+{"code":"247000821","Commune":"","Nom unique":"","nom":"CC Rahin et Cherimont","nature":"CC","nombreCommunes":"9","populationTotale":"12271"},
+{"code":"247000854","Commune":"","Nom unique":"","nom":"CC de la Haute Vallée de l'Ognon","nature":"CC","nombreCommunes":"25","populationTotale":"8916"}
+,
+{"code":"247100290","Commune":"","Nom unique":"","nom":"CU Le Creusot Montceau-les-Mines","nature":"CU","nombreCommunes":"34","populationTotale":"97828"},
+{"code":"247100589","Commune":"","Nom unique":"","nom":"CA Le Grand Chalon","nature":"CA","nombreCommunes":"51","populationTotale":"117907"},
+{"code":"247100639","Commune":"","Nom unique":"","nom":"CC de Marcigny","nature":"CC","nombreCommunes":"12","populationTotale":"6450"},
+{"code":"247100647","Commune":"","Nom unique":"","nom":"CC Bresse Nord Intercom","nature":"CC","nombreCommunes":"16","populationTotale":"6702"},
+{"code":"247103765","Commune":"","Nom unique":"","nom":"CC Entre Saône et Grosne","nature":"CC","nombreCommunes":"23","populationTotale":"11641"}
+,
+{"code":"247103864","Commune":"","Nom unique":"","nom":"CC du Canton de Semur-en-Brionnais","nature":"CC","nombreCommunes":"14","populationTotale":"5363"},
+{"code":"247104094","Commune":"","Nom unique":"","nom":"CC Sud Côte Chalonnaise","nature":"CC","nombreCommunes":"36","populationTotale":"11863"}
+,
+{"code":"247200090","Commune":"","Nom unique":"","nom":"CC de Sablé-sur-Sarthe","nature":"CC","nombreCommunes":"17","populationTotale":"30101"}
+,
+{"code":"247200132","Commune":"","Nom unique":"","nom":"CU Le Mans Métropole","nature":"CU","nombreCommunes":"19","populationTotale":"210635"}
+,
+{"code":"247200348","Commune":"","Nom unique":"","nom":"CC du Pays Fléchois","nature":"CC","nombreCommunes":"14","populationTotale":"28644"}
+,
+{"code":"247200421","Commune":"","Nom unique":"","nom":"CC du Sud Est du Pays Manceau","nature":"CC","nombreCommunes":"5","populationTotale":"17586"},
+{"code":"247200447","Commune":"","Nom unique":"","nom":"CC Orée de Bercé - Belinois","nature":"CC","nombreCommunes":"8","populationTotale":"19845"}
+,
+{"code":"247200629","Commune":"","Nom unique":"","nom":"CC du Val de Sarthe","nature":"CC","nombreCommunes":"16","populationTotale":"30992"},
+{"code":"247200686","Commune":"","Nom unique":"","nom":"CC du Pays de l'huisne Sarthoise","nature":"CC","nombreCommunes":"34","populationTotale":"29608"},
+{"code":"247300015","Commune":"","Nom unique":"","nom":"CC des Vallées d'Aigueblanche","nature":"CC","nombreCommunes":"7","populationTotale":"7243"}
+,
+{"code":"247300254","Commune":"","Nom unique":"","nom":"CC de Haute-Tarentaise","nature":"CC","nombreCommunes":"8","populationTotale":"16789"},
+{"code":"247300262","Commune":"","Nom unique":"","nom":"CC de Yenne","nature":"CC","nombreCommunes":"13","populationTotale":"7183"},
+{"code":"247300361","Commune":"","Nom unique":"","nom":"CC du Canton de la Chambre","nature":"CC","nombreCommunes":"12","populationTotale":"7529"},
+{"code":"247300452","Commune":"","Nom unique":"","nom":"CC Maurienne Galibier","nature":"CC","nombreCommunes":"6","populationTotale":"5835"},
+{"code":"247300528","Commune":"","Nom unique":"","nom":"CC Val Guiers","nature":"CC","nombreCommunes":"13","populationTotale":"12423"},
+{"code":"247300668","Commune":"","Nom unique":"","nom":"CC du Lac d'Aiguebelette (Ccla)","nature":"CC","nombreCommunes":"10","populationTotale":"5825"},
+{"code":"247300676","Commune":"","Nom unique":"","nom":"CC Porte de Maurienne","nature":"CC","nombreCommunes":"12","populationTotale":"6914"},
+{"code":"247300817","Commune":"","Nom unique":"","nom":"CC Les Versants d'Aime","nature":"CC","nombreCommunes":"4","populationTotale":"9853"},
+{"code":"247400047","Commune":"","Nom unique":"","nom":"CC de la Vallée Verte","nature":"CC","nombreCommunes":"8","populationTotale":"7610"}
+,
+{"code":"247400112","Commune":"","Nom unique":"","nom":"CC du Pays de Cruseilles","nature":"CC","nombreCommunes":"13","populationTotale":"15278"},
+{"code":"247400567","Commune":"","Nom unique":"","nom":"CC Fier et Usses","nature":"CC","nombreCommunes":"7","populationTotale":"15202"},
+{"code":"247400583","Commune":"","Nom unique":"","nom":"CC Arve et Salève","nature":"CC","nombreCommunes":"8","populationTotale":"19834"}
+,
+{"code":"247400617","Commune":"","Nom unique":"","nom":"CC des Vallées de Thônes","nature":"CC","nombreCommunes":"13","populationTotale":"19724"}
+,
+{"code":"247400666","Commune":"","Nom unique":"","nom":"CC des Quatre Rivières_74","nature":"CC","nombreCommunes":"11","populationTotale":"19150"}
+,
+{"code":"247400682","Commune":"","Nom unique":"","nom":"CC du Haut-Chablais","nature":"CC","nombreCommunes":"15","populationTotale":"12848"},
+{"code":"247400690","Commune":"","Nom unique":"","nom":"CC du Genevois","nature":"CC","nombreCommunes":"17","populationTotale":"44341"},
+{"code":"247400724","Commune":"","Nom unique":"","nom":"CC du Pays Rochois","nature":"CC","nombreCommunes":"9","populationTotale":"28022"},
+{"code":"247400740","Commune":"","Nom unique":"","nom":"CC Rumilly Terre de Savoie","nature":"CC","nombreCommunes":"18","populationTotale":"31261"},
+{"code":"247400773","Commune":"","Nom unique":"","nom":"CC des Sources du Lac d'Annecy","nature":"CC","nombreCommunes":"7","populationTotale":"15631"},
+{"code":"247600497","Commune":"","Nom unique":"","nom":"CC du Canton de Criquetot-l'Esneval","nature":"CC","nombreCommunes":"21","populationTotale":"16893"},
+{"code":"247600505","Commune":"","Nom unique":"","nom":"CC Campagne-De-Caux","nature":"CC","nombreCommunes":"22","populationTotale":"15304"},
+{"code":"247600539","Commune":"","Nom unique":"","nom":"CC Caux Estuaire","nature":"CC","nombreCommunes":"16","populationTotale":"18702"},
+{"code":"247600588","Commune":"","Nom unique":"","nom":"CC des Villes Soeurs","nature":"CC","nombreCommunes":"28","populationTotale":"39045"},
+{"code":"247600596","Commune":"","Nom unique":"","nom":"CA Havraise (Co.D.A.H.)","nature":"CA","nombreCommunes":"17","populationTotale":"239806"},
+{"code":"247600604","Commune":"","Nom unique":"","nom":"CC de Londinières","nature":"CC","nombreCommunes":"16","populationTotale":"5370"}
+,
+{"code":"247600620","Commune":"","Nom unique":"","nom":"CC de la Région d'Yvetot","nature":"CC","nombreCommunes":"20","populationTotale":"27886"}
+,
+{"code":"247600646","Commune":"","Nom unique":"","nom":"CC Caux - Austreberthe","nature":"CC","nombreCommunes":"9","populationTotale":"25758"},
+{"code":"247600729","Commune":"","Nom unique":"","nom":"CC Falaises du Talou","nature":"CC","nombreCommunes":"24","populationTotale":"24009"},
+{"code":"247600786","Commune":"","Nom unique":"","nom":"CA de la Région Dieppoise","nature":"CA","nombreCommunes":"16","populationTotale":"49409"}
+,
+{"code":"247700024","Commune":"","Nom unique":"","nom":"CC du Pays Fertois","nature":"CC","nombreCommunes":"19","populationTotale":"28177"},
+{"code":"247700032","Commune":"","Nom unique":"","nom":"CC Moret Seine et Loing","nature":"CC","nombreCommunes":"19","populationTotale":"40048"},
+{"code":"247700057","Commune":"","Nom unique":"","nom":"CA Melun Val de Seine","nature":"CA","nombreCommunes":"20","populationTotale":"132209"},
+{"code":"247700065","Commune":"","Nom unique":"","nom":"CC du Pays de l'Ourcq","nature":"CC","nombreCommunes":"22","populationTotale":"18391"},
+{"code":"247700107","Commune":"","Nom unique":"","nom":"CC Pays de Montereau","nature":"CC","nombreCommunes":"21","populationTotale":"42549"},
+{"code":"247700339","Commune":"","Nom unique":"","nom":"CA Val d'Europe Agglomération","nature":"CA","nombreCommunes":"7","populationTotale":"35554"}
+,
+{"code":"247700438","Commune":"","Nom unique":"","nom":"CC Pays Créçois","nature":"CC","nombreCommunes":"19","populationTotale":"36593"}
+,
+{"code":"247700594","Commune":"","Nom unique":"","nom":"CA Marne et Gondoire","nature":"CA","nombreCommunes":"20","populationTotale":"103359"},
+{"code":"247700644","Commune":"","Nom unique":"","nom":"CC l'Orée de la Brie","nature":"CC","nombreCommunes":"4","populationTotale":"26587"}
+,
+{"code":"247700701","Commune":"","Nom unique":"","nom":"CC Brie Nangissienne","nature":"CC","nombreCommunes":"20","populationTotale":"27752"},
+{"code":"247800550","Commune":"","Nom unique":"","nom":"CC du Pays Houdanais (C.C.P.H.)","nature":"CC","nombreCommunes":"36","populationTotale":"29510"},
+{"code":"247800584","Commune":"","Nom unique":"","nom":"CA Versailles Grand Parc (C.A.V.G.P.)","nature":"CA","nombreCommunes":"19","populationTotale":"270056"},
+{"code":"247800618","Commune":"","Nom unique":"","nom":"CC Coeur d'Yvelines","nature":"CC","nombreCommunes":"31","populationTotale":"50097"},
+{"code":"247900798","Commune":"","Nom unique":"","nom":"CC du Thouarsais","nature":"CC","nombreCommunes":"31","populationTotale":"36949"},
+{"code":"248000499","Commune":"","Nom unique":"","nom":"CC du Val de Somme","nature":"CC","nombreCommunes":"33","populationTotale":"26687"},
+{"code":"248000531","Commune":"","Nom unique":"","nom":"CA Amiens Métropole","nature":"CA","nombreCommunes":"39","populationTotale":"182600"}
+,
+{"code":"248000747","Commune":"","Nom unique":"","nom":"CC du Pays du Coquelicot","nature":"CC","nombreCommunes":"66","populationTotale":"29018"},
+{"code":"248100158","Commune":"","Nom unique":"","nom":"CC du Sor et de l'Agout","nature":"CC","nombreCommunes":"26","populationTotale":"23444"},
+{"code":"248100430","Commune":"","Nom unique":"","nom":"CA de Castres Mazamet","nature":"CA","nombreCommunes":"14","populationTotale":"81009"},
+{"code":"248100497","Commune":"","Nom unique":"","nom":"CC Val 81","nature":"CC","nombreCommunes":"19","populationTotale":"5689"},
+{"code":"248100737","Commune":"","Nom unique":"","nom":"CA de l'Albigeois (C2a)","nature":"CA","nombreCommunes":"16","populationTotale":"84990"},
+{"code":"248100745","Commune":"","Nom unique":"","nom":"CC Thoré Montagne Noire","nature":"CC","nombreCommunes":"9","populationTotale":"5205"}
+,
+{"code":"248200016","Commune":"","Nom unique":"","nom":"CC des Deux Rives","nature":"CC","nombreCommunes":"28","populationTotale":"19254"},
+{"code":"248200057","Commune":"","Nom unique":"","nom":"CC du Quercy Caussadais","nature":"CC","nombreCommunes":"19","populationTotale":"20739"},
+{"code":"248200065","Commune":"","Nom unique":"","nom":"CC de la Lomagne Tarn-et-Garonnaise","nature":"CC","nombreCommunes":"31","populationTotale":"10241"},
+{"code":"248200099","Commune":"","Nom unique":"","nom":"CA Grand Montauban","nature":"CA","nombreCommunes":"10","populationTotale":"77554"},
+{"code":"248200107","Commune":"","Nom unique":"","nom":"CC du Quercy Rouergue et des Gorges de l'Aveyron","nature":"CC","nombreCommunes":"17","populationTotale":"7803"},
+{"code":"248300394","Commune":"","Nom unique":"","nom":"CA Sud Sainte-Baume","nature":"CA","nombreCommunes":"9","populationTotale":"61329"},
+{"code":"248300410","Commune":"","Nom unique":"","nom":"CC de la Vallée du Gapeau","nature":"CC","nombreCommunes":"5","populationTotale":"30746"}
+,
+{"code":"248300493","Commune":"","Nom unique":"","nom":"CA Dracénoise","nature":"CA","nombreCommunes":"23","populationTotale":"110296"}
+,
+{"code":"248300543","Commune":"","Nom unique":"","nom":"Métropole Toulon-Provence-Méditerranée","nature":"ME","nombreCommunes":"12","populationTotale":"437460"}
+,
+{"code":"248300550","Commune":"","Nom unique":"","nom":"CC Coeur du Var","nature":"CC","nombreCommunes":"11","populationTotale":"43144"},
+{"code":"248400053","Commune":"","Nom unique":"","nom":"CA Ventoux-Comtat-Venaissin (Cove)","nature":"CA","nombreCommunes":"25","populationTotale":"71001"},
+{"code":"248400160","Commune":"","Nom unique":"","nom":"CC Aygues-Ouvèze en Provence (Ccaop)","nature":"CC","nombreCommunes":"8","populationTotale":"19325"}
+,
+{"code":"248400236","Commune":"","Nom unique":"","nom":"CC du Pays Réuni d'Orange","nature":"CC","nombreCommunes":"5","populationTotale":"46028"}
+,
+{"code":"248400251","Commune":"","Nom unique":"","nom":"CA du Grand Avignon (Coga)","nature":"CA","nombreCommunes":"16","populationTotale":"196640"},
+{"code":"248400285","Commune":"","Nom unique":"","nom":"CC Territoriale Sud-Luberon","nature":"CC","nombreCommunes":"16","populationTotale":"25295"},
+{"code":"248400293","Commune":"","Nom unique":"","nom":"CC des Sorgues du Comtat","nature":"CC","nombreCommunes":"5","populationTotale":"49123"},
+{"code":"248400319","Commune":"","Nom unique":"","nom":"CC du Pays des Sorgues et des Monts de Vaucluse","nature":"CC","nombreCommunes":"5","populationTotale":"33990"},
+{"code":"248400335","Commune":"","Nom unique":"","nom":"CC Vaison Ventoux","nature":"CC","nombreCommunes":"19","populationTotale":"17283"},
+{"code":"248500191","Commune":"","Nom unique":"","nom":"CC de l'Ile de Noirmoutier","nature":"CC","nombreCommunes":"4","populationTotale":"9674"},
+{"code":"248500258","Commune":"","Nom unique":"","nom":"CC Océan Marais de Monts","nature":"CC","nombreCommunes":"5","populationTotale":"19397"}
+,
+{"code":"248500340","Commune":"","Nom unique":"","nom":"CC Pays de Chantonnay","nature":"CC","nombreCommunes":"10","populationTotale":"22951"},
+{"code":"248500415","Commune":"","Nom unique":"","nom":"CC du Pays de la Châtaigneraie","nature":"CC","nombreCommunes":"18","populationTotale":"16042"}
+,
+{"code":"248500464","Commune":"","Nom unique":"","nom":"CC du Pays de Pouzauges","nature":"CC","nombreCommunes":"10","populationTotale":"23811"},
+{"code":"248500530","Commune":"","Nom unique":"","nom":"CC du Pays des Achards","nature":"CC","nombreCommunes":"9","populationTotale":"18512"},
+{"code":"248500563","Commune":"","Nom unique":"","nom":"CC Vendée, Sèvre, Autise","nature":"CC","nombreCommunes":"16","populationTotale":"16707"}
+,
+{"code":"248500589","Commune":"","Nom unique":"","nom":"CA La Roche-sur-Yon Agglomération","nature":"CA","nombreCommunes":"13","populationTotale":"99364"}
+,
+{"code":"248500621","Commune":"","Nom unique":"","nom":"CC du Pays des Herbiers","nature":"CC","nombreCommunes":"8","populationTotale":"30051"},
+{"code":"248500662","Commune":"","Nom unique":"","nom":"CC du Pays de Mortagne","nature":"CC","nombreCommunes":"12","populationTotale":"28787"},
+{"code":"248600413","Commune":"","Nom unique":"","nom":"CA Grand Châtellerault","nature":"CA","nombreCommunes":"47","populationTotale":"86669"}
+,
+{"code":"248600447","Commune":"","Nom unique":"","nom":"CC du Pays Loudunais","nature":"CC","nombreCommunes":"45","populationTotale":"25103"},
+{"code":"248700189","Commune":"","Nom unique":"","nom":"CC du Pays de Saint-Yrieix","nature":"CC","nombreCommunes":"9","populationTotale":"12666"},
+{"code":"248719262","Commune":"","Nom unique":"","nom":"CC Gartempe - Saint-Pardoux","nature":"CC","nombreCommunes":"8","populationTotale":"5355"},
+{"code":"248719288","Commune":"","Nom unique":"","nom":"CC du Val de Vienne","nature":"CC","nombreCommunes":"9","populationTotale":"16267"},
+{"code":"248719312","Commune":"","Nom unique":"","nom":"CA Limoges Métropole","nature":"CA","nombreCommunes":"20","populationTotale":"212550"}
+,
+{"code":"248719338","Commune":"","Nom unique":"","nom":"CC Briance Combade","nature":"CC","nombreCommunes":"10","populationTotale":"5700"},
+{"code":"248719353","Commune":"","Nom unique":"","nom":"CC des Portes de Vassivière","nature":"CC","nombreCommunes":"12","populationTotale":"5683"}
+,
+{"code":"248719361","Commune":"","Nom unique":"","nom":"CC de Noblat","nature":"CC","nombreCommunes":"12","populationTotale":"12275"},
+{"code":"248900334","Commune":"","Nom unique":"","nom":"CA du Grand Sénonais","nature":"CA","nombreCommunes":"27","populationTotale":"60204"}
+,
+{"code":"248900383","Commune":"","Nom unique":"","nom":"CC de l'Agglomération Migennoise","nature":"CC","nombreCommunes":"8","populationTotale":"15223"}
+,
+{"code":"248900524","Commune":"","Nom unique":"","nom":"CC de l'Aillantais","nature":"CC","nombreCommunes":"13","populationTotale":"10685"},
+{"code":"248900664","Commune":"","Nom unique":"","nom":"CC de la Vanne et du Pays d'Othe","nature":"CC","nombreCommunes":"22","populationTotale":"8926"},
+{"code":"248900748","Commune":"","Nom unique":"","nom":"CC du Gâtinais en Bourgogne","nature":"CC","nombreCommunes":"26","populationTotale":"17770"}
+,
+{"code":"248900896","Commune":"","Nom unique":"","nom":"CC Yonne Nord","nature":"CC","nombreCommunes":"23","populationTotale":"24926"},
+{"code":"248900938","Commune":"","Nom unique":"","nom":"CC du Jovinien","nature":"CC","nombreCommunes":"19","populationTotale":"22109"},
+{"code":"249000241","Commune":"","Nom unique":"","nom":"CC du Sud Territoire","nature":"CC","nombreCommunes":"27","populationTotale":"24063"},
+{"code":"249100074","Commune":"","Nom unique":"","nom":"CC du Pays de Limours (Ccpl)","nature":"CC","nombreCommunes":"14","populationTotale":"27435"},
+{"code":"249100157","Commune":"","Nom unique":"","nom":"CC des Deux Vallées_91","nature":"CC","nombreCommunes":"15","populationTotale":"19101"}
+,
+{"code":"249100546","Commune":"","Nom unique":"","nom":"CC du Val d'Essonne (Ccve)","nature":"CC","nombreCommunes":"21","populationTotale":"60528"},
+{"code":"249100553","Commune":"","Nom unique":"","nom":"CC Entre Juine et Renarde (Ccejr)","nature":"CC","nombreCommunes":"16","populationTotale":"27780"},
+{"code":"249100595","Commune":"","Nom unique":"","nom":"CC Le Dourdannais en Hurepoix (Ccdh)","nature":"CC","nombreCommunes":"11","populationTotale":"26710"},
+{"code":"249500109","Commune":"","Nom unique":"","nom":"CA de Cergy-Pontoise","nature":"CA","nombreCommunes":"13","populationTotale":"207503"},
+{"code":"249500430","Commune":"","Nom unique":"","nom":"CC Sausseron Impressionnistes","nature":"CC","nombreCommunes":"15","populationTotale":"19769"},
+{"code":"249500455","Commune":"","Nom unique":"","nom":"CC de la Vallée de l'Oise et des Trois Forêts","nature":"CC","nombreCommunes":"9","populationTotale":"39072"}
+,
+{"code":"249500489","Commune":"","Nom unique":"","nom":"CC du Haut Val d'Oise","nature":"CC","nombreCommunes":"9","populationTotale":"38326"},
+{"code":"249500513","Commune":"","Nom unique":"","nom":"CC du Vexin-Val de Seine","nature":"CC","nombreCommunes":"26","populationTotale":"17000"}
+]
