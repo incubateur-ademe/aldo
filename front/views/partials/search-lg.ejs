@@ -108,6 +108,7 @@
   })
 
   $("button#add-tag").click((event) => {
+    event.preventDefault()
     handleInputChange($('#location-search')[0].value)
   })
 
