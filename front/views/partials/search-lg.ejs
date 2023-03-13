@@ -16,11 +16,7 @@
           Rechercher
         </button>
       </div>
-      <datalist id="location-names">
-        <% for (let index = 0; index < epcis.length; index++) {%>
-        <option value="<%= epcis[index].code %> "><%= epcis[index].nom %> (<%= epcis[index].code %>)</option>
-        <%} %>
-      </datalist>
+      <datalist id="location-names"></datalist>
     </div>
     <p class="fr-text--xs fr-my-1w">Nous utilisons les noms d'EPCI de la fin de 2018</p>
   </form>
@@ -36,7 +32,7 @@
       data.forEach(loc => {
         locations[loc.insee] = loc.nom
         $('<option>', {
-          value: loc.insee,
+          value: loc.insee + " ",
           text: `${loc.nom} (${loc.insee})`
         }).appendTo('datalist#location-names')
       })
@@ -45,7 +41,7 @@
       data.forEach(loc => {
         locations[loc.code] = loc.nom
         $('<option>', {
-          value: loc.code,
+          value: loc.code + " ",
           text: `${loc.nom} (${loc.code})`
         }).appendTo('datalist#location-names')
       })
