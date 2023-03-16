@@ -16,6 +16,7 @@ function getArea (location, key, overrides) {
   }
 }
 
+// to be called per-location
 function getStocksByKeyword (location, keyword, options) {
   const area = getArea(location, keyword, options.areas)
   const groundDensity = getCarbonDensity(location, options.groundKeyword || keyword)
@@ -199,18 +200,7 @@ function getStocks (location, options) {
   options = options || {}
   options.areas = options.areas || {}
 
-  const originalAreas = {}
-  Object.keys(options.areas).forEach(key => {
-    if (!isNaN(options.areas[key])) {
-      if (key.startsWith('sols artificiels')) {
-        const optionsWithoutAreas = JSON.parse(JSON.stringify(options))
-        optionsWithoutAreas.areas = {}
-        Object.assign(originalAreas, getAreasSolsArtificiels(location, optionsWithoutAreas))
-      } else {
-        originalAreas[key] = getAreaData(location, key)
-      }
-    }
-  })
+  // TODO: aggregations when more than one location is used
   const stocks = {
     cultures: getStocksByKeyword(location, 'cultures', options),
     'zones humides': getStocksByKeyword(location, 'zones humides', options),
@@ -262,40 +252,79 @@ function getStocks (location, options) {
   stocks['sols artificiels'] = getStocksForParent(solArtSubtypes)
   stocks['sols artificiels'].children = solArtChildren
 
+  stocks.total = getTotalStock(stocks)
+  stocks.totalEquivalent = stocks.total * 44 / 12
+  annotateAreaCustomisations(location, options, stocks) // carbon to CO2 equivalent
   // extra data prep for display - TODO: consider whether this is better handled by the handler
-  // -- percentages by level 1 ground type
-  const parentTypes = Object.keys(stocks).filter((s) => !stocks[s].parent)
-  const stocksTotal = parentTypes.reduce((a, b) => a + stocks[b].totalStock, 0)
+  percentagesByParentType(stocks)
+  stocks.percentageByReservoir = getPercentageByReservoir(stocks)
+  stocks.byDensity = densityByChildType(stocks)
+  return stocks
+}
+
+function getTotalStock (stocks) {
+  return getParentTypes(stocks).reduce((a, b) => a + stocks[b].totalStock, 0)
+}
+
+function getParentTypes (stocks) {
+  return Object.keys(stocks).filter((s) => !stocks[s].parent)
+}
+
+function percentagesByParentType (stocks) {
+  const parentTypes = getParentTypes(stocks)
   const groundAndLitterStocksTotal = parentTypes.reduce((a, b) => {
     return a + (stocks[b].groundStock || 0) + (stocks[b].forestLitterStock || 0)
   }, 0)
   const biomassStocksTotal = parentTypes.reduce((a, b) => a + sumAllBiomassStock(stocks[b]), 0)
   for (const key of parentTypes) {
-    stocks[key].stockPercentage = asPercentage(stocks[key].totalStock, stocksTotal)
+    stocks[key].stockPercentage = asPercentage(stocks[key].totalStock, stocks.total)
     const groundAndLitter = stocks[key].groundStock + (stocks[key].forestLitterStock || 0)
     stocks[key].groundAndLitterStockPercentage = asPercentage(groundAndLitter, groundAndLitterStocksTotal)
     stocks[key].biomassStockPercentage = asPercentage(sumAllBiomassStock(stocks[key]), biomassStocksTotal)
   }
-  // -- percentage stock by reservoir
+}
+
+function getPercentageByReservoir (stocks) {
+  const parentTypes = getParentTypes(stocks)
   const groundStock = parentTypes.reduce((acc, cur) => acc + (stocks[cur].groundStock || 0), 0)
   const biomassStock = parentTypes.reduce((acc, cur) => acc + sumAllBiomassStock(stocks[cur]), 0)
   const forestLitterStock = parentTypes.reduce((acc, cur) => acc + (stocks[cur].forestLitterStock || 0), 0)
-  stocks.percentageByReservoir = {
-    'Sol (30 cm)': asPercentage(groundStock, stocksTotal),
-    'Biomasse sur pied': asPercentage(biomassStock, stocksTotal),
-    Litière: asPercentage(forestLitterStock, stocksTotal),
-    'Matériaux bois': asPercentage(stocks['produits bois'].totalStock, stocksTotal)
+  return {
+    'Sol (30 cm)': asPercentage(groundStock, stocks.total),
+    'Biomasse sur pied': asPercentage(biomassStock, stocks.total),
+    Litière: asPercentage(forestLitterStock, stocks.total),
+    'Matériaux bois': asPercentage(stocks['produits bois'].totalStock, stocks.total)
   }
-  // -- density per level 2 ground type
-  stocks.byDensity = {}
+}
+
+function densityByChildType (stocks) {
+  const byDensity = {}
+  Object.keys(stocks).forEach(key => {
+    if (key !== 'produits bois' && stocks[key].hasOwnProperty('totalDensity')) {
+      byDensity[key] = stocks[key].totalDensity || 0
+    } else if (stocks[key].densities) {
+      Object.assign(byDensity, stocks[key].densities)
+    }
+  })
+  return byDensity
+}
+
+function annotateAreaCustomisations (location, options, stocks) {
+  const originalAreas = {}
+  Object.keys(options.areas).forEach(key => {
+    if (!isNaN(options.areas[key])) {
+      if (key.startsWith('sols artificiels')) {
+        const optionsWithoutAreas = JSON.parse(JSON.stringify(options))
+        optionsWithoutAreas.areas = {}
+        Object.assign(originalAreas, getAreasSolsArtificiels(location, optionsWithoutAreas))
+      } else {
+        originalAreas[key] = getAreaData(location, key)
+      }
+    }
+  })
   const groundTypes = GroundTypes.map(gt => gt.stocksId)
   const modifiedAreas = Object.keys(originalAreas)
   Object.keys(stocks).forEach(key => {
-    if (key !== 'produits bois' && stocks[key].hasOwnProperty('totalDensity')) {
-      stocks.byDensity[key] = stocks[key].totalDensity || 0
-    } else if (stocks[key].densities) {
-      Object.assign(stocks.byDensity, stocks[key].densities)
-    }
     if (groundTypes.indexOf(key) !== -1) {
       if (isNaN(originalAreas[key])) {
         stocks[key].originalArea = stocks[key].area
@@ -310,10 +339,6 @@ function getStocks (location, options) {
       }
     }
   })
-  stocks.total = stocksTotal
-  // carbon to CO2 equivalent
-  stocks.totalEquivalent = stocksTotal * 44 / 12
-  return stocks
 }
 
 function sumAllBiomassStock (stock) {
