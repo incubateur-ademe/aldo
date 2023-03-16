@@ -27,7 +27,7 @@ describe('The stocks data module', () => {
   })
 
   const groundDataPath = '../dataByEpci/ground.csv.json'
-  it('given an EPCI, initial ground and final ground, returns the carbon flux in tC/(ha.year) from data file', () => {
+  it('given an EPCI and ground type, returns the carbon density in tC/ha from data file', () => {
     jest.doMock(groundDataPath, () => {
       return [
         {
