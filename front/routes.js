@@ -34,6 +34,10 @@ router.get('/epci/:epci', territoryHandler)
 router.get('/epci/:epci/tableur', excelExportHandler)
 router.get('/epci/:epci/:tab', territoryHandler)
 
+router.get('/commune/:commune', territoryHandler)
+router.get('/commune/:commune/tableur', excelExportHandler)
+router.get('/commune/:commune/:tab', territoryHandler)
+
 router.get('/contact', (req, res) => {
   res.render('contact', {
     pageTitle: 'Contact',
