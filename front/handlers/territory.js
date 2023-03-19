@@ -8,69 +8,29 @@ const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFo
 const { parseOptionsFromQuery } = require('./options')
 
 async function territoryHandler (req, res) {
-  const epcis = await epciList()
-  const epci = await getEpci(req.params.epci, true) || {}
-  if (!epci.code) {
-    res.status(404)
-    res.render('404-epci', {
-      epcis,
-      communes: communeList(),
-      attemptedSearch: req.params.epci
-    })
-    return
-  }
+  const { location, epcis } = await verifyLocations(req, res)
+  if (!location) return
+  const epci = location.epci
+
   const options = parseOptionsFromQuery(req.query)
-  const stocks = await getStocks({ epci }, options)
-  const flux = getAnnualFluxes({ epci }, options)
-  // ordering for display greatest stocks/flux (seq or emission) descending
-  const groundTypes = GroundTypes.filter(type => !type.parentType)
-  groundTypes.sort((a, b) => {
-    const stockA = stocks[a.stocksId].totalStock
-    const stockB = stocks[b.stocksId].totalStock
-    if (stockA < stockB) return 1
-    else if (stockA === stockB) return 0
-    else return -1
-  })
-  const sortedFluxKeys = GroundTypes.filter(type => !type.parentType)
-  sortedFluxKeys.sort((a, b) => {
-    const fluxA = Math.abs(flux.summary[a.stocksId]?.totalSequestration || 0)
-    const fluxB = Math.abs(flux.summary[b.stocksId]?.totalSequestration || 0)
-    if (fluxA < fluxB) return 1
-    else if (fluxA === fluxB) return 0
-    else return -1
-  })
-  const fluxIds = []
-  GroundTypes.forEach(gt => {
-    if (gt.altFluxId || gt.fluxId) {
-      fluxIds.push(gt.altFluxId || gt.fluxId)
-    }
-  })
-  // these are the types that can be modified to customise the stocks calculations
-  const stocksGroundTypes = GroundTypes.filter(gt => !gt.children && gt.stocksId !== 'produits bois')
-  stocksGroundTypes.sort((a, b) => {
-    if (a.name > b.name) return 1
-    else if (a.name === b.name) return 0
-    else return -1
-  })
-  const resetQueryStr = options.stocksHaveModifications || options.fluxHaveModifications ? '?' : undefined
-  // this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
-  let sharingQueryStr = ''
-  const params = Object.keys(req.query).map(queryParam => {
-    return `${queryParam}=${req.query[queryParam]}`
-  })
-  if (params.length) {
-    sharingQueryStr = `?${params.join('&')}`
-  }
+  const stocks = await getStocks(location, options)
+  const flux = getAnnualFluxes(location, options)
 
   const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
+
   res.render('territoire', {
     pageTitle: `${epci.nom}`,
     tab: req.params.tab || 'stocks',
     epcis,
     epci,
-    groundTypes,
+    groundTypes: getSortedGroundTypes(stocks),
     allGroundTypes: GroundTypes,
-    stocksGroundTypes,
+    // these are the types that can be modified to customise the stocks calculations
+    stocksGroundTypes: GroundTypes.filter(gt => !gt.children && gt.stocksId !== 'produits bois').sort((a, b) => {
+      if (a.name > b.name) return 1
+      else if (a.name === b.name) return 0
+      else return -1
+    }),
     stocks,
     charts: stocks && charts(stocks),
     formatNumber (number, fractionDigits = 0) {
@@ -88,23 +48,38 @@ async function territoryHandler (req, res) {
     simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides'],
     fluxSummary: flux?.summary,
     allFlux: flux?.allFlux,
-    sortedFluxKeys,
+    sortedFluxKeys: getSortedFluxKeys(flux),
     fluxCharts: fluxCharts(flux),
     fluxDetail,
-    fluxIds,
+    fluxIds: GroundTypes.filter(gt => gt.altFluxId || gt.fluxId).map(gt => gt.altFluxId || gt.fluxId),
     stockTotal: stocks?.total,
     stockTotalEquivalent: stocks?.totalEquivalent,
     fluxTotal: flux?.total,
     agriculturalPractices: AgriculturalPractices,
     agriculturalPracticeDetail,
     baseUrl: `/epci/${epci.code}`,
-    resetQueryStr,
-    sharingQueryStr,
+    resetQueryStr: options.stocksHaveModifications || options.fluxHaveModifications ? '?' : undefined,
+    sharingQueryStr: getSharingQueryString(req),
     beges: req.query.beges,
     perimetre: req.query.perimetre,
     forestBiomassSummaryByType: flux?.biomassSummary,
     ...options
   })
+}
+
+async function verifyLocations (req, res) {
+  const epcis = await epciList()
+  const epci = await getEpci(req.params.epci, true) || {}
+  if (!epci.code) {
+    res.status(404)
+    res.render('404-epci', {
+      epcis,
+      communes: communeList(),
+      attemptedSearch: req.params.epci
+    })
+    return
+  }
+  return { epcis, location: { epci } }
 }
 
 function formatFluxForDisplay (flux) {
@@ -135,6 +110,30 @@ function formatFluxForDisplay (flux) {
     })
   })
   return { fluxDetail, agriculturalPracticeDetail }
+}
+
+function getSortedGroundTypes (stocks) {
+  const parentTypes = GroundTypes.filter(type => !type.parentType)
+  parentTypes.sort((a, b) => {
+    const stockA = stocks[a.stocksId].totalStock
+    const stockB = stocks[b.stocksId].totalStock
+    if (stockA < stockB) return 1
+    else if (stockA === stockB) return 0
+    else return -1
+  })
+  return parentTypes
+}
+
+function getSortedFluxKeys (flux) {
+  const parentTypes = GroundTypes.filter(type => !type.parentType)
+  parentTypes.sort((a, b) => {
+    const fluxA = Math.abs(flux.summary[a.stocksId]?.totalSequestration || 0)
+    const fluxB = Math.abs(flux.summary[b.stocksId]?.totalSequestration || 0)
+    if (fluxA < fluxB) return 1
+    else if (fluxA === fluxB) return 0
+    else return -1
+  })
+  return parentTypes
 }
 
 function charts (stocks) {
@@ -394,6 +393,18 @@ function pieChart (title, labels, values) {
       }
     })
   }
+}
+
+// this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
+function getSharingQueryString (req) {
+  let sharingQueryStr = ''
+  const params = Object.keys(req.query).map(queryParam => {
+    return `${queryParam}=${req.query[queryParam]}`
+  })
+  if (params.length) {
+    sharingQueryStr = `?${params.join('&')}`
+  }
+  return sharingQueryStr
 }
 
 module.exports = {
