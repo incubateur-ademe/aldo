@@ -22,32 +22,6 @@ async function territoryHandler (req, res) {
   const options = parseOptionsFromQuery(req.query)
   const stocks = await getStocks({ epci }, options)
   const flux = getAnnualFluxes({ epci }, options)
-  const fluxDetail = {}
-  const agriculturalPracticeDetail = {}
-  flux.allFlux.forEach(f => {
-    if (f.value !== 0) {
-      if (f.practice) {
-        if (!agriculturalPracticeDetail[f.to]) {
-          agriculturalPracticeDetail[f.to] = []
-        }
-        agriculturalPracticeDetail[f.to].push(f)
-      } else {
-        if (!fluxDetail[f.to]) fluxDetail[f.to] = []
-        // biomass growth in forests is displayed elsewhere
-        if (f.growth === undefined) fluxDetail[f.to].push(f)
-      }
-    }
-  })
-  // order the details by initial occupation
-  Object.keys(fluxDetail).forEach((k) => {
-    fluxDetail[k].sort((a, b) => {
-      const aName = GroundTypes.find((gt) => gt.stocksId === a.from)?.name
-      const bName = GroundTypes.find((gt) => gt.stocksId === b.from)?.name
-      if (aName < bName) return -1
-      else if (aName === bName) return 0
-      else return 1
-    })
-  })
   // ordering for display greatest stocks/flux (seq or emission) descending
   const groundTypes = GroundTypes.filter(type => !type.parentType)
   groundTypes.sort((a, b) => {
@@ -88,6 +62,7 @@ async function territoryHandler (req, res) {
     sharingQueryStr = `?${params.join('&')}`
   }
 
+  const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
   res.render('territoire', {
     pageTitle: `${epci.nom}`,
     tab: req.params.tab || 'stocks',
@@ -130,6 +105,36 @@ async function territoryHandler (req, res) {
     forestBiomassSummaryByType: flux?.biomassSummary,
     ...options
   })
+}
+
+function formatFluxForDisplay (flux) {
+  const fluxDetail = {}
+  const agriculturalPracticeDetail = {}
+  flux.allFlux.forEach(f => {
+    if (f.value !== 0) {
+      if (f.practice) {
+        if (!agriculturalPracticeDetail[f.to]) {
+          agriculturalPracticeDetail[f.to] = []
+        }
+        agriculturalPracticeDetail[f.to].push(f)
+      } else {
+        if (!fluxDetail[f.to]) fluxDetail[f.to] = []
+        // biomass growth in forests is displayed elsewhere
+        if (f.growth === undefined) fluxDetail[f.to].push(f)
+      }
+    }
+  })
+  // order the details by initial occupation
+  Object.keys(fluxDetail).forEach((k) => {
+    fluxDetail[k].sort((a, b) => {
+      const aName = GroundTypes.find((gt) => gt.stocksId === a.from)?.name
+      const bName = GroundTypes.find((gt) => gt.stocksId === b.from)?.name
+      if (aName < bName) return -1
+      else if (aName === bName) return 0
+      else return 1
+    })
+  })
+  return { fluxDetail, agriculturalPracticeDetail }
 }
 
 function charts (stocks) {
