@@ -62,7 +62,7 @@ function getSubStocksByKeyword (location, keyword, parent, options) {
   return stocks
 }
 
-function getStocksForParent (subStocks) {
+function aggregateStocksForParent (subStocks) {
   const stocks = {
     totalReservoirStock: 0,
     area: 0,
@@ -220,7 +220,7 @@ function getStocks (location, options) {
     })
   })
   Object.assign(stocks, prairiesSubtypes)
-  stocks.prairies = getStocksForParent(prairiesSubtypes)
+  stocks.prairies = aggregateStocksForParent(prairiesSubtypes)
   stocks.prairies.children = prairieChildren
   // forests
   const forestChildren = GroundTypes.find(gt => gt.stocksId === 'forêts').children
@@ -232,23 +232,23 @@ function getStocks (location, options) {
     })
   })
   Object.assign(stocks, forestSubtypes)
-  stocks.forêts = getStocksForParent(forestSubtypes)
+  stocks.forêts = aggregateStocksForParent(forestSubtypes)
   stocks.forêts.children = forestChildren
   // sols artificiels
-  // this is an overload of the use of options.areas but since all sols artificiels areas need to
-  // be calculated at once, this is a concise way of doing it and since it is the last time the
-  // object is used it works.
-  Object.assign(options.areas, getAreasSolsArtificiels(location, options))
+  // All sols artificiels areas need to be calculated at once
+  const newOptions = JSON.parse(JSON.stringify(options))
+  const solsArtAreas = getAreasSolsArtificiels(location, options)
+  Object.assign(newOptions.areas, solsArtAreas)
   const solArtChildren = GroundTypes.find(gt => gt.stocksId === 'sols artificiels').children
   const solArtSubtypes = {}
   solArtChildren.forEach((c) => {
     solArtSubtypes[c] = getSubStocksByKeyword(location, c, 'sols artificiels', {
-      areas: options.areas,
+      areas: newOptions.areas,
       groundKeyword: c.endsWith('arbustifs') ? 'sols artificiels enherbés' : undefined
     })
   })
   Object.assign(stocks, solArtSubtypes)
-  stocks['sols artificiels'] = getStocksForParent(solArtSubtypes)
+  stocks['sols artificiels'] = aggregateStocksForParent(solArtSubtypes)
   stocks['sols artificiels'].children = solArtChildren
 
   stocks.total = getTotalStock(stocks)
