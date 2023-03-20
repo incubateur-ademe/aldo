@@ -1,5 +1,5 @@
 const { getAnnualFluxes } = require('./index')
-const { getEpci } = require('../epcis')
+const { getEpci } = require('../locations')
 
 // unit-style tests
 test('returns expected number of entries for cultures ground changes', () => {

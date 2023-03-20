@@ -48,7 +48,8 @@ function getAnnualGroundCarbonFlux (location, from, to) {
   // normal flux value lookup
   const csvFilePath = './dataByEpci/ground.csv'
   const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci)
+  const epciSiren = location.epci?.code || location.commune?.epci
+  const data = dataByEpci.find(data => data.siren === epciSiren)
   const dataValue = data[getGroundCarbonFluxKey(from, to)]
   if (dataValue) {
     return parseFloat(dataValue)
@@ -70,7 +71,8 @@ function getForestLitterFlux (from, to) {
 function getBiomassFlux (location, from, to) {
   const csvFilePath = './dataByEpci/biomass-hors-forets.csv'
   const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci)
+  const epciSiren = location.epci?.code || location.commune?.epci
+  const data = dataByEpci.find(data => data.siren === epciSiren)
   let key = `${from} vers ${to}`
   // TODO: why is this done ? esp herbacés to imperméables
   const keyReplacements = {
@@ -240,17 +242,21 @@ function cToCo2e (valueC) {
 }
 
 function getAnnualSurfaceChange (location, options, from, to) {
-  const csvFilePath = './dataByCommune/clc18-change.csv'
-  const dataByCommune = require(csvFilePath + '.json')
-  const communesForEpci = getCommunes({ epci: location.epci }).map((c) => c.insee)
-  const areaChangesForEpci = dataByCommune.filter(data => communesForEpci.includes(data.commune))
-
   const fromClcCodes = GroundTypes.find(groundType => groundType.stocksId === from).clcCodes
   const toClcCodes = GroundTypes.find(groundType => groundType.stocksId === to).clcCodes
   if (!fromClcCodes || !toClcCodes) {
     return 0
   }
 
+  const csvFilePath = './dataByCommune/clc18-change.csv'
+  const dataByCommune = require(csvFilePath + '.json')
+  let communes = []
+  if (location.epci) {
+    communes = getCommunes({ epci: location.epci.code }).map((c) => c.insee)
+  } else if (location.commune) {
+    communes.push(location.commune.insee)
+  }
+  const areaChangesForEpci = dataByCommune.filter(data => communes.includes(data.commune))
   const changesForGroundTypes = areaChangesForEpci.filter((change) => {
     return fromClcCodes.includes(change.code12) && toClcCodes.includes(change.code18)
   })
@@ -334,10 +340,17 @@ function getForestBiomassFluxesByCommune (location) {
   // there is data with null values because it isn't statistically significant at that
   // level. Remove these lines because they are not used.
   const significantCarbonData = carbonData.filter((data) => data.surface_ic === 's')
-  const areaDataForEpci = areaData.filter(data => data.CODE_EPCI === location.epci)
+  let areaDataByCommune = []
+  if (location.epci) {
+    areaDataByCommune = areaData.filter(data => data.CODE_EPCI === location.epci.code)
+  } else if (location.commune) {
+    let code = location.commune.insee
+    if (code.startsWith('0')) code = code.slice(1)
+    areaDataByCommune = areaData.filter(data => data.INSEE_COM === code)
+  }
   const forestSubtypes = GroundTypes.find((gt) => gt.stocksId === 'forêts').children
   const fluxes = []
-  areaDataForEpci.forEach((communeData) => {
+  areaDataByCommune.forEach((communeData) => {
     // for each line of data by commune + localisationCode, we need to add a flux
     //   for each of the four forest subtypes
     forestSubtypes.forEach((forestSubtype) => {

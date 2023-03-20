@@ -1,5 +1,5 @@
 const { getAnnualFluxes } = require('./index')
-const { getEpci } = require('../epcis')
+const { getEpci } = require('../locations')
 // const { getPopulationTotal } = require('../../data')
 
 jest.mock('../../data/flux', () => {

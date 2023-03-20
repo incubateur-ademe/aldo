@@ -1,7 +1,9 @@
 <h1 class="fr-mt-6w">
-  <%= epci.nom %>
+  <%= singleLocation.nom %>
 </h1>
 
+<!-- if is EPCI -->
+<% if (singleLocation.code) { %>
 <div class="fr-grid-row">
   <div class="fr-col-12 fr-col-md-3">
     <p>
@@ -48,6 +50,7 @@
 <p>
   <%= epci.nombreCommunes %> commune<%= epci.nombreCommunes === 1 ? '' : 's' %>
 </p>
+<% } %>
 <% } %>
 <div class="fr-callout fr-my-3w">
   <p class="fr-callout__title fr-mb-1w">

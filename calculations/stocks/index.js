@@ -210,17 +210,12 @@ function getStocks (location, options) {
 }
 
 function getStocksForLocation (location, options) {
-  const originalLocation = location
-  // TODO: change the other APIs to use whole EPCI object like stocks wood products?
-  if (location.epci) location = { epci: location.epci.code }
-  else if (location.commune?.code) location = { commune: location.commune.code }
-
   const stocks = {
     cultures: getStocksByKeyword(location, 'cultures', options),
     'zones humides': getStocksByKeyword(location, 'zones humides', options),
     vergers: getStocksByKeyword(location, 'vergers', options),
     vignes: getStocksByKeyword(location, 'vignes', options),
-    'produits bois': getStocksWoodProducts(originalLocation, options?.woodCalculation, options),
+    'produits bois': getStocksWoodProducts(location, options?.woodCalculation, options),
     haies: getStocksHaies(location, options)
   }
 
