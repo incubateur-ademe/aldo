@@ -35,7 +35,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getCarbonDensity({ epci: '200007177' }, 'cultures')).toBe(50)
+    expect(getCarbonDensity({ epci: { code: '200007177' } }, 'cultures')).toBe(50)
   })
 
   const areaPath = '../dataByCommune/clc18.csv.json'
@@ -95,7 +95,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getArea({ epci: '200000172' }, 'cultures')).toBe(80)
+    expect(getArea({ epci: { code: '200000172' } }, 'cultures')).toBe(80)
   })
 
   it('returns area in hectares (ha) for ground type "prairies zones herbacées" and valid EPCI SIREN', () => {
@@ -124,7 +124,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getArea({ epci: '200000172' }, 'prairies zones herbacées')).toBe(20)
+    expect(getArea({ epci: { code: '200000172' } }, 'prairies zones herbacées')).toBe(20)
   })
 
   it('throws useful error when attempting to get area for ground type without type to CLC type mapping', () => {
@@ -139,7 +139,7 @@ describe('The stocks data module', () => {
     })
     let error
     try {
-      getArea({ epci: '200000172' }, 'lake')
+      getArea({ epci: { code: '200000172' } }, 'lake')
     } catch (e) {
       error = e
     }
@@ -155,11 +155,11 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getBiomassCarbonDensity({ epci: '200000172' }, 'prairies zones arborées')).toBe(10)
+    expect(getBiomassCarbonDensity({ epci: { code: '200000172' } }, 'prairies zones arborées')).toBe(10)
   })
 
   it('relies on a different biomass function for forest biomass', () => {
-    expect(getBiomassCarbonDensity({ epci: '200000172' }, 'forêt mixte')).toBeUndefined()
+    expect(getBiomassCarbonDensity({ epci: { code: '200000172' } }, 'forêt mixte')).toBeUndefined()
   })
 
   it('returns an array of area information per commune for an EPCI', () => {
@@ -456,7 +456,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getArea({ epci: '249500513' }, 'forêt peupleraie')).toBe(50)
+    expect(getArea({ epci: { code: '249500513' } }, 'forêt peupleraie')).toBe(50)
   })
 
   it('returns area of haies (as ha) given valid EPCI SIREN', () => {
@@ -468,7 +468,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getArea({ epci: '249500513' }, 'haies')).toBe(20)
+    expect(getArea({ epci: { code: '249500513' } }, 'haies')).toBe(20)
   })
 
   it('returns forest litter carbon density (tC/ha) for valid forest subtype', () => {

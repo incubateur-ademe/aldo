@@ -1,6 +1,6 @@
 const path = require('path')
 const rootFolder = path.join(__dirname, '../../')
-const { getEpci } = require(path.join(rootFolder, './calculations/epcis'))
+const { getEpci, getCommune } = require(path.join(rootFolder, './calculations/locations'))
 const { epciList, communeList } = require(path.join(rootFolder, './data'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
@@ -8,9 +8,19 @@ const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFo
 const { parseOptionsFromQuery } = require('./options')
 
 async function territoryHandler (req, res) {
-  const { location, epcis } = await verifyLocations(req, res)
-  if (!location) return
-  const epci = location.epci
+  const location = await getLocationDetail(req, res)
+  if (!location) {
+    const epcis = await epciList()
+    const communes = communeList()
+    res.status(404)
+    res.render('404-epci', {
+      epcis,
+      communes,
+      attemptedSearch: req.params.epci
+    })
+    return
+  }
+  const singleLocation = location.epci || location.commune
 
   const options = parseOptionsFromQuery(req.query)
   const stocks = await getStocks(location, options)
@@ -19,10 +29,9 @@ async function territoryHandler (req, res) {
   const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
 
   res.render('territoire', {
-    pageTitle: `${epci.nom}`,
+    pageTitle: `${singleLocation.nom}`,
     tab: req.params.tab || 'stocks',
-    epcis,
-    epci,
+    singleLocation,
     groundTypes: getSortedGroundTypes(stocks),
     allGroundTypes: GroundTypes,
     // these are the types that can be modified to customise the stocks calculations
@@ -57,7 +66,7 @@ async function territoryHandler (req, res) {
     fluxTotal: flux?.total,
     agriculturalPractices: AgriculturalPractices,
     agriculturalPracticeDetail,
-    baseUrl: `/epci/${epci.code}`,
+    baseUrl: location.epci ? `/epci/${singleLocation.code}` : `/commune/${singleLocation.insee}`,
     resetQueryStr: options.stocksHaveModifications || options.fluxHaveModifications ? '?' : undefined,
     sharingQueryStr: getSharingQueryString(req),
     beges: req.query.beges,
@@ -67,19 +76,14 @@ async function territoryHandler (req, res) {
   })
 }
 
-async function verifyLocations (req, res) {
-  const epcis = await epciList()
-  const epci = await getEpci(req.params.epci, true) || {}
-  if (!epci.code) {
-    res.status(404)
-    res.render('404-epci', {
-      epcis,
-      communes: communeList(),
-      attemptedSearch: req.params.epci
-    })
-    return
+async function getLocationDetail (req, res) {
+  if (req.params.epci) {
+    const epci = await getEpci(req.params.epci, true)
+    if (epci) return { epci }
+  } else if (req.params.commune) {
+    const commune = getCommune(req.params.commune, true)
+    if (commune) return { commune }
   }
-  return { epcis, location: { epci } }
 }
 
 function formatFluxForDisplay (flux) {

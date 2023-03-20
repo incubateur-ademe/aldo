@@ -1,10 +1,10 @@
 <%- include('../partials/header') -%>
 <main role="main" id="contenu">
   <div class="fr-container fr-pb-6w fr-px-2w">
-    <%- include('../partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: epci.nom, }, ], }) -%>
+    <%- include('../partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: singleLocation.nom, }, ], }) -%>
     <%- include('./introduction') -%>
     <form action="<%= baseUrl %>/stocks" method="GET" class="fr-tabs fr-mt-4w" id="territory">
-      <input type="hidden" name="epci" value="<%= epci.nom %>" />
+      <!-- <input type="hidden" name="epci" value="<%= singleLocation.nom %>" /> -->
       <ul class="fr-tabs__list" role="tablist" aria-label="Données du territoire">
         <li role="presentation">
           <button type="button" id="tabpanel-stocks" class="fr-tabs__tab" tabindex="0" role="tab" aria-selected="<%=tab === 'stocks'%>" aria-controls="tabpanel-stocks-panel" data-fr-js-tab-button="true">Stocks</button>
@@ -60,8 +60,10 @@
   $('form#territory').submit((event) => {
     let currentTab = $("button.fr-tabs__tab[aria-selected=true]")[0]
     currentTab = currentTab?.id.endsWith("flux") ? "flux" : "stocks"
-    const epciCode = window.location.pathname.split('/')[2]
-    window.location.href = `/epci/${epciCode}/${currentTab}?${queryParams.toString()}`
+    const pathParts = window.location.pathname.split('/')
+    const locationType = pathParts[1]
+    const epciCode = pathParts[2]
+    window.location.href = `/${locationType}/${epciCode}/${currentTab}?${queryParams.toString()}`
     event.preventDefault()
   })
 </script>

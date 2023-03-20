@@ -5,7 +5,8 @@ const { getCommunes } = require('./communes')
 function getCarbonDensity (location, groundType) {
   const csvFilePath = './dataByEpci/ground.csv'
   const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci)
+  const epciSiren = location.epci?.code || location.commune?.epci
+  const data = dataByEpci.find(data => data.siren === epciSiren)
   return parseFloat(data[groundType]) || 0
 }
 
@@ -56,9 +57,10 @@ function getArea (location, groundType) {
 function getAreaHaies (location) {
   const csvFilePath = './dataByEpci/surface-haies.csv'
   const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.filter(data => data.siren === location.epci)
+  const epciSiren = location.epci?.code || location.commune?.epci
+  const data = dataByEpci.filter(data => data.siren === epciSiren)
   if (data.length > 1) {
-    console.log('WARNING: more than one haies surface area for siren: ', location.epci)
+    console.log('WARNING: more than one haies surface area for siren: ', epciSiren)
   }
   return parseFloat(data[0].area)
 }
@@ -69,7 +71,14 @@ function getAreaHaies (location) {
 function getAreaForests (location, forestType) {
   const csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
-  const areaDataForEpci = areaData.filter(data => data.CODE_EPCI === location.epci)
+  let areaDataByCommune = []
+  if (location.epci) {
+    areaDataByCommune = areaData.filter(data => data.CODE_EPCI === location.epci.code)
+  } else if (location.commune) {
+    let code = location.commune.insee
+    if (code.startsWith('0')) code = code.slice(1)
+    areaDataByCommune = areaData.filter(data => data.INSEE_COM === code)
+  }
   let sum = 0
   const areaCompositionColumnName = {
     'forêt feuillu': 'SUR_FEUILLUS',
@@ -77,7 +86,7 @@ function getAreaForests (location, forestType) {
     'forêt mixte': 'SUR_MIXTES',
     'forêt peupleraie': 'SUR_PEUPLERAIES'
   }[forestType]
-  areaDataForEpci.forEach((communeData) => {
+  areaDataByCommune.forEach((communeData) => {
     sum += +communeData[areaCompositionColumnName]
   })
   return sum
@@ -96,10 +105,11 @@ function getCommuneAreaDataForEpci (location) {
   const areaData = require(csvFilePath + '.json')
   if (location.epci) {
     return areaData.filter(data => data.CODE_EPCI === location.epci)
-  }
-  // TODO: fix file to append 0 to all the codes that are just 4 characters long
-  if (location.commune) {
-    return areaData.filter(data => data.INSEE_COM === location.commune)
+  } else if (location.commune) {
+    // TODO: fix file to append 0 to all the codes that are just 4 characters long
+    let code = location.commune.insee
+    if (code.startsWith('0')) code = code.slice(1)
+    return areaData.filter(data => data.INSEE_COM === code)
   }
   return areaData.filter(data => location.communes?.includes(data.INSEE_COM) || location.epcis?.includes(data.CODE_EPCI))
 }
@@ -145,7 +155,7 @@ function getCarbonDataForCommuneAndComposition (communeData, carbonData, forestS
 }
 
 function getForestBiomassCarbonDensities (location, forestSubtype) {
-  const areaDataForEpci = getCommuneAreaDataForEpci(location)
+  const areaDataByCommune = getCommuneAreaDataForEpci(location)
   const significantCarbonData = getSignificantCarbonData()
 
   let weightedLiveSum = 0
@@ -157,7 +167,7 @@ function getForestBiomassCarbonDensities (location, forestSubtype) {
     'forêt mixte': 'SUR_MIXTES',
     'forêt peupleraie': 'SUR_PEUPLERAIES'
   }[forestSubtype]
-  areaDataForEpci.forEach((communeData) => {
+  areaDataByCommune.forEach((communeData) => {
     const area = +communeData[areaCompositionColumnName]
     const carbonData = getCarbonDataForCommuneAndComposition(communeData, significantCarbonData, forestSubtype)
     weightedLiveSum += +carbonData['carbone_(tC∙ha-1)'] * area
@@ -178,7 +188,8 @@ function getBiomassCarbonDensity (location, groundType) {
   }
   const csvFilePath = './dataByEpci/biomass-hors-forets.csv'
   const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci)
+  const epciSiren = location.epci?.code || location.commune?.epci
+  const data = dataByEpci.find(data => data.siren === epciSiren)
   // NB: all stocks are integers, but flux has decimals
   return parseInt(data[groundType], 10) || 0
 }
@@ -218,10 +229,10 @@ function getAnnualWoodProductsHarvest (location) {
     'forêt mixte': 1.37,
     'forêt peupleraie': 1.3
   }
-  const areaDataForEpci = getCommuneAreaDataForEpci(location)
+  const areaDataByCommune = getCommuneAreaDataForEpci(location)
   const significantCarbonData = getSignificantCarbonData()
   const regionProportionData = getRegionProportionData()
-  areaDataForEpci.forEach((communeData) => {
+  areaDataByCommune.forEach((communeData) => {
     ['forêt conifere', 'forêt feuillu', 'forêt mixte', 'forêt peupleraie'].forEach((forestSubtype) => {
       const areaCompositionColumnName = typeToColumn[forestSubtype]
       const area = +communeData[areaCompositionColumnName]

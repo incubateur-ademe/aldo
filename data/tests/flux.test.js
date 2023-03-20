@@ -14,7 +14,7 @@ jest.mock('../communes', () => {
 })
 
 // test('returns all carbon flux in tc/(ha.year) for biomass cultures', () => {
-//   const fluxes = getAllAnnualFluxes({ epci: '200007177' })
+//   const fluxes = getAllAnnualFluxes({ epci: {code:'200007177'} })
 //   const biomassFlux = fluxes.filter(f => f.reservoir === 'biomasse')
 //   const cultureFluxes = biomassFlux.filter(f => f.to === 'cultures')
 //   expect(cultureFluxes.length).toBe(9)
@@ -24,7 +24,7 @@ jest.mock('../communes', () => {
 // })
 
 // test('returns expected biomass flux for forests', () => {
-//   const fluxes = getAllAnnualFluxes({ epci: '200007177' })
+//   const fluxes = getAllAnnualFluxes({ epci: {code:'200007177'} })
 //   const biomassFlux = fluxes.filter(f => f.reservoir === 'biomasse')
 //   const forestFluxes = biomassFlux.filter(f => f.to.startsWith('forêt '))
 //   expect(forestFluxes.length).toBe(4)
@@ -58,7 +58,7 @@ describe('The flux data module', () => {
         }
       ]
     })
-    expect(getAnnualGroundCarbonFlux({ epci: '200007177' }, 'prairies zones arborées', 'cultures')).toBe(-2)
+    expect(getAnnualGroundCarbonFlux({ epci: { code: '200007177' } }, 'prairies zones arborées', 'cultures')).toBe(-2)
   })
 
   it('returns all carbon flux in tc/(ha.year) for ground cultures', () => {
@@ -71,7 +71,7 @@ describe('The flux data module', () => {
         }
       ]
     })
-    const fluxes = getAllAnnualFluxes({ epci: '200007177' })
+    const fluxes = getAllAnnualFluxes({ epci: { code: '200007177' } })
     const groundFluxes = fluxes.filter(f => f.reservoir === 'sol')
     const cultureFluxes = groundFluxes.filter(f => f.to === 'cultures')
     // 1 vineyard + 4 forest subtypes
@@ -522,7 +522,7 @@ describe('The flux data module', () => {
           }
         ]
       })
-      const fluxes = getAllAnnualFluxes({ epci: '200007177' })
+      const fluxes = getAllAnnualFluxes({ epci: { code: '200007177' } })
       const forestFlux = fluxes.find((f) => f.from === 'forêts' && f.to === 'vignes' && f.reservoir === 'sol')
       expect(forestFlux).toBeUndefined()
       const mixedFlux = fluxes.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'sol')
@@ -547,7 +547,7 @@ describe('The flux data module', () => {
           }
         ]
       })
-      const fluxes = getAllAnnualFluxes({ epci: '200007177' })
+      const fluxes = getAllAnnualFluxes({ epci: { code: '200007177' } })
       const toVineyards = fluxes.find((f) => f.from === 'forêt mixte' && f.to === 'vignes')
       expect(toVineyards.yearsForFlux).toBe(20)
       const toLeafy = fluxes.find((f) => f.from === 'prairies zones arborées' && f.to === 'forêt feuillu')
@@ -555,7 +555,7 @@ describe('The flux data module', () => {
     })
 
     it('adds litter changes for forest subtype -> other ground type changes', () => {
-      const allFlux = getAllAnnualFluxes({ epci: '200007177' })
+      const allFlux = getAllAnnualFluxes({ epci: { code: '200007177' } })
       const culturesFlux = allFlux.filter(f => f.to === 'cultures')
       const litter = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'litière')
       expect(litter.length).toBe(4)

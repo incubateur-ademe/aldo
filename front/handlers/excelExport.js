@@ -1,7 +1,7 @@
 const xl = require('excel4node')
 const path = require('path')
 const rootFolder = path.join(__dirname, '../../')
-const { getEpci } = require(path.join(rootFolder, './calculations/epcis'))
+const { getEpci } = require(path.join(rootFolder, './calculations/locations'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
