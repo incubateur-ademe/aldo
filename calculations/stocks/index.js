@@ -195,12 +195,27 @@ options: {
 }
 */
 function getStocks (location, options) {
-  const originalLocation = location
-  location = { epci: location.epci.code } // TODO: change the other APIs to use whole EPCI object like stocks wood products?
   options = options || {}
   options.areas = options.areas || {}
 
-  // TODO: aggregations when more than one location is used
+  const stocks = getStocksForLocation(location, options)
+
+  stocks.total = getTotalStock(stocks)
+  stocks.totalEquivalent = stocks.total * 44 / 12
+  annotateAreaCustomisations(location, options, stocks) // carbon to CO2 equivalent
+  // extra data prep for display - TODO: consider whether this is better handled by the handler
+  percentagesByParentType(stocks)
+  stocks.percentageByReservoir = getPercentageByReservoir(stocks)
+  stocks.byDensity = densityByChildType(stocks)
+  return stocks
+}
+
+function getStocksForLocation (location, options) {
+  const originalLocation = location
+  // TODO: change the other APIs to use whole EPCI object like stocks wood products?
+  if (location.epci) location = { epci: location.epci.code }
+  else if (location.commune?.code) location = { commune: location.commune.code }
+
   const stocks = {
     cultures: getStocksByKeyword(location, 'cultures', options),
     'zones humides': getStocksByKeyword(location, 'zones humides', options),
@@ -252,13 +267,6 @@ function getStocks (location, options) {
   stocks['sols artificiels'] = aggregateStocksForParent(solArtSubtypes)
   stocks['sols artificiels'].children = solArtChildren
 
-  stocks.total = getTotalStock(stocks)
-  stocks.totalEquivalent = stocks.total * 44 / 12
-  annotateAreaCustomisations(location, options, stocks) // carbon to CO2 equivalent
-  // extra data prep for display - TODO: consider whether this is better handled by the handler
-  percentagesByParentType(stocks)
-  stocks.percentageByReservoir = getPercentageByReservoir(stocks)
-  stocks.byDensity = densityByChildType(stocks)
   return stocks
 }
 
