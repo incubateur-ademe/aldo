@@ -18,7 +18,7 @@ jest.mock('../dataByCommune/communes_17122018.csv.json', () => {
 })
 
 test('Can fetch communes by SIREN EPCI', () => {
-  const communes = getCommunes({ epci: '200007177' })
+  const communes = getCommunes({ epci: { code: '200007177' } })
   expect(communes.length).toBe(2)
   expect(communes[0].insee).toBe('01234')
   expect(communes[1].insee).toBe('01235')

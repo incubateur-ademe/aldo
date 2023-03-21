@@ -1,11 +1,10 @@
 const path = require('path')
 const rootFolder = path.join(__dirname, '../../')
-const { getEpci, getCommune } = require(path.join(rootFolder, './calculations/locations'))
 const { epciList, communeList } = require(path.join(rootFolder, './data'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
-const { parseOptionsFromQuery } = require('./options')
+const { parseOptionsFromQuery, getLocationDetail } = require('./shared')
 
 async function territoryHandler (req, res) {
   const location = await getLocationDetail(req, res)
@@ -74,16 +73,6 @@ async function territoryHandler (req, res) {
     forestBiomassSummaryByType: flux?.biomassSummary,
     ...options
   })
-}
-
-async function getLocationDetail (req, res) {
-  if (req.params.epci) {
-    const epci = await getEpci(req.params.epci, true)
-    if (epci) return { epci }
-  } else if (req.params.commune) {
-    const commune = getCommune(req.params.commune, true)
-    if (commune) return { commune }
-  }
 }
 
 function formatFluxForDisplay (flux) {
