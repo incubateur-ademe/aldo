@@ -76,7 +76,7 @@
 </div>
 <% } %>
 
-<% if (epcis.length) { %>
+<% if (epcis && epcis.length) { %>
 <p class="fr-mb-0">EPCI :</p>
 <ul>
   <% for( let index=0; index < epcis.length; index++ ) { %>
@@ -86,7 +86,7 @@
   <% } %>
 </ul>
 <% } %>
-<% if (communes.length) { %>
+<% if (communes && communes.length) { %>
 <p class="fr-mb-0">Commune :</p>
 <ul>
   <% for( let index=0; index < communes.length; index++ ) { %>
