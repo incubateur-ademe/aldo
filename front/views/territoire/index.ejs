@@ -1,10 +1,10 @@
 <%- include('../partials/header') -%>
 <main role="main" id="contenu">
   <div class="fr-container fr-pb-6w fr-px-2w">
-    <%- include('../partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: singleLocation.nom, }, ], }) -%>
+    <%- include('../partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: singleLocation?.nom || 'Regroupement', }, ], }) -%>
     <%- include('./introduction') -%>
     <form action="<%= baseUrl %>/stocks" method="GET" class="fr-tabs fr-mt-4w" id="territory">
-      <!-- <input type="hidden" name="epci" value="<%= singleLocation.nom %>" /> -->
+      <!-- <input type="hidden" name="epci" value="<%= singleLocation?.nom %>" /> -->
       <ul class="fr-tabs__list" role="tablist" aria-label="Données du territoire">
         <li role="presentation">
           <button type="button" id="tabpanel-stocks" class="fr-tabs__tab" tabindex="0" role="tab" aria-selected="<%=tab === 'stocks'%>" aria-controls="tabpanel-stocks-panel" data-fr-js-tab-button="true">Stocks</button>

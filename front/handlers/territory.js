@@ -19,16 +19,34 @@ async function territoryHandler (req, res) {
     })
     return
   }
-  const singleLocation = location.epci || location.commune
-
   const options = parseOptionsFromQuery(req.query)
-  const stocks = await getStocks(location, options)
-  const flux = getAnnualFluxes(location, options)
+
+  let stocks, flux
+  const singleLocation = location.epci || location.commune
+  if (singleLocation) {
+    stocks = getStocks(location, options)
+    flux = getAnnualFluxes(location, options)
+  } else {
+    location.epcis.forEach((epci) => {
+      stocks = getStocks({ epci }, options)
+      flux = getAnnualFluxes({ epci }, options)
+    })
+    location.communes.forEach((commune) => {
+      stocks = getStocks({ commune }, options)
+      flux = getAnnualFluxes({ commune }, options)
+    })
+  }
 
   const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
+  let baseUrl
+  if (singleLocation) {
+    baseUrl = location.epci ? `/epci/${singleLocation.code}` : `/commune/${singleLocation.insee}`
+  } else {
+    baseUrl = '/regroupement?' + location.epcis.map(c => `epcis[]=${c.code}`).join('&') + location.communes.map(c => `communes[]=${c.insee}`).join('&')
+  }
 
   res.render('territoire', {
-    pageTitle: `${singleLocation.nom}`,
+    pageTitle: `${singleLocation?.nom || 'Regroupement'}`,
     tab: req.params.tab || 'stocks',
     singleLocation,
     groundTypes: getSortedGroundTypes(stocks),
@@ -65,7 +83,7 @@ async function territoryHandler (req, res) {
     fluxTotal: flux?.total,
     agriculturalPractices: AgriculturalPractices,
     agriculturalPracticeDetail,
-    baseUrl: location.epci ? `/epci/${singleLocation.code}` : `/commune/${singleLocation.insee}`,
+    baseUrl,
     resetQueryStr: options.stocksHaveModifications || options.fluxHaveModifications ? '?' : undefined,
     sharingQueryStr: getSharingQueryString(req),
     beges: req.query.beges,
