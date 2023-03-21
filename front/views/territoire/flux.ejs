@@ -2,27 +2,28 @@
   <h2>Flux de carbone</h2>
   <p class="fr-text--sm fr-mb-1w">Bases de changement CLC 2012 2018 & Inventaire forestier IGN 2012 2016</p>
   <%- include('../partials/calculation-warning') -%>
-  <div class="fr-col-12 fr-col-md-8 fr-col-lg-6 fr-pb-2w">
+  <div class="fr-col-12 fr-col-lg-8 fr-pb-2w">
     <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
       <% for (let keyIdx=0; keyIdx < Object.keys(fluxCharts).length; keyIdx++) { %>
-        <% const chartKey = Object.keys(fluxCharts)[keyIdx]%>
-        <li>
-          <section class="fr-accordion">
-            <h3 class="fr-accordion__title">
-              <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
-                aria-controls="accordion-flux-chart-<%= keyIdx %>">
-                <%= fluxCharts[chartKey].title %>
-              </button>
-            </h3>
-            <div class="fr-collapse" id="accordion-flux-chart-<%= keyIdx %>">
-              <% if (fluxCharts[chartKey].note) { %>
-                <p><%= fluxCharts[chartKey].note %></p>
-              <% } %>
-              <canvas id="fluxChart-<%= chartKey %>" width="400" height="500"></canvas>
+      <% const chartKey = Object.keys(fluxCharts)[keyIdx]%>
+      <li>
+        <section class="fr-accordion">
+          <h3 class="fr-accordion__title">
+            <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>" aria-controls="accordion-flux-chart-<%= keyIdx %>">
+              <%= fluxCharts[chartKey].title %>
+            </button>
+          </h3>
+          <div class="fr-collapse" id="accordion-flux-chart-<%= keyIdx %>">
+            <% if (fluxCharts[chartKey].note) { %>
+            <p><%= fluxCharts[chartKey].note %></p>
+            <% } %>
+            <div class="chart-wrapper">
+              <canvas id="fluxChart-<%= chartKey %>"></canvas>
             </div>
-          </section>
-        </li>
-        <% } %>
+          </div>
+        </section>
+      </li>
+      <% } %>
     </ul>
   </div>
   <div class="fr-table fr-col-12 fr-col-lg-10 fr-pr-md-1w fr-mt-2w">
@@ -38,39 +39,39 @@
       </thead>
       <tbody>
         <% for( let index=0; index < sortedFluxKeys.length; index++ ) { %>
-          <% const groundType = sortedFluxKeys[index] %>
-          <% if (groundType.stocksId === 'haies') continue %>
-          <% const thisFlux = fluxSummary[groundType.stocksId] %>
-          <!-- TODO: make row blue if area modified -->
-          <tr class="expandable-row flux-row">
-            <td onClick='toggleRow(this)'>
-              <%= groundType.name %> <%= thisFlux?.hasModifications ? '*' : '' %>
-            </td>
-            <td onClick='toggleRow(this)' style="text-align: right;">
-              <% if (thisFlux) { %>
-                <%= formatNumber(thisFlux.totalSequestration) %>
-              <% } else { %>
-                <i>Pas de données</i>
-              <% } %>
-            </td>
-            <td onClick='toggleRow(this)' style="text-align: center;">
-              <% if (!thisFlux || Math.abs(thisFlux.totalSequestration) < 0.5) { %>
-                <!-- no change -->
-              <% } else if (thisFlux.totalSequestration > 0) { %>
-                <!-- colour = 'succès' -->
-                <span style="color: #1f8d49;">séquestration</span>
-              <% } else { %>
-                <!-- rouge marianne -->
-                <span style="color: #e1000f;">émission</span>
-              <% } %>
-            </td>
-            <td onClick='toggleRow(this)'>
-              <button onClick='toggleRow(this)' type="button">
-                <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
-              </button>
-            </td>
-            <td class='expanded-row-content hide-row'>
-              <%
+        <% const groundType = sortedFluxKeys[index] %>
+        <% if (groundType.stocksId === 'haies') continue %>
+        <% const thisFlux = fluxSummary[groundType.stocksId] %>
+        <!-- TODO: make row blue if area modified -->
+        <tr class="expandable-row flux-row">
+          <td onClick='toggleRow(this)'>
+            <%= groundType.name %> <%= thisFlux?.hasModifications ? '*' : '' %>
+          </td>
+          <td onClick='toggleRow(this)' style="text-align: right;">
+            <% if (thisFlux) { %>
+            <%= formatNumber(thisFlux.totalSequestration) %>
+            <% } else { %>
+            <i>Pas de données</i>
+            <% } %>
+          </td>
+          <td onClick='toggleRow(this)' style="text-align: center;">
+            <% if (!thisFlux || Math.abs(thisFlux.totalSequestration) < 0.5) { %>
+            <!-- no change -->
+            <% } else if (thisFlux.totalSequestration > 0) { %>
+            <!-- colour = 'succès' -->
+            <span style="color: #1f8d49;">séquestration</span>
+            <% } else { %>
+            <!-- rouge marianne -->
+            <span style="color: #e1000f;">émission</span>
+            <% } %>
+          </td>
+          <td onClick='toggleRow(this)'>
+            <button onClick='toggleRow(this)' type="button">
+              <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
+            </button>
+          </td>
+          <td class='expanded-row-content hide-row'>
+            <%
                 const hasFluxFromAreaChange = allFlux.some(f => {
                   // the startsWith handles the case of prairies and sols artificiels
                   let relevantFlux = f.to === groundType.stocksId || f.to.startsWith(groundType.stocksId)
@@ -83,30 +84,30 @@
                   return relevantFlux && f.value !== 0 && f.practice
                 })
               %>
-              <% if (!thisFlux) { %>
-                <p>Pas de données.</p>
-              <% } else if (Math.abs(thisFlux.totalSequestration) < 0.5) { %>
-                <p class="fr-text--sm fr-mb-1w">
-                Il n'y a aucun changement d'occupation du sol enregistré.
-              </p>
-              <% } else if (groundType.stocksId === 'produits bois') { %>
-                <%- include('fluxCalculations/wood', { woodCalculation }) -%>
-              <% } else if (!groundType.children) { %>
-                <% if (hasFluxFromAreaChange) { %>
-                  <p class="fr-text--sm fr-mb-1w">
-                    Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %>&nbsp;:
-                  </p>
-                  <%- include('fluxCalculations/simple', { groundType: groundType.stocksId }) -%>
-                <% } %>
-                <% if (hasFluxFromAgriculturalPractices) { %>
-                  <p class="fr-text--sm fr-mb-1w fr-mt-2w">
-                    Les flux annuels liés aux pratiques agricoles mises en place il y a moins de 20 ans&nbsp;:
-                  </p>
-                  <%- include('fluxCalculations/agricultural-practices', { groundType: groundType.stocksId }) -%>
-                <% } %>
-              <% } else { %>
-                <% if (hasFluxFromAreaChange) { %>
-                  <% function hasData(child) {
+            <% if (!thisFlux) { %>
+            <p>Pas de données.</p>
+            <% } else if (Math.abs(thisFlux.totalSequestration) < 0.5) { %>
+            <p class="fr-text--sm fr-mb-1w">
+              Il n'y a aucun changement d'occupation du sol enregistré.
+            </p>
+            <% } else if (groundType.stocksId === 'produits bois') { %>
+            <%- include('fluxCalculations/wood', { woodCalculation }) -%>
+            <% } else if (!groundType.children) { %>
+            <% if (hasFluxFromAreaChange) { %>
+            <p class="fr-text--sm fr-mb-1w">
+              Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %>&nbsp;:
+            </p>
+            <%- include('fluxCalculations/simple', { groundType: groundType.stocksId }) -%>
+            <% } %>
+            <% if (hasFluxFromAgriculturalPractices) { %>
+            <p class="fr-text--sm fr-mb-1w fr-mt-2w">
+              Les flux annuels liés aux pratiques agricoles mises en place il y a moins de 20 ans&nbsp;:
+            </p>
+            <%- include('fluxCalculations/agricultural-practices', { groundType: groundType.stocksId }) -%>
+            <% } %>
+            <% } else { %>
+            <% if (hasFluxFromAreaChange) { %>
+            <% function hasData(child) {
                     if (child.startsWith('forêt ')) {
                       return !!fluxDetail[child]?.length
                     } else {
@@ -114,45 +115,45 @@
                     }
                   }
                   const hasDataForMultipleChildren = groundType.children.filter(child => hasData(child)).length > 1 %>
-                  <% if (hasDataForMultipleChildren) { %>
-                    <p class="fr-text--sm fr-mb-1w">
-                      Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %> sont séparés par sous-typologie.
-                    </p>
-                  <% } %>
-                  <% for (const child of groundType.children) { %>
-                    <% if(hasData(child)) { %>
-                      <% const childName = allGroundTypes.find((g) => g.stocksId === child).name.toLowerCase() %>
-                      <p class="fr-text--sm">Vers <%= childName %>&nbsp;:</p>
-                      <%- include('fluxCalculations/simple', { groundType: child }) -%>
-                    <% } %>
-                  <% } %>
-                <% } else { %>
-                  <p class="fr-text--sm fr-mb-1w">
-                    Il n'y a aucun changement d'occupation du sol enregistré.
-                  </p>
-                <% } %>
-                <% if (hasFluxFromAgriculturalPractices) { %>
-                  <p class="fr-text--sm fr-mb-1w">
-                    Les flux annuels liés aux pratiques agricoles mises en place depuis moins de 20 ans&nbsp;:
-                  </p>
-                  <%- include('fluxCalculations/agricultural-practices', { groundType: groundType.stocksId }) -%>
-                <% } %>
-                <% if(groundType.stocksId === 'forêts') { %>
-                  <%- include('fluxCalculations/forest-biomass') -%>
-                <% } %>
-              <% } %>
-            </td>
-          </tr>
+            <% if (hasDataForMultipleChildren) { %>
+            <p class="fr-text--sm fr-mb-1w">
+              Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %> sont séparés par sous-typologie.
+            </p>
+            <% } %>
+            <% for (const child of groundType.children) { %>
+            <% if(hasData(child)) { %>
+            <% const childName = allGroundTypes.find((g) => g.stocksId === child).name.toLowerCase() %>
+            <p class="fr-text--sm">Vers <%= childName %>&nbsp;:</p>
+            <%- include('fluxCalculations/simple', { groundType: child }) -%>
+            <% } %>
+            <% } %>
+            <% } else { %>
+            <p class="fr-text--sm fr-mb-1w">
+              Il n'y a aucun changement d'occupation du sol enregistré.
+            </p>
+            <% } %>
+            <% if (hasFluxFromAgriculturalPractices) { %>
+            <p class="fr-text--sm fr-mb-1w">
+              Les flux annuels liés aux pratiques agricoles mises en place depuis moins de 20 ans&nbsp;:
+            </p>
+            <%- include('fluxCalculations/agricultural-practices', { groundType: groundType.stocksId }) -%>
+            <% } %>
+            <% if(groundType.stocksId === 'forêts') { %>
+            <%- include('fluxCalculations/forest-biomass') -%>
+            <% } %>
+            <% } %>
+          </td>
+        </tr>
         <% } %>
       </tbody>
     </table>
     <% if (fluxHaveModifications) { %>
-      <p class="fr-text--sm fr-mt-1w">* Changement de surface modifiée</p>
+    <p class="fr-text--sm fr-mt-1w">* Changement de surface modifiée</p>
     <% } %>
     <% if (Object.keys(agriculturalPracticeDetail).length) { %>
-      <p class="fr-text--sm fr-mt-1w">Ces flux comprisent ceux qui sont reliés a vos pratiques agricoles. Modifiez-les dans l'onglet « Pratiques agricoles ».</p>
+    <p class="fr-text--sm fr-mt-1w">Ces flux comprisent ceux qui sont reliés a vos pratiques agricoles. Modifiez-les dans l'onglet « Pratiques agricoles ».</p>
     <% } else { %>
-      <p class="fr-text--sm fr-mt-1w">Mettez à jour vos pratiques agricoles pour voir comment elles influencent les flux dans votre térritoire avec l'onglet « Pratiques agricoles ».</p>
+    <p class="fr-text--sm fr-mt-1w">Mettez à jour vos pratiques agricoles pour voir comment elles influencent les flux dans votre térritoire avec l'onglet « Pratiques agricoles ».</p>
     <% } %>
     <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/flux/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">En savoir plus sur les méthodes de calculs</a></p>
   </div>
