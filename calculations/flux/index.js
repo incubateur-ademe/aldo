@@ -46,13 +46,50 @@ function convertN2O (flux) {
 }
 
 function getAnnualFluxes (location, options) {
-  // TODO: update this temp code to prevent bugging
-  if (location.epcis?.length) location.epci = location.epcis[0]
-  else if (location.communes?.length) location.commune = location.communes[0]
-  // hack end
   options = options || {}
-  const allFluxes = getAllAnnualFluxes(location, options)
-  allFluxes.forEach((flux) => {
+  const fluxes = []
+  if (location.epci || location.commune) {
+    fluxes.push(...getFluxesForLocation(location, options))
+  }
+  // TODO: area overrides should be at regroupement level, not per-location
+  if (location.epcis) {
+    location.epcis.forEach((epci) => {
+      fluxes.push(...getFluxesForLocation({ epci }, options))
+    })
+  }
+  if (location.communes) {
+    location.communes.forEach((commune) => {
+      fluxes.push(...getFluxesForLocation({ commune }, options))
+    })
+  }
+  // TODO: aggregations for display
+  //  - produits bois details
+  //  - how to deal with custom areas?
+
+  fluxes.push(...getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas))
+
+  const { summary, biomassSummary, total } = fluxSummary(fluxes, options)
+
+  return {
+    allFlux: fluxes,
+    summary,
+    biomassSummary,
+    total
+  }
+}
+
+function getFluxesForLocation (location, options) {
+  const locationFluxes = getAllAnnualFluxes(location, options)
+  locationFluxes.forEach(getAreaAndCalculateValue(location, options))
+
+  locationFluxes.push(...getNitrousOxideEmissions(locationFluxes))
+  locationFluxes.push(...getFluxWoodProducts(location, options?.woodCalculation, options))
+  locationFluxes.push(...deforestationFlux(location, options))
+  return locationFluxes
+}
+
+function getAreaAndCalculateValue (location, options) {
+  return (flux) => {
     if (!flux.area && flux.area !== 0) {
       const { area, areaModified, originalArea } = getAnnualSurfaceChange(location, options, flux.from, flux.to)
       flux.area = area
@@ -73,8 +110,12 @@ function getAnnualFluxes (location, options) {
       flux.value = annualtC
     }
     flux.co2e = convertCToCo2e(flux.value)
-  })
+  }
+}
+
+function getNitrousOxideEmissions (allFluxes) {
   // need to do a second pass because N2O calculation requires the sum of ground and litter values
+  const n2oEmissions = []
   const groundFluxes = allFluxes.filter(flux => flux.reservoir === 'sol')
   groundFluxes.forEach((groundFlux) => {
     const litterFlux = allFluxes.find(flux => flux.reservoir === 'litière' && flux.from === groundFlux.from && flux.to === groundFlux.to) || {}
@@ -83,7 +124,7 @@ function getAnnualFluxes (location, options) {
     if (groundFluxValue + litterFluxValue < 0) {
       // decided to keep this grouping because N2O only tracked if emitted
       const annualN2O = convertN2O(groundFluxValue + litterFluxValue)
-      allFluxes.push({
+      n2oEmissions.push({
         from: groundFlux.from,
         to: groundFlux.to,
         value: annualN2O,
@@ -94,12 +135,10 @@ function getAnnualFluxes (location, options) {
       })
     }
   })
-  const woodFluxes = getFluxWoodProducts(location, options?.woodCalculation, options)
-  allFluxes.push(...woodFluxes)
-  const agriculturalPracticesFlux = getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas)
-  allFluxes.push(...agriculturalPracticesFlux)
-  allFluxes.push(...deforestationFlux(location, options))
+  return n2oEmissions
+}
 
+function fluxSummary (allFluxes, options) {
   const summary = {}
   let total = 0
   allFluxes.forEach((flux) => {
@@ -152,13 +191,7 @@ function getAnnualFluxes (location, options) {
   const biomassGrowthAreaModified = biomassSummary.some((subtype) => subtype.areaModified)
   summary.forêts.areaModified = summary.forêts.areaModified || biomassGrowthAreaModified
   summary.forêts.hasModifications = summary.forêts.hasModifications || biomassGrowthAreaModified
-
-  return {
-    allFlux: allFluxes,
-    summary,
-    biomassSummary,
-    total
-  }
+  return { summary, biomassSummary, total }
 }
 
 function forestBiomassGrowthSummary (allFlux, options) {
