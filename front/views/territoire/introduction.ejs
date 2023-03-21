@@ -1,8 +1,8 @@
 <h1 class="fr-mt-6w">
-  <%= singleLocation.nom %>
+  <%= singleLocation?.nom || 'Regroupement' %>
 </h1>
 
-<% if (singleLocation.code) { %>
+<% if (singleLocation?.code) { %>
 <div class="fr-grid-row">
   <div class="fr-col-12 fr-col-md-3">
     <p>
@@ -24,7 +24,7 @@
   </div>
 </div>
 
-<% if (singleLocation.membres.length) { %>
+<% if (singleLocation?.membres.length) { %>
 <section class="fr-accordion">
   <p class="fr-accordion__title">
     <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-communes">
@@ -50,7 +50,7 @@
   <%= singleLocation.nombreCommunes %> commune<%= singleLocation.nombreCommunes === 1 ? '' : 's' %>
 </p>
 <% } %>
-<% } else if (singleLocation.insee) { %>
+<% } else if (singleLocation?.insee) { %>
 <div class="fr-grid-row">
   <div class="fr-col-12 fr-col-md-3">
     <p>

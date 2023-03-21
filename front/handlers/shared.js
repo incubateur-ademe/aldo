@@ -52,11 +52,16 @@ function parseOptionsFromQuery (query) {
 
 async function getLocationDetail (req, res) {
   if (req.params.epci) {
-    const epci = await getEpci(req.params.epci, true)
+    const epci = getEpci(req.params.epci, true)
     if (epci) return { epci }
   } else if (req.params.commune) {
     const commune = getCommune(req.params.commune, true)
     if (commune) return { commune }
+  } else {
+    const location = { communes: [], epcis: [] }
+    if (req.query.communes) location.communes = req.query.communes.map((c) => getCommune(c, true))
+    if (req.query.epcis) location.epcis = req.query.epcis.map((c) => getEpci(c, true))
+    return location
   }
 }
 
