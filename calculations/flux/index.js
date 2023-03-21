@@ -46,6 +46,10 @@ function convertN2O (flux) {
 }
 
 function getAnnualFluxes (location, options) {
+  // TODO: update this temp code to prevent bugging
+  if (location.epcis?.length) location.epci = location.epcis[0]
+  else if (location.communes?.length) location.commune = location.communes[0]
+  // hack end
   options = options || {}
   const allFluxes = getAllAnnualFluxes(location, options)
   allFluxes.forEach((flux) => {

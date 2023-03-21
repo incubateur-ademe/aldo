@@ -198,7 +198,24 @@ function getStocks (location, options) {
   options = options || {}
   options.areas = options.areas || {}
 
-  const stocks = getStocksForLocation(location, options)
+  const stocksForLocations = []
+  let stocks
+  if (location.epci || location.commune) {
+    stocks = getStocksForLocation(location, options)
+  } else {
+    // area overrides shouldn't be passed down at this level
+    if (location.epcis) {
+      location.epcis.forEach((epci) => {
+        stocksForLocations.push(getStocksForLocation({ epci }, options))
+      })
+    }
+    if (location.communes) {
+      location.communes.forEach((commune) => {
+        stocksForLocations.push(getStocksForLocation({ commune }, options))
+      })
+    }
+    stocks = aggregateStocks(stocksForLocations, options)
+  }
 
   stocks.total = getTotalStock(stocks)
   stocks.totalEquivalent = stocks.total * 44 / 12
@@ -263,6 +280,64 @@ function getStocksForLocation (location, options) {
   stocks['sols artificiels'].children = solArtChildren
 
   return stocks
+}
+
+function aggregateStocks (stocksForLocations, options) {
+  // TODO: area overrides should happen at this level
+  const aggregatedStocks = {}
+  const sumKeys = [
+    'area',
+    'originalArea',
+    'groundStock',
+    'biomassStock',
+    'liveBiomassStock',
+    'deadBiomassStock',
+    'forestLitterStock',
+    'totalReservoirStock',
+    'totalStock'
+  ]
+  const areaWeightedKeys = [
+    'groundDensity',
+    'biomassDensity',
+    'liveBiomassDensity',
+    'deadBiomassDensity',
+    'forestLitterDensity',
+    'totalDensity'
+  ]
+  const constantKeys = [
+    'areaModified',
+    'hasModifications',
+    'children',
+    'parent'
+  ]
+  // TODO: stockPercentage?
+  stocksForLocations.forEach((stocksForLocation) => {
+    Object.entries(stocksForLocation).forEach(([groundType, valuesForType]) => {
+      if (!aggregatedStocks[groundType]) aggregatedStocks[groundType] = {}
+      Object.entries(valuesForType).forEach(([key, value]) => {
+        if (!aggregatedStocks[groundType][key]) {
+          aggregatedStocks[groundType][key] = 0
+        }
+        if (sumKeys.includes(key)) aggregatedStocks[groundType][key] += value
+        else if (areaWeightedKeys.includes(key)) {
+          // fall back to 1 here and dividing by location count below
+          // so that if no area for ground type, user still has chance to enter their data
+          const area = stocksForLocation[groundType].area || 1
+          aggregatedStocks[groundType][key] += (value * area)
+        }
+        if (constantKeys.includes(key)) {
+          aggregatedStocks[groundType][key] = value || aggregatedStocks[groundType][key]
+        }
+      })
+    })
+  })
+  Object.keys(aggregatedStocks).forEach((groundType) => {
+    areaWeightedKeys.forEach((key) => {
+      if (!aggregatedStocks[groundType][key]) return
+      aggregatedStocks[groundType][key] /= (aggregatedStocks[groundType].area || stocksForLocations.length)
+    })
+  })
+  return aggregatedStocks
 }
 
 function getTotalStock (stocks) {
