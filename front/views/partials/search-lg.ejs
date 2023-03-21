@@ -103,7 +103,19 @@
   $("#location-search").keypress((event) => {
     if (event.which == 13) {
       event.preventDefault();
-      handleInputChange(event.target.value)
+      // TODO: if empty, submit form
+      const searchTerm = event.target.value
+      locationData = handleInputChange(searchTerm)
+      if (!locationData && searchTerm) {
+        const relevantOptions = Object.entries(locations).filter(([code, lName]) => {
+          const nameMatch = lName.toLowerCase().includes(searchTerm.toLowerCase())
+          const codeMatch = code.toLowerCase().includes(searchTerm.toLowerCase())
+          return nameMatch || codeMatch;
+        });
+        if (relevantOptions.length === 1) {
+          handleInputChange(relevantOptions.shift()[0])
+        }
+      }
     }
   })
 
@@ -115,13 +127,15 @@
   function handleInputChange(value) {
     if (!value) return
     const code = value.trim()
-    const location = getLocationData(code)
-    if (location) {
-      addLocationTag(location)
+    const locationData = getLocationData(code)
+    if (locationData) {
+      addLocationTag(locationData)
       document.getElementById('location-search').value = ""
+      return locationData
     }
   }
 
+  // TODO: debug why not removed when navigate to URL
   function removeTag(event) {
     event.preventDefault()
     $(`#${codeToId(event.target.value)}`).remove()
