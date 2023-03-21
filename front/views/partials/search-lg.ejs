@@ -102,19 +102,22 @@
   // monitor pressing enter key
   $("#location-search").keypress((event) => {
     if (event.which == 13) {
-      event.preventDefault();
-      // TODO: if empty, submit form
       const searchTerm = event.target.value
-      locationData = handleInputChange(searchTerm)
-      if (!locationData && searchTerm) {
-        const relevantOptions = Object.entries(locations).filter(([code, lName]) => {
-          const nameMatch = lName.toLowerCase().includes(searchTerm.toLowerCase())
-          const codeMatch = code.toLowerCase().includes(searchTerm.toLowerCase())
-          return nameMatch || codeMatch;
-        });
-        if (relevantOptions.length === 1) {
-          handleInputChange(relevantOptions.shift()[0])
+      if (searchTerm) {
+        event.preventDefault()
+        locationData = handleInputChange(searchTerm)
+        if (!locationData && searchTerm) {
+          const relevantOptions = Object.entries(locations).filter(([code, lName]) => {
+            const nameMatch = lName.toLowerCase().includes(searchTerm.toLowerCase())
+            const codeMatch = code.toLowerCase().includes(searchTerm.toLowerCase())
+            return nameMatch || codeMatch
+          });
+          if (relevantOptions.length === 1) {
+            handleInputChange(relevantOptions.shift()[0])
+          }
         }
+      } else if ($('#locations')[0].children.length) {
+        $('form').submit()
       }
     }
   })
