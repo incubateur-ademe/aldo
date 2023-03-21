@@ -60,7 +60,7 @@
   }
 
   function codeToId(l) {
-    return `loc-${l.code}`
+    return `loc-${l.code || l}`
   }
 
   function addLocationTag(location) {
@@ -138,7 +138,6 @@
     }
   }
 
-  // TODO: debug why not removed when navigate to URL
   function removeTag(event) {
     event.preventDefault()
     $(`#${codeToId(event.target.value)}`).remove()
