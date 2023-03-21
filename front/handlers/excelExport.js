@@ -1,22 +1,23 @@
 const xl = require('excel4node')
 const path = require('path')
 const rootFolder = path.join(__dirname, '../../')
-const { getEpci } = require(path.join(rootFolder, './calculations/locations'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
-const { parseOptionsFromQuery } = require('./options')
+const { parseOptionsFromQuery, getLocationDetail } = require('./shared')
 
 async function excelExportHandler (req, res) {
-  // prepare data
-  const epci = await getEpci(req.params.epci, true) || {}
-  if (!epci.code) {
+  const location = await getLocationDetail(req, res)
+  const singleLocation = location?.epci || location?.commune
+  // for now only support single location
+  if (!singleLocation) {
     res.status(404)
     return
   }
+
   const options = parseOptionsFromQuery(req.query)
-  const stocks = await getStocks({ epci }, options)
-  const flux = getAnnualFluxes({ epci }, options)
+  const stocks = await getStocks(location, options)
+  const flux = getAnnualFluxes(location, options)
 
   // prepare export
   const wb = new xl.Workbook()
@@ -51,18 +52,35 @@ async function excelExportHandler (req, res) {
   ws.cell(row, secondColumn)
     .string('Nom')
   ws.cell(row, thirdColumn)
-    .string(epci.nom)
+    .string(singleLocation.nom)
     .style(dataStyle)
   row++
-  ws.cell(row, secondColumn)
-    .string('SIREN')
-  ws.cell(row, thirdColumn)
-    .string(epci.code)
-    .style(dataStyle)
-  row++
+  if (singleLocation.code) {
+    ws.cell(row, secondColumn)
+      .string('SIREN')
+    ws.cell(row, thirdColumn)
+      .string(singleLocation.code)
+      .style(dataStyle)
+    row++
+  } else if (singleLocation.insee) {
+    ws.cell(row, secondColumn)
+      .string('Code INSEE')
+    ws.cell(row, thirdColumn)
+      .string(singleLocation.insee)
+      .style(dataStyle)
+    row++
+    ws.cell(row, secondColumn)
+      .string('SIREN EPCI')
+    ws.cell(row, thirdColumn)
+      .string(singleLocation.epci)
+      .style(dataStyle)
+    row++
+  }
   ws.cell(row, secondColumn)
     .string('Lien')
-  let pageUrl = `${process.env.PROTOCOL.toLowerCase()}://${process.env.HOSTNAME}/epci/${epci.code}`
+  let pageUrl = `${process.env.PROTOCOL.toLowerCase()}://${process.env.HOSTNAME}`
+  if (singleLocation.code) pageUrl += `/epci/${singleLocation.code}`
+  else if (singleLocation.insee) pageUrl += `/commune/${singleLocation.insee}`
   if (req._parsedUrl.search) pageUrl += `${req._parsedUrl.search}`
   ws.cell(row, thirdColumn)
     .link(pageUrl, 'Outil ALDO en ligne')
@@ -73,10 +91,10 @@ async function excelExportHandler (req, res) {
     .date(new Date())
     .style(dataStyle)
   row++
-  ws.cell(row, secondColumn)
-    .string('Communes')
-  if (epci.membres?.length) {
-    epci.membres.forEach(commune => {
+  if (singleLocation.membres?.length) {
+    ws.cell(row, secondColumn)
+      .string('Communes')
+    singleLocation.membres.forEach(commune => {
       ws.cell(row, thirdColumn)
         .string(commune)
         .style(dataStyle)
@@ -320,7 +338,7 @@ async function excelExportHandler (req, res) {
     row++
   })
 
-  wb.write(`${epci.nom}.xlsx`, res)
+  wb.write(`${singleLocation.nom}.xlsx`, res)
 }
 
 module.exports = {
