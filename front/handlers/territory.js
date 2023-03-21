@@ -19,25 +19,13 @@ async function territoryHandler (req, res) {
     })
     return
   }
-  const options = parseOptionsFromQuery(req.query)
 
-  let stocks, flux
-  const singleLocation = location.epci || location.commune
-  if (singleLocation) {
-    stocks = getStocks(location, options)
-    flux = getAnnualFluxes(location, options)
-  } else {
-    location.epcis.forEach((epci) => {
-      stocks = getStocks({ epci }, options)
-      flux = getAnnualFluxes({ epci }, options)
-    })
-    location.communes.forEach((commune) => {
-      stocks = getStocks({ commune }, options)
-      flux = getAnnualFluxes({ commune }, options)
-    })
-  }
+  const options = parseOptionsFromQuery(req.query)
+  const stocks = getStocks(location, options)
+  const flux = getAnnualFluxes(location, options)
 
   const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
+  const singleLocation = location.epci || location.commune
   let baseUrl
   if (singleLocation) {
     baseUrl = location.epci ? `/epci/${singleLocation.code}` : `/commune/${singleLocation.insee}`

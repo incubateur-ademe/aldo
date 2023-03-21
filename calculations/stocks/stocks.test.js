@@ -8,8 +8,14 @@ jest.mock('../../data/stocks', () => {
   return {
     __esModule: true,
     ...originalModule,
-    getArea: jest.fn(() => 50),
-    getCarbonDensity: jest.fn(() => 2),
+    getArea: jest.fn((location) => {
+      if (location.epci?.code === '200042992') return 100
+      return 50
+    }),
+    getCarbonDensity: jest.fn((location) => {
+      if (location.epci?.code === '200042992') return 5
+      return 2
+    }),
     getBiomassCarbonDensity: jest.fn((location, keyword) => {
       // TODO: maybe refactor getStocksByKeyword to only fetch biomass for non-forest
       if (!keyword.startsWith('forêt ')) {
@@ -89,6 +95,12 @@ describe('The stocks calculation module', () => {
       expect(totalStock).toEqual(250)
       const totalReservoirStock = simpleStock.totalReservoirStock
       expect(totalReservoirStock).toEqual(250)
+    })
+
+    it('accepts multiple locations', () => {
+      const stocks = getStocks({ epcis: [epci, getEpci('200042992', true)] })
+      expect(stocks.cultures.area).toEqual(150)
+      expect(stocks.cultures.groundDensity).toEqual(4)
     })
 
     it('calculates total density by the sum of ground and biomass densities', () => {
