@@ -33,10 +33,25 @@ async function territoryHandler (req, res) {
     baseUrl = '/regroupement?' + location.epcis.map(c => `epcis[]=${c.code}`).join('&') + location.communes.map(c => `communes[]=${c.insee}`).join('&')
   }
 
+  let pageTitle = singleLocation?.nom
+  const epciCount = location.epcis.length
+  const communeCount = location.communes.length
+  if (epciCount || communeCount) {
+    pageTitle = 'Regroupement'
+    const epcis = epciCount ? `de ${epciCount} EPCI${epciCount > 1 ? 's' : ''}` : ''
+    const communes = communeCount ? `de ${communeCount} commune${communeCount > 1 ? 's' : ''}` : ''
+    if (epcis) {
+      pageTitle += ' ' + epcis
+      if (communes) pageTitle += ' et'
+    }
+    if (communes) pageTitle += ' ' + communes
+  }
   res.render('territoire', {
-    pageTitle: `${singleLocation?.nom || 'Regroupement'}`,
+    pageTitle,
     tab: req.params.tab || 'stocks',
     singleLocation,
+    communes: location.communes,
+    epcis: location.epcis,
     groundTypes: getSortedGroundTypes(stocks),
     allGroundTypes: GroundTypes,
     // these are the types that can be modified to customise the stocks calculations
