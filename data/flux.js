@@ -252,7 +252,7 @@ function getAnnualSurfaceChange (location, options, from, to) {
   const dataByCommune = require(csvFilePath + '.json')
   let communes = []
   if (location.epci) {
-    communes = getCommunes({ epci: location.epci.code }).map((c) => c.insee)
+    communes = getCommunes(location).map((c) => c.insee)
   } else if (location.commune) {
     communes.push(location.commune.insee)
   }
