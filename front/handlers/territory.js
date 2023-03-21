@@ -34,8 +34,8 @@ async function territoryHandler (req, res) {
   }
 
   let pageTitle = singleLocation?.nom
-  const epciCount = location.epcis.length
-  const communeCount = location.communes.length
+  const epciCount = location.epcis?.length
+  const communeCount = location.communes?.length
   if (epciCount || communeCount) {
     pageTitle = 'Regroupement'
     const epcis = epciCount ? `de ${epciCount} EPCI${epciCount > 1 ? 's' : ''}` : ''
