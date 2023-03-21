@@ -62,3 +62,7 @@ th.flux-surface-col {
   max-width: 13%;
   width: 13%;
 }
+
+.chart-wrapper {
+  max-width: 70%;
+}
