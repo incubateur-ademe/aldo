@@ -1,5 +1,5 @@
 <h1 class="fr-mt-6w">
-  <%= singleLocation?.nom || 'Regroupement' %>
+  <%= pageTitle %>
 </h1>
 
 <% if (singleLocation?.code) { %>
@@ -75,6 +75,28 @@
   </div>
 </div>
 <% } %>
+
+<% if (epcis.length) { %>
+<p class="fr-mb-0">EPCI :</p>
+<ul>
+  <% for( let index=0; index < epcis.length; index++ ) { %>
+    <li>
+      <%= epcis[index].nom %> (<%= epcis[index].code %>)
+    </li>
+  <% } %>
+</ul>
+<% } %>
+<% if (communes.length) { %>
+<p class="fr-mb-0">Commune :</p>
+<ul>
+  <% for( let index=0; index < communes.length; index++ ) { %>
+    <li>
+      <%= communes[index].nom %> (<%= communes[index].insee %>)
+    </li>
+  <% } %>
+</ul>
+<% } %>
+
 <div class="fr-callout fr-my-3w">
   <p class="fr-callout__title fr-mb-1w">
     Une <%= fluxTotal > 0 ? "séquestration" : "émission" %>
