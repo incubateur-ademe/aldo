@@ -104,7 +104,7 @@ function getCommuneAreaDataForEpci (location) {
   const csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
   if (location.epci) {
-    return areaData.filter(data => data.CODE_EPCI === location.epci)
+    return areaData.filter(data => data.CODE_EPCI === location.epci.code)
   } else if (location.commune) {
     // TODO: fix file to append 0 to all the codes that are just 4 characters long
     let code = location.commune.insee
@@ -156,6 +156,9 @@ function getCarbonDataForCommuneAndComposition (communeData, carbonData, forestS
 
 function getForestBiomassCarbonDensities (location, forestSubtype) {
   const areaDataByCommune = getCommuneAreaDataForEpci(location)
+  if (!areaDataByCommune.length) {
+    return { live: 0, dead: 0 }
+  }
   const significantCarbonData = getSignificantCarbonData()
 
   let weightedLiveSum = 0
