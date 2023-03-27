@@ -16,8 +16,7 @@ jest.mock('../../data/stocks', () => {
         return 3
       }
     }),
-    getLiveBiomassCarbonDensity: jest.fn(() => 4),
-    getDeadBiomassCarbonDensity: jest.fn(() => 5),
+    getForestBiomassCarbonDensities: jest.fn(() => ({ live: 4, dead: 5 })),
     getForestLitterCarbonDensity: jest.fn(() => 6),
     getAnnualWoodProductsHarvest: jest.fn(() => {
       return {

@@ -133,8 +133,12 @@ jest.mock('../../data/stocks', () => {
         return 4
       }
     }),
-    getLiveBiomassCarbonDensity: jest.fn((location, type) => type === 'forêt conifere' ? 13 : 3),
-    getDeadBiomassCarbonDensity: jest.fn(() => 7)
+    getForestBiomassCarbonDensities: jest.fn((location, type) => {
+      return {
+        live: type === 'forêt conifere' ? 13 : 3,
+        dead: 7
+      }
+    })
   }
 })
 

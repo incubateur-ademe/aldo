@@ -5,7 +5,7 @@ const {
 const { GroundTypes } = require('../constants')
 const { getFluxWoodProducts } = require('./woodProducts')
 const { getFluxAgriculturalPractices } = require('./agriculturalPractices')
-const { getBiomassCarbonDensity, getLiveBiomassCarbonDensity, getDeadBiomassCarbonDensity } = require('../../data/stocks')
+const { getBiomassCarbonDensity, getForestBiomassCarbonDensities } = require('../../data/stocks')
 
 function convertCToCo2e (valueC) {
   return valueC * 44 / 12
@@ -229,7 +229,8 @@ function deforestationFlux (location, options) {
         continue
       }
 
-      const initialBiomassDensity = getLiveBiomassCarbonDensity(location, from) + getDeadBiomassCarbonDensity(location, from)
+      const forestBiomassDensities = getForestBiomassCarbonDensities(location, from)
+      const initialBiomassDensity = forestBiomassDensities.live + forestBiomassDensities.dead
       const annualFlux = getBiomassCarbonDensity(location, to) - initialBiomassDensity
 
       const annualFluxEquivalent = convertCToCo2e(annualFlux)
