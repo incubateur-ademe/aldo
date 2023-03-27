@@ -2,9 +2,8 @@ const {
   getArea: getAreaData,
   getCarbonDensity,
   getBiomassCarbonDensity,
-  getLiveBiomassCarbonDensity,
-  getDeadBiomassCarbonDensity,
-  getForestLitterCarbonDensity
+  getForestLitterCarbonDensity,
+  getForestBiomassCarbonDensities
 } = require('../../data/stocks')
 const { getStocksWoodProducts } = require('./woodProducts')
 const { GroundTypes } = require('../constants')
@@ -33,12 +32,14 @@ function getStocksByKeyword (location, keyword, options) {
     totalDensity: groundDensity + biomassDensity
   }
   if (keyword.startsWith('forêt ')) {
-    const liveBiomassDensity = getLiveBiomassCarbonDensity(location, keyword) || 0
+    const forestBiomassDensities = getForestBiomassCarbonDensities(location, keyword)
+
+    const liveBiomassDensity = forestBiomassDensities.live
     const liveBiomassStock = liveBiomassDensity * area
     stocks.liveBiomassDensity = liveBiomassDensity
     stocks.liveBiomassStock = liveBiomassStock
 
-    const deadBiomassDensity = getDeadBiomassCarbonDensity(location, keyword) || 0
+    const deadBiomassDensity = forestBiomassDensities.dead
     stocks.deadBiomassDensity = deadBiomassDensity
     const deadBiomassStock = deadBiomassDensity * area
     stocks.deadBiomassStock = deadBiomassStock
