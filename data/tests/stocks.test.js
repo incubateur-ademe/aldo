@@ -5,8 +5,7 @@ const {
   getCommuneAreaDataForEpci,
   getSignificantCarbonData,
   getCarbonDataForCommuneAndComposition,
-  getLiveBiomassCarbonDensity,
-  getDeadBiomassCarbonDensity,
+  getForestBiomassCarbonDensities,
   getFranceStocksWoodProducts,
   // getAnnualWoodProductsHarvest,
   // getAnnualFranceWoodProductsHarvest,
@@ -377,7 +376,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getLiveBiomassCarbonDensity({ epci }, 'forêt mixte')).toBe(3.5)
+    expect(getForestBiomassCarbonDensities({ epci }, 'forêt mixte').live).toBe(3.5)
   })
 
   it('returns dead biomass carbon density for a relevant forest type, weighted by area communes for an EPCI', () => {
@@ -414,7 +413,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getDeadBiomassCarbonDensity({ epci }, 'forêt peupleraie')).toBe(3.5)
+    expect(getForestBiomassCarbonDensities({ epci }, 'forêt peupleraie').dead).toBe(3.5)
   })
 
   it('returns area of forest subtype (as ha) given valid EPCI SIREN', () => {
