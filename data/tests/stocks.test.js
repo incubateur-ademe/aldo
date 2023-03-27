@@ -240,7 +240,7 @@ describe('The stocks data module', () => {
         composition: 'Feuillu',
         code_localisation: 'C5',
         'carbone_(tC∙ha-1)': '10',
-        'bois_mort_volume_(m3∙ha-1)': '20',
+        'bois_mort_carbone_(tC∙ha-1)': '20',
         'prelevement_volume_(m3∙ha-1∙an-1)': '30'
       },
       {
@@ -250,7 +250,7 @@ describe('The stocks data module', () => {
     ]
     const data = getCarbonDataForCommuneAndComposition(communeData, carbonData, 'forêt feuillu')
     expect(data['carbone_(tC∙ha-1)']).toBe('10')
-    expect(data['bois_mort_volume_(m3∙ha-1)']).toBe('20')
+    expect(data['bois_mort_carbone_(tC∙ha-1)']).toBe('20')
     expect(data['prelevement_volume_(m3∙ha-1∙an-1)']).toBe('30')
   })
 
@@ -268,7 +268,7 @@ describe('The stocks data module', () => {
         composition: 'Feuillu',
         code_localisation: 'C',
         'carbone_(tC∙ha-1)': '10',
-        'bois_mort_volume_(m3∙ha-1)': '20',
+        'bois_mort_carbone_(tC∙ha-1)': '20',
         'prelevement_volume_(m3∙ha-1∙an-1)': '30'
       },
       {
@@ -278,7 +278,7 @@ describe('The stocks data module', () => {
     ]
     const data = getCarbonDataForCommuneAndComposition(communeData, carbonData, 'forêt feuillu')
     expect(data['carbone_(tC∙ha-1)']).toBe('10')
-    expect(data['bois_mort_volume_(m3∙ha-1)']).toBe('20')
+    expect(data['bois_mort_carbone_(tC∙ha-1)']).toBe('20')
     expect(data['prelevement_volume_(m3∙ha-1∙an-1)']).toBe('30')
   })
 
@@ -297,7 +297,7 @@ describe('The stocks data module', () => {
         composition: 'Feuillu',
         code_localisation: 'ARA',
         'carbone_(tC∙ha-1)': '10',
-        'bois_mort_volume_(m3∙ha-1)': '20',
+        'bois_mort_carbone_(tC∙ha-1)': '20',
         'prelevement_volume_(m3∙ha-1∙an-1)': '30'
       },
       {
@@ -307,7 +307,7 @@ describe('The stocks data module', () => {
     ]
     const data = getCarbonDataForCommuneAndComposition(communeData, carbonData, 'forêt feuillu')
     expect(data['carbone_(tC∙ha-1)']).toBe('10')
-    expect(data['bois_mort_volume_(m3∙ha-1)']).toBe('20')
+    expect(data['bois_mort_carbone_(tC∙ha-1)']).toBe('20')
     expect(data['prelevement_volume_(m3∙ha-1∙an-1)']).toBe('30')
   })
 
@@ -327,7 +327,7 @@ describe('The stocks data module', () => {
         composition: 'Peupleraie',
         code_localisation: 'Sud',
         'carbone_(tC∙ha-1)': '10',
-        'bois_mort_volume_(m3∙ha-1)': '20',
+        'bois_mort_carbone_(tC∙ha-1)': '20',
         'prelevement_volume_(m3∙ha-1∙an-1)': '30'
       },
       {
@@ -337,7 +337,7 @@ describe('The stocks data module', () => {
     ]
     const data = getCarbonDataForCommuneAndComposition(communeData, carbonData, 'forêt peupleraie')
     expect(data['carbone_(tC∙ha-1)']).toBe('10')
-    expect(data['bois_mort_volume_(m3∙ha-1)']).toBe('20')
+    expect(data['bois_mort_carbone_(tC∙ha-1)']).toBe('20')
     expect(data['prelevement_volume_(m3∙ha-1∙an-1)']).toBe('30')
   })
 
@@ -357,13 +357,13 @@ describe('The stocks data module', () => {
         composition: 'Conifere',
         code_localisation: 'France',
         'carbone_(tC∙ha-1)': '10',
-        'bois_mort_volume_(m3∙ha-1)': '20',
+        'bois_mort_carbone_(tC∙ha-1)': '20',
         'prelevement_volume_(m3∙ha-1∙an-1)': '30'
       }
     ]
     const data = getCarbonDataForCommuneAndComposition(communeData, carbonData, 'forêt conifere')
     expect(data['carbone_(tC∙ha-1)']).toBe('10')
-    expect(data['bois_mort_volume_(m3∙ha-1)']).toBe('20')
+    expect(data['bois_mort_carbone_(tC∙ha-1)']).toBe('20')
     expect(data['prelevement_volume_(m3∙ha-1∙an-1)']).toBe('30')
   })
 
@@ -428,13 +428,13 @@ describe('The stocks data module', () => {
           surface_ic: 's',
           code_localisation: 'Nord',
           composition: 'Peupleraie',
-          'bois_mort_volume_(m3∙ha-1)': '2'
+          'bois_mort_carbone_(tC∙ha-1)': '2'
         },
         {
           surface_ic: 's',
           code_localisation: 'Nord-Ouest',
           composition: 'Peupleraie',
-          'bois_mort_volume_(m3∙ha-1)': '4'
+          'bois_mort_carbone_(tC∙ha-1)': '4'
         }
       ]
     })
