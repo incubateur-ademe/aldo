@@ -43,7 +43,6 @@ function getFluxByConsumption (location) {
 }
 
 function getFluxByHarvest (location) {
-  location = { epci: location.epci.code } // see getFlux
   const allLocalHarvest = getAnnualWoodProductsHarvest(location)
   const allFranceHarvest = getAnnualFranceWoodProductsHarvest()
   const franceSequestration = getFranceFluxWoodProducts()

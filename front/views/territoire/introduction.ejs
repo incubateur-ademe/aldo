@@ -1,14 +1,15 @@
 <h1 class="fr-mt-6w">
-  <%= epci.nom %>
+  <%= pageTitle %>
 </h1>
 
+<% if (singleLocation?.code) { %>
 <div class="fr-grid-row">
   <div class="fr-col-12 fr-col-md-3">
     <p>
-      SIREN : <%= epci.code %>
+      SIREN : <%= singleLocation.code %>
     </p>
     <p>
-      Population : <%= formatNumber(epci.populationTotale) %>
+      Population : <%= formatNumber(singleLocation.populationTotale) %>
     </p>
   </div>
   <div class="fr-col" style="text-align: right;">
@@ -23,20 +24,20 @@
   </div>
 </div>
 
-<% if (epci.membres.length) { %>
+<% if (singleLocation?.membres.length) { %>
 <section class="fr-accordion">
   <p class="fr-accordion__title">
     <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-communes">
-      <%= epci.membres.length %> communes
+      <%= singleLocation.membres.length %> communes
     </button>
   </p>
   <div class="fr-collapse" id="accordion-communes">
     <ul>
       <div class="fr-grid-row">
-        <% for( let index=0; index < epci.membres.length; index++ ) { %>
+        <% for( let index=0; index < singleLocation.membres.length; index++ ) { %>
         <div class="fr-col-12 fr-sm-col-6 fr-col-md-4">
           <li>
-            <%= epci.membres[index] %>
+            <%= singleLocation.membres[index] %>
           </li>
         </div>
         <% } %>
@@ -46,9 +47,56 @@
 </section>
 <% } else { %>
 <p>
-  <%= epci.nombreCommunes %> commune<%= epci.nombreCommunes === 1 ? '' : 's' %>
+  <%= singleLocation.nombreCommunes %> commune<%= singleLocation.nombreCommunes === 1 ? '' : 's' %>
 </p>
 <% } %>
+<% } else if (singleLocation?.insee) { %>
+<div class="fr-grid-row">
+  <div class="fr-col-12 fr-col-md-3">
+    <p>
+      INSEE : <%= singleLocation.insee %>
+    </p>
+    <p>
+      Population : <%= formatNumber(singleLocation.POPULATION) %>
+    </p>
+    <p>
+      SIREN EPCI : <a href="/epci/<%= singleLocation.epci %>"><%= singleLocation.epci %></a>
+    </p>
+  </div>
+  <div class="fr-col" style="text-align: right;">
+    <p class="fr-mb-1w">
+      <a href="<%= baseUrl %>/tableur<%= sharingQueryStr %> " download class="fr-btn fr-btn--secondary">Télécharger en format Excel</a>
+    </p>
+    <p class="fr-text--sm fr-sm-mb-0">
+      <a href="https://docs.datagir.ademe.fr/documentation-aldo/" target="_blank" rel="noopener noreferrer">
+        Documentation
+      </a>
+    </p>
+  </div>
+</div>
+<% } %>
+
+<% if (epcis && epcis.length) { %>
+<p class="fr-mb-0">EPCI :</p>
+<ul>
+  <% for( let index=0; index < epcis.length; index++ ) { %>
+    <li>
+      <%= epcis[index].nom %> (<%= epcis[index].code %>)
+    </li>
+  <% } %>
+</ul>
+<% } %>
+<% if (communes && communes.length) { %>
+<p class="fr-mb-0">Commune :</p>
+<ul>
+  <% for( let index=0; index < communes.length; index++ ) { %>
+    <li>
+      <%= communes[index].nom %> (<%= communes[index].insee %>)
+    </li>
+  <% } %>
+</ul>
+<% } %>
+
 <div class="fr-callout fr-my-3w">
   <p class="fr-callout__title fr-mb-1w">
     Une <%= fluxTotal > 0 ? "séquestration" : "émission" %>

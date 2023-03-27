@@ -27,7 +27,6 @@ function getStocksByConsumption (location) {
 }
 
 function getStocksByHarvest (location) {
-  location = { epci: location.epci.code } // see getStocks
   const localAnnualWoodProductsHarvest = getAnnualWoodProductsHarvest(location)
   const franceAnnualWoodProductsHarvest = getAnnualFranceWoodProductsHarvest()
   const franceStocksByCategory = getFranceStocksWoodProducts()

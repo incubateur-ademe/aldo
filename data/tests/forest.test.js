@@ -14,8 +14,7 @@ const {
 // })
 
 test('returns array of fluxes of expected structure', () => {
-  const epci = { epci: '200000172' }
-  const fluxes = getForestBiomassFluxesByCommune(epci)
+  const fluxes = getForestBiomassFluxesByCommune({ epci: { code: '200000172' } })
   expect(fluxes.length).toBe(40)
   const flux = fluxes[0]
   expect(flux).toHaveProperty('to')

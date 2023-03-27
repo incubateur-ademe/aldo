@@ -1,26 +1,102 @@
 const path = require('path')
 const rootFolder = path.join(__dirname, '../../')
-const { getEpci } = require(path.join(rootFolder, './calculations/epcis'))
-const { epciList } = require(path.join(rootFolder, './data'))
+const { epciList, communeList } = require(path.join(rootFolder, './data'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
-const { parseOptionsFromQuery } = require('./options')
+const { parseOptionsFromQuery, getLocationDetail } = require('./shared')
 
 async function territoryHandler (req, res) {
-  const epcis = await epciList()
-  const epci = await getEpci(req.params.epci, true) || {}
-  if (!epci.code) {
+  const location = await getLocationDetail(req, res)
+  if (!location) {
+    const epcis = await epciList()
+    const communes = communeList()
     res.status(404)
     res.render('404-epci', {
       epcis,
+      communes,
       attemptedSearch: req.params.epci
     })
     return
   }
+
   const options = parseOptionsFromQuery(req.query)
-  const stocks = await getStocks({ epci }, options)
-  const flux = getAnnualFluxes({ epci }, options)
+  const stocks = getStocks(location, options)
+  const flux = getAnnualFluxes(location, options)
+
+  const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
+  const singleLocation = location.epci || location.commune
+  let baseUrl
+  if (singleLocation) {
+    baseUrl = location.epci ? `/epci/${singleLocation.code}` : `/commune/${singleLocation.insee}`
+  } else {
+    baseUrl = '/regroupement?' + location.epcis.map(c => `epcis[]=${c.code}`).join('&') + location.communes.map(c => `communes[]=${c.insee}`).join('&')
+  }
+
+  let pageTitle = singleLocation?.nom
+  const epciCount = location.epcis?.length
+  const communeCount = location.communes?.length
+  if (epciCount || communeCount) {
+    pageTitle = 'Regroupement'
+    const epcis = epciCount ? `de ${epciCount} EPCI${epciCount > 1 ? 's' : ''}` : ''
+    const communes = communeCount ? `de ${communeCount} commune${communeCount > 1 ? 's' : ''}` : ''
+    if (epcis) {
+      pageTitle += ' ' + epcis
+      if (communes) pageTitle += ' et'
+    }
+    if (communes) pageTitle += ' ' + communes
+  }
+  res.render('territoire', {
+    pageTitle,
+    tab: req.params.tab || 'stocks',
+    singleLocation,
+    communes: location.communes,
+    epcis: location.epcis,
+    groundTypes: getSortedGroundTypes(stocks),
+    allGroundTypes: GroundTypes,
+    // these are the types that can be modified to customise the stocks calculations
+    stocksGroundTypes: GroundTypes.filter(gt => !gt.children && gt.stocksId !== 'produits bois').sort((a, b) => {
+      if (a.name > b.name) return 1
+      else if (a.name === b.name) return 0
+      else return -1
+    }),
+    stocks,
+    charts: stocks && charts(stocks),
+    formatNumber (number, fractionDigits = 0) {
+      return number.toLocaleString('fr-FR', {
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits
+      })
+    },
+    round (number) {
+      return Math.round(number)
+    },
+    pascalCase (text) {
+      return text.replace(/ /g, '_')
+    },
+    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides'],
+    fluxSummary: flux?.summary,
+    allFlux: flux?.allFlux,
+    sortedFluxKeys: getSortedFluxKeys(flux),
+    fluxCharts: fluxCharts(flux),
+    fluxDetail,
+    fluxIds: GroundTypes.filter(gt => gt.altFluxId || gt.fluxId).map(gt => gt.altFluxId || gt.fluxId),
+    stockTotal: stocks?.total,
+    stockTotalEquivalent: stocks?.totalEquivalent,
+    fluxTotal: flux?.total,
+    agriculturalPractices: AgriculturalPractices,
+    agriculturalPracticeDetail,
+    baseUrl,
+    resetQueryStr: options.stocksHaveModifications || options.fluxHaveModifications ? '?' : undefined,
+    sharingQueryStr: getSharingQueryString(req),
+    beges: req.query.beges,
+    perimetre: req.query.perimetre,
+    forestBiomassSummaryByType: flux?.biomassSummary,
+    ...options
+  })
+}
+
+function formatFluxForDisplay (flux) {
   const fluxDetail = {}
   const agriculturalPracticeDetail = {}
   flux.allFlux.forEach(f => {
@@ -47,88 +123,31 @@ async function territoryHandler (req, res) {
       else return 1
     })
   })
-  // ordering for display greatest stocks/flux (seq or emission) descending
-  const groundTypes = GroundTypes.filter(type => !type.parentType)
-  groundTypes.sort((a, b) => {
+  return { fluxDetail, agriculturalPracticeDetail }
+}
+
+function getSortedGroundTypes (stocks) {
+  const parentTypes = GroundTypes.filter(type => !type.parentType)
+  parentTypes.sort((a, b) => {
     const stockA = stocks[a.stocksId].totalStock
     const stockB = stocks[b.stocksId].totalStock
     if (stockA < stockB) return 1
     else if (stockA === stockB) return 0
     else return -1
   })
-  const sortedFluxKeys = GroundTypes.filter(type => !type.parentType)
-  sortedFluxKeys.sort((a, b) => {
+  return parentTypes
+}
+
+function getSortedFluxKeys (flux) {
+  const parentTypes = GroundTypes.filter(type => !type.parentType)
+  parentTypes.sort((a, b) => {
     const fluxA = Math.abs(flux.summary[a.stocksId]?.totalSequestration || 0)
     const fluxB = Math.abs(flux.summary[b.stocksId]?.totalSequestration || 0)
     if (fluxA < fluxB) return 1
     else if (fluxA === fluxB) return 0
     else return -1
   })
-  const fluxIds = []
-  GroundTypes.forEach(gt => {
-    if (gt.altFluxId || gt.fluxId) {
-      fluxIds.push(gt.altFluxId || gt.fluxId)
-    }
-  })
-  // these are the types that can be modified to customise the stocks calculations
-  const stocksGroundTypes = GroundTypes.filter(gt => !gt.children && gt.stocksId !== 'produits bois')
-  stocksGroundTypes.sort((a, b) => {
-    if (a.name > b.name) return 1
-    else if (a.name === b.name) return 0
-    else return -1
-  })
-  const resetQueryStr = options.stocksHaveModifications || options.fluxHaveModifications ? '?' : undefined
-  // this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
-  let sharingQueryStr = ''
-  const params = Object.keys(req.query).map(queryParam => {
-    return `${queryParam}=${req.query[queryParam]}`
-  })
-  if (params.length) {
-    sharingQueryStr = `?${params.join('&')}`
-  }
-
-  res.render('territoire', {
-    pageTitle: `${epci.nom}`,
-    tab: req.params.tab || 'stocks',
-    epcis,
-    epci,
-    groundTypes,
-    allGroundTypes: GroundTypes,
-    stocksGroundTypes,
-    stocks,
-    charts: stocks && charts(stocks),
-    formatNumber (number, fractionDigits = 0) {
-      return number.toLocaleString('fr-FR', {
-        minimumFractionDigits: fractionDigits,
-        maximumFractionDigits: fractionDigits
-      })
-    },
-    round (number) {
-      return Math.round(number)
-    },
-    pascalCase (text) {
-      return text.replace(/ /g, '_')
-    },
-    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides'],
-    fluxSummary: flux?.summary,
-    allFlux: flux?.allFlux,
-    sortedFluxKeys,
-    fluxCharts: fluxCharts(flux),
-    fluxDetail,
-    fluxIds,
-    stockTotal: stocks?.total,
-    stockTotalEquivalent: stocks?.totalEquivalent,
-    fluxTotal: flux?.total,
-    agriculturalPractices: AgriculturalPractices,
-    agriculturalPracticeDetail,
-    baseUrl: `/epci/${epci.code}`,
-    resetQueryStr,
-    sharingQueryStr,
-    beges: req.query.beges,
-    perimetre: req.query.perimetre,
-    forestBiomassSummaryByType: flux?.biomassSummary,
-    ...options
-  })
+  return parentTypes
 }
 
 function charts (stocks) {
@@ -388,6 +407,18 @@ function pieChart (title, labels, values) {
       }
     })
   }
+}
+
+// this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
+function getSharingQueryString (req) {
+  let sharingQueryStr = ''
+  const params = Object.keys(req.query).map(queryParam => {
+    return `${queryParam}=${req.query[queryParam]}`
+  })
+  if (params.length) {
+    sharingQueryStr = `?${params.join('&')}`
+  }
+  return sharingQueryStr
 }
 
 module.exports = {

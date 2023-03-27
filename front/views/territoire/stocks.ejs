@@ -5,27 +5,28 @@
   <!-- TODO: why does an anchor link break the table tabs? -->
   <!-- <p class="fr-col-12 fr-mb-1w fr-text--sm"><a href="#tableur-stocks">Résultats détaillés</a></p> -->
   <!-- TODO: test a11y of these charts -->
-  <div class="fr-col-12 fr-col-md-8 fr-col-lg-6 fr-pb-4w">
+  <div class="fr-col-12 fr-col-lg-8 fr-pb-4w">
     <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
       <% for (let keyIdx=0; keyIdx < Object.keys(charts).length; keyIdx++) { %>
-        <% const key = Object.keys(charts)[keyIdx] %> 
-        <li>
-          <section class="fr-accordion">
-            <h3 class="fr-accordion__title">
-              <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>"
-                aria-controls="accordion-chart-<%= keyIdx %>">
-                <%= charts[key].title %>
-              </button>
-            </h3>
-            <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
-              <% if (charts[key].note) { %>
-                <p><%= charts[key].note %></p>
-              <% } %>
-              <canvas id="chart-<%= key %>" width="400" height="400"></canvas>
+      <% const key = Object.keys(charts)[keyIdx] %>
+      <li>
+        <section class="fr-accordion">
+          <h3 class="fr-accordion__title">
+            <button type="button" class="fr-accordion__btn" aria-expanded="<%= keyIdx === 0 %>" aria-controls="accordion-chart-<%= keyIdx %>">
+              <%= charts[key].title %>
+            </button>
+          </h3>
+          <div class="fr-collapse" id="accordion-chart-<%= keyIdx %>">
+            <% if (charts[key].note) { %>
+            <p><%= charts[key].note %></p>
+            <% } %>
+            <div class="chart-wrapper">
+              <canvas id="chart-<%= key %>"></canvas>
             </div>
-          </section>
-        </li>
-        <% } %>
+          </div>
+        </section>
+      </li>
+      <% } %>
     </ul>
   </div>
   <div class="fr-table fr-col-12 fr-col-lg-10 fr-pr-md-1w fr-mt-2w">
@@ -42,60 +43,61 @@
       </thead>
       <tbody>
         <% for( let index=0; index < groundTypes.length; index++ ) { %>
-          <% const groundType = groundTypes[index] %>
-          <% const thisStock = stocks[groundType.stocksId] %>
-          <!-- TODO: make row blue if area modified -->
-          <tr class="expandable-row stocks-row">
-            <td onClick='toggleRow(this)'>
-              <%= groundType.name %> <%= thisStock.hasModifications ? '*' : '' %>
-            </td>
-            <td onClick='toggleRow(this)' style="text-align: right;">
-              <% if (thisStock.area !==undefined) { %>
-                <%= formatNumber(thisStock.area) %>
-              <% } else { %>
-                <i title="Les stocks générés par l’usage de produits bois ne sont pas liés à une surface d’occupation du sol.">Pas applicable</i>
-              <% } %>
-            </td>
-            <td onClick='toggleRow(this)' style="text-align: right;">
-              <%= formatNumber(thisStock.totalStock) %>
-            </td>
-            <td onClick='toggleRow(this)' style="text-align: right;">
-              <% if (thisStock.stockPercentage> 10) { %>
-                <b>
-                  <%= formatNumber(thisStock.stockPercentage) %> %
-                </b>
-              <% } else { %>
-                <%= formatNumber(thisStock.stockPercentage) %> %
-              <% } %>
-            </td>
-            <td onClick='toggleRow(this)'>
-              <button onClick='toggleRow(this)' type="button">
-                <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
-              </button>
-            </td>
-            <td class='expanded-row-content hide-row'>
-              <!-- TODO: reset input values if URL doesn't contain the relevant query value -->
-              <% const stocksId = groundTypes[index].stocksId %>
-              <% if (simpleStocks.indexOf(stocksId) > -1) { %>
-                <%- include('stockCalculations/simple', {index, stocksId, stock: thisStock }) -%>
-              <% } else if (thisStock.children) { %>
-                <%- include('stockCalculations/subtypes', {stocksId, stock: thisStock}) -%>
-              <% } else if (stocksId === 'produits bois' ) { %>
-                <%- include('stockCalculations/wood', {stock: thisStock, woodCalculation }) -%>
-              <% } else if (stocksId === 'haies' ) { %>
-                <%- include('stockCalculations/hedges', {stock: thisStock }) -%>
-              <% } %>
-              <!-- indicate if sols artificiels proportion was changed ? -->
-            </td>
-          </tr>
-          <% } %>
+        <% const groundType = groundTypes[index] %>
+        <% const thisStock = stocks[groundType.stocksId] %>
+        <!-- TODO: make row blue if area modified -->
+        <tr class="expandable-row stocks-row">
+          <td onClick='toggleRow(this)'>
+            <%= groundType.name %> <%= thisStock.hasModifications ? '*' : '' %>
+          </td>
+          <td onClick='toggleRow(this)' style="text-align: right;">
+            <% if (thisStock.area !==undefined) { %>
+            <%= formatNumber(thisStock.area) %>
+            <% } else { %>
+            <i title="Les stocks générés par l’usage de produits bois ne sont pas liés à une surface d’occupation du sol.">Pas applicable</i>
+            <% } %>
+          </td>
+          <td onClick='toggleRow(this)' style="text-align: right;">
+            <%= formatNumber(thisStock.totalStock) %>
+          </td>
+          <td onClick='toggleRow(this)' style="text-align: right;">
+            <% if (thisStock.stockPercentage> 10) { %>
+            <b>
+              <%= formatNumber(thisStock.stockPercentage) %> %
+            </b>
+            <% } else { %>
+            <%= formatNumber(thisStock.stockPercentage) %> %
+            <% } %>
+          </td>
+          <td onClick='toggleRow(this)'>
+            <button onClick='toggleRow(this)' type="button">
+              <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
+            </button>
+          </td>
+          <td class='expanded-row-content hide-row'>
+            <!-- TODO: reset input values if URL doesn't contain the relevant query value -->
+            <% const stocksId = groundTypes[index].stocksId %>
+            <% if (simpleStocks.indexOf(stocksId) > -1) { %>
+            <%- include('stockCalculations/simple', {index, stocksId, stock: thisStock }) -%>
+            <% } else if (thisStock.children) { %>
+            <%- include('stockCalculations/subtypes', {stocksId, stock: thisStock}) -%>
+            <% } else if (stocksId === 'produits bois' ) { %>
+            <%- include('stockCalculations/wood', {stock: thisStock, woodCalculation }) -%>
+            <% } else if (stocksId === 'haies' ) { %>
+            <%- include('stockCalculations/hedges', {stock: thisStock }) -%>
+            <% } %>
+            <!-- indicate if sols artificiels proportion was changed ? -->
+          </td>
+        </tr>
+        <% } %>
       </tbody>
     </table>
+    <!-- TODO: fix url for regrouping -->
     <% if (stocksHaveModifications) { %>
-      <p class="fr-text--sm fr-mt-1w">* Données modifiées</p>
-      <a class="fr-btn fr-btn--secondary fr-mt-1w" href="<%= baseUrl %>/stocks<%= resetQueryStr %>">
-        Réinitialiser les données
-      </a>
+    <p class="fr-text--sm fr-mt-1w">* Données modifiées</p>
+    <a class="fr-btn fr-btn--secondary fr-mt-1w" href="<%= baseUrl %>/stocks<%= resetQueryStr %>">
+      Réinitialiser les données
+    </a>
     <% } %>
     <p class="fr-text--sm fr-mt-1w">
       <a href="https://docs.datagir.ademe.fr/documentation-aldo/stocks/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">

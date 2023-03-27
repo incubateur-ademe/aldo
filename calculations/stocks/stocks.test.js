@@ -1,5 +1,5 @@
 const { getStocks } = require('./index')
-const { getEpci } = require('../epcis')
+const { getEpci } = require('../locations')
 const { getPopulationTotal } = require('../../data')
 
 jest.mock('../../data/stocks', () => {
@@ -8,8 +8,14 @@ jest.mock('../../data/stocks', () => {
   return {
     __esModule: true,
     ...originalModule,
-    getArea: jest.fn(() => 50),
-    getCarbonDensity: jest.fn(() => 2),
+    getArea: jest.fn((location) => {
+      if (location.epci?.code === '200042992') return 100
+      return 50
+    }),
+    getCarbonDensity: jest.fn((location) => {
+      if (location.epci?.code === '200042992') return 5
+      return 2
+    }),
     getBiomassCarbonDensity: jest.fn((location, keyword) => {
       // TODO: maybe refactor getStocksByKeyword to only fetch biomass for non-forest
       if (!keyword.startsWith('forêt ')) {
@@ -65,7 +71,7 @@ describe('The stocks calculation module', () => {
     expect(stocks.haies).toBeDefined()
   })
 
-  describe('for simple ground types', () => {
+  describe('for simple ground types and a single EPCI', () => {
     const overrides = {
       areas: { vignes: 70 }
     }
@@ -88,6 +94,12 @@ describe('The stocks calculation module', () => {
       expect(totalStock).toEqual(250)
       const totalReservoirStock = simpleStock.totalReservoirStock
       expect(totalReservoirStock).toEqual(250)
+    })
+
+    it('accepts multiple locations', () => {
+      const stocks = getStocks({ epcis: [epci, getEpci('200042992', true)] })
+      expect(stocks.cultures.area).toEqual(150)
+      expect(stocks.cultures.groundDensity).toEqual(4)
     })
 
     it('calculates total density by the sum of ground and biomass densities', () => {
@@ -342,5 +354,19 @@ describe('The stocks calculation module', () => {
         expect(percentageByReservoir['Biomasse sur pied']).toBeCloseTo(expectedPercentage, 1)
       })
     })
+  })
+
+  // getStocks for a commune
+  // getStocks for multiple epcis and communes
+  describe('for a custom grouping of territories', () => {
+    // 2 epcis, 2 communes (one of which is part of one of the epcis so shouldn't count)
+
+    it('calculates total stock as a sum of the stocks of the requested territories', () => {
+
+    })
+
+    // it calculates the carbon density as a weighted average of the requested territories
+
+    // it allows area overrides, calculating stock as original weighted density * area given
   })
 })
