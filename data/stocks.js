@@ -160,6 +160,8 @@ function getForestBiomassCarbonDensities (location, forestSubtype) {
 
   let weightedLiveSum = 0
   let weightedDeadSum = 0
+  let meanLiveSum = 0
+  let meanDeadSum = 0
   let totalArea = 0
   const areaCompositionColumnName = {
     'forêt feuillu': 'SUR_FEUILLUS',
@@ -172,10 +174,13 @@ function getForestBiomassCarbonDensities (location, forestSubtype) {
     const carbonData = getCarbonDataForCommuneAndComposition(communeData, significantCarbonData, forestSubtype)
     weightedLiveSum += +carbonData['carbone_(tC∙ha-1)'] * area
     weightedDeadSum += +carbonData['bois_mort_carbone_(tC∙ha-1)'] * area
+    meanLiveSum += +carbonData['carbone_(tC∙ha-1)']
+    meanDeadSum += +carbonData['bois_mort_carbone_(tC∙ha-1)']
     totalArea += area
   })
-  const live = totalArea ? weightedLiveSum / totalArea : 0
-  const dead = totalArea ? weightedDeadSum / totalArea : 0
+  // if there is some area, take weighted sum, otherwise take mean to allow for user customisations of areas
+  const live = totalArea ? weightedLiveSum / totalArea : meanLiveSum / areaDataByCommune.length
+  const dead = totalArea ? weightedDeadSum / totalArea : meanDeadSum / areaDataByCommune.length
   return { live, dead }
 }
 

@@ -404,6 +404,43 @@ describe('The stocks data module', () => {
     expect(getForestBiomassCarbonDensities({ epci }, 'forêt mixte').live).toBe(3.5)
   })
 
+  it('given an area of 0, returns a mean of the live biomass carbon densitie for a relevant forest type for an EPCI', () => {
+    const epci = '200000172'
+    jest.doMock('../dataByCommune/surface-foret.csv.json', () => {
+      return [
+        {
+          INSEE_COM: '1001',
+          CODE_EPCI: epci,
+          code_groupeser: 'A1',
+          SUR_MIXTES: '0'
+        },
+        {
+          INSEE_COM: '1002',
+          CODE_EPCI: epci,
+          code_rad13: 'CVL',
+          SUR_MIXTES: '0'
+        }
+      ]
+    })
+    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
+      return [
+        {
+          surface_ic: 's',
+          code_localisation: 'A1',
+          composition: 'Mixte',
+          'carbone_(tC∙ha-1)': '2'
+        },
+        {
+          surface_ic: 's',
+          code_localisation: 'CVL',
+          composition: 'Mixte',
+          'carbone_(tC∙ha-1)': '4'
+        }
+      ]
+    })
+    expect(getForestBiomassCarbonDensities({ epci }, 'forêt mixte').live).toBe(3)
+  })
+
   it('returns dead biomass carbon density for a relevant forest type, weighted by area communes for an EPCI', () => {
     const epci = '200000172'
     jest.doMock('../dataByCommune/surface-foret.csv.json', () => {
