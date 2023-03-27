@@ -205,18 +205,20 @@ function getStocks (location, options) {
     annotateAreaCustomisations(location, options, stocks)
   } else {
     // area overrides shouldn't be passed down at this level
+    const communeLevelOptions = JSON.parse(JSON.stringify(options))
+    communeLevelOptions.areas = {}
     if (location.epcis) {
       location.epcis.forEach((epci) => {
-        stocksForLocations.push(getStocksForLocation({ epci }, options))
+        stocksForLocations.push(getStocksForLocation({ epci }, communeLevelOptions))
       })
     }
     if (location.communes) {
       location.communes.forEach((commune) => {
-        stocksForLocations.push(getStocksForLocation({ commune }, options))
+        stocksForLocations.push(getStocksForLocation({ commune }, communeLevelOptions))
       })
     }
-    stocks = aggregateStocks(stocksForLocations, options)
-    annotateAreaCustomisationsForGrouping(location, options, stocks)
+    stocks = aggregateStocks(stocksForLocations)
+    annotateAreaCustomisationsForGrouping(stocks, options)
   }
 
   stocks.total = getTotalStock(stocks)
@@ -283,7 +285,7 @@ function getStocksForLocation (location, options) {
   return stocks
 }
 
-function aggregateStocks (stocksForLocations, options) {
+function aggregateStocks (stocksForLocations) {
   // TODO: area overrides should happen at this level
   const aggregatedStocks = {}
   const sumKeys = [
@@ -428,7 +430,18 @@ function annotateAreaCustomisations (location, options, stocks) {
 
 // TODO: replace this temporary hack, put in place to simply allow the pages
 // to load.
-function annotateAreaCustomisationsForGrouping (location, options, stocks) {
+/*
+{
+  areas: {},
+  areaChanges: {},
+  woodCalculation: 'récolte',
+  proportionSolsImpermeables: '0.80',
+  agriculturalPracticesEstablishedAreas: {},
+  fluxHaveModifications: false,
+  stocksHaveModifications: false
+}
+*/
+function annotateAreaCustomisationsForGrouping (stocks, options) {
   const groundTypes = GroundTypes.map(gt => gt.stocksId)
   Object.keys(stocks).forEach(key => {
     if (groundTypes.indexOf(key) !== -1) {
