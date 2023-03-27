@@ -3,5 +3,6 @@
 /notes
 .vscode/
 /data/dataByEpci/*.csv.json
+/data/dataByCommune/*.csv.json
 .env
 .~lock.*
