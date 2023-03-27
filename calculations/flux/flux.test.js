@@ -273,18 +273,12 @@ describe('The flux calculation module', () => {
       expect(flux.co2e).toBeDefined()
     })
 
-    it('adds for changes between forest types too', () => {
-      const fluxes = getAnnualFluxes({ epci: '243000643' })
-      const flux = fluxes.allFlux.find((f) => f.from === 'forêt feuillu' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
-      expect(flux.annualFlux).toEqual(10)
-    })
-
-    it('adds reforestation for changes to forest types', () => {
+    it('ignore changes where final ground type is a forest type', () => {
       const fluxes = getAnnualFluxes({ epci: '243000643' })
       const toConifer = fluxes.allFlux.find((f) => f.from === 'cultures' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
-      expect(toConifer.area).toBe(5)
-      expect(toConifer.annualFlux).toEqual(16)
-      expect(toConifer.value).toEqual(80)
+      expect(toConifer).not.toBeDefined()
+      const betweenForests = fluxes.allFlux.find((f) => f.from === 'forêt feuillu' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
+      expect(betweenForests).not.toBeDefined()
     })
 
     it('allows change from forest type to be overridden', () => {
@@ -293,15 +287,6 @@ describe('The flux calculation module', () => {
       expect(toVineyard.area).toBe(20)
       expect(toVineyard.originalArea).toBe(10)
       expect(toVineyard.areaModified).toBe(true)
-    })
-
-    it('allows change to forest type to be overridden', () => {
-      const fluxes = getAnnualFluxes({ epci: '243000643' }, { areaChanges: { cult_for_con: 20 } })
-      const toConifer = fluxes.allFlux.find((f) => f.from === 'cultures' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
-      expect(toConifer.area).toBe(20)
-      expect(toConifer.originalArea).toBe(5)
-      expect(toConifer.areaModified).toBe(true)
-      expect(fluxes.summary.forêts.areaModified).toBe(true)
     })
   })
   // TODO: should be able to override area from a prairie subtype to another
