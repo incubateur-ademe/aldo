@@ -393,8 +393,6 @@ function getForestBiomassFluxesByCommune (location) {
         flux.ignLocalisationCode = france
         carbonDataForCommuneAndLocalisation =
           compositionCarbonData.find((data) => data.code_localisation === france)
-        // TODO: remove this console log?
-        console.log(flux)
         if (!carbonDataForCommuneAndLocalisation) {
           // this is unexpected
           const message =

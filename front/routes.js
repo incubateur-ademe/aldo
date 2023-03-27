@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
   })
 })
 
-router.get('/regroupement', async (req, res) => {
+async function groupingHandler (req, res) {
   if (req.query.epcis && !req.query.communes) {
     if (req.query.epcis.length === 1) {
       res.redirect('/epci/' + req.query.epcis[0])
@@ -28,7 +28,11 @@ router.get('/regroupement', async (req, res) => {
     }
   }
   return territoryHandler(req, res)
-})
+}
+
+router.get('/regroupement', groupingHandler)
+// router.get('/regroupement/tableur', excelExportHandler)
+router.get('/regroupement/:tab', groupingHandler)
 
 router.get('/epci/:epci', territoryHandler)
 router.get('/epci/:epci/tableur', excelExportHandler)

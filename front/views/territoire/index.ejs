@@ -3,7 +3,7 @@
   <div class="fr-container fr-pb-6w fr-px-2w">
     <%- include('../partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: singleLocation?.nom || 'Regroupement', }, ], }) -%>
     <%- include('./introduction') -%>
-    <form action="<%= baseUrl %>/stocks" method="GET" class="fr-tabs fr-mt-4w" id="territory">
+    <form method="GET" class="fr-tabs fr-mt-4w" id="territory">
       <!-- <input type="hidden" name="epci" value="<%= singleLocation?.nom %>" /> -->
       <ul class="fr-tabs__list" role="tablist" aria-label="Données du territoire">
         <li role="presentation">
@@ -62,8 +62,12 @@
     currentTab = currentTab?.id.endsWith("flux") ? "flux" : "stocks"
     const pathParts = window.location.pathname.split('/')
     const locationType = pathParts[1]
-    const epciCode = pathParts[2]
-    window.location.href = `/${locationType}/${epciCode}/${currentTab}?${queryParams.toString()}`
+    const locationCode = pathParts[2]
+    if (locationType === 'regroupement') {
+      window.location.href = `/regroupement/${currentTab}?${queryParams.toString()}`
+    } else {
+      window.location.href = `/${locationType}/${locationCode}/${currentTab}?${queryParams.toString()}`
+    }
     event.preventDefault()
   })
 </script>
