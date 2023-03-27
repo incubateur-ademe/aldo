@@ -224,6 +224,10 @@ function deforestationFlux (location, options) {
       const to = toGt.stocksId
       if (from === to) {
         continue
+      } else if (forestSubtypes.includes(to)) {
+        // ignore reforestation and changes between forest subtypes since that biomass should
+        // be taken into account by the growth of biomass based on area used by stocks
+        continue
       }
 
       let annualFlux
