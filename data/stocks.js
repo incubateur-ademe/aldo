@@ -155,7 +155,7 @@ function getForestBiomassCarbonDensities (location, forestSubtype) {
     const area = +communeData[areaCompositionColumnName]
     const carbonData = getCarbonDataForCommuneAndComposition(communeData, significantCarbonData, forestSubtype)
     weightedLiveSum += +carbonData['carbone_(tC∙ha-1)'] * area
-    weightedDeadSum += +carbonData['bois_mort_volume_(m3∙ha-1)'] * area
+    weightedDeadSum += +carbonData['bois_mort_carbone_(tC∙ha-1)'] * area
     totalArea += area
   })
   const live = totalArea ? weightedLiveSum / totalArea : 0
