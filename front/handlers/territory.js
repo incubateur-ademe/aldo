@@ -289,7 +289,7 @@ function fluxCharts (flux) {
         data: {
           labels: reservoirLabels,
           datasets: [{
-            label: 'Flux (tCO2e/ha)',
+            label: 'Flux (tCO2e/an)',
             data: reservoirData,
             backgroundColor: chartBackgroundColors,
             borderColor: chartBorderColors,
@@ -300,7 +300,7 @@ function fluxCharts (flux) {
           scales: {
             y: {
               title: {
-                text: 'Flux (tCO2e/ha)',
+                text: 'Flux (tCO2e/an)',
                 display: true
               }
             }
@@ -325,7 +325,7 @@ function fluxCharts (flux) {
         data: {
           labels,
           datasets: [{
-            label: 'Flux (tCO2e/ha.an)',
+            label: 'Flux (tCO2e/an)',
             data: keys.map(key => Math.round(flux.summary[key].totalSequestration)),
             backgroundColor: getColours(labels, '950'),
             borderColor: getColours(labels, 'main'),
@@ -336,7 +336,7 @@ function fluxCharts (flux) {
           scales: {
             y: {
               title: {
-                text: 'Flux (tCO2e/ha.an)',
+                text: 'Flux (tCO2e/an)',
                 display: true
               }
             }
