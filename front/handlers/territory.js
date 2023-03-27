@@ -26,12 +26,6 @@ async function territoryHandler (req, res) {
 
   const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
   const singleLocation = location.epci || location.commune
-  let baseUrl
-  if (singleLocation) {
-    baseUrl = location.epci ? `/epci/${singleLocation.code}` : `/commune/${singleLocation.insee}`
-  } else {
-    baseUrl = '/regroupement?' + location.epcis.map(c => `epcis[]=${c.code}`).join('&') + location.communes.map(c => `communes[]=${c.insee}`).join('&')
-  }
 
   let pageTitle = singleLocation?.nom
   const epciCount = location.epcis?.length
@@ -45,6 +39,14 @@ async function territoryHandler (req, res) {
       if (communes) pageTitle += ' et'
     }
     if (communes) pageTitle += ' ' + communes
+  }
+  let resetQueryStr
+  if (singleLocation) {
+    resetQueryStr = options.stocksHaveModifications || options.fluxHaveModifications ? '?' : undefined
+  } else {
+    resetQueryStr = '?' + location.epcis.map(c => `epcis[]=${c.code}`).join('&')
+    const communeStr = location.communes.map(c => `communes[]=${c.insee}`).join('&')
+    resetQueryStr += (location.communes.length ? '&' : '') + communeStr
   }
   res.render('territoire', {
     pageTitle,
@@ -86,9 +88,13 @@ async function territoryHandler (req, res) {
     fluxTotal: flux?.total,
     agriculturalPractices: AgriculturalPractices,
     agriculturalPracticeDetail,
-    baseUrl,
-    resetQueryStr: options.stocksHaveModifications || options.fluxHaveModifications ? '?' : undefined,
-    sharingQueryStr: getSharingQueryString(req),
+    resetQueryStr,
+    sharingQueryStr: req.search,
+    getTabUrl: (tabName, withQuery) => {
+      let url = req.path
+      if (tabName) url = `/regroupement/${tabName}`
+      return url + withQuery ? req.search : ''
+    },
     beges: req.query.beges,
     perimetre: req.query.perimetre,
     forestBiomassSummaryByType: flux?.biomassSummary,
@@ -407,18 +413,6 @@ function pieChart (title, labels, values) {
       }
     })
   }
-}
-
-// this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
-function getSharingQueryString (req) {
-  let sharingQueryStr = ''
-  const params = Object.keys(req.query).map(queryParam => {
-    return `${queryParam}=${req.query[queryParam]}`
-  })
-  if (params.length) {
-    sharingQueryStr = `?${params.join('&')}`
-  }
-  return sharingQueryStr
 }
 
 module.exports = {

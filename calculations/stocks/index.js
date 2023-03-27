@@ -202,6 +202,7 @@ function getStocks (location, options) {
   let stocks
   if (location.epci || location.commune) {
     stocks = getStocksForLocation(location, options)
+    annotateAreaCustomisations(location, options, stocks)
   } else {
     // area overrides shouldn't be passed down at this level
     if (location.epcis) {
@@ -215,11 +216,11 @@ function getStocks (location, options) {
       })
     }
     stocks = aggregateStocks(stocksForLocations, options)
+    annotateAreaCustomisationsForGrouping(location, options, stocks)
   }
 
   stocks.total = getTotalStock(stocks)
   stocks.totalEquivalent = stocks.total * 44 / 12
-  annotateAreaCustomisations(location, options, stocks) // carbon to CO2 equivalent
   // extra data prep for display - TODO: consider whether this is better handled by the handler
   percentagesByParentType(stocks)
   stocks.percentageByReservoir = getPercentageByReservoir(stocks)
@@ -294,7 +295,10 @@ function aggregateStocks (stocksForLocations, options) {
     'deadBiomassStock',
     'forestLitterStock',
     'totalReservoirStock',
-    'totalStock'
+    'totalStock',
+    'localPopulation',
+    'biStock',
+    'boStock'
   ]
   const areaWeightedKeys = [
     'groundDensity',
@@ -308,7 +312,10 @@ function aggregateStocks (stocksForLocations, options) {
     'areaModified',
     'hasModifications',
     'children',
-    'parent'
+    'parent',
+    'francePopulation',
+    'biFranceStocksTotal',
+    'boFranceStocksTotal'
   ]
   // TODO: stockPercentage?
   stocksForLocations.forEach((stocksForLocation) => {
@@ -415,6 +422,19 @@ function annotateAreaCustomisations (location, options, stocks) {
         stocks[key].areaModified = true
         stocks[key].hasModifications = true
       }
+    }
+  })
+}
+
+// TODO: replace this temporary hack, put in place to simply allow the pages
+// to load.
+function annotateAreaCustomisationsForGrouping (location, options, stocks) {
+  const groundTypes = GroundTypes.map(gt => gt.stocksId)
+  Object.keys(stocks).forEach(key => {
+    if (groundTypes.indexOf(key) !== -1) {
+      stocks[key].originalArea = stocks[key].area
+      stocks[key].areaModified = false
+      stocks[key].hasModifications = false
     }
   })
 }

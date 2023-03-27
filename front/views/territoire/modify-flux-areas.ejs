@@ -54,12 +54,11 @@
       <% } %>
     </tbody>
   </table>
-  <!-- TODO: fix url for regrouping -->
-  <button class="fr-btn fr-mt-2w" type="submit" formaction="<%= baseUrl %>/flux">
+  <button class="fr-btn fr-mt-2w" type="submit" formaction="<%= getTabUrl('flux') %>">
     Mettre à jour les calculs
   </button>
   <% if (fluxHaveModifications) { %>
-    <a class="fr-btn fr-btn--secondary fr-ml-2w" href="<%= baseUrl %>/flux<%= resetQueryStr %>">
+    <a class="fr-btn fr-btn--secondary fr-ml-2w" href="<%= getTabUrl('flux') %><%= resetQueryStr %>">
       Réinitialiser
     </a>
   <% } %>
