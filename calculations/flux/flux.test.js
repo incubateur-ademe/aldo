@@ -266,7 +266,7 @@ describe('The flux calculation module', () => {
   // TODO: can provide areas for agricultural practices
   // test per practice?
 
-  describe('the biomass fluxes linked to de- and reforestation', () => {
+  describe('the biomass fluxes linked to deforestation', () => {
     it('adds for changes to non-forest types, using the stock biomass densities for both ground types', () => {
       const fluxes = getAnnualFluxes({ epci: '243000643' })
       const flux = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
@@ -277,7 +277,7 @@ describe('The flux calculation module', () => {
       expect(flux.co2e).toBeDefined()
     })
 
-    it('ignore changes where final ground type is a forest type', () => {
+    it('ignore biomass changes where final ground type is a forest type since these are accounted for by the biomass growth calculations', () => {
       const fluxes = getAnnualFluxes({ epci: '243000643' })
       const toConifer = fluxes.allFlux.find((f) => f.from === 'cultures' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
       expect(toConifer).not.toBeDefined()
