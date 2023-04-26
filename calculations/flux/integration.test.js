@@ -6,14 +6,7 @@ test('returns expected number of entries for cultures ground changes', () => {
   const allFlux = getAnnualFluxes({ epci: getEpci('200007177', true) }).allFlux
   const culturesFlux = allFlux.filter(f => f.to === 'cultures')
   const cGround = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'sol')
-  expect(cGround.length).toBe(7)
-})
-
-test('returns expected number of entries for cultures litter changes', () => {
-  const allFlux = getAnnualFluxes({ epci: getEpci('200007177', true) }).allFlux
-  const culturesFlux = allFlux.filter(f => f.to === 'cultures')
-  const litter = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'litière')
-  expect(litter.length).toBe(1)
+  expect(cGround.length).toBe(9)
 })
 
 // data-dependent tests

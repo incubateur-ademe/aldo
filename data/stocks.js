@@ -168,25 +168,13 @@ function getBiomassCarbonDensity (location, groundType) {
     return
   }
   if (groundType === 'haies') {
-    return getLiveBiomassCarbonDensity(location, 'forêt mixte')
+    return getForestBiomassCarbonDensities(location, 'forêt mixte').live
   }
   const csvFilePath = './dataByEpci/biomass-hors-forets.csv'
   const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)
   // NB: all stocks are integers, but flux has decimals
   return parseInt(data[groundType], 10) || 0
-}
-
-function getLiveBiomassCarbonDensity (location, forestType) {
-  if (forestType.startsWith('forêt ')) {
-    return getForestBiomassCarbonDensities(location, forestType).live
-  }
-}
-
-function getDeadBiomassCarbonDensity (location, forestType) {
-  if (forestType.startsWith('forêt ')) {
-    return getForestBiomassCarbonDensities(location, forestType).dead
-  }
 }
 
 // source: CITEPA 2016-2019 in tC
@@ -268,8 +256,7 @@ module.exports = {
   getCarbonDensity,
   getArea,
   getBiomassCarbonDensity,
-  getLiveBiomassCarbonDensity,
-  getDeadBiomassCarbonDensity,
+  getForestBiomassCarbonDensities,
   getFranceStocksWoodProducts,
   getForestLitterCarbonDensity,
   getAnnualWoodProductsHarvest,

@@ -55,9 +55,11 @@ function getAnnualGroundCarbonFlux (location, from, to) {
 }
 
 function getForestLitterFlux (from, to) {
-  const fromTypes = ['forêts', 'sols artificiels arborés et buissonants', 'sols artificiels imperméabilisés']
-  const toTypes = ['forêts', 'sols artificiels arborés et buissonants']
-  if (from === 'forêts' && !toTypes.includes(to)) {
+  const forestChildTypes = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
+  // TODO: why the addition of impermeabilisés?
+  const fromTypes = forestChildTypes.concat(['sols artificiels arborés et buissonants', 'sols artificiels imperméabilisés'])
+  const toTypes = forestChildTypes.concat(['sols artificiels arborés et buissonants'])
+  if (forestChildTypes.includes(from) && !toTypes.includes(to)) {
     return -9
   } else if (!fromTypes.includes(from) && toTypes.includes(to)) {
     return 9
@@ -111,7 +113,7 @@ function yearMultiplier (reservoir, from, to) {
       return 1
     } else if (from === 'sols artificiels arborés et buissonants') {
       return multiplier
-    } else if (from === 'forêts' || to === 'forêts') {
+    } else if (from.startsWith('forêt ') || to.startsWith('forêt ')) {
       return multiplier
     } else if (from.startsWith('prairies') || to.startsWith('prairies')) {
       return multiplier
@@ -182,10 +184,6 @@ function getAllAnnualFluxes (location, options) {
       const to = toGt.stocksId
       if (from === to) {
         continue
-      } else if (to in GroundTypes.find((gt) => gt.stocksId === 'forêts').children) {
-        // there is no CLC change to forest subtypes, only to the forest parent type.
-        // Biomass flux per subtype is handled separately
-        continue
       }
       if (fromGt.fluxId && toGt.fluxId) {
         const annualFlux = getAnnualGroundCarbonFlux(location, from, to)
@@ -241,10 +239,6 @@ function cToCo2e (valueC) {
 }
 
 function getAnnualSurfaceChange (location, options, from, to) {
-  if (to.startsWith('forêt ')) {
-    // not elegant error management but shouldn't happen
-    throw new Error('Change to forest is only measured at parent-type level, not subtype')
-  }
   const csvFilePath = './dataByEpci/clc18-change.csv'
   const dataByEpci = require(csvFilePath + '.json')
   const data = dataByEpci.find(data => data.siren === location.epci)

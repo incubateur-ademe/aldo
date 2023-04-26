@@ -9,13 +9,21 @@ jest.mock('../../data/flux', () => {
     __esModule: true,
     ...originalModule,
     getAnnualSurfaceChange: jest.fn((location, options, from, to) => {
-      return {
+      const areaChanges = {
         cultures: {
           vignes: 3,
           vergers: 4,
-          'forêt mixte': 5
+          'forêt mixte': 5,
+          'forêt conifere': 5
+        },
+        'forêt mixte': {
+          vignes: 10
+        },
+        'forêt feuillu': {
+          'forêt conifere': 3
         }
-      }[from][to]
+      }[from]
+      return areaChanges ? areaChanges[to] : undefined
     }),
     getAllAnnualFluxes: jest.fn(() => {
       return [
@@ -46,8 +54,9 @@ jest.mock('../../data/flux', () => {
           reservoir: 'sol',
           gas: 'C'
         },
+        // per-commune forest biomass entries: not associated with area changes (hence no from)
+        // instead, in real usage the entries correspond to today's area for that type
         {
-          from: 'cultures',
           to: 'forêt mixte',
           reservoir: 'biomasse',
           area: 1,
@@ -60,7 +69,6 @@ jest.mock('../../data/flux', () => {
           conversionFactor: 1
         },
         {
-          from: 'vergers',
           to: 'forêt mixte',
           reservoir: 'biomasse',
           area: 2,
@@ -72,9 +80,8 @@ jest.mock('../../data/flux', () => {
           fluxMeterCubed: 0.1,
           conversionFactor: 0.1
         },
-        // add this one in to check filtering on biomass summary calculations
+        // add this entry (per-commune today's area) to check filtering on biomass summary
         {
-          from: 'cultures',
           to: 'forêt feuillu',
           reservoir: 'biomasse',
           area: 20,
@@ -85,6 +92,16 @@ jest.mock('../../data/flux', () => {
           timberExtraction: 20,
           fluxMeterCubed: 20,
           conversionFactor: 20
+        },
+        // change between forest types (eventually this will be handled, for now at least elegantly ignored)
+        {
+          from: 'forêt feuillu',
+          to: 'forêt conifere',
+          annualFlux: 2,
+          annualFluxEquivalent: 6,
+          yearsForFlux: 20,
+          reservoir: 'sol',
+          gas: 'C'
         }
       ]
     }),
@@ -92,16 +109,10 @@ jest.mock('../../data/flux', () => {
       bo: 1000,
       bi: 2000
     }))
-    // getBiomassCarbonDensity: jest.fn((location, keyword) => {
-    //   // TODO: maybe refactor getStocksByKeyword to only fetch biomss for non-forest
-    //   if (!keyword.startsWith('forêt ')) {
-    //     return 3
-    //   }
-    // }),
   }
 })
 
-const ORIGINAL_FLUX_COUNT = 6
+const ORIGINAL_FLUX_COUNT = 7
 
 jest.mock('../../data/stocks', () => {
   const originalModule = jest.requireActual('../../data/stocks')
@@ -116,7 +127,18 @@ jest.mock('../../data/stocks', () => {
     getAnnualFranceWoodProductsHarvest: jest.fn(() => ({
       bo: 100,
       bi: 1000
-    }))
+    })),
+    getBiomassCarbonDensity: jest.fn((location, keyword) => {
+      if (!keyword.startsWith('forêt ')) {
+        return 4
+      }
+    }),
+    getForestBiomassCarbonDensities: jest.fn((location, type) => {
+      return {
+        live: type === 'forêt conifere' ? 13 : 3,
+        dead: 7
+      }
+    })
   }
 })
 
@@ -195,9 +217,15 @@ describe('The flux calculation module', () => {
 
   // TODO: test totalSequestration in the summary for prairies, sols art, forêts
   it('has a summary with totals by ground type, including parent types', () => {
-    const fluxes = getAnnualFluxes({ epci }, { areaChanges: {} })
+    const fluxes = getAnnualFluxes({ epci })
     expect(fluxes.summary.vignes).toBeDefined()
     expect(fluxes.summary.forêts).toBeDefined()
+  })
+
+  it('contains flux entries per forest subtype', () => {
+    const fluxes = getAnnualFluxes({ epci })
+    const conifer = fluxes.allFlux.find((f) => f.to === 'forêt conifere')
+    expect(conifer.value).toBe(120)
   })
 
   describe('the forest biomass summary', () => {
@@ -238,5 +266,32 @@ describe('The flux calculation module', () => {
   // TODO: can provide areas for agricultural practices
   // test per practice?
 
-  // TODO: add tests and code for loss of biomass from forest loss
+  describe('the biomass fluxes linked to deforestation', () => {
+    it('adds for changes to non-forest types, using the stock biomass densities for both ground types', () => {
+      const fluxes = getAnnualFluxes({ epci: '243000643' })
+      const flux = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
+      expect(flux.annualFlux).toEqual(-6)
+      expect(flux.annualFluxEquivalent).toBeDefined()
+      expect(flux.area).toEqual(10)
+      expect(flux.value).toEqual(-60)
+      expect(flux.co2e).toBeDefined()
+    })
+
+    it('ignore biomass changes where final ground type is a forest type since these are accounted for by the biomass growth calculations', () => {
+      const fluxes = getAnnualFluxes({ epci: '243000643' })
+      const toConifer = fluxes.allFlux.find((f) => f.from === 'cultures' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
+      expect(toConifer).not.toBeDefined()
+      const betweenForests = fluxes.allFlux.find((f) => f.from === 'forêt feuillu' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
+      expect(betweenForests).not.toBeDefined()
+    })
+
+    it('allows change from forest type to be overridden', () => {
+      const fluxes = getAnnualFluxes({ epci: '243000643' }, { areaChanges: { for_mix_vign: 20 } })
+      const toVineyard = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
+      expect(toVineyard.area).toBe(20)
+      expect(toVineyard.originalArea).toBe(10)
+      expect(toVineyard.areaModified).toBe(true)
+    })
+  })
+  // TODO: should be able to override area from a prairie subtype to another
 })

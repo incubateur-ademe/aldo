@@ -5,6 +5,7 @@ const {
 const { GroundTypes } = require('../constants')
 const { getFluxWoodProducts } = require('./woodProducts')
 const { getFluxAgriculturalPractices } = require('./agriculturalPractices')
+const { getBiomassCarbonDensity, getForestBiomassCarbonDensities } = require('../../data/stocks')
 
 function convertCToCo2e (valueC) {
   return valueC * 44 / 12
@@ -95,10 +96,15 @@ function getAnnualFluxes (location, options) {
   allFluxes.push(...woodFluxes)
   const agriculturalPracticesFlux = getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas)
   allFluxes.push(...agriculturalPracticesFlux)
+  allFluxes.push(...deforestationFlux(location, options))
 
   const summary = {}
   let total = 0
   allFluxes.forEach((flux) => {
+    if (!flux.co2e && flux.co2e !== 0) {
+      console.log('WARNING: flux without a co2e found', flux)
+      return
+    }
     total += flux.co2e
     const to = flux.to
     if (!summary[to]) {
@@ -144,6 +150,7 @@ function getAnnualFluxes (location, options) {
   const biomassGrowthAreaModified = biomassSummary.some((subtype) => subtype.areaModified)
   summary.forêts.areaModified = summary.forêts.areaModified || biomassGrowthAreaModified
   summary.forêts.hasModifications = summary.forêts.hasModifications || biomassGrowthAreaModified
+
   return {
     allFlux: allFluxes,
     summary,
@@ -158,7 +165,7 @@ function forestBiomassGrowthSummary (allFlux, options) {
   const forestSubtypes = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
   for (const subtype of forestSubtypes) {
     const subtypeFluxes =
-      allFlux.filter((flux) => flux.to === subtype && flux.reservoir === 'biomasse')
+      allFlux.filter((flux) => !flux.from && flux.to === subtype && flux.reservoir === 'biomasse')
     const originalArea = sumByProperty(subtypeFluxes, 'area')
     const summary = {
       to: subtype,
@@ -206,6 +213,48 @@ function weightedAverage (objArray, key, keyForWeighting) {
   })
   const total = sumByProperty(objArray, keyForWeighting)
   return total ? weightedSum / total : 0
+}
+
+function deforestationFlux (location, options) {
+  const deforestationFluxes = []
+  const forestSubtypes = GroundTypes.find((gt) => gt.stocksId === 'forêts').children
+  for (const from of forestSubtypes) {
+    for (const toGt of GroundTypes) {
+      const to = toGt.stocksId
+      if (from === to) {
+        continue
+      } else if (forestSubtypes.includes(to)) {
+        // ignore reforestation and changes between forest subtypes since that biomass should
+        // be taken into account by the growth of biomass based on area used by stocks
+        continue
+      }
+
+      const forestBiomassDensities = getForestBiomassCarbonDensities(location, from)
+      const initialBiomassDensity = forestBiomassDensities.live + forestBiomassDensities.dead
+      const annualFlux = getBiomassCarbonDensity(location, to) - initialBiomassDensity
+
+      const annualFluxEquivalent = convertCToCo2e(annualFlux)
+      const { area, areaModified, originalArea } = getAnnualSurfaceChange(location, options, from, to)
+      if (area && annualFlux) {
+        const value = annualFlux * area
+        deforestationFluxes.push({
+          from,
+          to,
+          area,
+          originalArea,
+          areaModified,
+          annualFlux,
+          annualFluxEquivalent,
+          flux: annualFlux,
+          value,
+          co2e: convertCToCo2e(value),
+          reservoir: 'biomasse',
+          gas: 'C'
+        })
+      }
+    }
+  }
+  return deforestationFluxes
 }
 
 module.exports = {
