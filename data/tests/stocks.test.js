@@ -180,7 +180,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    const data = getCommuneAreaDataForEpci({ epci })
+    const data = getCommuneAreaDataForEpci({ epci: { code: epci } })
     expect(data.length).toBe(2)
   })
 
@@ -401,7 +401,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getForestBiomassCarbonDensities({ epci }, 'forêt mixte').live).toBe(3.5)
+    expect(getForestBiomassCarbonDensities({ epci: { code: epci } }, 'forêt mixte').live).toBe(3.5)
   })
 
   it('given an area of 0, returns a mean of the live biomass carbon densitie for a relevant forest type for an EPCI', () => {
@@ -438,7 +438,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getForestBiomassCarbonDensities({ epci }, 'forêt mixte').live).toBe(3)
+    expect(getForestBiomassCarbonDensities({ epci: { code: epci } }, 'forêt mixte').live).toBe(3)
   })
 
   it('returns dead biomass carbon density for a relevant forest type, weighted by area communes for an EPCI', () => {
@@ -475,7 +475,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getForestBiomassCarbonDensities({ epci }, 'forêt peupleraie').dead).toBe(3.5)
+    expect(getForestBiomassCarbonDensities({ epci: { code: epci } }, 'forêt peupleraie').dead).toBe(3.5)
   })
 
   it('returns area of forest subtype (as ha) given valid EPCI SIREN', () => {
