@@ -292,6 +292,7 @@ function getSolsArtificielsException (location, options, from, to, clcAnnualChan
       }
     }
     const changeSolsArbores = getAnnualSurfaceChange(location, options, from, 'sols artificiels arborés et buissonants')
+    // NB: the CLC codes for impermeable and arbustifs are the same, hence the variable name
     const changeArboresAndImpermeables = clcAnnualChange + changeSolsArbores
     if (changeSolsArbores < estimatedPortionGreen * changeArboresAndImpermeables) {
       return changeArboresAndImpermeables * estimatedPortionGreen - changeSolsArbores
@@ -379,6 +380,7 @@ function getForestBiomassFluxesByCommune (location) {
         flux.ignLocalisationCode = france
         carbonDataForCommuneAndLocalisation =
           compositionCarbonData.find((data) => data.code_localisation === france)
+        // TODO: remove this console log?
         console.log(flux)
         if (!carbonDataForCommuneAndLocalisation) {
           // this is unexpected
