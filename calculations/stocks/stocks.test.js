@@ -376,6 +376,7 @@ describe('The stocks calculation module', () => {
       expect(stocks.cultures.area).toEqual(1000)
       expect(stocks.cultures.originalArea).toEqual(150)
       expect(stocks.cultures.areaModified).toBe(true)
+      expect(stocks.cultures.hasModifications).toBe(true)
       // and the ground density should remain the weighted average from the original areas
       expect(stocks.cultures.groundDensity).toEqual(4)
     })
@@ -391,8 +392,10 @@ describe('The stocks calculation module', () => {
       expect(forestChild.liveBiomassStock).toEqual(4000)
       expect(forestChild.originalArea).toEqual(150)
       expect(forestChild.areaModified).toBe(true)
+      expect(forestChild.hasModifications).toBe(true)
       const forestParent = stocks.forêts
       expect(forestParent.areaModified).toBe(true)
+      expect(forestParent.hasModifications).toBe(true)
       // non overridden areas : 3 * 50 + 3  * 100
       expect(forestParent.area).toEqual(1450)
       // 3 * (50 * 4) + 3 * (100 * 4) + (1000 * 4)

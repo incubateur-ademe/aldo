@@ -448,6 +448,7 @@ function annotateAreaCustomisationsForGrouping (stocks, options) {
     stocks[groundType].originalArea = stocks[groundType].area
     stocks[groundType].area = options.areas[groundType]
     stocks[groundType].areaModified = true
+    stocks[groundType].hasModifications = true
     calculateStocks(stocks[groundType])
     if (stocks[groundType].parent) {
       parentTypesToUpdate.push(stocks[groundType].parent)
@@ -457,6 +458,7 @@ function annotateAreaCustomisationsForGrouping (stocks, options) {
   parentTypesToUpdate.forEach((groundType) => {
     stocks[groundType].originalArea = stocks[groundType].area
     stocks[groundType].areaModified = true
+    stocks[groundType].hasModifications = true
     Object.assign(stocks[groundType], aggregateStocksForParent(stocks, groundType))
   })
 }
