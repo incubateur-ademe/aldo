@@ -63,7 +63,7 @@ function getSubStocksByKeyword (location, keyword, parent, options) {
   return stocks
 }
 
-function aggregateStocksForParent (subStocks) {
+function aggregateStocksForParent (subStocks, parent) {
   const stocks = {
     totalReservoirStock: 0,
     area: 0,
@@ -74,6 +74,7 @@ function aggregateStocksForParent (subStocks) {
     deadBiomassStock: 0
   }
   for (const subType of Object.keys(subStocks)) {
+    if (parent && subStocks[subType].parent !== parent) continue
     stocks.totalReservoirStock += subStocks[subType].totalReservoirStock
     stocks.area += subStocks[subType].area
     stocks.groundStock += subStocks[subType].groundStock
@@ -218,7 +219,7 @@ function getStocks (location, options) {
       })
     }
     stocks = aggregateStocks(stocksForLocations)
-    annotateAreaCustomisationsForGrouping(stocks, options)
+    annotateAreaCustomisationsForGrouping(stocks, options, stocks)
   }
 
   stocks.total = getTotalStock(stocks)
@@ -442,12 +443,38 @@ function annotateAreaCustomisations (location, options, stocks) {
 }
 */
 function annotateAreaCustomisationsForGrouping (stocks, options) {
-  const groundTypes = GroundTypes.map(gt => gt.stocksId)
-  Object.keys(stocks).forEach(key => {
-    if (groundTypes.indexOf(key) !== -1) {
-      stocks[key].originalArea = stocks[key].area
-      stocks[key].areaModified = false
-      stocks[key].hasModifications = false
+  const parentTypesToUpdate = []
+  Object.keys(options.areas).forEach(groundType => {
+    stocks[groundType].originalArea = stocks[groundType].area
+    stocks[groundType].area = options.areas[groundType]
+    stocks[groundType].areaModified = true
+    calculateStocks(stocks[groundType])
+    if (stocks[groundType].parent) {
+      parentTypesToUpdate.push(stocks[groundType].parent)
+    }
+  })
+
+  parentTypesToUpdate.forEach((groundType) => {
+    stocks[groundType].originalArea = stocks[groundType].area
+    stocks[groundType].areaModified = true
+    Object.assign(stocks[groundType], aggregateStocksForParent(stocks, groundType))
+  })
+}
+
+function calculateStocks (stock) {
+  const keys = [
+    'ground',
+    'biomass',
+    'liveBiomass',
+    'deadBiomass',
+    'forestLitter',
+    'total'
+  ]
+  const area = stock.area
+  keys.forEach(key => {
+    const density = stock[`${key}Density`]
+    if (density) {
+      stock[`${key}Stock`] = density * area
     }
   })
 }

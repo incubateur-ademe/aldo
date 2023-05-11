@@ -2,7 +2,7 @@ const {
   getCarbonDensity,
   getArea,
   getBiomassCarbonDensity,
-  getCommuneAreaDataForEpci,
+  getForestAreaData,
   getSignificantCarbonData,
   getCarbonDataForCommuneAndComposition,
   getForestBiomassCarbonDensities,
@@ -180,7 +180,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    const data = getCommuneAreaDataForEpci({ epci: { code: epci } })
+    const data = getForestAreaData({ epci: { code: epci } })
     expect(data.length).toBe(2)
   })
 
@@ -205,7 +205,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    const data = getCommuneAreaDataForEpci({ epcis: ['200000172', '249500513'], communes: ['1003', '2001'] })
+    const data = getForestAreaData({ epcis: ['200000172', '249500513'], communes: ['1003', '2001'] })
     expect(data.length).toBe(3)
   })
 

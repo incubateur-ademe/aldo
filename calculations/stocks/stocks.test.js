@@ -96,12 +96,6 @@ describe('The stocks calculation module', () => {
       expect(totalReservoirStock).toEqual(250)
     })
 
-    it('accepts multiple locations', () => {
-      const stocks = getStocks({ epcis: [epci, getEpci('200042992', true)] })
-      expect(stocks.cultures.area).toEqual(150)
-      expect(stocks.cultures.groundDensity).toEqual(4)
-    })
-
     it('calculates total density by the sum of ground and biomass densities', () => {
       const totalDensity = simpleStock.totalDensity
       expect(totalDensity).toEqual(5)
@@ -359,11 +353,55 @@ describe('The stocks calculation module', () => {
   // getStocks for a commune
   // getStocks for multiple epcis and communes
   describe('for a custom grouping of territories', () => {
+    it('outputs area as sum of location areas', () => {
+      const stocks = getStocks({ epcis: [epci, getEpci('200042992', true)] })
+      expect(stocks.cultures.area).toEqual(150)
+      // (4 forest child types) 4 * 50 + 4 * 100
+      expect(stocks.forêts.area).toEqual(600)
+      // 4 * (50 * 4) + 4 * (100 * 4)
+      expect(stocks.forêts.liveBiomassStock).toEqual(2400)
+    })
+
+    it('outputs ground density as weighted average of location areas', () => {
+      const stocks = getStocks({ epcis: [epci, getEpci('200042992', true)] })
+      expect(stocks.cultures.groundDensity).toEqual(4)
+    })
+
+    it('allows area overrides for a simple ground type', () => {
+      const overrides = {
+        areas: { cultures: 1000 }
+      }
+      const stocks = getStocks({ epcis: [epci, getEpci('200042992', true)] }, overrides)
+      expect(stocks.cultures.area).toEqual(1000)
+      expect(stocks.cultures.originalArea).toEqual(150)
+      expect(stocks.cultures.areaModified).toBe(true)
+      // and the ground density should remain the weighted average from the original areas
+      expect(stocks.cultures.groundDensity).toEqual(4)
+    })
+
+    it('updates parent type data for overridden child area', () => {
+      const overrides = {
+        areas: { 'forêt feuillu': 1000 }
+      }
+      const stocks = getStocks({ epcis: [epci, getEpci('200042992', true)] }, overrides)
+      const forestChild = stocks['forêt feuillu']
+      expect(forestChild.area).toEqual(1000)
+      expect(forestChild.liveBiomassDensity).toEqual(4)
+      expect(forestChild.liveBiomassStock).toEqual(4000)
+      expect(forestChild.originalArea).toEqual(150)
+      expect(forestChild.areaModified).toBe(true)
+      const forestParent = stocks.forêts
+      expect(forestParent.areaModified).toBe(true)
+      // non overridden areas : 3 * 50 + 3  * 100
+      expect(forestParent.area).toEqual(1450)
+      // 3 * (50 * 4) + 3 * (100 * 4) + (1000 * 4)
+      expect(forestParent.liveBiomassStock).toEqual(5800)
+    })
     // 2 epcis, 2 communes (one of which is part of one of the epcis so shouldn't count)
 
-    it('calculates total stock as a sum of the stocks of the requested territories', () => {
+    // it('calculates total stock as a sum of the stocks of the requested territories', () => {
 
-    })
+    // })
 
     // it calculates the carbon density as a weighted average of the requested territories
 

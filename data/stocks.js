@@ -100,7 +100,7 @@ function getSignificantCarbonData () {
   return carbonData.filter((data) => data.surface_ic === 's')
 }
 
-function getCommuneAreaDataForEpci (location) {
+function getForestAreaData (location) {
   const csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
   if (location.epci) {
@@ -114,7 +114,7 @@ function getCommuneAreaDataForEpci (location) {
   return areaData.filter(data => location.communes?.includes(data.INSEE_COM) || location.epcis?.includes(data.CODE_EPCI))
 }
 
-// communeData is one entry from the array returned by getCommuneAreaDataForEpci
+// communeData is one entry from the array returned by getForestAreaData
 // carbon data is the array returned by getSignificantCarbonData
 // composition is a forest subtype
 function getCarbonDataForCommuneAndComposition (communeData, carbonData, forestSubtype) {
@@ -155,7 +155,7 @@ function getCarbonDataForCommuneAndComposition (communeData, carbonData, forestS
 }
 
 function getForestBiomassCarbonDensities (location, forestSubtype) {
-  const areaDataByCommune = getCommuneAreaDataForEpci(location)
+  const areaDataByCommune = getForestAreaData(location)
   if (!areaDataByCommune.length) {
     return { live: 0, dead: 0 }
   }
@@ -237,7 +237,7 @@ function getAnnualWoodProductsHarvest (location) {
     'forêt mixte': 1.37,
     'forêt peupleraie': 1.3
   }
-  const areaDataByCommune = getCommuneAreaDataForEpci(location)
+  const areaDataByCommune = getForestAreaData(location)
   const significantCarbonData = getSignificantCarbonData()
   const regionProportionData = getRegionProportionData()
   areaDataByCommune.forEach((communeData) => {
@@ -280,7 +280,7 @@ function getForestLitterCarbonDensity (subtype) {
 module.exports = {
   getCarbonDensity,
   getArea,
-  getCommuneAreaDataForEpci,
+  getForestAreaData,
   getSignificantCarbonData,
   getCarbonDataForCommuneAndComposition,
   getBiomassCarbonDensity,
