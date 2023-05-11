@@ -291,7 +291,6 @@ function aggregateStocks (stocksForLocations) {
   const aggregatedStocks = {}
   const sumKeys = [
     'area',
-    'originalArea',
     'groundStock',
     'biomassStock',
     'liveBiomassStock',
@@ -346,6 +345,7 @@ function aggregateStocks (stocksForLocations) {
       if (!aggregatedStocks[groundType][key]) return
       aggregatedStocks[groundType][key] /= (aggregatedStocks[groundType].area || stocksForLocations.length)
     })
+    aggregatedStocks[groundType].originalArea = aggregatedStocks[groundType].area
   })
   return aggregatedStocks
 }

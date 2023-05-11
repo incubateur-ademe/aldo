@@ -356,6 +356,7 @@ describe('The stocks calculation module', () => {
     it('outputs area as sum of location areas', () => {
       const stocks = getStocks({ epcis: [epci, getEpci('200042992', true)] })
       expect(stocks.cultures.area).toEqual(150)
+      expect(stocks.cultures.originalArea).toEqual(150)
       // (4 forest child types) 4 * 50 + 4 * 100
       expect(stocks.forêts.area).toEqual(600)
       // 4 * (50 * 4) + 4 * (100 * 4)
