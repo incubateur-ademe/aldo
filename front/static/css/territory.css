@@ -9,6 +9,12 @@ tr.stocks-row {
   justify-content: flex-start;
 }
 
+tr.other-stocks-row {
+  display: grid;
+  grid-template-columns: 1.6fr 0.9fr 0.9fr 0.5fr;
+  justify-content: flex-start;
+}
+
 tr.flux-row {
   display: grid;
   grid-template-columns: 0.9fr 0.7fr 1fr 0.3fr;
