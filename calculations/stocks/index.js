@@ -3,7 +3,8 @@ const {
   getCarbonDensity,
   getBiomassCarbonDensity,
   getForestLitterCarbonDensity,
-  getForestBiomassCarbonDensities
+  getForestBiomassCarbonDensities,
+  getHedgerowsDataByCommune
 } = require('../../data/stocks')
 const { getStocksWoodProducts } = require('./woodProducts')
 const { GroundTypes } = require('../constants')
@@ -140,17 +141,34 @@ function getAreasSolsArtificiels (location, options) {
   return areas
 }
 
-function getStocksHaies (location, options) {
-  const carbonDensity = getBiomassCarbonDensity(location, 'haies')
-  const area = getArea(location, 'haies', options.areas)
-  const totalReservoirStock = carbonDensity * area
+function getStocksHedgerows (location, options) {
+  const data = getHedgerowsDataByCommune(location)
+  const originalArea = sumByProperty(data, 'length')
+  const carbonDensity = weightedAverage(data, 'carbonDensity', 'length')
+  let area = originalArea
+  let biomassStock
+  if (options?.areas?.haies) {
+    area = options.areas.haies
+  }
+  if (originalArea === area) {
+    data.forEach((d) => {
+      d.biomassStock = d.length * d.carbonDensity
+    })
+    biomassStock = sumByProperty(data, 'biomassStock')
+  } else {
+    biomassStock = area * carbonDensity
+  }
   return {
-    totalReservoirStock,
-    totalStock: totalReservoirStock,
+    totalReservoirStock: biomassStock,
+    totalStock: biomassStock,
+    // continue using the term 'area' for consistency
     area,
+    originalArea,
+    areaModified: area !== originalArea,
+    hasModifications: area !== originalArea,
     biomassDensity: carbonDensity,
     groundDensity: 0,
-    biomassStock: totalReservoirStock,
+    biomassStock: biomassStock,
     totalDensity: carbonDensity
   }
 }
@@ -203,6 +221,7 @@ function getStocks (location, options) {
   let stocks
   if (location.epci || location.commune) {
     stocks = getStocksForLocation(location, options)
+    stocks.haies = getStocksHedgerows(location, options)
     annotateAreaCustomisations(location, options, stocks)
   } else {
     // area overrides shouldn't be passed down at this level
@@ -219,6 +238,7 @@ function getStocks (location, options) {
       })
     }
     stocks = aggregateStocks(stocksForLocations)
+    stocks.haies = getStocksHedgerows(location, options)
     annotateAreaCustomisationsForGrouping(stocks, options, stocks)
   }
 
@@ -237,8 +257,7 @@ function getStocksForLocation (location, options) {
     'zones humides': getStocksByKeyword(location, 'zones humides', options),
     vergers: getStocksByKeyword(location, 'vergers', options),
     vignes: getStocksByKeyword(location, 'vignes', options),
-    'produits bois': getStocksWoodProducts(location, options?.woodCalculation, options),
-    haies: getStocksHaies(location, options)
+    'produits bois': getStocksWoodProducts(location, options?.woodCalculation, options)
   }
 
   // extra steps for ground types that are grouped together
@@ -413,7 +432,7 @@ function annotateAreaCustomisations (location, options, stocks) {
   const groundTypes = GroundTypes.map(gt => gt.stocksId)
   const modifiedAreas = Object.keys(originalAreas)
   Object.keys(stocks).forEach(key => {
-    if (groundTypes.indexOf(key) !== -1) {
+    if (groundTypes.indexOf(key) !== -1 && !stocks[key].originalArea) {
       if (isNaN(originalAreas[key])) {
         stocks[key].originalArea = stocks[key].area
         const children = GroundTypes.find(gt => gt.stocksId === key).children
@@ -483,6 +502,24 @@ function calculateStocks (stock) {
 
 function sumAllBiomassStock (stock) {
   return (stock.biomassStock || 0) + (stock.liveBiomassStock || 0) + (stock.deadBiomassStock || 0)
+}
+
+// consider refactoring to share these between files and unit testing
+function sumByProperty (objArray, key) {
+  let sum = 0
+  objArray.forEach((obj) => {
+    sum += obj[key]
+  })
+  return sum
+}
+
+function weightedAverage (objArray, key, keyForWeighting) {
+  let weightedSum = 0
+  objArray.forEach((obj) => {
+    weightedSum += obj[key] * obj[keyForWeighting]
+  })
+  const total = sumByProperty(objArray, keyForWeighting)
+  return total ? weightedSum / total : 0
 }
 
 module.exports = {
