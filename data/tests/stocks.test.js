@@ -9,7 +9,8 @@ const {
   getFranceStocksWoodProducts,
   // getAnnualWoodProductsHarvest,
   // getAnnualFranceWoodProductsHarvest,
-  getForestLitterCarbonDensity
+  getForestLitterCarbonDensity,
+  getHedgerowsDataByCommune
 } = require('../stocks')
 
 jest.mock('../communes', () => {
@@ -496,17 +497,52 @@ describe('The stocks data module', () => {
     expect(getArea({ epci: { code: '249500513' } }, 'forêt peupleraie')).toBe(50)
   })
 
-  it('returns area of haies (as ha) given valid EPCI SIREN', () => {
-    jest.doMock('../dataByEpci/surface-haies.csv.json', () => {
+  it('handles hedgerows area differently', () => {
+    expect(getArea({ epci: { code: '249500513' } }, 'haies')).toBe(undefined)
+  })
+
+  it('returns length (km) and carbon density of hedgerows given valid EPCI SIREN', () => {
+    jest.doMock('../dataByCommune/haie-clc18.csv.json', () => {
       return [
         {
-          siren: '249500513',
-          area: '20'
+          INSEE_COM: '01234',
+          TOTKM_HAIE: '20',
+          INSEE_DEP: '2' // TODO: should use dep in this file or from our commune data?
+        },
+        {
+          INSEE_COM: '01235',
+          TOTKM_HAIE: '10',
+          INSEE_DEP: '3'
+        },
+        {
+          INSEE_COM: '99999',
+          TOTKM_HAIE: '99',
+          INSEE_DEP: '9'
         }
       ]
     })
-    expect(getArea({ epci: { code: '249500513' } }, 'haies')).toBe(20)
+    // TODO: reconsider folder name? move to a different folder? this data is by department
+    jest.doMock('../dataByCommune/carbone-haies.csv.json', () => {
+      return [
+        {
+          dep: '2',
+          C_aerien_km: '10'
+        },
+        {
+          dep: '3',
+          C_aerien_km: '50'
+        }
+      ]
+    })
+    const data = getHedgerowsDataByCommune({ epci: { code: '249500513' } })
+    expect(data.length).toBe(2)
+    const first = data[0]
+    expect(first.carbonDensity).toBe(10)
+    expect(first.length).toBe(20)
   })
+
+  // TODO: test for single commune and test for mixed
+  // TODO: test for if carbone haies file doesn't have the target dep > 78 tC/km
 
   it('returns forest litter carbon density (tC/ha) for valid forest subtype', () => {
     expect(getForestLitterCarbonDensity('feuillu')).toBe(9)
