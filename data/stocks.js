@@ -286,7 +286,10 @@ function getHedgerowsDataByCommune (location) {
   const communeCodes = getCommunes(location).map((c) => c.insee)
   lengthData = lengthData.filter((data) => communeCodes.includes(data.INSEE_COM) && data.TOTKM_HAIE)
   return lengthData.map((data) => {
-    const carbonDensity = carbonData.find((cd) => cd.dep === data.INSEE_DEP)?.C_aerien_km || 0
+    // source de 78 tC/km -> rapport ADEME/IGN "STOCKS DE BOIS ET DE CARBONE DANS LES HAIES BOCAGÈRES FRANÇAISES"
+    // page 41 : « En moyenne, le stock de carbone par km pour le linéaire possédant un volume (MNHC > 3 m)
+    // sur l’ensemble de la zone d’étude est de 100 tC/km, dont 78 pour la partie aérienne ».
+    const carbonDensity = carbonData.find((cd) => cd.dep === data.INSEE_DEP)?.C_aerien_km || 78
     return {
       length: +data.TOTKM_HAIE,
       carbonDensity: +carbonDensity

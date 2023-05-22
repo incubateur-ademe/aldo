@@ -23,3 +23,6 @@ test('Can fetch communes by SIREN EPCI', () => {
   expect(communes[0].insee).toBe('01234')
   expect(communes[1].insee).toBe('01235')
 })
+
+// TODO: test for multiple epcis
+// TODO: test commune deduplication if specified epcis and communes
