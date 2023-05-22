@@ -560,7 +560,6 @@ describe('The stocks data module', () => {
       const first = data[0]
       expect(first.carbonDensity).toBe(78)
     })
-    // TODO: test for single commune and test for mixed
   })
 
   it('returns forest litter carbon density (tC/ha) for valid forest subtype', () => {

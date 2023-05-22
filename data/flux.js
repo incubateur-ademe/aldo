@@ -250,12 +250,7 @@ function getAnnualSurfaceChange (location, options, from, to) {
 
   const csvFilePath = './dataByCommune/clc18-change.csv'
   const dataByCommune = require(csvFilePath + '.json')
-  let communes = []
-  if (location.epci) {
-    communes = getCommunes(location).map((c) => c.insee)
-  } else if (location.commune) {
-    communes.push(location.commune.insee)
-  }
+  const communes = getCommunes(location).map((c) => c.insee)
   const areaChangesForEpci = dataByCommune.filter(data => communes.includes(data.commune))
   const changesForGroundTypes = areaChangesForEpci.filter((change) => {
     return fromClcCodes.includes(change.code12) && toClcCodes.includes(change.code18)
