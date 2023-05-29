@@ -42,6 +42,44 @@ jest.mock('../../data/stocks', () => {
         bo: 500,
         bi: 200
       }
+    }),
+    getHedgerowsDataByCommune: jest.fn((location) => {
+      if (location.epci) {
+        return [
+          {
+            department: 2,
+            length: 10,
+            carbonDensity: 50
+          },
+          {
+            department: 99,
+            length: 10,
+            carbonDensity: 10
+          }
+        ]
+      } else if (location.commune) {
+        return [
+          {
+            department: 2,
+            length: 10,
+            carbonDensity: 50
+          }
+        ]
+      } else if (location.communes) {
+        return [
+          {
+            department: 2,
+            length: 10,
+            carbonDensity: 50
+          },
+          {
+            department: 3,
+            length: 20,
+            carbonDensity: 20
+          }
+        ]
+      }
+      return []
     })
   }
 })
@@ -198,6 +236,41 @@ describe('The stocks calculation module', () => {
     })
   })
 
+  describe('for hedgerows', () => {
+    it('returns the stock as the product of the length and carbon density for an EPCI', () => {
+      const stocks = getStocks({ epci })
+      const hedgerows = stocks.haies
+      expect(hedgerows.area).toBe(20)
+      expect(hedgerows.totalDensity).toBe(30) // weighted average
+      expect(hedgerows.totalStock).toBe(600)
+    })
+
+    it('returns the stock as the product of the length and carbon density for a commune', () => {
+      const stocks = getStocks({ commune: { departement: 2 } })
+      const hedgerows = stocks.haies
+      expect(hedgerows.totalStock).toBe(500)
+    })
+
+    it('returns the stock as the sum of the products of the length and carbon density for a grouping', () => {
+      const stocks = getStocks({ communes: [{ departement: 2 }, { departement: 3 }] })
+      const hedgerows = stocks.haies
+      expect(hedgerows.area).toBe(30)
+      expect(hedgerows.totalDensity).toBe(30) // weighted average
+      expect(hedgerows.totalStock).toBe(900)
+    })
+
+    it('supports length overrides', () => {
+      const stocks = getStocks({ epci }, { areas: { haies: 10 } })
+      const hedgerows = stocks.haies
+      expect(hedgerows.area).toBe(10)
+      expect(hedgerows.originalArea).toBe(20)
+      expect(hedgerows.areaModified).toBe(true)
+      expect(hedgerows.hasModifications).toBe(true)
+      expect(hedgerows.totalDensity).toBe(30)
+      expect(hedgerows.totalStock).toBe(300)
+    })
+  })
+
   describe('for artificial ground types', () => {
     const impermeableKey = 'sols artificiels imperméabilisés'
     const shrubbyKey = 'sols artificiels arbustifs'
@@ -338,11 +411,12 @@ describe('The stocks calculation module', () => {
         // live biomass stock per ground subtype = 50 * 4
         // dead biomass stock per ground subtype = 50 * 5
 
-        // 8 * 50 * 3 = 1200 stock for 7 standard sources + haies
+        // 7 * 50 * 3 = 1050 stock for 7 standard sources
         // 50 * 4 * (4 + 5) = 200 * 9 = 1800 for forest live and dead inc
         // 50 * 3 = 150 for the only sols art that has area with the mocked data
         // 0 for prod bois
-        const expectedBiomassStockTotal = 3150
+        // 600 for haies
+        const expectedBiomassStockTotal = 3600
         const total = stocks.total
         const expectedPercentage = expectedBiomassStockTotal / total * 100
         expect(percentageByReservoir['Biomasse sur pied']).toBeCloseTo(expectedPercentage, 1)

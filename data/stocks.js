@@ -17,7 +17,7 @@ function getCarbonDensity (location, groundType) {
 // are placed on the same level, so some CLC codes are used in two types.
 function getArea (location, groundType) {
   if (groundType === 'haies') {
-    return getAreaHaies(location)
+    return
   } else if (groundType.startsWith('forêt ')) {
     return getAreaForests(location, groundType)
   }
@@ -277,6 +277,26 @@ function getForestLitterCarbonDensity (subtype) {
   return 9 // TODO: ask follow up on source of this data
 }
 
+function getHedgerowsDataByCommune (location) {
+  const carbonCsvFilePath = './dataByCommune/carbone-haies.csv'
+  const carbonData = require(carbonCsvFilePath + '.json')
+  const csvFilePath = './dataByCommune/haie-clc18.csv'
+  let lengthData = require(csvFilePath + '.json')
+
+  const communeCodes = getCommunes(location).map((c) => c.insee)
+  lengthData = lengthData.filter((data) => communeCodes.includes(data.INSEE_COM) && data.TOTKM_HAIE)
+  return lengthData.map((data) => {
+    // source de 78 tC/km -> rapport ADEME/IGN "STOCKS DE BOIS ET DE CARBONE DANS LES HAIES BOCAGÈRES FRANÇAISES"
+    // page 41 : « En moyenne, le stock de carbone par km pour le linéaire possédant un volume (MNHC > 3 m)
+    // sur l’ensemble de la zone d’étude est de 100 tC/km, dont 78 pour la partie aérienne ».
+    const carbonDensity = carbonData.find((cd) => cd.dep === data.INSEE_DEP)?.C_aerien_km || 78
+    return {
+      length: +data.TOTKM_HAIE,
+      carbonDensity: +carbonDensity
+    }
+  })
+}
+
 module.exports = {
   getCarbonDensity,
   getArea,
@@ -288,5 +308,6 @@ module.exports = {
   getFranceStocksWoodProducts,
   getForestLitterCarbonDensity,
   getAnnualWoodProductsHarvest,
-  getAnnualFranceWoodProductsHarvest
+  getAnnualFranceWoodProductsHarvest,
+  getHedgerowsDataByCommune
 }

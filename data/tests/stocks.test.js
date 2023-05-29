@@ -9,7 +9,8 @@ const {
   getFranceStocksWoodProducts,
   // getAnnualWoodProductsHarvest,
   // getAnnualFranceWoodProductsHarvest,
-  getForestLitterCarbonDensity
+  getForestLitterCarbonDensity,
+  getHedgerowsDataByCommune
 } = require('../stocks')
 
 jest.mock('../communes', () => {
@@ -496,16 +497,73 @@ describe('The stocks data module', () => {
     expect(getArea({ epci: { code: '249500513' } }, 'forêt peupleraie')).toBe(50)
   })
 
-  it('returns area of haies (as ha) given valid EPCI SIREN', () => {
-    jest.doMock('../dataByEpci/surface-haies.csv.json', () => {
-      return [
-        {
-          siren: '249500513',
-          area: '20'
-        }
-      ]
+  it('handles hedgerows area differently', () => {
+    expect(getArea({ epci: { code: '249500513' } }, 'haies')).toBe(undefined)
+  })
+
+  describe('hedgerows', () => {
+    it('returns length (km) and carbon density of hedgerows given valid EPCI SIREN', () => {
+      // NB: this file is per-department not per-commune, unlike what the folder name suggests
+      jest.doMock('../dataByCommune/carbone-haies.csv.json', () => {
+        return [
+          {
+            dep: '2',
+            C_aerien_km: '10'
+          },
+          {
+            dep: '3',
+            C_aerien_km: '50'
+          }
+        ]
+      })
+      jest.doMock('../dataByCommune/haie-clc18.csv.json', () => {
+        return [
+          {
+            INSEE_COM: '01234',
+            TOTKM_HAIE: '20',
+            INSEE_DEP: '2'
+          },
+          {
+            INSEE_COM: '01235',
+            TOTKM_HAIE: '10',
+            INSEE_DEP: '3'
+          },
+          {
+            INSEE_COM: '99999',
+            TOTKM_HAIE: '99',
+            INSEE_DEP: '9'
+          }
+        ]
+      })
+      const data = getHedgerowsDataByCommune({ epci: { code: '249500513' } })
+      expect(data.length).toBe(2)
+      const first = data[0]
+      expect(first.carbonDensity).toBe(10)
+      expect(first.length).toBe(20)
     })
-    expect(getArea({ epci: { code: '249500513' } }, 'haies')).toBe(20)
+
+    it('returns the default carbon density of hedgerows if there is no data for the location\'s department', () => {
+      jest.doMock('../dataByCommune/carbone-haies.csv.json', () => {
+        return [
+          {
+            dep: '3',
+            C_aerien_km: '50'
+          }
+        ]
+      })
+      jest.doMock('../dataByCommune/haie-clc18.csv.json', () => {
+        return [
+          {
+            INSEE_COM: '01234',
+            TOTKM_HAIE: '20',
+            INSEE_DEP: '2'
+          }
+        ]
+      })
+      const data = getHedgerowsDataByCommune({ epci: { code: '249500513' } })
+      const first = data[0]
+      expect(first.carbonDensity).toBe(78)
+    })
   })
 
   it('returns forest litter carbon density (tC/ha) for valid forest subtype', () => {
