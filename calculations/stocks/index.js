@@ -238,8 +238,8 @@ function getStocks (location, options) {
       })
     }
     stocks = aggregateStocks(stocksForLocations)
-    stocks.haies = getStocksHedgerows(location, options)
     annotateAreaCustomisationsForGrouping(stocks, options, stocks)
+    stocks.haies = getStocksHedgerows(location, options)
   }
 
   stocks.total = getTotalStock(stocks)
@@ -464,6 +464,7 @@ function annotateAreaCustomisations (location, options, stocks) {
 function annotateAreaCustomisationsForGrouping (stocks, options) {
   const parentTypesToUpdate = []
   Object.keys(options.areas).forEach(groundType => {
+    if (!stocks[groundType]) return
     stocks[groundType].originalArea = stocks[groundType].area
     stocks[groundType].area = options.areas[groundType]
     stocks[groundType].areaModified = true
