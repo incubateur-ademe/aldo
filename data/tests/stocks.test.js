@@ -502,13 +502,26 @@ describe('The stocks data module', () => {
   })
 
   describe('hedgerows', () => {
-    beforeEach(() => {
+    it('returns length (km) and carbon density of hedgerows given valid EPCI SIREN', () => {
+      // NB: this file is per-department not per-commune, unlike what the folder name suggests
+      jest.doMock('../dataByCommune/carbone-haies.csv.json', () => {
+        return [
+          {
+            dep: '2',
+            C_aerien_km: '10'
+          },
+          {
+            dep: '3',
+            C_aerien_km: '50'
+          }
+        ]
+      })
       jest.doMock('../dataByCommune/haie-clc18.csv.json', () => {
         return [
           {
             INSEE_COM: '01234',
             TOTKM_HAIE: '20',
-            INSEE_DEP: '2' // TODO: should use dep in this file or from our commune data?
+            INSEE_DEP: '2'
           },
           {
             INSEE_COM: '01235',
@@ -522,22 +535,6 @@ describe('The stocks data module', () => {
           }
         ]
       })
-    })
-
-    it('returns length (km) and carbon density of hedgerows given valid EPCI SIREN', () => {
-      // TODO: reconsider folder name? move to a different folder? this data is by department
-      jest.doMock('../dataByCommune/carbone-haies.csv.json', () => {
-        return [
-          {
-            dep: '2',
-            C_aerien_km: '10'
-          },
-          {
-            dep: '3',
-            C_aerien_km: '50'
-          }
-        ]
-      })
       const data = getHedgerowsDataByCommune({ epci: { code: '249500513' } })
       expect(data.length).toBe(2)
       const first = data[0]
@@ -546,7 +543,6 @@ describe('The stocks data module', () => {
     })
 
     it('returns the default carbon density of hedgerows if there is no data for the location\'s department', () => {
-      // TODO: reconsider folder name? move to a different folder? this data is by department
       jest.doMock('../dataByCommune/carbone-haies.csv.json', () => {
         return [
           {
@@ -555,8 +551,16 @@ describe('The stocks data module', () => {
           }
         ]
       })
+      jest.doMock('../dataByCommune/haie-clc18.csv.json', () => {
+        return [
+          {
+            INSEE_COM: '01234',
+            TOTKM_HAIE: '20',
+            INSEE_DEP: '2'
+          }
+        ]
+      })
       const data = getHedgerowsDataByCommune({ epci: { code: '249500513' } })
-      expect(data.length).toBe(2)
       const first = data[0]
       expect(first.carbonDensity).toBe(78)
     })
