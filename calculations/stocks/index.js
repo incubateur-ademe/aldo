@@ -6,6 +6,9 @@ const {
   getForestBiomassCarbonDensities,
   getHedgerowsDataByCommune
 } = require('../../data/stocks')
+const {
+  getCommunes
+} = require('../../data/communes')
 const { getStocksWoodProducts } = require('./woodProducts')
 const { GroundTypes } = require('../constants')
 
@@ -17,10 +20,10 @@ function getArea (location, key, overrides) {
   }
 }
 
-// to be called per-location
+// to be called per-commune
 function getStocksByKeyword (location, keyword, options) {
   const area = getArea(location, keyword, options.areas)
-  const groundDensity = getCarbonDensity(location, options.groundKeyword || keyword)
+  const groundDensity = getCarbonDensity(location.commune, options.groundKeyword || keyword)
   const groundStock = groundDensity * area
   const biomassDensity = getBiomassCarbonDensity(location, keyword) || 0
   const biomassStock = biomassDensity * area
@@ -217,30 +220,18 @@ function getStocks (location, options) {
   options = options || {}
   options.areas = options.areas || {}
 
+  const communes = getCommunes(location)
+
   const stocksForLocations = []
-  let stocks
-  if (location.epci || location.commune) {
-    stocks = getStocksForLocation(location, options)
-    stocks.haies = getStocksHedgerows(location, options)
-    annotateAreaCustomisations(location, options, stocks)
-  } else {
-    // area overrides shouldn't be passed down at this level
-    const communeLevelOptions = JSON.parse(JSON.stringify(options))
-    communeLevelOptions.areas = {}
-    if (location.epcis) {
-      location.epcis.forEach((epci) => {
-        stocksForLocations.push(getStocksForLocation({ epci }, communeLevelOptions))
-      })
-    }
-    if (location.communes) {
-      location.communes.forEach((commune) => {
-        stocksForLocations.push(getStocksForLocation({ commune }, communeLevelOptions))
-      })
-    }
-    stocks = aggregateStocks(stocksForLocations)
-    annotateAreaCustomisationsForGrouping(stocks, options, stocks)
-    stocks.haies = getStocksHedgerows(location, options)
-  }
+  // area overrides shouldn't be passed down at this level
+  const communeLevelOptions = JSON.parse(JSON.stringify(options))
+  communeLevelOptions.areas = {}
+  communes.forEach((commune) => {
+    stocksForLocations.push(getStocksForLocation({ commune }, communeLevelOptions))
+  })
+  const stocks = aggregateStocks(stocksForLocations)
+  annotateAreaCustomisations(stocks, options, stocks)
+  stocks.haies = getStocksHedgerows(location, options)
 
   stocks.total = getTotalStock(stocks)
   stocks.totalEquivalent = stocks.total * 44 / 12
@@ -416,38 +407,6 @@ function densityByChildType (stocks) {
   return byDensity
 }
 
-function annotateAreaCustomisations (location, options, stocks) {
-  const originalAreas = {}
-  Object.keys(options.areas).forEach(key => {
-    if (!isNaN(options.areas[key])) {
-      if (key.startsWith('sols artificiels')) {
-        const optionsWithoutAreas = JSON.parse(JSON.stringify(options))
-        optionsWithoutAreas.areas = {}
-        Object.assign(originalAreas, getAreasSolsArtificiels(location, optionsWithoutAreas))
-      } else {
-        originalAreas[key] = getAreaData(location, key)
-      }
-    }
-  })
-  const groundTypes = GroundTypes.map(gt => gt.stocksId)
-  const modifiedAreas = Object.keys(originalAreas)
-  Object.keys(stocks).forEach(key => {
-    if (groundTypes.indexOf(key) !== -1 && !stocks[key].originalArea) {
-      if (isNaN(originalAreas[key])) {
-        stocks[key].originalArea = stocks[key].area
-        const children = GroundTypes.find(gt => gt.stocksId === key).children
-        const hasModifiedChild = children?.some(child => modifiedAreas.includes(child))
-        stocks[key].areaModified = hasModifiedChild
-        stocks[key].hasModifications = hasModifiedChild
-      } else {
-        stocks[key].originalArea = originalAreas[key]
-        stocks[key].areaModified = true
-        stocks[key].hasModifications = true
-      }
-    }
-  })
-}
-
 // TODO: replace this temporary hack, put in place to simply allow the pages
 // to load.
 /*
@@ -461,7 +420,7 @@ function annotateAreaCustomisations (location, options, stocks) {
   stocksHaveModifications: false
 }
 */
-function annotateAreaCustomisationsForGrouping (stocks, options) {
+function annotateAreaCustomisations (stocks, options) {
   const parentTypesToUpdate = []
   Object.keys(options.areas).forEach(groundType => {
     if (!stocks[groundType]) return

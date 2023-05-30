@@ -1,6 +1,14 @@
 const { getStocks } = require('./index')
-const { getEpci } = require('../locations')
 const { getPopulationTotal } = require('../../data')
+
+jest.mock('../../data/communes', () => {
+  return {
+    getCommunes: jest.fn((location) => {
+      if (location.epcis) return [{ insee: '01234' }, { insee: '01235' }, { insee: '11234' }]
+      return [{ insee: '01234' }, { insee: '01235' }]
+    })
+  }
+})
 
 jest.mock('../../data/stocks', () => {
   const originalModule = jest.requireActual('../../data/stocks')
@@ -9,12 +17,38 @@ jest.mock('../../data/stocks', () => {
     __esModule: true,
     ...originalModule,
     getArea: jest.fn((location) => {
-      if (location.epci?.code === '200042992') return 100
-      return 50
+      return 25
     }),
-    getCarbonDensity: jest.fn((location) => {
-      if (location.epci?.code === '200042992') return 5
-      return 2
+    getCarbonDensity: jest.fn((commune, groundType) => {
+      if (commune.insee.startsWith('0')) {
+        return {
+          zpc: '1_1',
+          cultures: 2,
+          prairies: 2,
+          forêts: 2,
+          'zones humides': 2,
+          vergers: 2,
+          vignes: 2,
+          'Sols artificialisés': 2,
+          'sols artificiels imperméabilisés': 2,
+          'sols artificiels enherbés': 2,
+          'sols artificiels arborés et buissonants': 2
+        }[groundType] || 0
+      } else if (commune.insee) {
+        return {
+          zpc: '2_2',
+          cultures: 8,
+          prairies: 8,
+          forêts: 8,
+          'zones humides': 8,
+          vergers: 8,
+          vignes: 8,
+          'Sols artificialisés': 8,
+          'sols artificiels imperméabilisés': 8,
+          'sols artificiels enherbés': 8,
+          'sols artificiels arborés et buissonants': 8
+        }[groundType] || 0
+      } else return 0
     }),
     getBiomassCarbonDensity: jest.fn((location, keyword) => {
       // TODO: maybe refactor getStocksByKeyword to only fetch biomass for non-forest
@@ -85,7 +119,7 @@ jest.mock('../../data/stocks', () => {
 })
 
 describe('The stocks calculation module', () => {
-  const epci = getEpci('CC Faucigny-Glières')
+  const epci = { code: '00000000' }
   it('has data for all ground types', () => {
     const stocks = getStocks({ epci })
     expect(stocks.cultures).toBeDefined()
@@ -116,12 +150,12 @@ describe('The stocks calculation module', () => {
     const stocks = getStocks({ epci }, overrides)
     const simpleStock = stocks.cultures // has neither parent nor children
 
-    it('calculates ground stock by multiplying density by area', () => {
+    it('calculates ground stock by taking the sum of the products of density and area for every commune', () => {
       const groundStock = simpleStock.groundStock
       expect(groundStock).toEqual(100)
     })
 
-    it('calculates biomass stock by multiplying density by area', () => {
+    it('calculates biomass stock by taking the sum of the products of density and area for every commune', () => {
       const biomassStock = simpleStock.biomassStock
       expect(biomassStock).toEqual(150)
     })
@@ -212,7 +246,7 @@ describe('The stocks calculation module', () => {
 
     it('calculates the total stock with the extra reservoirs', () => {
       // ground + live and dead biomass + litter
-      // 50 * 2 + 50 * (4 + 5) + 50 * 6
+      // (25 * 2 + 25 * (4 + 5) + 25 * 6) * 2 communes
       expect(forestChild.totalStock).toEqual(850)
     })
   })
@@ -222,8 +256,8 @@ describe('The stocks calculation module', () => {
     const stocksByHarvest = getStocks({ epci })
 
     it('for harvest, calculates stock by multiplying France stocks with the proportion of all m^3 of wood harvested locally', () => {
-      expect(stocksByHarvest['produits bois'].boStock).toEqual(50)
-      expect(stocksByHarvest['produits bois'].biStock).toEqual(100)
+      expect(stocksByHarvest['produits bois'].boStock).toEqual(100)
+      expect(stocksByHarvest['produits bois'].biStock).toEqual(200)
     })
 
     const stocksByConsumption = getStocks({ epci }, { woodCalculation: 'consommation' })
@@ -286,7 +320,7 @@ describe('The stocks calculation module', () => {
         expect(stocks[treeKey].area).toEqual(20)
       })
 
-      it('can be fetched from the data', () => {
+      it('can be fetched from the data as the sum of the areas of the communes', () => {
         const stocks = getStocks({ epci })
         expect(stocks[treeKey].area).toEqual(50)
       })
@@ -427,18 +461,19 @@ describe('The stocks calculation module', () => {
   // getStocks for a commune
   // getStocks for multiple epcis and communes
   describe('for a custom grouping of territories', () => {
+    const epci2 = { code: '99999999' }
     it('outputs area as sum of location areas', () => {
-      const stocks = getStocks({ epcis: [epci, getEpci('200042992', true)] })
-      expect(stocks.cultures.area).toEqual(150)
-      expect(stocks.cultures.originalArea).toEqual(150)
-      // (4 forest child types) 4 * 50 + 4 * 100
-      expect(stocks.forêts.area).toEqual(600)
-      // 4 * (50 * 4) + 4 * (100 * 4)
-      expect(stocks.forêts.liveBiomassStock).toEqual(2400)
+      const stocks = getStocks({ epcis: [epci, epci2] })
+      expect(stocks.cultures.area).toEqual(75)
+      expect(stocks.cultures.originalArea).toEqual(75)
+      // (4 forest child types) 4 * 25 * 3 communes
+      expect(stocks.forêts.area).toEqual(300)
+      // 4 * (25 * 4) * 3
+      expect(stocks.forêts.liveBiomassStock).toEqual(1200)
     })
 
     it('outputs ground density as weighted average of location areas', () => {
-      const stocks = getStocks({ epcis: [epci, getEpci('200042992', true)] })
+      const stocks = getStocks({ epcis: [epci, epci2] })
       expect(stocks.cultures.groundDensity).toEqual(4)
     })
 
@@ -446,9 +481,9 @@ describe('The stocks calculation module', () => {
       const overrides = {
         areas: { cultures: 1000 }
       }
-      const stocks = getStocks({ epcis: [epci, getEpci('200042992', true)] }, overrides)
+      const stocks = getStocks({ epcis: [epci, epci2] }, overrides)
       expect(stocks.cultures.area).toEqual(1000)
-      expect(stocks.cultures.originalArea).toEqual(150)
+      expect(stocks.cultures.originalArea).toEqual(75)
       expect(stocks.cultures.areaModified).toBe(true)
       expect(stocks.cultures.hasModifications).toBe(true)
       // and the ground density should remain the weighted average from the original areas
@@ -459,21 +494,21 @@ describe('The stocks calculation module', () => {
       const overrides = {
         areas: { 'forêt feuillu': 1000 }
       }
-      const stocks = getStocks({ epcis: [epci, getEpci('200042992', true)] }, overrides)
+      const stocks = getStocks({ epcis: [epci, epci2] }, overrides)
       const forestChild = stocks['forêt feuillu']
       expect(forestChild.area).toEqual(1000)
       expect(forestChild.liveBiomassDensity).toEqual(4)
       expect(forestChild.liveBiomassStock).toEqual(4000)
-      expect(forestChild.originalArea).toEqual(150)
+      expect(forestChild.originalArea).toEqual(75)
       expect(forestChild.areaModified).toBe(true)
       expect(forestChild.hasModifications).toBe(true)
       const forestParent = stocks.forêts
       expect(forestParent.areaModified).toBe(true)
       expect(forestParent.hasModifications).toBe(true)
-      // non overridden areas : 3 * 50 + 3  * 100
-      expect(forestParent.area).toEqual(1450)
-      // 3 * (50 * 4) + 3 * (100 * 4) + (1000 * 4)
-      expect(forestParent.liveBiomassStock).toEqual(5800)
+      // non overridden areas : 3 types * 25 area * 3 communes + 1000
+      expect(forestParent.area).toEqual(1225)
+      // 3 types * (25 * 4) * 3 communes + (1000 * 4)
+      expect(forestParent.liveBiomassStock).toEqual(4900)
     })
     // 2 epcis, 2 communes (one of which is part of one of the epcis so shouldn't count)
 
