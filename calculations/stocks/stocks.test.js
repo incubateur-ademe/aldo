@@ -338,6 +338,7 @@ describe('The stocks calculation module', () => {
         expect(fixedImpermeableStocks[impermeableKey].area).toEqual(20)
       })
 
+      // TODO: change this test. Areas should not be impacted by customisations to other areas
       it('is the product of the proportion and the total when there are not many trees', () => {
         const areas = {}
         areas[treeKey] = 0
@@ -370,7 +371,7 @@ describe('The stocks calculation module', () => {
         expect(stocks[shrubbyKey].area).toEqual(20)
       })
 
-      // TODO: question the logic of this
+      // TODO: change this test. Areas should not be impacted by customisations to other areas
       it('is the green portion of the total area minus the area with trees if there are not many trees', () => {
         const areas = {}
         areas[treeKey] = 5
