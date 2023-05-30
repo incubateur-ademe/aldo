@@ -1,13 +1,31 @@
 const { getIgnLocalisation } = require('./shared')
 const { getCommunes } = require('./communes')
 
-// Gets the carbon area density of a given ground type.
-function getCarbonDensity (location, groundType) {
-  const csvFilePath = './dataByEpci/ground.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const epciSiren = location.epci?.code || location.commune?.epci
-  const data = dataByEpci.find(data => data.siren === epciSiren)
-  return parseFloat(data[groundType]) || 0
+// Gets the carbon area density of a given ground type using the zone pédo-climatique majoritaire for the commune
+function getCarbonDensity (commune, groundType) {
+  const zpcCommunePath = './dataByCommune/zpc.csv'
+  const zpcsForCommunes = require(zpcCommunePath + '.json')
+  const zpcForCommune = zpcsForCommunes.find((data) => data.insee === commune.insee)
+  if (!zpcForCommune) {
+    // Not expecting this to happen but in case it does, fail silently
+    console.log('No ZPC for commune : ', commune)
+    return 0
+  }
+  const zpcStocksPath = './dataByCommune/stocks-zpc.csv'
+  const stocksForZpcs = require(zpcStocksPath + '.json')
+  const stocksForZpc = stocksForZpcs.find((data) => data.zpc === zpcForCommune.zpc)
+  if (!stocksForZpc) {
+    // Not expecting this to happen but in case it does, fail silently
+    console.log('No stocks for ZPC : ', zpcForCommune.zpc)
+    return 0
+  }
+  const carbonDensity = stocksForZpc[groundType]
+  if (!carbonDensity) {
+    // Not expecting this to happen but in case it does, fail silently
+    console.log('No stocks for ground type and ZPC : ', groundType, stocksForZpc)
+    return 0
+  }
+  return +carbonDensity
 }
 
 // Gets the area in hectares (ha) of a given ground type in a location.

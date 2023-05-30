@@ -26,17 +26,26 @@ describe('The stocks data module', () => {
     jest.resetModules()
   })
 
-  const groundDataPath = '../dataByEpci/ground.csv.json'
-  it('given an EPCI and ground type, returns the carbon density in tC/ha from data file', () => {
-    jest.doMock(groundDataPath, () => {
+  const zpcCommunePath = '../dataByCommune/zpc.csv.json'
+  const zpcStocksPath = '../dataByCommune/stocks-zpc.csv.json'
+  it('given a commune and ground type, returns the carbon density in tC/ha according to the zone pédo-climatique (ZPC)', () => {
+    jest.doMock(zpcCommunePath, () => {
       return [
         {
-          siren: '200007177',
+          insee: '01234',
+          zpc: '1_1'
+        }
+      ]
+    })
+    jest.doMock(zpcStocksPath, () => {
+      return [
+        {
+          zpc: '1_1',
           cultures: 50
         }
       ]
     })
-    expect(getCarbonDensity({ epci: { code: '200007177' } }, 'cultures')).toBe(50)
+    expect(getCarbonDensity({ insee: '01234' }, 'cultures')).toBe(50)
   })
 
   const areaPath = '../dataByCommune/clc18.csv.json'
