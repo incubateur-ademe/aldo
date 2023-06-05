@@ -2,6 +2,7 @@
 <main role="main" id="contenu">
   <div class="fr-container fr-pb-6w fr-px-2w">
     <%- include('../partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: singleLocation?.nom || 'Regroupement', }, ], }) -%>
+    <%- include('./warnings') -%>
     <%- include('./introduction') -%>
     <form method="GET" class="fr-tabs fr-mt-4w" id="territory">
       <!-- <input type="hidden" name="epci" value="<%= singleLocation?.nom %>" /> -->

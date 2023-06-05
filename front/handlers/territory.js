@@ -5,6 +5,7 @@ const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
 const { parseOptionsFromQuery, getLocationDetail } = require('./shared')
+const { getCommunes } = require(path.join(rootFolder, './data/communes'))
 
 async function territoryHandler (req, res) {
   const location = await getLocationDetail(req, res)
@@ -18,6 +19,21 @@ async function territoryHandler (req, res) {
       attemptedSearch: req.params.epci
     })
     return
+  }
+
+  const userWarnings = []
+  const selectedCommunes = getCommunes(location)
+  if (selectedCommunes.length < 10) {
+    userWarnings.push('tooFewCommunes')
+  }
+  const epcisFromSelectedCommunes = []
+  for (const commune of selectedCommunes) {
+    if (epcisFromSelectedCommunes.indexOf(commune.epci) === -1) {
+      epcisFromSelectedCommunes.push(commune.epci)
+    }
+  }
+  if (epcisFromSelectedCommunes.length > 1) {
+    userWarnings.push('multipleEpcis')
   }
 
   const options = parseOptionsFromQuery(req.query)
@@ -54,6 +70,7 @@ async function territoryHandler (req, res) {
     singleLocation,
     communes: location.communes,
     epcis: location.epcis,
+    userWarnings,
     groundTypes: getSortedGroundTypes(stocks),
     allGroundTypes: GroundTypes,
     // these are the types that can be modified to customise the stocks calculations
