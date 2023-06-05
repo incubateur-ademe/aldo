@@ -1,45 +1,5 @@
 {
   "epcis": {
-    "1": {
-      "code": "1",
-      "Commune": "",
-      "Nom unique": "",
-      "nom": "Île-de-Bréhat",
-      "nature": "Comm",
-      "nombreCommunes": 1,
-      "populationTotale": 361,
-      "membres": []
-    },
-    "2": {
-      "code": "2",
-      "Commune": "",
-      "Nom unique": "",
-      "nom": "Île-de-Sein & Ouessant",
-      "nature": "Comm",
-      "nombreCommunes": 2,
-      "populationTotale": 684,
-      "membres": []
-    },
-    "3": {
-      "code": "3",
-      "Commune": "",
-      "Nom unique": "",
-      "nom": "Loire-Authion",
-      "nature": "Comm",
-      "nombreCommunes": 1,
-      "populationTotale": 15702,
-      "membres": []
-    },
-    "4": {
-      "code": "4",
-      "Commune": "",
-      "Nom unique": "",
-      "nom": "L'Île-d'Yeu",
-      "nature": "Comm",
-      "nombreCommunes": 1,
-      "populationTotale": 4809,
-      "membres": []
-    },
     "200000172": {
       "code": "200000172",
       "Commune": "",
@@ -48755,5 +48715,5 @@
       ]
     }
   },
-  "totalPopulation": 65705495
+  "totalPopulation": 65683939
 }
