@@ -49,17 +49,66 @@ describe('The flux data module', () => {
   })
 
   const groundDataPath = '../dataByEpci/ground.csv.json'
-  it('given an EPCI, initial ground and final ground, returns the carbon flux in tC/(ha.year) from data file', () => {
-    jest.doMock(groundDataPath, () => {
+  it('given a commune, initial ground and final ground, returns the carbon flux in tC/(ha.year) from data file', () => {
+    jest.doMock('../dataByCommune/zpc.csv.json', () => {
       return [
         {
-          siren: '200007177',
-          'f_prai_cult_%zpc': -2
+          insee: '1001',
+          zpc: '1_1'
         }
       ]
     })
-    expect(getAnnualGroundCarbonFlux({ epci: { code: '200007177' } }, 'prairies zones arborées', 'cultures')).toBe(-2)
+    jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+      return [
+        {
+          zpc: '1_1',
+          prai_cult: -2
+        }
+      ]
+    })
+    expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'prairies zones arborées', 'cultures')).toBe(-2)
   })
+
+  // cultures_vergers = 0
+  // cultures_vignes = 0
+  // prairies_sols art arb = prairies_forêts
+  // forêts_sols art arb = 0
+  // zones humides_vergers = zh_cult
+  // zones humides_vignes = zh_cult
+  // zones humides_sa imp = zh_cult + cult_sa imp
+  // zh_sa enh = zh_prai
+  // zh_sa arb = zh_for
+  // ver_cult = 0
+  // ver_zh = zh_cult
+  // ver_vign = 0
+  // ver_sa imp = cult_sa imp
+  // ver_sa enh = cult_sa enh
+  // ver_sa arb = cult_sa arb
+  // vig_cult = 0
+  // vig_zh = zh_cult
+  // vig_ver = 0
+  // vig_sa imp = cult_sa imp
+  // vig_sa enh = cult_sa enh
+  // vig_sa arb = cult_sa arb
+  // *** sa imp should use cult instead (nb cult_ver/vig=0 and should be here too)
+  // sa imp_cult = 0
+  // sa imp_prai = cult_prai
+  // sa imp_for = cult_for
+  // sa imp_zh = cult_zh
+  // sa imp_ver = 0
+  // sa imp_vig = 0
+  // sa imp_sa enh = cult_sa enh
+  // sa imp_sa arb = cult_sa arb
+  // *** sa enh initial should use prai initial
+  // sa enh_cult = prai_cult
+  // sa enh_prai = 0
+  // sa enh_for = prai_for
+  // sa enh_zh = prai_zh
+  // sa enh_ver = prai_ver
+  // sa enh_vig = prai_vig
+  // sa enh_sa imp = prai_sa imp
+  // sa enh_sa arb = prai_sa arb
+  // *** sa arb initial should use forest initial (0 for sa arb -> forest)
 
   it('returns all carbon flux in tc/(ha.year) for ground cultures', () => {
     jest.doMock(groundDataPath, () => {

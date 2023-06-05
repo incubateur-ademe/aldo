@@ -5,54 +5,32 @@ const { getCommunes } = require('./communes')
 // dependency tree
 const { GroundTypes } = require('../calculations/constants')
 
-function getGroundCarbonFluxKey (from, to) {
-  const fromDetails = GroundTypes.find(groundType => groundType.stocksId === from)
-  const toDetails = GroundTypes.find(groundType => groundType.stocksId === to)
-  return `f_${fromDetails.fluxId}_${toDetails.fluxId}_%zpc`
+function handleGroundCarbonFluxExceptions (location, from, to) {
+  // TODO
 }
 
 function getAnnualGroundCarbonFlux (location, from, to) {
-  // to start, deal with some exceptions in flux lookups
-  if (from === 'sols artificiels arbustifs') {
-    if (to === 'zones humides') return
-    // could've chosen any prairie type, they have the same flux
-    return getAnnualGroundCarbonFlux(location, 'prairies zones arborées', to)
-  } else if (from === 'sols artificiels arborés et buissonants') {
-    if (to === 'zones humides' || to === 'forêts') return
-    return getAnnualGroundCarbonFlux(location, 'forêts', to)
-  }
-  // all vergers/vignes -> sols artificiels X use the flux for vergers/vignes -> cultures instead
-  if (to.startsWith('sols')) {
-    if (from === 'vergers' || from === 'vignes') {
-      return getAnnualGroundCarbonFlux(location, 'cultures', to)
-    }
-  }
-  if (to === 'sols artificiels imperméabilisés') {
-    if (from === 'zones humides') {
-      return getAnnualGroundCarbonFlux(location, from, 'cultures') + getAnnualGroundCarbonFlux(location, 'cultures', to)
-    }
-  } else if (to === 'sols artificiels arbustifs') {
-    if (from.startsWith('prairies')) {
-      return
-    } else if (from === 'zones humides') {
-      // could've chosen any prairie type, they have the same flux
-      return getAnnualGroundCarbonFlux(location, from, 'prairies zones arborées')
-    }
-  } else if (to === 'sols artificiels arborés et buissonants') {
-    if (from.startsWith('forêts')) {
-      return
-    } else if (from === 'zones humides') {
-      return getAnnualGroundCarbonFlux(location, from, 'forêts')
-    }
-  }
+  const commune = location.commune
+  if (!commune) { console.log('NOPE'); return }
+  const exceptionValue = handleGroundCarbonFluxExceptions(location, from, to)
+  if (exceptionValue || exceptionValue === 0) return exceptionValue
   // normal flux value lookup
-  const csvFilePath = './dataByEpci/ground.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const epciSiren = location.epci?.code || location.commune?.epci
-  const data = dataByEpci.find(data => data.siren === epciSiren)
-  const dataValue = data[getGroundCarbonFluxKey(from, to)]
+  const zpcForCommunes = require('./dataByCommune/zpc.csv.json')
+  const zpcForCommune = zpcForCommunes.find(data => data.insee === commune.insee)
+  const zpc = zpcForCommune.zpc
+
+  const fluxForZpcs = require('./dataByCommune/flux-zpc.csv.json')
+  const fluxForZpc = fluxForZpcs.find(data => data.zpc === zpc)
+
+  const fromDetails = GroundTypes.find(groundType => groundType.stocksId === from)
+  const toDetails = GroundTypes.find(groundType => groundType.stocksId === to)
+  const key = fromDetails.fluxId + '_' + toDetails.fluxId
+
+  const dataValue = fluxForZpc[key]
   if (dataValue) {
     return parseFloat(dataValue)
+  } else {
+    console.log('NO DATA')
   }
 }
 
