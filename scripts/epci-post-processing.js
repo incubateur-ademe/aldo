@@ -1,6 +1,7 @@
 // This script combines the data in two files containing EPCI data.
 // This is done once in advance rather than per-request since this data does not change per-request.
 // The JSON versions of the files must be generated before this script is run using the csvtojson.sh script.
+// To run, enter the scripts directory and call `node epci-post-processing`
 
 const fs = require('fs')
 const epcis = require('../data/dataByEpci/epci.csv.json')
