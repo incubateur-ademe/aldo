@@ -26,6 +26,15 @@ async function territoryHandler (req, res) {
   if (selectedCommunes.length < 10) {
     userWarnings.push('tooFewCommunes')
   }
+  const epcisFromSelectedCommunes = []
+  for (const commune of selectedCommunes) {
+    if (epcisFromSelectedCommunes.indexOf(commune.epci) === -1) {
+      epcisFromSelectedCommunes.push(commune.epci)
+    }
+  }
+  if (epcisFromSelectedCommunes.length > 1) {
+    userWarnings.push('multipleEpcis')
+  }
 
   const options = parseOptionsFromQuery(req.query)
   const stocks = getStocks(location, options)
