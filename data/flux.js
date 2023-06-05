@@ -6,10 +6,57 @@ const { getCommunes } = require('./communes')
 const { GroundTypes } = require('../calculations/constants')
 
 function handleGroundCarbonFluxExceptions (location, from, to) {
-  // TODO
+  const saArbId = 'sols artificiels arborés et buissonants'
+  const saImpId = 'sols artificiels imperméabilisés'
+  const saEnhId = 'sols artificiels arbustifs'
+  const vergersId = 'vergers'
+  const vignesId = 'vignes'
+  const culturesId = 'cultures'
+  const zhId = 'zones humides'
+  if (from === culturesId) {
+    if (to === vergersId || to === vignesId) return 0
+  } else if (from.startsWith('prairies')) {
+    if (to === saArbId) {
+      // doesn't matter which forest subtype used here
+      return getAnnualGroundCarbonFlux(location, from, 'forêt mixte')
+    }
+  } else if (from.startsWith('forêt')) {
+    if (to === saArbId) return 0
+  } else if (from === zhId) {
+    if (to === vergersId || to === vignesId) {
+      return getAnnualGroundCarbonFlux(location, from, culturesId)
+    } else if (to === saImpId) {
+      return getAnnualGroundCarbonFlux(location, from, culturesId) + getAnnualGroundCarbonFlux(location, culturesId, saImpId)
+    } else if (to === 'sols artificiels arbustifs') {
+      // doesn't matter which prairie subtype used here
+      return getAnnualGroundCarbonFlux(location, from, 'prairies zones arbustives')
+    } else if (to === saArbId) {
+      // doesn't matter which forest subtype used here
+      return getAnnualGroundCarbonFlux(location, from, 'forêt mixte')
+    }
+  } else if (from === vergersId) {
+    if (to === culturesId) return 0
+    else if (to === zhId || to.startsWith('sols')) {
+      return getAnnualGroundCarbonFlux(location, culturesId, to)
+    } else if (to === vignesId) return 0
+  } else if (from === vignesId) {
+    if (to === culturesId) return 0
+    else if (to === zhId || to.startsWith('sols')) {
+      return getAnnualGroundCarbonFlux(location, culturesId, to)
+    } else if (to === vergersId) return 0
+  } else if (from === saImpId) {
+    return getAnnualGroundCarbonFlux(location, culturesId, to)
+  } else if (from === saEnhId) {
+    // doesn't matter which prairie subtype used here
+    return getAnnualGroundCarbonFlux(location, 'prairies zones arbustives', to)
+  } else if (from === saArbId) {
+    // doesn't matter which forest subtype used here
+    return getAnnualGroundCarbonFlux(location, 'forêt mixte', to)
+  }
 }
 
 function getAnnualGroundCarbonFlux (location, from, to) {
+  if (from === to) return 0
   const commune = location.commune
   if (!commune) { console.log('NOPE'); return }
   const exceptionValue = handleGroundCarbonFluxExceptions(location, from, to)

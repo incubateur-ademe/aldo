@@ -49,66 +49,295 @@ describe('The flux data module', () => {
   })
 
   const groundDataPath = '../dataByEpci/ground.csv.json'
-  it('given a commune, initial ground and final ground, returns the carbon flux in tC/(ha.year) from data file', () => {
-    jest.doMock('../dataByCommune/zpc.csv.json', () => {
-      return [
-        {
-          insee: '1001',
-          zpc: '1_1'
-        }
-      ]
-    })
-    jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
-      return [
-        {
-          zpc: '1_1',
-          prai_cult: -2
-        }
-      ]
-    })
-    expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'prairies zones arborées', 'cultures')).toBe(-2)
-  })
 
-  // cultures_vergers = 0
-  // cultures_vignes = 0
-  // prairies_sols art arb = prairies_forêts
-  // forêts_sols art arb = 0
-  // zones humides_vergers = zh_cult
-  // zones humides_vignes = zh_cult
-  // zones humides_sa imp = zh_cult + cult_sa imp
-  // zh_sa enh = zh_prai
-  // zh_sa arb = zh_for
-  // ver_cult = 0
-  // ver_zh = zh_cult
-  // ver_vign = 0
-  // ver_sa imp = cult_sa imp
-  // ver_sa enh = cult_sa enh
-  // ver_sa arb = cult_sa arb
-  // vig_cult = 0
-  // vig_zh = zh_cult
-  // vig_ver = 0
-  // vig_sa imp = cult_sa imp
-  // vig_sa enh = cult_sa enh
-  // vig_sa arb = cult_sa arb
-  // *** sa imp should use cult instead (nb cult_ver/vig=0 and should be here too)
-  // sa imp_cult = 0
-  // sa imp_prai = cult_prai
-  // sa imp_for = cult_for
-  // sa imp_zh = cult_zh
-  // sa imp_ver = 0
-  // sa imp_vig = 0
-  // sa imp_sa enh = cult_sa enh
-  // sa imp_sa arb = cult_sa arb
-  // *** sa enh initial should use prai initial
-  // sa enh_cult = prai_cult
-  // sa enh_prai = 0
-  // sa enh_for = prai_for
-  // sa enh_zh = prai_zh
-  // sa enh_ver = prai_ver
-  // sa enh_vig = prai_vig
-  // sa enh_sa imp = prai_sa imp
-  // sa enh_sa arb = prai_sa arb
-  // *** sa arb initial should use forest initial (0 for sa arb -> forest)
+  describe('the fetching of ground carbon flux in tC/(ha.year)', () => {
+    beforeEach(() => {
+      jest.doMock('../dataByCommune/zpc.csv.json', () => {
+        return [
+          {
+            insee: '1001',
+            zpc: '1_1'
+          }
+        ]
+      })
+    })
+    it('given a commune, initial ground and final ground, returns the carbon flux in tC/(ha.year) from data file', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            prai_cult: -2
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'prairies zones arborées', 'cultures')).toBe(-2)
+    })
+
+    // the exceptions
+    it('returns 0 for cultures -> vignes and cultures -> vergers', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            cult_vign: -2
+            // testing both if data is present (not expected) and when it isn't
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'cultures', 'vignes')).toBe(0)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'cultures', 'vergers')).toBe(0)
+    })
+
+    it('for prairies -> sols art arborés return prairies -> forêts', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            prai_for: 2
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'prairies zones herbacées', 'sols artificiels arborés et buissonants')).toBe(2)
+    })
+
+    it('for forêt subtypes -> sols art arborés return 0', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1'
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'forêt conifere', 'sols artificiels arborés et buissonants')).toBe(0)
+    })
+
+    it('for zones humides -> vergers/vignes return as if -> cultures', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            zh_cult: 2
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'zones humides', 'vignes')).toBe(2)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'zones humides', 'vergers')).toBe(2)
+    })
+
+    it('for zones humides -> sols art imp return sum of (zh -> cult + cult -> sa imp)', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            cult_art_imp: 2,
+            zh_cult: 3
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'zones humides', 'sols artificiels imperméabilisés')).toBe(5)
+    })
+
+    it('for zones humides -> sa enh return as if -> prairies', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            zh_prai: 2
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'zones humides', 'sols artificiels arbustifs')).toBe(2)
+    })
+
+    it('for zones humides -> sa arborés return as if -> forêt', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            zh_for: 2
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'zones humides', 'sols artificiels arborés et buissonants')).toBe(2)
+    })
+
+    it('for vergers -> cultures return 0', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1'
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'vergers', 'cultures')).toBe(0)
+    })
+
+    it('for vergers -> zones humides return cultures -> zh', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            cult_zh: 2
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'vergers', 'zones humides')).toBe(2)
+    })
+
+    it('for vergers -> vignes return 0', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1'
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'vergers', 'vignes')).toBe(0)
+    })
+
+    it('for vergers to any sols art, return the equivalent using an initial occupation of cultures', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            cult_art_imp: 2,
+            cult_art_arb: 3,
+            cult_art_enh: 4
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'vergers', 'sols artificiels imperméabilisés')).toBe(2)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'vergers', 'sols artificiels arborés et buissonants')).toBe(3)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'vergers', 'sols artificiels arbustifs')).toBe(4)
+    })
+
+    it('for vignes -> cultures return 0', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1'
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'vignes', 'cultures')).toBe(0)
+    })
+
+    it('for vignes -> zones humides return cultures -> zh', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            cult_zh: 2
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'vignes', 'zones humides')).toBe(2)
+    })
+
+    it('for vignes -> vergers return 0', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1'
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'vignes', 'vergers')).toBe(0)
+    })
+
+    it('for vignes to any sols art, return the equivalent using an initial occupation of cultures', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            cult_art_imp: 2,
+            cult_art_arb: 3,
+            cult_art_enh: 4
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'vignes', 'sols artificiels imperméabilisés')).toBe(2)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'vignes', 'sols artificiels arborés et buissonants')).toBe(3)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'vignes', 'sols artificiels arbustifs')).toBe(4)
+    })
+
+    it('replaces an inital occupation of sols art imp with cultures for all', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            cult_prai: 1,
+            cult_for: 2,
+            cult_zh: 3,
+            cult_art_arb: 4,
+            cult_art_enh: 5
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels imperméabilisés', 'cultures')).toBe(0)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels imperméabilisés', 'prairies zones arbustives')).toBe(1)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels imperméabilisés', 'forêt mixte')).toBe(2)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels imperméabilisés', 'zones humides')).toBe(3)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels imperméabilisés', 'sols artificiels imperméabilisés')).toBe(0)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels imperméabilisés', 'sols artificiels arborés et buissonants')).toBe(4)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels imperméabilisés', 'sols artificiels arbustifs')).toBe(5)
+      // takes into account cultures exceptions
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels imperméabilisés', 'vignes')).toBe(0)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels imperméabilisés', 'vergers')).toBe(0)
+    })
+
+    it('replaces an inital occupation of sols art enh with prairies for all', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            prai_cult: 1,
+            prai_for: 2,
+            prai_zh: 3,
+            prai_vign: 4,
+            prai_verg: 5,
+            prai_art_imp: 6
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arbustifs', 'cultures')).toBe(1)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arbustifs', 'prairies zones arbustives')).toBe(0)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arbustifs', 'forêt mixte')).toBe(2)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arbustifs', 'zones humides')).toBe(3)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arbustifs', 'vignes')).toBe(4)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arbustifs', 'vergers')).toBe(5)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arbustifs', 'sols artificiels imperméabilisés')).toBe(6)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arbustifs', 'sols artificiels arbustifs')).toBe(0)
+      // takes into account prairie subtype exceptions too
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arbustifs', 'sols artificiels arborés et buissonants')).toBe(2)
+    })
+
+    it('replaces an inital occupation of sols art arboré with forêt for all', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            for_cult: 1,
+            for_prai: 2,
+            for_zh: 3,
+            for_vign: 4,
+            for_verg: 5,
+            for_art_imp: 6,
+            for_art_enh: 7
+          }
+        ]
+      })
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arborés et buissonants', 'cultures')).toBe(1)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arborés et buissonants', 'prairies zones arbustives')).toBe(2)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arborés et buissonants', 'forêt mixte')).toBe(0)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arborés et buissonants', 'zones humides')).toBe(3)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arborés et buissonants', 'vignes')).toBe(4)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arborés et buissonants', 'vergers')).toBe(5)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arborés et buissonants', 'sols artificiels imperméabilisés')).toBe(6)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arborés et buissonants', 'sols artificiels arbustifs')).toBe(7)
+      expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arborés et buissonants', 'sols artificiels arborés et buissonants')).toBe(0)
+    })
+  })
 
   it('returns all carbon flux in tc/(ha.year) for ground cultures', () => {
     jest.doMock(groundDataPath, () => {
