@@ -55,6 +55,7 @@ function handleGroundCarbonFluxExceptions (location, from, to) {
   }
 }
 
+// TODO: incorporate yearsForFlux setting in here?
 function getAnnualGroundCarbonFlux (location, from, to) {
   if (from === to) return 0
   const commune = location.commune
