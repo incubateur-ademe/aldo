@@ -1,0 +1,10 @@
+<% for( const warning of userWarnings ) { %>
+  <div class="fr-alert fr-alert--info">
+    <% if (warning === 'tooFewCommunes') { %>
+      <p class="fr-alert__title fr-mb-2w">Vous avez séléctionné un territoire jugé trop petit compte tenu de l'incertitude.</p>
+      <p class="fr-mb-2w">ALDO propose des ordres de grandeurs sur les stocks et flux de carbone dans les sols et la biomasse pour initier une réflexion sur la gestion des sols et des forêts en lien avec les activités agricoles, sylvicoles et l’aménagement du territoire. Notons que toutes les valeurs moyennes de stocks de carbone et flux de référence à l’hectare sont calculées à l’échelle de vastes domaines géographiques : les grandes régions écologiques pour la biomasse forestière et les régions pédoclimatiques pour les stocks de carbone dans les sols.</p>
+      <p class="fr-mb-2w">Si la moyenne est significative et statistiquement valide à ces échelles, elle peut masquer des situations locales hétérogènes : <strong>en dessous d'une dizaine de communes, on considère qu'ALDO n'est pas l'outil adéquat pour fournir ces résultats.</strong></p>
+      <p>Plus de détails dans <a href='https://docs.datagir.ademe.fr/documentation-aldo/complements/perimetre-et-limites#incertitudes-et-significativite-des-donnees' target="_blank" rel="noopener">la documentation sur les échelles de significativité des données</a>.</p>
+    <% } %>
+  </div>
+<% } %>
