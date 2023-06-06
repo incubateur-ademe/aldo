@@ -23,7 +23,7 @@ jest.mock('../../data/stocks', () => {
       return 25
     }),
     getCarbonDensity: jest.fn((commune, groundType) => {
-      if (commune.insee.startsWith('0')) {
+      if (commune.insee?.startsWith('0')) {
         return {
           zpc: '1_1',
           cultures: 2,
