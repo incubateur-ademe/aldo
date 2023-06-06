@@ -312,15 +312,18 @@ describe('The stocks calculation module', () => {
     const impermeableKey = 'sols artificiels imperméabilisés'
     const shrubbyKey = 'sols artificiels arbustifs'
     const treeKey = 'sols artificiels arborés et buissonants'
+    const unmodifiedStocks = getStocks({ epci })
 
     describe('the tree area', () => {
-      it('can be set by the user', () => {
+      it('can be set by the user without impacting the other area calculations', () => {
         const stocks = getStocks({ epci }, {
           areas: {
             'sols artificiels arborés et buissonants': 20
           }
         })
         expect(stocks[treeKey].area).toEqual(20)
+        expect(stocks[impermeableKey].area).toEqual(unmodifiedStocks[impermeableKey].area)
+        expect(stocks[shrubbyKey].area).toEqual(unmodifiedStocks[shrubbyKey].area)
       })
 
       it('can be fetched from the data as the sum of the areas of the communes', () => {
@@ -332,16 +335,16 @@ describe('The stocks calculation module', () => {
     // NB: the 'proportion' in these tests refers to the hypothesis of the proportion of artificial ground
     //  which is impermeable. The value can be 0 - 1 inclusive.
     describe('the impermeable area', () => {
-      it('can be set by the user', () => {
+      it('can be set by the user without impacting the other area calculations', () => {
         const fixedImpermeableStocks = getStocks({ epci }, {
           areas: {
             'sols artificiels imperméabilisés': 20
           }
         })
         expect(fixedImpermeableStocks[impermeableKey].area).toEqual(20)
+        expect(fixedImpermeableStocks[treeKey].area).toEqual(unmodifiedStocks[treeKey].area)
+        expect(fixedImpermeableStocks[shrubbyKey].area).toEqual(unmodifiedStocks[shrubbyKey].area)
       })
-
-      // TODO: check that area customisations don't impact other sols art areas
 
       it('is the product of the proportion and the total when there are not many trees', () => {
         const stocks = getStocks({ commune: { insee: 'no trees' } })
@@ -362,13 +365,15 @@ describe('The stocks calculation module', () => {
     })
 
     describe('the shrubby area', () => {
-      it('can be set by the user', () => {
+      it('can be set by the user without impacting the other area calculations', () => {
         const stocks = getStocks({ epci }, {
           areas: {
             'sols artificiels arbustifs': 20
           }
         })
         expect(stocks[shrubbyKey].area).toEqual(20)
+        expect(stocks[impermeableKey].area).toEqual(unmodifiedStocks[impermeableKey].area)
+        expect(stocks[treeKey].area).toEqual(unmodifiedStocks[treeKey].area)
       })
 
       it('is the green portion of the total area minus the area with trees if there are not many trees', () => {
