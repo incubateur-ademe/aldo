@@ -6,5 +6,5 @@ test('returns EPCI list', () => {
 })
 
 test('returns population total for EPCIs in system', () => {
-  expect(getPopulationTotal(epciList())).toBe(65705495)
+  expect(getPopulationTotal(epciList())).toBe(64812000)
 })

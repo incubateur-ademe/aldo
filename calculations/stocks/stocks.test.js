@@ -5,6 +5,7 @@ jest.mock('../../data/communes', () => {
   return {
     getCommunes: jest.fn((location) => {
       if (location.epcis) return [{ insee: '01234' }, { insee: '01235' }, { insee: '11234' }]
+      if (location.commune) return [location.commune]
       return [{ insee: '01234' }, { insee: '01235' }]
     })
   }
@@ -16,7 +17,9 @@ jest.mock('../../data/stocks', () => {
   return {
     __esModule: true,
     ...originalModule,
-    getArea: jest.fn((location) => {
+    getArea: jest.fn((location, groundType) => {
+      if (location.commune.insee === 'no trees' && groundType === 'sols arborés') return 0
+      if (location.commune.insee === 'few trees' && groundType === 'sols arborés') return 5
       return 25
     }),
     getCarbonDensity: jest.fn((commune, groundType) => {
@@ -338,20 +341,17 @@ describe('The stocks calculation module', () => {
         expect(fixedImpermeableStocks[impermeableKey].area).toEqual(20)
       })
 
-      // TODO: change this test. Areas should not be impacted by customisations to other areas
+      // TODO: check that area customisations don't impact other sols art areas
+
       it('is the product of the proportion and the total when there are not many trees', () => {
-        const areas = {}
-        areas[treeKey] = 0
-        const stocks = getStocks({ epci }, { areas })
-        // proportion defaults to 0.8, or 80%. 80% of 50 is 40.
-        expect(stocks[impermeableKey].area).toEqual(40)
+        const stocks = getStocks({ commune: { insee: 'no trees' } })
+        // proportion defaults to 0.8, or 80%. 80% of 25 is 20.
+        expect(stocks[impermeableKey].area).toEqual(20)
       })
 
       it('is the product of the proportion and the total when there are not many trees, and the proportion can be customised', () => {
-        const areas = {}
-        areas[treeKey] = 0
-        const stocks = getStocks({ epci }, { areas, proportionSolsImpermeables: 0.5 })
-        expect(stocks[impermeableKey].area).toEqual(25)
+        const stocks = getStocks({ commune: { insee: 'no trees' } }, { proportionSolsImpermeables: 0.5 })
+        expect(stocks[impermeableKey].area).toEqual(12.5)
       })
 
       it('is the area without trees minus the area with trees if there are >= 0.2 * area trees', () => {
@@ -371,23 +371,18 @@ describe('The stocks calculation module', () => {
         expect(stocks[shrubbyKey].area).toEqual(20)
       })
 
-      // TODO: change this test. Areas should not be impacted by customisations to other areas
       it('is the green portion of the total area minus the area with trees if there are not many trees', () => {
-        const areas = {}
-        areas[treeKey] = 5
-        const stocks = getStocks({ epci }, { areas })
-        // areaWithoutTrees = 50 (from mocked getArea fn)
+        const stocks = getStocks({ commune: { insee: 'few trees' } })
+        // areaWithoutTrees = 25 (from mocked getArea fn)
         // areaWithTrees = 5
         // 5 < 0.2 * (areaWithoutTrees + areaWithTrees)
-        // 5 < 0.2 * 55 === TRUE
-        // areaImpermeable = 0.8 * 55 = 44
+        // 5 < 0.2 * 30 === TRUE
+        // areaImpermeable = 0.8 * 30 = 24
         // threshold for condition : areaWithTrees < 0.2 * (areaImpermeable + areaWithTrees)
-        // 5 < 0.2 * 49 === TRUE
+        // 5 < 0.2 * 29 === TRUE
         // 0.2 (default green portion) * (areaWithoutTrees + areaWithTrees) - areaWithTrees
-        // 0.2 * 55 - 5
-        expect(stocks[shrubbyKey].area).toBeCloseTo(6, 0)
-        // TODO: fix resolve floating point inaccuracy to be able to use the below
-        // expect(stocks[shrubbyKey].area).toEqual(6)
+        // 0.2 * 30 - 5
+        expect(stocks[shrubbyKey].area).toBeCloseTo(1, 0)
       })
 
       // TODO: green portion is customised relative to impermeable portion set by user
