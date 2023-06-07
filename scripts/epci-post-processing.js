@@ -5,30 +5,52 @@
 
 const fs = require('fs')
 const epcis = require('../data/dataByEpci/epci.csv.json')
-const communes = require('../data/dataByEpci/communes_17122018.csv.json')
+const communes = require('../data/dataByCommune/communes_17122018.csv.json')
 
 const epciLookup = {
   epcis: {},
-  totalPopulation: 64812000 // https://www.insee.fr/fr/statistiques/3692693 1 janvier 2019 France métropole
+  totalPopulation: 0
 }
 
 try {
   let differencesCommuneCount = 0
   console.log('difference de nombre de communes attendues et trouvées:')
+  const epciCodesSeen = []
   epcis.forEach(epci => {
-    epci.populationTotale = parseInt(epci.populationTotale, 10)
+    epciCodesSeen.push(epci.code)
+    epci.populationTotale = +epci.populationTotale
     epci.nombreCommunes = parseInt(epci.nombreCommunes, 10)
     epciLookup.epcis[epci.code] = epci
-    epciLookup.epcis[epci.code].membres = communes.filter((c) => c.epci === epci.code).map((c) => c.commune)
+    const epciCommunes = communes.filter((c) => c.epci === epci.code)
+    epciLookup.epcis[epci.code].membres = epciCommunes.map((c) => c.nom)
+    if (epciCommunes.length) {
+      epci.populationTotale = 0
+      epciCommunes.forEach((c) => {
+        epci.populationTotale += +c.POPULATION
+      })
+    }
     if (epciLookup.epcis[epci.code].membres.length !== epci.nombreCommunes) {
       console.log(epci.nom, epci.code)
       console.log('attendu', epci.nombreCommunes)
       console.log('trouvé', epciLookup.epcis[epci.code].membres.length)
       differencesCommuneCount++
     }
+    epciLookup.totalPopulation += epci.populationTotale
   })
+  communes.filter((c) => !c.epci).forEach((c) => {
+    epciLookup.totalPopulation += +c.POPULATION
+  })
+  const ignoredCommunes = []
+  communes.forEach((c) => {
+    if (epciCodesSeen.indexOf(c.epci) === -1) {
+      ignoredCommunes.push(c)
+    }
+  })
+  console.log(ignoredCommunes)
+
   console.log(differencesCommuneCount, 'EPCIs with commune count differences')
   console.log(Object.keys(epcis).length, 'EPCIs in total')
+  console.log(ignoredCommunes.length, 'communes ignored')
 
   // convert JSON object to a string
   const data = JSON.stringify(epciLookup, null, 2)

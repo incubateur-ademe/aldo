@@ -421,7 +421,7 @@ function userWarnings (location) {
   const warnings = []
   const allCommunes = getCommunes(location)
   let requestedCommunesCount = (location.epci?.membres.length || 0) + (!!location.commune && 1) + (location.communes?.length || 0)
-  location.epcis.forEach(epci => {
+  location.epcis?.forEach(epci => {
     requestedCommunesCount += epci.membres.length
   })
   if (requestedCommunesCount > allCommunes.length) {
