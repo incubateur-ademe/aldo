@@ -21,21 +21,6 @@ async function territoryHandler (req, res) {
     return
   }
 
-  const userWarnings = []
-  const selectedCommunes = getCommunes(location)
-  if (selectedCommunes.length < 10) {
-    userWarnings.push('tooFewCommunes')
-  }
-  const epcisFromSelectedCommunes = []
-  for (const commune of selectedCommunes) {
-    if (epcisFromSelectedCommunes.indexOf(commune.epci) === -1) {
-      epcisFromSelectedCommunes.push(commune.epci)
-    }
-  }
-  if (epcisFromSelectedCommunes.length > 1) {
-    userWarnings.push('multipleEpcis')
-  }
-
   const options = parseOptionsFromQuery(req.query)
   const stocks = getStocks(location, options)
   const flux = getAnnualFluxes(location, options)
@@ -70,7 +55,7 @@ async function territoryHandler (req, res) {
     singleLocation,
     communes: location.communes,
     epcis: location.epcis,
-    userWarnings,
+    userWarnings: userWarnings(location),
     groundTypes: getSortedGroundTypes(stocks),
     allGroundTypes: GroundTypes,
     // these are the types that can be modified to customise the stocks calculations
@@ -430,6 +415,32 @@ function pieChart (title, labels, values) {
       }
     })
   }
+}
+
+function userWarnings (location) {
+  const warnings = []
+  const allCommunes = getCommunes(location)
+  let requestedCommunesCount = (location.epci?.membres.length || 0) + (!!location.commune && 1) + (location.communes?.length || 0)
+  location.epcis.forEach(epci => {
+    requestedCommunesCount += epci.membres.length
+  })
+  if (requestedCommunesCount > allCommunes.length) {
+    warnings.push('communesDeduplicated')
+  }
+  if (allCommunes.length < 10 && (!location.epci && !location.epcis?.length)) {
+    // some EPCIs are <10 communes, don't show message for them
+    warnings.push('tooFewCommunes')
+  }
+  const epcisFromSelectedCommunes = []
+  for (const commune of allCommunes) {
+    if (epcisFromSelectedCommunes.indexOf(commune.epci) === -1) {
+      epcisFromSelectedCommunes.push(commune.epci)
+    }
+  }
+  if (epcisFromSelectedCommunes.length > 1) {
+    warnings.push('multipleEpcis')
+  }
+  return warnings
 }
 
 module.exports = {
