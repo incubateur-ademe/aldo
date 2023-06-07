@@ -9,7 +9,7 @@ const communes = require('../data/dataByEpci/communes_17122018.csv.json')
 
 const epciLookup = {
   epcis: {},
-  totalPopulation: 64812000 // https://www.insee.fr/fr/statistiques/3692693 1 janvier 2019 France métropole
+  totalPopulation: 0
 }
 
 try {
@@ -26,6 +26,7 @@ try {
       console.log('trouvé', epciLookup.epcis[epci.code].membres.length)
       differencesCommuneCount++
     }
+    epciLookup.totalPopulation += epci.populationTotale
   })
   console.log(differencesCommuneCount, 'EPCIs with commune count differences')
   console.log(Object.keys(epcis).length, 'EPCIs in total')
