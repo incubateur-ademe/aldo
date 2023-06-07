@@ -420,6 +420,13 @@ function pieChart (title, labels, values) {
 function userWarnings (location) {
   const warnings = []
   const allCommunes = getCommunes(location)
+  let requestedCommunesCount = (location.epci?.membres.length || 0) + (!!location.commune && 1) + (location.communes?.length || 0)
+  location.epcis.forEach(epci => {
+    requestedCommunesCount += epci.membres.length
+  })
+  if (requestedCommunesCount > allCommunes.length) {
+    warnings.push('communesDeduplicated')
+  }
   if (allCommunes.length < 10 && (!location.epci && !location.epcis?.length)) {
     // some EPCIs are <10 communes, don't show message for them
     warnings.push('tooFewCommunes')

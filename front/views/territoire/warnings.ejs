@@ -8,6 +8,9 @@
     <% } else if (warning === 'multipleEpcis') { %>
       <p class="fr-alert__title fr-mb-2w">Vous avez séléctionné des territoires qui n'appartiennent pas tous au même territoire "supra" (EPCI, département ou région)</p>
       <p>La séléction de territoires trop éloignés géographiquement n'est pas pertinente (les valeurs de référence des stocks et flux de carbone à l'hectare varie selon l'emplacement du territoire). Nous vous recommandons, si tel était le cas, d'obtenir vos résultats de manière séparée pour chacun des territoires séléctionnés pour avoir une vision plus contrastée et localisée des spécificités locales.</p>
+    <% } else if (warning === 'communesDeduplicated') { %>
+      <p class="fr-alert__title fr-mb-2w">Vous avez séléctionné plusieurs territoires qui se superposent</p>
+      <p>Par exemple : 1 EPCI + 1 commune déjà contenu dans le périmètre de l'EPCI. Les résultats présentés éliminent automatiquement les doublons.</p>
     <% } %>
   </div>
 <% } %>
