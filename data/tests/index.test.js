@@ -6,5 +6,7 @@ test('returns EPCI list', () => {
 })
 
 test('returns population total for EPCIs in system', () => {
-  expect(getPopulationTotal(epciList())).toBe(64812000)
+  // inaccuracies in data means that improvements are made gradually, so setting as range not exact value
+  expect(getPopulationTotal(epciList())).toBeGreaterThan(64000000)
+  expect(getPopulationTotal(epciList())).toBeLessThan(65000000)
 })
