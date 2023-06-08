@@ -251,6 +251,7 @@ function getStocks (location, options) {
   return stocks
 }
 
+// TODO: refactor to restrict to single commune
 function getStocksForLocation (location, options) {
   const stocks = {
     cultures: getStocksByKeyword(location, 'cultures', options),
