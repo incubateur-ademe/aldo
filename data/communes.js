@@ -13,11 +13,10 @@ function getCommunes (location) {
     const alreadyIncluded = allCommunes.find((c) => c.insee === commune.insee)
     if (!alreadyIncluded) allCommunes.push(commune)
   })
-  // console.log(zpcByCommune)
   allCommunes.forEach((commune) => {
-    // console.log(commune)
     commune.zpc = zpcByCommune.find((zpcData) => zpcData.insee === commune.insee)?.zpc
   })
+
   return allCommunes
 }
 
