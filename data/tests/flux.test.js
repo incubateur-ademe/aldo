@@ -48,8 +48,6 @@ describe('The flux data module', () => {
     jest.resetModules()
   })
 
-  const groundDataPath = '../dataByEpci/ground.csv.json'
-
   describe('the fetching of ground carbon flux in tC/(ha.year)', () => {
     beforeEach(() => {
       jest.doMock('../dataByCommune/zpc.csv.json', () => {
@@ -337,23 +335,23 @@ describe('The flux data module', () => {
       expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arborés et buissonants', 'sols artificiels arbustifs')).toBe(7)
       expect(getAnnualGroundCarbonFlux({ commune: { insee: '1001' } }, 'sols artificiels arborés et buissonants', 'sols artificiels arborés et buissonants')).toBe(0)
     })
-  })
 
-  it('returns all carbon flux in tc/(ha.year) for ground cultures', () => {
-    jest.doMock(groundDataPath, () => {
-      return [
-        {
-          siren: '200007177',
-          'f_vign_cult_%zpc': 3,
-          'f_for_cult_%zpc': -10
-        }
-      ]
+    it('returns all carbon flux in tc/(ha.year) for ground cultures', () => {
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            zh_cult: 3,
+            for_cult: -10
+          }
+        ]
+      })
+      const fluxes = getAllAnnualFluxes({ commune: { insee: '1001', epci: '200007177' } })
+      const groundFluxes = fluxes.filter(f => f.reservoir === 'sol')
+      const cultureFluxes = groundFluxes.filter(f => f.to === 'cultures')
+      // 1 zones humides + 4 forest subtypes + 3 0s (exceptions covered in above tests) + 1 SA arb which uses forest
+      expect(cultureFluxes.length).toBe(9)
     })
-    const fluxes = getAllAnnualFluxes({ epci: { code: '200007177' } })
-    const groundFluxes = fluxes.filter(f => f.reservoir === 'sol')
-    const cultureFluxes = groundFluxes.filter(f => f.to === 'cultures')
-    // 1 vineyard + 4 forest subtypes
-    expect(cultureFluxes.length).toBe(5)
   })
 
   const areaChangePath = '../dataByCommune/clc18-change.csv.json'
@@ -791,16 +789,24 @@ describe('The flux data module', () => {
 
   describe('for forests', () => {
     it('provides data per-subtype', () => {
-      jest.doMock(groundDataPath, () => {
+      jest.doMock('../dataByCommune/zpc.csv.json', () => {
         return [
           {
-            siren: '200007177',
-            'f_for_vign_%zpc': -2,
-            'f_cult_for_%zpc': 3
+            insee: '1001',
+            zpc: '1_1'
           }
         ]
       })
-      const fluxes = getAllAnnualFluxes({ epci: { code: '200007177' } })
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            for_vign: -2,
+            cult_for: 3
+          }
+        ]
+      })
+      const fluxes = getAllAnnualFluxes({ commune: { insee: '1001', epci: '200007177' } })
       const forestFlux = fluxes.find((f) => f.from === 'forêts' && f.to === 'vignes' && f.reservoir === 'sol')
       expect(forestFlux).toBeUndefined()
       const mixedFlux = fluxes.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'sol')
@@ -816,16 +822,24 @@ describe('The flux data module', () => {
 
     it('adds a multiplier of 20', () => {
       // the ground carbon density is the same for all forest types
-      jest.doMock(groundDataPath, () => {
+      jest.doMock('../dataByCommune/zpc.csv.json', () => {
         return [
           {
-            siren: '200007177',
-            'f_for_vign_%zpc': -2,
-            'f_prai_for_%zpc': 3
+            insee: '1001',
+            zpc: '1_1'
           }
         ]
       })
-      const fluxes = getAllAnnualFluxes({ epci: { code: '200007177' } })
+      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
+        return [
+          {
+            zpc: '1_1',
+            for_vign: -2,
+            prai_for: 3
+          }
+        ]
+      })
+      const fluxes = getAllAnnualFluxes({ commune: { insee: '1001', epci: '200007177' } })
       const toVineyards = fluxes.find((f) => f.from === 'forêt mixte' && f.to === 'vignes')
       expect(toVineyards.yearsForFlux).toBe(20)
       const toLeafy = fluxes.find((f) => f.from === 'prairies zones arborées' && f.to === 'forêt feuillu')
