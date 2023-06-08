@@ -16,7 +16,7 @@ const {
 jest.mock('../communes', () => {
   return {
     getCommunes: jest.fn(() => {
-      return [{ insee: '01234' }, { insee: '01235' }]
+      return [{ insee: '01234', zpc: '1_1' }, { insee: '01235', zpc: '1_1' }]
     })
   }
 })
@@ -26,17 +26,8 @@ describe('The stocks data module', () => {
     jest.resetModules()
   })
 
-  const zpcCommunePath = '../dataByCommune/zpc.csv.json'
-  const zpcStocksPath = '../dataByCommune/stocks-zpc.csv.json'
   it('given a commune and ground type, returns the carbon density in tC/ha according to the zone pédo-climatique (ZPC)', () => {
-    jest.doMock(zpcCommunePath, () => {
-      return [
-        {
-          insee: '01234',
-          zpc: '1_1'
-        }
-      ]
-    })
+    const zpcStocksPath = '../dataByCommune/stocks-zpc.csv.json'
     jest.doMock(zpcStocksPath, () => {
       return [
         {
@@ -45,7 +36,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getCarbonDensity({ insee: '01234' }, 'cultures')).toBe(50)
+    expect(getCarbonDensity({ insee: '01234', zpc: '1_1' }, 'cultures')).toBe(50)
   })
 
   const areaPath = '../dataByCommune/clc18.csv.json'

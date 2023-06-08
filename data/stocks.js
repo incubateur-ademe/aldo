@@ -4,9 +4,7 @@ const { GroundTypes } = require('../calculations/constants')
 
 // Gets the carbon area density of a given ground type using the zone pédo-climatique majoritaire for the commune
 function getCarbonDensity (commune, groundType) {
-  const zpcCommunePath = './dataByCommune/zpc.csv'
-  const zpcsForCommunes = require(zpcCommunePath + '.json')
-  const zpcForCommune = zpcsForCommunes.find((data) => data.insee === commune.insee)
+  const zpcForCommune = commune.zpc
   if (!zpcForCommune) {
     // Not expecting this to happen but in case it does, fail silently
     console.log('No ZPC for commune : ', commune)
@@ -14,10 +12,10 @@ function getCarbonDensity (commune, groundType) {
   }
   const zpcStocksPath = './dataByCommune/stocks-zpc.csv'
   const stocksForZpcs = require(zpcStocksPath + '.json')
-  const stocksForZpc = stocksForZpcs.find((data) => data.zpc === zpcForCommune.zpc)
+  const stocksForZpc = stocksForZpcs.find((data) => data.zpc === zpcForCommune)
   if (!stocksForZpc) {
     // Not expecting this to happen but in case it does, fail silently
-    console.log('No stocks for ZPC : ', zpcForCommune.zpc)
+    console.log('No stocks for ZPC : ', zpcForCommune)
     return 0
   }
   const carbonDensity = stocksForZpc[groundType]
