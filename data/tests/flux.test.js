@@ -356,7 +356,6 @@ describe('The flux data module', () => {
 
   const areaChangePath = '../dataByCommune/clc18-change.csv.json'
   it('returns change in surface area for given ground types from data file divided by 6, the number of years between studies', () => {
-    const siren = '200007177'
     jest.doMock(areaChangePath, () => {
       return [
         // from constants.json:
@@ -369,16 +368,10 @@ describe('The flux data module', () => {
           area: '5'
         },
         {
-          commune: '01235',
-          code12: '323',
-          code18: '211',
-          area: '15'
-        },
-        {
-          commune: '01235',
+          commune: '01234',
           code12: '323',
           code18: '212',
-          area: '4.6'
+          area: '7'
         },
         {
           commune: '01234',
@@ -387,15 +380,15 @@ describe('The flux data module', () => {
           area: '100'
         },
         {
-          commune: '09999', // uninteresting commune for this EPCI
+          commune: '09999', // uninteresting commune for this request
           code12: '323',
           code18: '211',
           area: '100'
         }
       ]
     })
-    expect(getAnnualSurfaceChange({ epci: siren }, {}, 'prairies zones arborées', 'cultures')).toBeCloseTo(4.1, 1)
-    expect(getAnnualSurfaceChange({ epci: siren }, {}, 'prairies zones arbustives', 'cultures')).toBe(0)
+    expect(getAnnualSurfaceChange({ commune: { insee: '01234' } }, {}, 'prairies zones arborées', 'cultures')).toBe(2)
+    expect(getAnnualSurfaceChange({ commune: { insee: '01234' } }, {}, 'prairies zones arbustives', 'cultures')).toBe(0)
   })
 
   describe('sols artificiels area changes', () => {

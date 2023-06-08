@@ -2,6 +2,7 @@ const {
   getAllAnnualFluxes,
   getAnnualSurfaceChange: getAnnualSurfaceChangeData
 } = require('../../data/flux')
+const { getCommunes } = require('../../data/communes')
 const { GroundTypes } = require('../constants')
 const { getFluxWoodProducts } = require('./woodProducts')
 const { getFluxAgriculturalPractices } = require('./agriculturalPractices')
@@ -46,22 +47,13 @@ function convertN2O (flux) {
 }
 
 function getAnnualFluxes (location, options) {
+  const communes = getCommunes(location)
   options = options || {}
   const fluxes = []
-  if (location.epci || location.commune) {
-    fluxes.push(...getFluxesForLocation(location, options))
-  }
   // TODO: area overrides should be at regroupement level, not per-location
-  if (location.epcis) {
-    location.epcis.forEach((epci) => {
-      fluxes.push(...getFluxesForLocation({ epci }, options))
-    })
-  }
-  if (location.communes) {
-    location.communes.forEach((commune) => {
-      fluxes.push(...getFluxesForLocation({ commune }, options))
-    })
-  }
+  communes.forEach((commune) => {
+    fluxes.push(...getFluxesForLocation({ commune }, options))
+  })
   // TODO: aggregations for display
   //  - produits bois details
   //  - how to deal with custom areas?

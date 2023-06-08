@@ -59,7 +59,7 @@ function handleGroundCarbonFluxExceptions (location, from, to) {
 function getAnnualGroundCarbonFlux (location, from, to) {
   if (from === to) return 0
   const commune = location.commune
-  if (!commune) { console.log('NOPE'); return }
+  if (!commune) { console.log('getAnnualGroundCarbonFlux called with bad location', location); return 0 }
   const exceptionValue = handleGroundCarbonFluxExceptions(location, from, to)
   if (exceptionValue || exceptionValue === 0) return exceptionValue
   // normal flux value lookup
@@ -69,6 +69,7 @@ function getAnnualGroundCarbonFlux (location, from, to) {
 
   const fluxForZpcs = require('./dataByCommune/flux-zpc.csv.json')
   const fluxForZpc = fluxForZpcs.find(data => data.zpc === zpc)
+  if (!fluxForZpc) { console.log('No ZPC for commune', commune.insee, zpc); return }
 
   const fromDetails = GroundTypes.find(groundType => groundType.stocksId === from)
   const toDetails = GroundTypes.find(groundType => groundType.stocksId === to)
@@ -78,7 +79,7 @@ function getAnnualGroundCarbonFlux (location, from, to) {
   if (dataValue) {
     return parseFloat(dataValue)
   } else {
-    console.log('NO DATA')
+    console.log('ZPC does not have value for key', zpc, key)
   }
 }
 
@@ -268,6 +269,7 @@ function cToCo2e (valueC) {
 }
 
 function getAnnualSurfaceChange (location, options, from, to) {
+  if (!location.commune) { console.log('getAnnualSurfaceChange called with bad location', location); return 0 }
   const fromClcCodes = GroundTypes.find(groundType => groundType.stocksId === from).clcCodes
   const toClcCodes = GroundTypes.find(groundType => groundType.stocksId === to).clcCodes
   if (!fromClcCodes || !toClcCodes) {
@@ -276,9 +278,8 @@ function getAnnualSurfaceChange (location, options, from, to) {
 
   const csvFilePath = './dataByCommune/clc18-change.csv'
   const dataByCommune = require(csvFilePath + '.json')
-  const communes = getCommunes(location).map((c) => c.insee)
-  const areaChangesForEpci = dataByCommune.filter(data => communes.includes(data.commune))
-  const changesForGroundTypes = areaChangesForEpci.filter((change) => {
+  const areaChangesForCommune = dataByCommune.filter(data => data.commune === location.commune.insee)
+  const changesForGroundTypes = areaChangesForCommune.filter((change) => {
     return fromClcCodes.includes(change.code12) && toClcCodes.includes(change.code18)
   })
   const totalAreaChange = changesForGroundTypes.reduce((acc, change) => acc + Number(change.area), 0)

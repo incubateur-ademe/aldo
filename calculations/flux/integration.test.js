@@ -6,7 +6,8 @@ test('returns expected number of entries for cultures ground changes', () => {
   const allFlux = getAnnualFluxes({ epci: getEpci('200007177', true) }).allFlux
   const culturesFlux = allFlux.filter(f => f.to === 'cultures')
   const cGround = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'sol')
-  expect(cGround.length).toBe(9)
+  // 13 flux values * 12 communes in this EPCI = 156
+  expect(cGround.length).toBe(156)
 })
 
 // data-dependent tests
