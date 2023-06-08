@@ -573,6 +573,8 @@ describe('The stocks data module', () => {
       const first = data[0]
       expect(first.carbonDensity).toBe(78)
     })
+
+    // TODO: could write test for the sum of hedgerow length byGroundType - expecting sum using CLC codes at level 1 (not child types)
   })
 
   it('returns forest litter carbon density (tC/ha) for valid forest subtype', () => {

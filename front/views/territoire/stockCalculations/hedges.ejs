@@ -31,3 +31,20 @@
 <button class="fr-btn" type="submit">
   Mettre à jour
 </button>
+<table class="fr-table fr-table--blue-cumulus fr-mt-4w fr-mb-0">
+  <caption>
+    <p>Linéaire haies par typologie du sol</p>
+  </caption>
+  <thead class="fr-mt-2w">
+    <th class="fr-text--xs">Occupation du sol</th>
+    <th class="fr-text--xs">Haies (km)</th>
+  </thead>
+  <tbody>
+    <% for( const [stocksId, length] of Object.entries(stock.byGroundType) ) { %>
+      <tr>
+        <td><%= allGroundTypes.find((gt) => gt.stocksId === stocksId).name %></td>
+        <td style="text-align: right;"><%= formatNumber(length) %></td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

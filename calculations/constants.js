@@ -69,7 +69,8 @@ module.exports = {
       stocksId: 'sols artificiels',
       name: 'Sols artificiels',
       color: 'gris',
-      children: ['sols artificiels imperméabilisés', 'sols artificiels arbustifs', 'sols artificiels arborés et buissonants']
+      children: ['sols artificiels imperméabilisés', 'sols artificiels arbustifs', 'sols artificiels arborés et buissonants'],
+      clcCodes: ['111', '112', '121', '122', '123', '124', '131', '132', '133', '141', '142']
     },
     {
       stocksId: 'sols artificiels arbustifs',

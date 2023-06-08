@@ -86,12 +86,14 @@ jest.mock('../../data/stocks', () => {
           {
             department: 2,
             length: 10,
-            carbonDensity: 50
+            carbonDensity: 50,
+            byGroundType: {}
           },
           {
             department: 99,
             length: 10,
-            carbonDensity: 10
+            carbonDensity: 10,
+            byGroundType: {}
           }
         ]
       } else if (location.commune) {
@@ -99,7 +101,8 @@ jest.mock('../../data/stocks', () => {
           {
             department: 2,
             length: 10,
-            carbonDensity: 50
+            carbonDensity: 50,
+            byGroundType: {}
           }
         ]
       } else if (location.communes) {
@@ -107,12 +110,14 @@ jest.mock('../../data/stocks', () => {
           {
             department: 2,
             length: 10,
-            carbonDensity: 50
+            carbonDensity: 50,
+            byGroundType: {}
           },
           {
             department: 3,
             length: 20,
-            carbonDensity: 20
+            carbonDensity: 20,
+            byGroundType: {}
           }
         ]
       }
@@ -306,6 +311,8 @@ describe('The stocks calculation module', () => {
       expect(hedgerows.totalDensity).toBe(30)
       expect(hedgerows.totalStock).toBe(300)
     })
+
+    // TODO: test commune aggregation of lengths byGroundType
   })
 
   describe('for artificial ground types', () => {

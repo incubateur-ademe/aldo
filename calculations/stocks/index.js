@@ -153,10 +153,18 @@ function getStocksHedgerows (location, options) {
   if (options?.areas?.haies) {
     area = options.areas.haies
   }
-  if (originalArea === area) {
-    data.forEach((d) => {
-      d.biomassStock = d.length * d.carbonDensity
+  const byGroundType = {}
+  data.forEach((d) => {
+    const stocksIds = Object.keys(d.byGroundType)
+    stocksIds.forEach((id) => {
+      if (!Object.hasOwn(byGroundType, id)) byGroundType[id] = 0
+      byGroundType[id] += d.byGroundType[id]
     })
+    if (originalArea === area) {
+      d.biomassStock = d.length * d.carbonDensity
+    }
+  })
+  if (originalArea === area) {
     biomassStock = sumByProperty(data, 'biomassStock')
   } else {
     biomassStock = area * carbonDensity
@@ -172,7 +180,8 @@ function getStocksHedgerows (location, options) {
     biomassDensity: carbonDensity,
     groundDensity: 0,
     biomassStock: biomassStock,
-    totalDensity: carbonDensity
+    totalDensity: carbonDensity,
+    byGroundType
   }
 }
 
