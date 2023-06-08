@@ -1,5 +1,6 @@
 const { getIgnLocalisation } = require('./shared')
 const { getCommunes } = require('./communes')
+const { GroundTypes } = require('../calculations/constants')
 
 // Gets the carbon area density of a given ground type using the zone pédo-climatique majoritaire for the commune
 function getCarbonDensity (commune, groundType) {
@@ -303,14 +304,27 @@ function getHedgerowsDataByCommune (location) {
 
   const communeCodes = getCommunes(location).map((c) => c.insee)
   lengthData = lengthData.filter((data) => communeCodes.includes(data.INSEE_COM) && data.TOTKM_HAIE)
+
+  const excludeIds = ['produits bois', 'haies']
+  // ignore child types as well
+  const groundTypes = GroundTypes.filter((gt) => !gt.parentType && !excludeIds.includes(gt.stocksId))
   return lengthData.map((data) => {
     // source de 78 tC/km -> rapport ADEME/IGN "STOCKS DE BOIS ET DE CARBONE DANS LES HAIES BOCAGÈRES FRANÇAISES"
     // page 41 : « En moyenne, le stock de carbone par km pour le linéaire possédant un volume (MNHC > 3 m)
     // sur l’ensemble de la zone d’étude est de 100 tC/km, dont 78 pour la partie aérienne ».
     const carbonDensity = carbonData.find((cd) => cd.dep === data.INSEE_DEP)?.C_aerien_km || 78
+
+    const byGroundType = {}
+    groundTypes.forEach((gt) => { byGroundType[gt.stocksId] = 0 })
+    groundTypes.forEach((gt) => {
+      gt.clcCodes.forEach((clcCode) => {
+        byGroundType[gt.stocksId] += +data[`CLC_${clcCode}`] || 0
+      })
+    })
     return {
       length: +data.TOTKM_HAIE,
-      carbonDensity: +carbonDensity
+      carbonDensity: +carbonDensity,
+      byGroundType
     }
   })
 }
