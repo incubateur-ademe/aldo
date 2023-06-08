@@ -63,9 +63,7 @@ function getAnnualGroundCarbonFlux (location, from, to) {
   const exceptionValue = handleGroundCarbonFluxExceptions(location, from, to)
   if (exceptionValue || exceptionValue === 0) return exceptionValue
   // normal flux value lookup
-  const zpcForCommunes = require('./dataByCommune/zpc.csv.json')
-  const zpcForCommune = zpcForCommunes.find(data => data.insee === commune.insee)
-  const zpc = zpcForCommune.zpc
+  const zpc = commune.zpc
 
   const fluxForZpcs = require('./dataByCommune/flux-zpc.csv.json')
   const fluxForZpc = fluxForZpcs.find(data => data.zpc === zpc)
