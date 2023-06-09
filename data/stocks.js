@@ -1,5 +1,4 @@
 const { getIgnLocalisation } = require('./shared')
-const { getCommunes } = require('./communes')
 const { GroundTypes } = require('../calculations/constants')
 
 // Gets the carbon area density of a given ground type using the zone pédo-climatique majoritaire for the commune
@@ -62,10 +61,9 @@ function getArea (location, groundType) {
   }
   const csvFilePath = './dataByCommune/clc18.csv'
   const areasByCommuneAndClcType = require(csvFilePath + '.json')
-  const communeCodes = getCommunes(location).map((c) => c.insee)
   let totalArea = 0
   areasByCommuneAndClcType.forEach((areaData) => {
-    if (communeCodes.includes(areaData.insee) && clcCodes.includes(areaData.code18)) {
+    if (location.commune.insee === areaData.insee && clcCodes.includes(areaData.code18)) {
       totalArea += +areaData.area
     }
   })
@@ -285,13 +283,13 @@ function getForestLitterCarbonDensity (subtype) {
 }
 
 function getHedgerowsDataByCommune (location) {
+  if (!location.commune) { console.log('getHedgerowsDataByCommune called wrong', location); return }
   const carbonCsvFilePath = './dataByCommune/carbone-haies.csv'
   const carbonData = require(carbonCsvFilePath + '.json')
   const csvFilePath = './dataByCommune/haie-clc18.csv'
   let lengthData = require(csvFilePath + '.json')
 
-  const communeCodes = getCommunes(location).map((c) => c.insee)
-  lengthData = lengthData.filter((data) => communeCodes.includes(data.INSEE_COM) && data.TOTKM_HAIE)
+  lengthData = lengthData.filter((data) => location.commune === data.INSEE_COM && data.TOTKM_HAIE)
 
   const excludeIds = ['produits bois', 'haies']
   // ignore child types as well
