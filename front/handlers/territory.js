@@ -22,9 +22,12 @@ async function territoryHandler (req, res) {
   }
 
   const options = parseOptionsFromQuery(req.query)
+  console.log('getting stocks...')
   const stocks = getStocks(location, options)
+  console.log('getting fluxes')
   const flux = getAnnualFluxes(location, options)
 
+  console.log('formatting fluxes')
   const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
   const singleLocation = location.epci || location.commune
 
@@ -49,6 +52,7 @@ async function territoryHandler (req, res) {
     const communeStr = location.communes.map(c => `communes[]=${c.insee}`).join('&')
     resetQueryStr += (location.communes.length ? '&' : '') + communeStr
   }
+  console.log('rendering')
   res.render('territoire', {
     pageTitle,
     tab: req.params.tab || 'stocks',
@@ -67,6 +71,7 @@ async function territoryHandler (req, res) {
     stocks,
     charts: stocks && charts(stocks),
     formatNumber (number, fractionDigits = 0) {
+      if (!number) return
       return number.toLocaleString('fr-FR', {
         minimumFractionDigits: fractionDigits,
         maximumFractionDigits: fractionDigits
@@ -420,9 +425,9 @@ function pieChart (title, labels, values) {
 function userWarnings (location) {
   const warnings = []
   const allCommunes = getCommunes(location)
-  let requestedCommunesCount = (location.epci?.membres.length || 0) + (!!location.commune && 1) + (location.communes?.length || 0)
+  let requestedCommunesCount = (location.epci?.communes.length || 0) + (!!location.commune && 1) + (location.communes?.length || 0)
   location.epcis?.forEach(epci => {
-    requestedCommunesCount += epci.membres.length
+    requestedCommunesCount += epci.communes.length
   })
   if (requestedCommunesCount > allCommunes.length) {
     warnings.push('communesDeduplicated')

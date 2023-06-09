@@ -272,7 +272,7 @@ describe('The stocks calculation module', () => {
 
     it('for consumption, calculates stock by multipling France stocks with the proportion of local population', () => {
       // TODO: mock getPopulationTotal and epci.populationTotale and remove logic for a better test
-      const populationShare = epci.populationTotale / getPopulationTotal()
+      const populationShare = epci.population / getPopulationTotal()
       expect(stocksByConsumption['produits bois'].boStock).toEqual(500 * populationShare)
       expect(stocksByConsumption['produits bois'].biStock).toEqual(200 * populationShare)
     })

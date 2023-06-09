@@ -1,19 +1,19 @@
-const franceData = require('../data/dataByEpci/france.json')
-const communeData = require('../data/dataByCommune/communes_17122018.csv.json')
+const epciData = require('../data/dataByEpci/epcis.json')
+const communeData = require('../data/dataByCommune/communes.json')
 
 function getEpci (searchTerm, bySiren = false) {
   if (bySiren) {
-    return franceData.epcis[searchTerm]
+    return epciData[searchTerm]
   }
-  const epci = Object.values(franceData.epcis).find(epci => epci.nom === searchTerm)
+  const epci = Object.values(epciData).find(epci => epci.nom === searchTerm)
   return epci
 }
 
 function getCommune (searchTerm, byCode = false) {
   if (byCode) {
-    return communeData.find((data) => data.insee === searchTerm)
+    return communeData[searchTerm]
   } else {
-    return communeData.find((data) => data.nom === searchTerm)
+    return Object.values(communeData).find((data) => data.nom === searchTerm)
   }
 }
 

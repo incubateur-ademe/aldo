@@ -48,6 +48,7 @@ function convertN2O (flux) {
 
 function getAnnualFluxes (location, options) {
   const communes = getCommunes(location)
+  // console.log(communes)
   options = options || {}
   const fluxes = []
   // TODO: area overrides should be at regroupement level, not per-location

@@ -238,7 +238,8 @@ describe('The flux calculation module', () => {
     it('provides the area as a sum of the areas of the same type', () => {
       const fluxes = getAnnualFluxes({ epci })
       const mixed = fluxes.biomassSummary[0]
-      expect(mixed.area).toBe(3)
+      // there are 7 communes, each with area of 3
+      expect(mixed.area).toBe(21)
       expect(mixed.co2e).toBeDefined()
     })
 
@@ -267,8 +268,9 @@ describe('The flux calculation module', () => {
   // test per practice?
 
   describe('the biomass fluxes linked to deforestation', () => {
+    const epci = { code: '243000643', communes: ['01234', '01235', '01236'] }
     it('adds for changes to non-forest types, using the stock biomass densities for both ground types', () => {
-      const fluxes = getAnnualFluxes({ epci: '243000643' })
+      const fluxes = getAnnualFluxes({ epci })
       const flux = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
       expect(flux.annualFlux).toEqual(-6)
       expect(flux.annualFluxEquivalent).toBeDefined()
@@ -278,7 +280,7 @@ describe('The flux calculation module', () => {
     })
 
     it('ignore biomass changes where final ground type is a forest type since these are accounted for by the biomass growth calculations', () => {
-      const fluxes = getAnnualFluxes({ epci: '243000643' })
+      const fluxes = getAnnualFluxes({ epci })
       const toConifer = fluxes.allFlux.find((f) => f.from === 'cultures' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
       expect(toConifer).not.toBeDefined()
       const betweenForests = fluxes.allFlux.find((f) => f.from === 'forêt feuillu' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
@@ -286,7 +288,7 @@ describe('The flux calculation module', () => {
     })
 
     it('allows change from forest type to be overridden', () => {
-      const fluxes = getAnnualFluxes({ epci: '243000643' }, { areaChanges: { for_mix_vign: 20 } })
+      const fluxes = getAnnualFluxes({ epci }, { areaChanges: { for_mix_vign: 20 } })
       const toVineyard = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
       expect(toVineyard.area).toBe(20)
       expect(toVineyard.originalArea).toBe(10)

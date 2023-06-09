@@ -18,24 +18,24 @@ try {
   const epciCodesSeen = []
   epcis.forEach(epci => {
     epciCodesSeen.push(epci.code)
-    epci.populationTotale = +epci.populationTotale
+    epci.population = +epci.population
     epci.nombreCommunes = parseInt(epci.nombreCommunes, 10)
     epciLookup.epcis[epci.code] = epci
     const epciCommunes = communes.filter((c) => c.epci === epci.code)
-    epciLookup.epcis[epci.code].membres = epciCommunes.map((c) => c.nom)
+    epciLookup.epcis[epci.code].communes = epciCommunes.map((c) => c.nom)
     if (epciCommunes.length) {
-      epci.populationTotale = 0
+      epci.population = 0
       epciCommunes.forEach((c) => {
-        epci.populationTotale += +c.population
+        epci.population += +c.population
       })
     }
-    if (epciLookup.epcis[epci.code].membres.length !== epci.nombreCommunes) {
+    if (epciLookup.epcis[epci.code].communes.length !== epci.nombreCommunes) {
       console.log(epci.nom, epci.code)
       console.log('attendu', epci.nombreCommunes)
-      console.log('trouvé', epciLookup.epcis[epci.code].membres.length)
+      console.log('trouvé', epciLookup.epcis[epci.code].communes.length)
       differencesCommuneCount++
     }
-    epciLookup.totalPopulation += epci.populationTotale
+    epciLookup.totalPopulation += epci.population
   })
   communes.filter((c) => !c.epci).forEach((c) => {
     epciLookup.totalPopulation += +c.population

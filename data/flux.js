@@ -18,7 +18,7 @@ function handleGroundCarbonFluxExceptions (location, from, to) {
     if (to === saArbId) {
       // doesn't matter which forest subtype used here
       return getAnnualGroundCarbonFlux(location, from, 'forêt mixte')
-    }
+    } else if (to === saEnhId) return 0
   } else if (from.startsWith('forêt')) {
     if (to === saArbId) return 0
   } else if (from === zhId) {
@@ -56,9 +56,13 @@ function handleGroundCarbonFluxExceptions (location, from, to) {
 
 // TODO: incorporate yearsForFlux setting in here?
 function getAnnualGroundCarbonFlux (location, from, to) {
-  if (from === to) return 0
   const commune = location.commune
   if (!commune) { console.log('getAnnualGroundCarbonFlux called with bad location', location); return 0 }
+
+  const fromDetails = GroundTypes.find(groundType => groundType.stocksId === from)
+  const toDetails = GroundTypes.find(groundType => groundType.stocksId === to)
+  if (fromDetails.fluxId === toDetails.fluxId) return 0
+
   const exceptionValue = handleGroundCarbonFluxExceptions(location, from, to)
   if (exceptionValue || exceptionValue === 0) return exceptionValue
   // normal flux value lookup
@@ -68,15 +72,13 @@ function getAnnualGroundCarbonFlux (location, from, to) {
   const fluxForZpc = fluxForZpcs.find(data => data.zpc === zpc)
   if (!fluxForZpc) { console.log('No ZPC for commune', commune.insee, zpc); return }
 
-  const fromDetails = GroundTypes.find(groundType => groundType.stocksId === from)
-  const toDetails = GroundTypes.find(groundType => groundType.stocksId === to)
   const key = fromDetails.fluxId + '_' + toDetails.fluxId
 
   const dataValue = fluxForZpc[key]
   if (dataValue) {
     return parseFloat(dataValue)
   } else {
-    console.log('ZPC does not have value for key', zpc, key)
+    console.log('ZPC does not have value for key', zpc, key, fromDetails, toDetails)
   }
 }
 
@@ -212,7 +214,7 @@ function getAllAnnualFluxes (location, options) {
       if (from === to) {
         continue
       }
-      if (fromGt.fluxId && toGt.fluxId) {
+      if (fromGt.fluxId && toGt.fluxId && fromGt.fluxId !== toGt.fluxId) {
         const annualFlux = getAnnualGroundCarbonFlux(location, from, to)
         const yearsForFlux = yearMultiplier('sol', from, to)
         if (annualFlux !== undefined) {
@@ -266,7 +268,7 @@ function cToCo2e (valueC) {
 }
 
 function getAnnualSurfaceChange (location, options, from, to) {
-  const yearlyAreaChange = location.commune.changes[from][to]
+  const yearlyAreaChange = location.commune.changes[from][to] || 0
   const solsArtificielsException = getSolsArtificielsException(location, options, from, to, yearlyAreaChange)
   if (solsArtificielsException !== undefined) {
     return solsArtificielsException

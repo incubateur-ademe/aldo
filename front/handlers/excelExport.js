@@ -91,10 +91,10 @@ async function excelExportHandler (req, res) {
     .date(new Date())
     .style(dataStyle)
   row++
-  if (singleLocation.membres?.length) {
+  if (singleLocation.communes?.length) {
     ws.cell(row, secondColumn)
       .string('Communes')
-    singleLocation.membres.forEach(commune => {
+    singleLocation.communes.forEach(commune => {
       ws.cell(row, thirdColumn)
         .string(commune)
         .style(dataStyle)
