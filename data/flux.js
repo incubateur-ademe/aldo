@@ -1,5 +1,4 @@
 const { getIgnLocalisation } = require('./shared')
-const { getCommunes } = require('./communes')
 
 // TODO: move this file to a folder that both layers can rely on to not completely break
 // dependency tree
@@ -267,7 +266,16 @@ function cToCo2e (valueC) {
 }
 
 function getAnnualSurfaceChange (location, options, from, to) {
-  if (!location.commune) { console.log('getAnnualSurfaceChange called with bad location', location); return 0 }
+  const yearlyAreaChange = location.commune.changes[from][to]
+  const solsArtificielsException = getSolsArtificielsException(location, options, from, to, yearlyAreaChange)
+  if (solsArtificielsException !== undefined) {
+    return solsArtificielsException
+  }
+  return yearlyAreaChange
+}
+
+function getAnnualSurfaceChangeFromData (location, from, to) {
+  if (!location.commune) { console.log('getAnnualSurfaceChangeFromData called with bad location', location); return 0 }
   const fromClcCodes = GroundTypes.find(groundType => groundType.stocksId === from).clcCodes
   const toClcCodes = GroundTypes.find(groundType => groundType.stocksId === to).clcCodes
   if (!fromClcCodes || !toClcCodes) {
@@ -284,10 +292,6 @@ function getAnnualSurfaceChange (location, options, from, to) {
 
   const yearsBetweenStudies = 6
   const yearlyAreaChange = totalAreaChange / yearsBetweenStudies
-  const solsArtificielsException = getSolsArtificielsException(location, options, from, to, yearlyAreaChange)
-  if (solsArtificielsException !== undefined) {
-    return solsArtificielsException
-  }
   return yearlyAreaChange
 }
 
@@ -443,6 +447,7 @@ module.exports = {
   getAllAnnualFluxes,
   getForestLitterFlux,
   getAnnualSurfaceChange,
+  getAnnualSurfaceChangeFromData,
   getFranceFluxWoodProducts,
   getForestBiomassFluxesByCommune,
   cToCo2e

@@ -1,7 +1,7 @@
 const {
   getAnnualGroundCarbonFlux,
   getAllAnnualFluxes,
-  getAnnualSurfaceChange,
+  getAnnualSurfaceChangeFromData,
   getForestLitterFlux
 } = require('../flux')
 
@@ -387,8 +387,8 @@ describe('The flux data module', () => {
         }
       ]
     })
-    expect(getAnnualSurfaceChange({ commune: { insee: '01234' } }, {}, 'prairies zones arborées', 'cultures')).toBe(2)
-    expect(getAnnualSurfaceChange({ commune: { insee: '01234' } }, {}, 'prairies zones arbustives', 'cultures')).toBe(0)
+    expect(getAnnualSurfaceChangeFromData({ commune: { insee: '01234' } }, {}, 'prairies zones arborées', 'cultures')).toBe(2)
+    expect(getAnnualSurfaceChangeFromData({ commune: { insee: '01234' } }, {}, 'prairies zones arbustives', 'cultures')).toBe(0)
   })
 
   describe('sols artificiels area changes', () => {
@@ -412,7 +412,7 @@ describe('The flux data module', () => {
             }
           ]
         })
-        const fromShrubby = getAnnualSurfaceChange({ epci: siren }, {}, 'sols artificiels arbustifs', 'sols artificiels imperméabilisés')
+        const fromShrubby = getAnnualSurfaceChangeFromData({ epci: siren }, {}, 'sols artificiels arbustifs', 'sols artificiels imperméabilisés')
         expect(fromShrubby).toBe(0)
       })
       // TODO: what about if has data overrides?
@@ -442,7 +442,7 @@ describe('The flux data module', () => {
             }
           ]
         })
-        const fromCultures = getAnnualSurfaceChange({ epci: siren }, {}, from, 'sols artificiels imperméabilisés')
+        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, {}, from, 'sols artificiels imperméabilisés')
         expect(fromCultures).toBe(50)
       })
 
@@ -471,7 +471,7 @@ describe('The flux data module', () => {
             }
           ]
         })
-        const fromCultures = getAnnualSurfaceChange({ epci: siren }, { proportionSolsImpermeables: 0.34 }, from, 'sols artificiels imperméabilisés')
+        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, { proportionSolsImpermeables: 0.34 }, from, 'sols artificiels imperméabilisés')
         expect(fromCultures).toBe(50)
       })
 
@@ -500,7 +500,7 @@ describe('The flux data module', () => {
             }
           ]
         })
-        const fromCultures = getAnnualSurfaceChange({ epci: siren }, { proportionSolsImpermeables: 0.33 }, from, 'sols artificiels imperméabilisés')
+        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, { proportionSolsImpermeables: 0.33 }, from, 'sols artificiels imperméabilisés')
         expect(fromCultures).toBe(49.5)
       })
 
@@ -529,7 +529,7 @@ describe('The flux data module', () => {
             }
           ]
         })
-        const fromCultures = getAnnualSurfaceChange({ epci: siren }, {}, from, 'sols artificiels imperméabilisés')
+        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, {}, from, 'sols artificiels imperméabilisés')
         expect(fromCultures).toBe(48)
       })
     })
@@ -553,7 +553,7 @@ describe('The flux data module', () => {
             }
           ]
         })
-        const toShrubby = getAnnualSurfaceChange({ epci: siren }, {}, 'sols artificiels imperméabilisés', 'sols artificiels arbustifs')
+        const toShrubby = getAnnualSurfaceChangeFromData({ epci: siren }, {}, 'sols artificiels imperméabilisés', 'sols artificiels arbustifs')
         expect(toShrubby).toBe(0)
       })
       // TODO: what about if has data overrides?
@@ -585,7 +585,7 @@ describe('The flux data module', () => {
         })
         // proportion green = 0.2; change sols art = 50
         // => threshold = 0.2 * 50 = 10
-        const fromForestMixed = getAnnualSurfaceChange({ epci: siren }, {}, from, 'sols artificiels arbustifs')
+        const fromForestMixed = getAnnualSurfaceChangeFromData({ epci: siren }, {}, from, 'sols artificiels arbustifs')
         expect(fromForestMixed).toBeCloseTo(10, 0)
       })
 
@@ -616,7 +616,7 @@ describe('The flux data module', () => {
         })
         // proportion green = 0.4; change sols art = 50
         // => threshold = 0.4 * 50 = 20
-        const fromForestMixed = getAnnualSurfaceChange({ epci: siren }, { proportionSolsImpermeables: 0.6 }, from, 'sols artificiels arbustifs')
+        const fromForestMixed = getAnnualSurfaceChangeFromData({ epci: siren }, { proportionSolsImpermeables: 0.6 }, from, 'sols artificiels arbustifs')
         expect(fromForestMixed).toBeCloseTo(20, 0)
       })
 
@@ -637,7 +637,7 @@ describe('The flux data module', () => {
       //   })
       //   // proportion green = 0.4; change sols art = 50
       //   // => threshold = 0.4 * 50 = 20
-      //   const fromForestMixed = getAnnualSurfaceChange({ epci: siren }, {}, from, 'sols artificiels arbustifs')
+      //   const fromForestMixed = getAnnualSurfaceChangeFromData({ epci: siren }, {}, from, 'sols artificiels arbustifs')
       //   expect(fromForestMixed).toBe(0)
       // })
 
@@ -668,7 +668,7 @@ describe('The flux data module', () => {
         })
         // proportion green = 0.4; change sols art = 50
         // => threshold = 0.2 * 50 = 10 (10 - 1)
-        const fromCultures = getAnnualSurfaceChange({ epci: siren }, {}, from, 'sols artificiels arbustifs')
+        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, {}, from, 'sols artificiels arbustifs')
         expect(fromCultures).toBeCloseTo(9, 0)
       })
 
@@ -699,7 +699,7 @@ describe('The flux data module', () => {
         })
         // proportion green = 0.4; change sols art = 50
         // => threshold = 0.4 * 50 = 20 (20 - 1)
-        const fromCultures = getAnnualSurfaceChange({ epci: siren }, { proportionSolsImpermeables: 0.6 }, from, 'sols artificiels arbustifs')
+        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, { proportionSolsImpermeables: 0.6 }, from, 'sols artificiels arbustifs')
         expect(fromCultures).toBeCloseTo(19, 0)
       })
     })
@@ -748,17 +748,17 @@ describe('The flux data module', () => {
           ]
         })
         const to = 'sols artificiels arborés et buissonants'
-        const fromSolsArtArbustifs = getAnnualSurfaceChange({ epci: siren }, {}, 'sols artificiels arbustifs', to)
+        const fromSolsArtArbustifs = getAnnualSurfaceChangeFromData({ epci: siren }, {}, 'sols artificiels arbustifs', to)
         expect(fromSolsArtArbustifs).toBe(0)
-        const fromPraiArbo = getAnnualSurfaceChange({ epci: siren }, {}, 'prairies zones arborées', to)
+        const fromPraiArbo = getAnnualSurfaceChangeFromData({ epci: siren }, {}, 'prairies zones arborées', to)
         expect(fromPraiArbo).toBe(0)
-        const fromPraiArbu = getAnnualSurfaceChange({ epci: siren }, {}, 'prairies zones arbustives', to)
+        const fromPraiArbu = getAnnualSurfaceChangeFromData({ epci: siren }, {}, 'prairies zones arbustives', to)
         expect(fromPraiArbu).toBe(0)
-        const fromVergers = getAnnualSurfaceChange({ epci: siren }, {}, 'vergers', to)
+        const fromVergers = getAnnualSurfaceChangeFromData({ epci: siren }, {}, 'vergers', to)
         expect(fromVergers).toBe(0)
-        const fromVignes = getAnnualSurfaceChange({ epci: siren }, {}, 'vignes', to)
+        const fromVignes = getAnnualSurfaceChangeFromData({ epci: siren }, {}, 'vignes', to)
         expect(fromVignes).toBe(0)
-        const fromZonesHumides = getAnnualSurfaceChange({ epci: siren }, {}, 'zones humides', to)
+        const fromZonesHumides = getAnnualSurfaceChangeFromData({ epci: siren }, {}, 'zones humides', to)
         expect(fromZonesHumides).toBe(0)
       })
 
@@ -774,7 +774,7 @@ describe('The flux data module', () => {
             }
           ]
         })
-        const fromCultures = getAnnualSurfaceChange({ epci: siren }, {}, 'cultures', 'sols artificiels arborés et buissonants')
+        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, {}, 'cultures', 'sols artificiels arborés et buissonants')
         expect(fromCultures).toBe(10)
       })
     })

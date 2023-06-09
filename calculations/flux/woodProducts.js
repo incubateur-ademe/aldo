@@ -11,7 +11,7 @@ const { getPopulationTotal } = require('../../data')
 
 function getFluxByConsumption (location) {
   const popTotal = getPopulationTotal()
-  const population = location.epci ? location.epci.populationTotale : location.commune.POPULATION
+  const population = location.epci ? location.epci.populationTotale : location.commune.population
   const proportion = population / popTotal
   const franceFlux = getFranceFluxWoodProducts()
   const bo = franceFlux.bo * proportion

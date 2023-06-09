@@ -1,12 +1,19 @@
-const communes = require('./dataByCommune/communes_17122018.csv.json')
+const communesData = require('./dataByCommune/communes.json')
 const zpcByCommune = require('./dataByCommune/zpc.csv.json')
+const { getAnnualSurfaceChangeFromData } = require('./flux')
+const { GroundTypes } = require('../calculations/constants')
 
 function getCommunes (location) {
   // handle the location options
-  let epcis = location.epcis || []
+  const epcis = location.epcis || []
   if (location.epci) epcis.push(location.epci)
-  epcis = epcis.map((epci) => epci.code)
-  const allCommunes = communes.filter((c) => epcis.includes(c.epci))
+  const epciCommuneCodes = []
+  epcis.forEach((epci) => epciCommuneCodes.push(...epci.communes))
+  const allCommunes = []
+  epciCommuneCodes.forEach((insee) => allCommunes.push(communesData[insee]))
+  // epcis = epcis.map((epci) => epci.code)
+  // const communeCodes = 
+  // const allCommunes = communesData.filter((c) => epcis.includes(c.epci))
   const remainingCommunes = location.communes || []
   if (location.commune) remainingCommunes.push(location.commune)
 
@@ -16,7 +23,7 @@ function getCommunes (location) {
     if (!alreadyIncluded) allCommunes.push(commune)
   })
 
-  return completeData(allCommunes)
+  return allCommunes
 }
 
 // adds data about:
@@ -35,7 +42,23 @@ function completeData (communes) {
       arrondissementsToAdd = arrondissementsToAdd.concat(arrondissements)
     }
   })
-  return communes.concat(arrondissementsToAdd)
+  const allCommunes = communes.concat(arrondissementsToAdd)
+  const excludeIds = ['haies', 'produits bois']
+  const childGroundTypes = GroundTypes
+    .filter((gt) => !gt.children && !excludeIds.includes(gt.stocksId))
+  allCommunes.forEach((commune) => {
+    const changes = {}
+    childGroundTypes.forEach((fromGt) => {
+      changes[fromGt.stocksId] = {}
+      childGroundTypes.forEach((toGt) => {
+        if (fromGt.stocksId === toGt.stocksId) return
+        const area = getAnnualSurfaceChangeFromData({ commune }, fromGt.stocksId, toGt.stocksId)
+        if (area) changes[fromGt.stocksId][toGt.stocksId] = area
+      })
+    })
+    commune.changes = changes
+  })
+  return allCommunes
 }
 
 // some communes have arrondissements which are administratively communes but will be referred to as arrondissements in this code.
@@ -65,5 +88,6 @@ const COMMUNES_WITH_ARRONDISSEMENTS = {
 }
 
 module.exports = {
-  getCommunes
+  getCommunes,
+  completeData
 }
