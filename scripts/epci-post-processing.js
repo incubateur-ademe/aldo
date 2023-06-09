@@ -26,7 +26,7 @@ try {
     if (epciCommunes.length) {
       epci.populationTotale = 0
       epciCommunes.forEach((c) => {
-        epci.populationTotale += +c.POPULATION
+        epci.populationTotale += +c.population
       })
     }
     if (epciLookup.epcis[epci.code].membres.length !== epci.nombreCommunes) {
@@ -38,7 +38,7 @@ try {
     epciLookup.totalPopulation += epci.populationTotale
   })
   communes.filter((c) => !c.epci).forEach((c) => {
-    epciLookup.totalPopulation += +c.POPULATION
+    epciLookup.totalPopulation += +c.population
   })
   const ignoredCommunes = []
   communes.forEach((c) => {
