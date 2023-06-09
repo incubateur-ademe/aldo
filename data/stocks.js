@@ -33,6 +33,7 @@ function getCarbonDensity (commune, groundType) {
 // NB: in the lookup the type names for ground data and the more specific biomass data
 // are placed on the same level, so some CLC codes are used in two types.
 function getArea (location, groundType) {
+  if (!location.commune) { console.log('getArea in data/stocks called wrong', location); return }
   if (groundType === 'haies') {
     return
   } else if (groundType.startsWith('forêt ')) {
@@ -69,17 +70,6 @@ function getArea (location, groundType) {
     }
   })
   return totalArea
-}
-
-function getAreaHaies (location) {
-  const csvFilePath = './dataByEpci/surface-haies.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const epciSiren = location.epci?.code || location.commune?.epci
-  const data = dataByEpci.filter(data => data.siren === epciSiren)
-  if (data.length > 1) {
-    console.log('WARNING: more than one haies surface area for siren: ', epciSiren)
-  }
-  return parseFloat(data[0].area)
 }
 
 // using IGN, not CLC, data for forests because it is more accurate
