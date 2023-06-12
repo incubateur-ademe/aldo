@@ -1,6 +1,6 @@
 const {
   getCarbonDensity,
-  getArea,
+  getAreaFromData,
   getBiomassCarbonDensity,
   getForestAreaData,
   getSignificantCarbonData,
@@ -10,7 +10,7 @@ const {
   // getAnnualWoodProductsHarvest,
   // getAnnualFranceWoodProductsHarvest,
   getForestLitterCarbonDensity,
-  getHedgerowsDataByCommune
+  getHedgerowsDataForCommunes
 } = require('../stocks')
 
 jest.mock('../communes', () => {
@@ -40,21 +40,11 @@ describe('The stocks data module', () => {
   })
 
   const areaPath = '../dataByCommune/clc18.csv.json'
-  it('returns area in hectares (ha) for ground type "cultures" and valid EPCI SIREN', () => {
+  it('returns area in hectares (ha) for ground type "cultures" and a commune', () => {
     jest.doMock(areaPath, () => {
       return [
         {
           insee: '01234',
-          code18: '211',
-          area: '10'
-        },
-        {
-          insee: '01235',
-          code18: '212',
-          area: '10'
-        },
-        {
-          insee: '01235',
           code18: '211',
           area: '10'
         },
@@ -96,10 +86,10 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getArea({ epci: { code: '200000172' } }, 'cultures')).toBe(80)
+    expect(getAreaFromData({ commune: { insee: '01234' } }, 'cultures')).toBe(60)
   })
 
-  it('returns area in hectares (ha) for ground type "prairies zones herbacées" and valid EPCI SIREN', () => {
+  it('returns area in hectares (ha) for ground type "prairies zones herbacées" and a commune', () => {
     jest.doMock(areaPath, () => {
       return [
         {
@@ -112,11 +102,6 @@ describe('The stocks data module', () => {
           code18: '321',
           area: '5'
         },
-        {
-          insee: '01235',
-          code18: '321',
-          area: '5'
-        },
         // to be ignored
         {
           insee: '01235',
@@ -125,7 +110,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getArea({ epci: { code: '200000172' } }, 'prairies zones herbacées')).toBe(20)
+    expect(getAreaFromData({ commune: { insee: '01234' } }, 'prairies zones herbacées')).toBe(15)
   })
 
   it('throws useful error when attempting to get area for ground type without type to CLC type mapping', () => {
@@ -140,7 +125,7 @@ describe('The stocks data module', () => {
     })
     let error
     try {
-      getArea({ epci: { code: '200000172' } }, 'lake')
+      getAreaFromData({ commune: { insee: '01234' } }, 'lake')
     } catch (e) {
       error = e
     }
@@ -479,11 +464,11 @@ describe('The stocks data module', () => {
     expect(getForestBiomassCarbonDensities({ epci: { code: epci } }, 'forêt peupleraie').dead).toBe(3.5)
   })
 
-  it('returns area of forest subtype (as ha) given valid EPCI SIREN', () => {
+  it('returns area of forest subtype (as ha) given a commune', () => {
     jest.doMock('../dataByCommune/surface-foret.csv.json', () => {
       return [
         {
-          INSEE_COM: '00000',
+          INSEE_COM: '1234',
           CODE_EPCI: '249500513',
           SUR_PEUPLERAIES: '30'
         },
@@ -494,15 +479,15 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    expect(getArea({ epci: { code: '249500513' } }, 'forêt peupleraie')).toBe(50)
+    expect(getAreaFromData({ commune: { insee: '01234' } }, 'forêt peupleraie')).toBe(30)
   })
 
   it('handles hedgerows area differently', () => {
-    expect(getArea({ epci: { code: '249500513' } }, 'haies')).toBe(undefined)
+    expect(getAreaFromData({ commune: { insee: '01234' } }, 'haies')).toBe(undefined)
   })
 
   describe('hedgerows', () => {
-    it('returns length (km) and carbon density of hedgerows given valid EPCI SIREN', () => {
+    it('returns length (km) and carbon density of hedgerows given a commune', () => {
       // NB: this file is per-department not per-commune, unlike what the folder name suggests
       jest.doMock('../dataByCommune/carbone-haies.csv.json', () => {
         return [
@@ -535,7 +520,7 @@ describe('The stocks data module', () => {
           }
         ]
       })
-      const data = getHedgerowsDataByCommune({ epci: { code: '249500513' } })
+      const data = getHedgerowsDataForCommunes({ communes: [{ insee: '01234' }, { insee: '01235' }] })
       expect(data.length).toBe(2)
       const first = data[0]
       expect(first.carbonDensity).toBe(10)
@@ -560,7 +545,7 @@ describe('The stocks data module', () => {
           }
         ]
       })
-      const data = getHedgerowsDataByCommune({ epci: { code: '249500513' } })
+      const data = getHedgerowsDataForCommunes({ communes: [{ insee: '01234' }, { insee: '01235' }] })
       const first = data[0]
       expect(first.carbonDensity).toBe(78)
     })

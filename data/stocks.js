@@ -46,7 +46,7 @@ function getAreaFromData (location, groundType) {
   if (groundType === 'haies') {
     return
   } else if (groundType.startsWith('forêt ')) {
-    return getAreaForests(location, groundType)
+    return getAreaForests(location.commune, groundType)
   }
   // consider using clcCodes in constants file
   // TODO: make more standardised keys?
@@ -82,17 +82,13 @@ function getAreaFromData (location, groundType) {
 // using IGN, not CLC, data for forests because it is more accurate
 // side effect being that the sum of the areas could be different to the
 // recorded size of the EPCI.
-function getAreaForests (location, forestType) {
+function getAreaForests (commune, forestType) {
   const csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
   let areaDataByCommune = []
-  if (location.epci) {
-    areaDataByCommune = areaData.filter(data => data.CODE_EPCI === location.epci.code)
-  } else if (location.commune) {
-    let code = location.commune.insee
-    if (code.startsWith('0')) code = code.slice(1)
-    areaDataByCommune = areaData.filter(data => data.INSEE_COM === code)
-  }
+  let code = commune.insee
+  if (code.startsWith('0')) code = code.slice(1)
+  areaDataByCommune = areaData.filter(data => data.INSEE_COM === code)
   let sum = 0
   const areaCompositionColumnName = {
     'forêt feuillu': 'SUR_FEUILLUS',
