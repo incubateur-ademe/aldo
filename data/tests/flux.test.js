@@ -388,51 +388,34 @@ describe('The flux data module', () => {
     // NB: in constants arbustifs and impermeable are the same codes
     describe('when final occupation is impermeable', () => {
       it('always returns 0 when initial occupation is shrubby', () => {
-        jest.doMock(areaChangePath, () => {
-          return [
-            {
-              commune: '01234',
-              code12: '111',
-              code18: '112',
-              area: '100'
-            },
-            {
-              commune: '01234',
-              code12: '121',
-              code18: '122',
-              area: '200'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              'sols artificiels arbustifs': {
+                'sols artificiels imperméabilisés': 50
+              }
             }
-          ]
-        })
-        const fromShrubby = getAnnualSurfaceChangeFromData(communeLocation, 'sols artificiels arbustifs', 'sols artificiels imperméabilisés')
+          }
+        }
+        const fromShrubby = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'sols artificiels arbustifs', 'sols artificiels imperméabilisés')
         expect(fromShrubby).toBe(0)
       })
 
       it('returns CLC change data when, for the same initial occupation, there is a large change to sols art with trees', () => {
         const from = 'cultures'
-        jest.doMock(areaChangePath, () => {
-          return [
-            {
-              commune: '01234',
-              code12: '213', // cultures
-              code18: '112', // sols art
-              area: '100'
-            },
-            {
-              commune: '01234',
-              code12: '241', // cultures
-              code18: '122', // sols art
-              area: '200'
-            },
-            {
-              commune: '01234',
-              code12: '242', // cultures
-              code18: '141', // sols art arborés
-              area: '600'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arborés et buissonants': 100
+              }
             }
-          ]
-        })
-        const fromCultures = getAnnualSurfaceChangeFromData(communeLocation, from, 'sols artificiels imperméabilisés')
+          }
+        }
+        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, {}, from, 'sols artificiels imperméabilisés')
         expect(fromCultures).toBe(50)
       })
 
@@ -614,74 +597,50 @@ describe('The flux data module', () => {
     })
 
     describe('when final occupation is sols art trees', () => {
-      it('returns 0 if the initial area is sols art arbustifs, prairies arborés, prairies arbusifs, vergers, vignes, or zones humides', () => {
-        jest.doMock(areaChangePath, () => {
-          return [
-            {
-              commune: '01234',
-              code12: '111', // sols art
-              code18: '141', // sols art arborés
-              area: '60'
-            },
-            {
-              commune: '01234',
-              code12: '323', // prai_arbo
-              code18: '141', // sols art arborés
-              area: '60'
-            },
-            {
-              commune: '01234',
-              code12: '322', // prai_arbu
-              code18: '141', // sols art arborés
-              area: '60'
-            },
-            {
-              commune: '01234',
-              code12: '222', // vergers
-              code18: '141', // sols art arborés
-              area: '60'
-            },
-            {
-              commune: '01234',
-              code12: '221', // vignes
-              code18: '141', // sols art arborés
-              area: '60'
-            },
-            {
-              commune: '01234',
-              code12: '411', // zones humides
-              code18: '141', // sols art arborés
-              area: '60'
+      it('returns 0 if the initial area is sols art arbustifs, prairies arborés, prairies arbustifs, vergers, vignes, or zones humides', () => {
+        const toObj = {
+          'sols artificiels arborés et buissonants': 10
+        }
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              'sols artificiels imperméabilisés': toObj,
+              'prairies zones arborées': toObj,
+              'prairies zones arbustives': toObj,
+              vergers: toObj,
+              vignes: toObj,
+              'zones humides': toObj
             }
-          ]
-        })
+          }
+        }
         const to = 'sols artificiels arborés et buissonants'
-        const fromSolsArtArbustifs = getAnnualSurfaceChangeFromData({ epci: siren }, 'sols artificiels arbustifs', to)
+        const fromSolsArtArbustifs = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'sols artificiels arbustifs', to)
         expect(fromSolsArtArbustifs).toBe(0)
-        const fromPraiArbo = getAnnualSurfaceChangeFromData({ epci: siren }, 'prairies zones arborées', to)
+        const fromPraiArbo = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'prairies zones arborées', to)
         expect(fromPraiArbo).toBe(0)
-        const fromPraiArbu = getAnnualSurfaceChangeFromData({ epci: siren }, 'prairies zones arbustives', to)
+        const fromPraiArbu = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'prairies zones arbustives', to)
         expect(fromPraiArbu).toBe(0)
-        const fromVergers = getAnnualSurfaceChangeFromData({ epci: siren }, 'vergers', to)
+        const fromVergers = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'vergers', to)
         expect(fromVergers).toBe(0)
-        const fromVignes = getAnnualSurfaceChangeFromData({ epci: siren }, 'vignes', to)
+        const fromVignes = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'vignes', to)
         expect(fromVignes).toBe(0)
-        const fromZonesHumides = getAnnualSurfaceChangeFromData({ epci: siren }, 'zones humides', to)
+        const fromZonesHumides = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'zones humides', to)
         expect(fromZonesHumides).toBe(0)
       })
 
       it('returns CLC yearly change for remaining initial types', () => {
-        jest.doMock(areaChangePath, () => {
-          return [
-            {
-              commune: '01234',
-              code12: '244', // cultures
-              code18: '141', // sols art
-              area: '60'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                'sols artificiels arborés et buissonants': 10
+              }
             }
-          ]
-        })
-        const fromCultures = getAnnualSurfaceChangeFromData({ commune: { insee: '01234' } }, 'cultures', 'sols artificiels arborés et buissonants')
+          }
+        }
+        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'cultures', 'sols artificiels arborés et buissonants')
         expect(fromCultures).toBe(10)
       })
     })
