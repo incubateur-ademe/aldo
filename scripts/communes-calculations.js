@@ -2,6 +2,7 @@
 // This is done once in advance rather than per-request since this data does not change per-request.
 // The JSON versions of the files must be generated before this script is run using the csvtojson.sh script.
 // To run, enter the scripts directory and call `node epci-post-processing`
+// TODO: write tests for this script
 
 const fs = require('fs')
 const communes = require('../data/dataByCommune/communes_17122018.csv.json')

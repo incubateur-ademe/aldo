@@ -11,20 +11,21 @@ function getCommunes (location) {
   const epciCommuneCodes = []
   epcis.forEach((epci) => epciCommuneCodes.push(...epci.communes))
   const allCommunes = []
-  epciCommuneCodes.forEach((insee) => allCommunes.push(communesData[insee]))
-  // epcis = epcis.map((epci) => epci.code)
-  // const communeCodes = 
-  // const allCommunes = communesData.filter((c) => epcis.includes(c.epci))
+  addCommunesIfUnique(allCommunes, epciCommuneCodes)
+
   const remainingCommunes = location.communes || []
   if (location.commune) remainingCommunes.push(location.commune)
-
-  // deduplicate communes from EPCIs
-  remainingCommunes.forEach((commune) => {
-    const alreadyIncluded = allCommunes.find((c) => c.insee === commune.insee)
-    if (!alreadyIncluded) allCommunes.push(commune)
-  })
+  addCommunesIfUnique(allCommunes, remainingCommunes)
 
   return allCommunes
+}
+
+function addCommunesIfUnique (communes, communesToAdd) {
+  communesToAdd.forEach((commune) => {
+    const insee = commune.insee || commune // can pass list of commune objects or insee codes
+    const alreadyIncluded = communes.find((c) => c.insee === insee)
+    if (!alreadyIncluded) communes.push(communesData[insee])
+  })
 }
 
 // adds data about:
