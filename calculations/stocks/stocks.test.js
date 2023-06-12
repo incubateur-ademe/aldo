@@ -18,8 +18,8 @@ jest.mock('../../data/stocks', () => {
     __esModule: true,
     ...originalModule,
     getArea: jest.fn((location, groundType) => {
-      if (location.commune.insee === 'no trees' && groundType === 'sols arborés') return 0
-      if (location.commune.insee === 'few trees' && groundType === 'sols arborés') return 5
+      if (location.commune.insee === 'no trees' && groundType === 'sols artificiels arborés et buissonants') return 0
+      if (location.commune.insee === 'few trees' && groundType === 'sols artificiels arborés et buissonants') return 5
       return 25
     }),
     getCarbonDensity: jest.fn((commune, groundType) => {

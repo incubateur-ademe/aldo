@@ -48,27 +48,10 @@ function getAreaFromData (location, groundType) {
   } else if (groundType.startsWith('forêt ')) {
     return getAreaForests(location.commune, groundType)
   }
-  // consider using clcCodes in constants file
-  // TODO: make more standardised keys?
-  const aldoTypeToClcCodes = {
-    cultures: ['211', '212', '213', '241', '242', '243', '244'],
-    prairies: ['231', '321', '322', '323'],
-    'prairies zones herbacées': ['231', '321'],
-    'prairies zones arbustives': ['322'],
-    'prairies zones arborées': ['323'],
-    vignes: ['221'],
-    vergers: ['222', '223'],
-    'sols arborés': ['141'], // aka "sols artificiels arborés et buissonants" in stocks_c tab
-    'sols artificiels non-arborés': ['111', '112', '121', '122', '123', '124', '131', '132', '133', '142'],
-    'sols artificiels imperméabilisés': ['111', '121', '122', '123', '124', '131', '132', '133', '142'],
-    'sols artificialisés': ['112'],
-    // TODO: ask about logic F39: area sols arbustifs stocks_c tab.
-    'zones humides': ['411', '412', '421', '422', '423', '511', '512', '521', '522', '523']
-  }
-  const clcCodes = aldoTypeToClcCodes[groundType]
+  const typeDetails = GroundTypes.find((gt) => gt.stocksId === groundType)
+  const clcCodes = typeDetails?.clcCodes
   if (!clcCodes) {
-    return 0
-    // throw new Error(`No CLC code mapping found for ground type '${groundType}'`)
+    throw new Error(`No CLC code mapping found for ground type '${groundType}'`)
   }
   const csvFilePath = './dataByCommune/clc18.csv'
   const areasByCommuneAndClcType = require(csvFilePath + '.json')

@@ -103,10 +103,10 @@ function getAreasSolsArtificiels (location, options) {
   const treeKey = 'sols artificiels arborés et buissonants'
 
   // start by estimating the area taken by each
-  const areaWithoutTrees = getArea(location, 'sols artificiels non-arborés', {})
+  const areaWithoutTrees = getArea(location, impermeableKey, {})
   let areaWithTrees = options.areas[treeKey]
   if (isNaN(areaWithTrees)) {
-    areaWithTrees = getArea(location, 'sols arborés', {})
+    areaWithTrees = getArea(location, treeKey, {})
   }
   const totalArea = areaWithoutTrees + areaWithTrees
 
