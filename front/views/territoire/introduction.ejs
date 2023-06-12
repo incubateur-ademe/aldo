@@ -2,7 +2,7 @@
   <%= pageTitle %>
 </h1>
 
-<!-- <% if (singleLocation?.code) { %>
+<% if (singleLocation?.code) { %>
 <div class="fr-grid-row">
   <div class="fr-col-12 fr-col-md-3">
     <p>
@@ -37,7 +37,7 @@
         <% for( let index=0; index < singleLocation.communes.length; index++ ) { %>
         <div class="fr-col-12 fr-sm-col-6 fr-col-md-4">
           <li>
-            <%= singleLocation.communes[index] %>
+            <a href="/commune/<%= singleLocation.communes[index] %>"><%= singleLocation.communes[index] %></a>
           </li>
         </div>
         <% } %>
@@ -81,7 +81,7 @@
 <ul>
   <% for( let index=0; index < epcis.length; index++ ) { %>
     <li>
-      <%= epcis[index].nom %> (<%= epcis[index].code %>)
+      <a href="/epci/<%= epcis[index].code %>"><%= epcis[index].nom %> (<%= epcis[index].code %>)</a>
     </li>
   <% } %>
 </ul>
@@ -91,11 +91,11 @@
 <ul>
   <% for( let index=0; index < communes.length; index++ ) { %>
     <li>
-      <%= communes[index].nom %> (<%= communes[index].insee %>)
+      <a href="/commune/<%= communes[index].insee %>"><%= communes[index].nom %> (<%= communes[index].insee %>)</a>
     </li>
   <% } %>
 </ul>
-<% } %> -->
+<% } %>
 
 <div class="fr-callout fr-my-3w">
   <p class="fr-callout__title fr-mb-1w">

@@ -26,13 +26,23 @@ function getCarbonDensity (commune, groundType) {
   return +carbonDensity
 }
 
+function getArea (location, groundType) {
+  if (!location.commune) { console.log('getArea in data/stocks called wrong', location); return }
+  const area = location.commune.clc18[groundType]
+  if (area >= 0) return area
+  else {
+    // console.log('no area saved for', location.commune?.insee, groundType)
+    return getAreaFromData(location, groundType)
+  }
+}
+
 // Gets the area in hectares (ha) of a given ground type in a location.
 // The ground types Corine Land Cover uses are different from the types used by ALDO,
 // so a mapping is used and the sum of ha of all matching CLC types is returned.
 // NB: in the lookup the type names for ground data and the more specific biomass data
 // are placed on the same level, so some CLC codes are used in two types.
-function getArea (location, groundType) {
-  if (!location.commune) { console.log('getArea in data/stocks called wrong', location); return }
+function getAreaFromData (location, groundType) {
+  if (!location.commune) { console.log('getAreaFromData in data/stocks called wrong', location); return }
   if (groundType === 'haies') {
     return
   } else if (groundType.startsWith('forêt ')) {
@@ -281,14 +291,15 @@ function getForestLitterCarbonDensity (subtype) {
   return 9 // TODO: ask follow up on source of this data
 }
 
-function getHedgerowsDataByCommune (location) {
-  if (!location.commune) { console.log('getHedgerowsDataByCommune called wrong', location); return }
+function getHedgerowsDataForCommunes (location) {
+  if (!location.communes) { console.log('getHedgerowsDataForCommunes called wrong', location); return }
   const carbonCsvFilePath = './dataByCommune/carbone-haies.csv'
   const carbonData = require(carbonCsvFilePath + '.json')
   const csvFilePath = './dataByCommune/haie-clc18.csv'
   let lengthData = require(csvFilePath + '.json')
 
-  lengthData = lengthData.filter((data) => location.commune === data.INSEE_COM && data.TOTKM_HAIE)
+  const communes = location.communes.map((c) => c.insee)
+  lengthData = lengthData.filter((data) => communes.includes(data.INSEE_COM) && data.TOTKM_HAIE)
 
   const excludeIds = ['produits bois', 'haies']
   // ignore child types as well
@@ -317,6 +328,7 @@ function getHedgerowsDataByCommune (location) {
 module.exports = {
   getCarbonDensity,
   getArea,
+  getAreaFromData,
   getForestAreaData,
   getSignificantCarbonData,
   getCarbonDataForCommuneAndComposition,
@@ -326,5 +338,5 @@ module.exports = {
   getForestLitterCarbonDensity,
   getAnnualWoodProductsHarvest,
   getAnnualFranceWoodProductsHarvest,
-  getHedgerowsDataByCommune
+  getHedgerowsDataForCommunes
 }

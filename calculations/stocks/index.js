@@ -4,7 +4,7 @@ const {
   getBiomassCarbonDensity,
   getForestLitterCarbonDensity,
   getForestBiomassCarbonDensities,
-  getHedgerowsDataByCommune
+  getHedgerowsDataForCommunes
 } = require('../../data/stocks')
 const {
   getCommunes
@@ -145,7 +145,7 @@ function getAreasSolsArtificiels (location, options) {
 }
 
 function getStocksHedgerows (location, options) {
-  const data = getHedgerowsDataByCommune(location)
+  const data = getHedgerowsDataForCommunes(location)
   const originalArea = sumByProperty(data, 'length')
   const carbonDensity = weightedAverage(data, 'carbonDensity', 'length')
   let area = originalArea
@@ -240,7 +240,7 @@ function getStocks (location, options) {
   })
   const stocks = aggregateStocks(stocksForLocations)
   annotateAreaCustomisations(stocks, options, stocks)
-  stocks.haies = getStocksHedgerows(location, options)
+  stocks.haies = getStocksHedgerows({ communes }, options)
 
   stocks.total = getTotalStock(stocks)
   stocks.totalEquivalent = stocks.total * 44 / 12
