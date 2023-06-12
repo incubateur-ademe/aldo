@@ -1,6 +1,7 @@
 const {
   getAnnualGroundCarbonFlux,
   getAllAnnualFluxes,
+  getAnnualSurfaceChange,
   getAnnualSurfaceChangeFromData,
   getForestLitterFlux
 } = require('../flux')
@@ -383,10 +384,10 @@ describe('The flux data module', () => {
   })
 
   describe('sols artificiels area changes', () => {
+    const communeLocation = { commune: { insee: '01234' } }
     // NB: in constants arbustifs and impermeable are the same codes
     describe('when final occupation is impermeable', () => {
       it('always returns 0 when initial occupation is shrubby', () => {
-        const siren = '200007177'
         jest.doMock(areaChangePath, () => {
           return [
             {
@@ -396,20 +397,18 @@ describe('The flux data module', () => {
               area: '100'
             },
             {
-              commune: '01235',
+              commune: '01234',
               code12: '121',
               code18: '122',
               area: '200'
             }
           ]
         })
-        const fromShrubby = getAnnualSurfaceChangeFromData({ epci: siren }, 'sols artificiels arbustifs', 'sols artificiels imperméabilisés')
+        const fromShrubby = getAnnualSurfaceChangeFromData(communeLocation, 'sols artificiels arbustifs', 'sols artificiels imperméabilisés')
         expect(fromShrubby).toBe(0)
       })
-      // TODO: what about if has data overrides?
 
       it('returns CLC change data when, for the same initial occupation, there is a large change to sols art with trees', () => {
-        const siren = '200007177'
         const from = 'cultures'
         jest.doMock(areaChangePath, () => {
           return [
@@ -420,194 +419,133 @@ describe('The flux data module', () => {
               area: '100'
             },
             {
-              commune: '01235',
+              commune: '01234',
               code12: '241', // cultures
               code18: '122', // sols art
               area: '200'
             },
             {
-              commune: '01235',
+              commune: '01234',
               code12: '242', // cultures
               code18: '141', // sols art arborés
               area: '600'
             }
           ]
         })
-        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, from, 'sols artificiels imperméabilisés')
+        const fromCultures = getAnnualSurfaceChangeFromData(communeLocation, from, 'sols artificiels imperméabilisés')
         expect(fromCultures).toBe(50)
       })
 
-      it('returns CLC change data when, for the same initial occupation, there is a large change to sols art with trees, with custom portion', () => {
-        const siren = '200007177'
+      it('returns yearly CLC change data when, for the same initial occupation, there is a large change to sols art with trees, with custom portion', () => {
         const from = 'cultures'
-        jest.doMock(areaChangePath, () => {
-          return [
-            {
-              commune: '01234',
-              code12: '213', // cultures
-              code18: '112', // sols art
-              area: '100'
-            },
-            {
-              commune: '01235',
-              code12: '241', // cultures
-              code18: '122', // sols art
-              area: '200'
-            },
-            {
-              commune: '01235',
-              code12: '242', // cultures
-              code18: '141', // sols art arborés
-              area: '600'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arborés et buissonants': 100
+              }
             }
-          ]
-        })
-        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, { proportionSolsImpermeables: 0.34 }, from, 'sols artificiels imperméabilisés')
+          }
+        }
+        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, { proportionSolsImpermeables: 0.34 }, from, 'sols artificiels imperméabilisés')
         expect(fromCultures).toBe(50)
       })
 
       it('returns the impermeable portion of the sum of changes to impermeable and to sols art with trees, with custom portion', () => {
-        const siren = '200007177'
         const from = 'cultures'
-        jest.doMock(areaChangePath, () => {
-          return [
-            {
-              commune: '01234',
-              code12: '213', // cultures
-              code18: '112', // sols art
-              area: '100'
-            },
-            {
-              commune: '01235',
-              code12: '241', // cultures
-              code18: '122', // sols art
-              area: '200'
-            },
-            {
-              commune: '01235',
-              code12: '242', // cultures
-              code18: '141', // sols art arborés
-              area: '600'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arborés et buissonants': 100
+              }
             }
-          ]
-        })
-        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, { proportionSolsImpermeables: 0.33 }, from, 'sols artificiels imperméabilisés')
+          }
+        }
+        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, { proportionSolsImpermeables: 0.33 }, from, 'sols artificiels imperméabilisés')
         expect(fromCultures).toBe(49.5)
       })
 
       it('returns the impermeable portion of the sum of changes to impermeable and to sols art with trees', () => {
-        const siren = '200007177'
         const from = 'cultures'
-        jest.doMock(areaChangePath, () => {
-          return [
-            {
-              commune: '01234',
-              code12: '213', // cultures
-              code18: '112', // sols art
-              area: '100'
-            },
-            {
-              commune: '01235',
-              code12: '241', // cultures
-              code18: '122', // sols art
-              area: '200'
-            },
-            {
-              commune: '01235',
-              code12: '242', // cultures
-              code18: '141', // sols art arborés
-              area: '60'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arborés et buissonants': 10
+              }
             }
-          ]
-        })
-        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, from, 'sols artificiels imperméabilisés')
+          }
+        }
+        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, {}, from, 'sols artificiels imperméabilisés')
         expect(fromCultures).toBe(48)
       })
     })
     // TODO: test if doubling up on changes to shrubby and impermeable since they use the same CLC codes
     describe('when final occupation is shrubby', () => {
       it('always returns 0 when initial occupation is impermeable', () => {
-        const siren = '200007177'
-        jest.doMock(areaChangePath, () => {
-          return [
-            {
-              commune: '01234',
-              code12: '111', // sols art
-              code18: '112', // sols art
-              area: '100'
-            },
-            {
-              commune: '01235',
-              code12: '121', // sols art
-              code18: '122', // sols art
-              area: '200'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                // these two share CLC codes so will always have the same value
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arbustifs': 50
+              }
             }
-          ]
-        })
-        const toShrubby = getAnnualSurfaceChangeFromData({ epci: siren }, 'sols artificiels imperméabilisés', 'sols artificiels arbustifs')
+          }
+        }
+        const toShrubby = getAnnualSurfaceChange(communeLocationWithChanges, 'sols artificiels imperméabilisés', 'sols artificiels arbustifs')
         expect(toShrubby).toBe(0)
       })
       // TODO: what about if has data overrides?
 
       it('for forest subtypes, if the change to sols art trees is smaller than the green portion of remaining sols art, return the green portion of remaining sols art', () => {
-        const siren = '200007177'
         const from = 'forêt mixte'
-        jest.doMock(areaChangePath, () => {
-          return [
-            {
-              commune: '01234',
-              code12: '313', // forêt mixte
-              code18: '112', // sols art
-              area: '100'
-            },
-            {
-              commune: '01235',
-              code12: '324', // forêt mixte
-              code18: '122', // sols art
-              area: '200'
-            },
-            {
-              commune: '01235',
-              code12: '324', // forêt mixte
-              code18: '141', // sols art arborés
-              area: '6'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              'forêt mixte': {
+                'sols artificiels arborés et buissonants': 1,
+                // these two share CLC codes so will always have the same value
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arbustifs': 50
+              }
             }
-          ]
-        })
+          }
+        }
         // proportion green = 0.2; change sols art = 50
         // => threshold = 0.2 * 50 = 10
-        const fromForestMixed = getAnnualSurfaceChangeFromData({ epci: siren }, from, 'sols artificiels arbustifs')
+        const fromForestMixed = getAnnualSurfaceChange(communeLocationWithChanges, {}, from, 'sols artificiels arbustifs')
         expect(fromForestMixed).toBeCloseTo(10, 0)
       })
 
       it('for forest subtypes, if the change to sols art trees is smaller than the green portion of remaining sols art, return the green portion of remaining sols art, with custom portion', () => {
-        const siren = '200007177'
         const from = 'forêt mixte'
-        jest.doMock(areaChangePath, () => {
-          return [
-            {
-              commune: '01234',
-              code12: '313', // forêt mixte
-              code18: '112', // sols art
-              area: '100'
-            },
-            {
-              commune: '01235',
-              code12: '324', // forêt mixte
-              code18: '122', // sols art
-              area: '200'
-            },
-            {
-              commune: '01235',
-              code12: '324', // forêt mixte
-              code18: '141', // sols art arborés
-              area: '6'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              'forêt mixte': {
+                'sols artificiels arborés et buissonants': 1,
+                // these two share CLC codes so will always have the same value
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arbustifs': 50
+              }
             }
-          ]
-        })
+          }
+        }
         // proportion green = 0.4; change sols art = 50
         // => threshold = 0.4 * 50 = 20
-        const fromForestMixed = getAnnualSurfaceChangeFromData({ epci: siren }, { proportionSolsImpermeables: 0.6 }, from, 'sols artificiels arbustifs')
+        const fromForestMixed = getAnnualSurfaceChange(communeLocationWithChanges, { proportionSolsImpermeables: 0.6 }, from, 'sols artificiels arbustifs')
         expect(fromForestMixed).toBeCloseTo(20, 0)
       })
 
@@ -628,76 +566,55 @@ describe('The flux data module', () => {
       //   })
       //   // proportion green = 0.4; change sols art = 50
       //   // => threshold = 0.4 * 50 = 20
-      //   const fromForestMixed = getAnnualSurfaceChangeFromData({ epci: siren }, {}, from, 'sols artificiels arbustifs')
+      //   const fromForestMixed = getAnnualSurfaceChangeFromData(communeLocation, {}, from, 'sols artificiels arbustifs')
       //   expect(fromForestMixed).toBe(0)
       // })
 
       it('if the change to sols art trees is smaller than the green portion of the total change to sols art, return the green portion of the total change to sols art, minus the tree change', () => {
-        const siren = '200007177'
         const from = 'cultures'
-        jest.doMock(areaChangePath, () => {
-          return [
-            {
-              commune: '01234',
-              code12: '243', // cultures
-              code18: '112', // sols art
-              area: '100'
-            },
-            {
-              commune: '01235',
-              code12: '243', // cultures
-              code18: '122', // sols art
-              area: '200'
-            },
-            {
-              commune: '01235',
-              code12: '243', // cultures
-              code18: '141', // sols art arborés
-              area: '6'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                'sols artificiels arborés et buissonants': 1,
+                // these two share CLC codes so will always have the same value
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arbustifs': 50
+              }
             }
-          ]
-        })
+          }
+        }
         // proportion green = 0.4; change sols art = 50
         // => threshold = 0.2 * 50 = 10 (10 - 1)
-        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, from, 'sols artificiels arbustifs')
+        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, {}, from, 'sols artificiels arbustifs')
         expect(fromCultures).toBeCloseTo(9, 0)
       })
 
       it('if the change to sols art trees is smaller than the green portion of the total change to sols art, return the green portion of the total change to sols art, minus the tree change, with custom proportion', () => {
-        const siren = '200007177'
         const from = 'cultures'
-        jest.doMock(areaChangePath, () => {
-          return [
-            {
-              commune: '01234',
-              code12: '243', // cultures
-              code18: '112', // sols art
-              area: '100'
-            },
-            {
-              commune: '01235',
-              code12: '243', // cultures
-              code18: '122', // sols art
-              area: '200'
-            },
-            {
-              commune: '01235',
-              code12: '243', // cultures
-              code18: '141', // sols art arborés
-              area: '6'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                'sols artificiels arborés et buissonants': 1,
+                // these two share CLC codes so will always have the same value
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arbustifs': 50
+              }
             }
-          ]
-        })
+          }
+        }
         // proportion green = 0.4; change sols art = 50
         // => threshold = 0.4 * 50 = 20 (20 - 1)
-        const fromCultures = getAnnualSurfaceChangeFromData({ epci: siren }, { proportionSolsImpermeables: 0.6 }, from, 'sols artificiels arbustifs')
+        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, { proportionSolsImpermeables: 0.6 }, from, 'sols artificiels arbustifs')
         expect(fromCultures).toBeCloseTo(19, 0)
       })
     })
 
     describe('when final occupation is sols art trees', () => {
       it('returns 0 if the initial area is sols art arbustifs, prairies arborés, prairies arbusifs, vergers, vignes, or zones humides', () => {
-        const siren = '200007177'
         jest.doMock(areaChangePath, () => {
           return [
             {

@@ -268,7 +268,7 @@ function cToCo2e (valueC) {
 }
 
 function getAnnualSurfaceChange (location, options, from, to) {
-  const yearlyAreaChange = location.commune.changes[from][to] || 0
+  const yearlyAreaChange = location.commune.changes[from]?.[to] || 0
   const solsArtificielsException = getSolsArtificielsException(location, options, from, to, yearlyAreaChange)
   if (solsArtificielsException !== undefined) {
     return solsArtificielsException
