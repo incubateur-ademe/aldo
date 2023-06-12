@@ -6,7 +6,7 @@ jest.mock('../../data/communes', () => {
     getCommunes: jest.fn((location) => {
       if (location.epcis) return [{ insee: '01234' }, { insee: '01235' }, { insee: '11234' }]
       if (location.commune) return [location.commune]
-      return [{ insee: '01234' }, { insee: '01235' }]
+      return location.communes || [{ insee: '01234' }, { insee: '01235' }]
     })
   }
 })
@@ -80,8 +80,8 @@ jest.mock('../../data/stocks', () => {
         bi: 200
       }
     }),
-    getHedgerowsDataByCommune: jest.fn((location) => {
-      if (location.epci) {
+    getHedgerowsDataForCommunes: jest.fn((location) => {
+      if (location.communes.length === 2) {
         return [
           {
             department: 2,
@@ -96,7 +96,7 @@ jest.mock('../../data/stocks', () => {
             byGroundType: {}
           }
         ]
-      } else if (location.commune) {
+      } else if (location.communes.length === 1) {
         return [
           {
             department: 2,
@@ -105,11 +105,17 @@ jest.mock('../../data/stocks', () => {
             byGroundType: {}
           }
         ]
-      } else if (location.communes) {
+      } else if (location.communes.length === 3) {
         return [
           {
             department: 2,
-            length: 10,
+            length: 2,
+            carbonDensity: 50,
+            byGroundType: {}
+          },
+          {
+            department: 2,
+            length: 8,
             carbonDensity: 50,
             byGroundType: {}
           },
@@ -294,7 +300,7 @@ describe('The stocks calculation module', () => {
     })
 
     it('returns the stock as the sum of the products of the length and carbon density for a grouping', () => {
-      const stocks = getStocks({ communes: [{ departement: 2 }, { departement: 3 }] })
+      const stocks = getStocks({ communes: [{ departement: 2 }, { departement: 2 }, { departement: 3 }] })
       const hedgerows = stocks.haies
       expect(hedgerows.area).toBe(30)
       expect(hedgerows.totalDensity).toBe(30) // weighted average
