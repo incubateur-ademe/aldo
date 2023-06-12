@@ -1,6 +1,7 @@
 const communesData = require('./dataByCommune/communes.json')
 const zpcByCommune = require('./dataByCommune/zpc.csv.json')
 const { getAnnualSurfaceChangeFromData } = require('./flux')
+const { getArea } = require('./stocks')
 const { GroundTypes } = require('../calculations/constants')
 
 function getCommunes (location) {
@@ -48,8 +49,10 @@ function completeData (communes) {
     .filter((gt) => !gt.children && !excludeIds.includes(gt.stocksId))
   allCommunes.forEach((commune) => {
     const changes = {}
+    const clc18 = {}
     childGroundTypes.forEach((fromGt) => {
       changes[fromGt.stocksId] = {}
+      clc18[fromGt.stocksId] = getArea({ commune }, fromGt.stocksId)
       childGroundTypes.forEach((toGt) => {
         if (fromGt.stocksId === toGt.stocksId) return
         const area = getAnnualSurfaceChangeFromData({ commune }, fromGt.stocksId, toGt.stocksId)
@@ -57,6 +60,7 @@ function completeData (communes) {
       })
     })
     commune.changes = changes
+    commune.clc18 = clc18
   })
   return allCommunes
 }

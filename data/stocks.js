@@ -57,16 +57,15 @@ function getArea (location, groundType) {
   }
   const clcCodes = aldoTypeToClcCodes[groundType]
   if (!clcCodes) {
-    throw new Error(`No CLC code mapping found for ground type '${groundType}'`)
+    return 0
+    // throw new Error(`No CLC code mapping found for ground type '${groundType}'`)
   }
   const csvFilePath = './dataByCommune/clc18.csv'
   const areasByCommuneAndClcType = require(csvFilePath + '.json')
   let totalArea = 0
-  areasByCommuneAndClcType.forEach((areaData) => {
-    if (location.commune.insee === areaData.insee && clcCodes.includes(areaData.code18)) {
-      totalArea += +areaData.area
-    }
-  })
+  areasByCommuneAndClcType
+    .filter((areaData) => location.commune.insee === areaData.insee && clcCodes.includes(areaData.code18))
+    .forEach((areaData) => { totalArea += +areaData.area })
   return totalArea
 }
 
