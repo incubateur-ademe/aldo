@@ -71,7 +71,6 @@ async function territoryHandler (req, res) {
     stocks,
     charts: stocks && charts(stocks),
     formatNumber (number, fractionDigits = 0) {
-      if (!number) return
       return number.toLocaleString('fr-FR', {
         minimumFractionDigits: fractionDigits,
         maximumFractionDigits: fractionDigits
