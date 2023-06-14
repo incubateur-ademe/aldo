@@ -23,8 +23,8 @@ function getCommunes (location) {
 function addCommunesIfUnique (communes, communesToAdd) {
   communesToAdd.forEach((commune) => {
     const insee = commune.insee || commune // can pass list of commune objects or insee codes
-    const alreadyIncluded = communes.find((c) => c.insee === insee)
-    if (!alreadyIncluded) communes.push(communesData[insee])
+    const alreadyIncluded = communes.some((c) => c.insee === insee)
+    if (!alreadyIncluded) communes.push(commune.insee ? commune : communesData[insee])
   })
 }
 
