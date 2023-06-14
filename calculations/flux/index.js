@@ -48,10 +48,9 @@ function convertN2O (flux) {
 
 function getAnnualFluxes (location, options) {
   const communes = getCommunes(location)
-  // console.log(communes)
   options = options || {}
   const fluxes = []
-  // TODO: area overrides should be at regroupement level, not per-location
+
   communes.forEach((commune) => {
     fluxes.push(...getFluxesForLocation({ commune }, options))
   })
@@ -61,12 +60,14 @@ function getAnnualFluxes (location, options) {
 
   fluxes.push(...getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas))
 
+  const areas = areaChangesByGroundType(communes, options)
   const { summary, biomassSummary, total } = fluxSummary(fluxes, options)
 
   return {
     allFlux: fluxes,
     summary,
     biomassSummary,
+    areas,
     total
   }
 }
@@ -224,6 +225,39 @@ function forestBiomassGrowthSummary (allFlux, options) {
     }
   }
   return forestBiomassSummaryByType
+}
+
+function areaChangesByGroundType (communes, options) {
+  const changes = {}
+  const excludeIds = ['haies', 'produits bois']
+  const childGroundTypes = GroundTypes
+    .filter((gt) => !gt.children && !excludeIds.includes(gt.stocksId))
+  communes.forEach((commune) => {
+    childGroundTypes.forEach((from) => {
+      const fromGt = from.stocksId
+      if (!changes[fromGt]) changes[fromGt] = {}
+      childGroundTypes.forEach((to) => {
+        const toGt = to.stocksId
+        if (fromGt === toGt) return
+
+        if (!changes[fromGt][toGt]) changes[fromGt][toGt] = { originalArea: 0 }
+
+        changes[fromGt][toGt].originalArea += getAnnualSurfaceChangeData({ commune }, options, fromGt, toGt)
+        changes[fromGt][toGt].area = changes[fromGt][toGt].originalArea
+
+        if (options.areaChanges) {
+          // sometimes from isn't defined because of the special cases of forest biomass
+          const key = `${from.altFluxId || from.fluxId}_${to.altFluxId || to.fluxId}`
+          if (options.areaChanges[key] >= 0) {
+            // this area is not summed.
+            changes[fromGt][toGt].area = options.areaChanges[key]
+            changes[fromGt][toGt].areaModified = true
+          }
+        }
+      })
+    })
+  })
+  return changes
 }
 
 function sumByProperty (objArray, key) {

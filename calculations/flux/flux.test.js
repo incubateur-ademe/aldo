@@ -23,8 +23,9 @@ jest.mock('../../data/flux', () => {
           'forêt conifere': 3
         }
       }[from]
-      return areaChanges ? areaChanges[to] : undefined
+      return areaChanges ? areaChanges[to] : 0
     }),
+    // this is called once per commune
     getAllAnnualFluxes: jest.fn(() => {
       return [
         {
@@ -296,4 +297,62 @@ describe('The flux calculation module', () => {
     })
   })
   // TODO: should be able to override area from a prairie subtype to another
+
+  it('aggregates the area changes per-commune into a hash table to provide a total area change per ground type pair for the grouping', () => {
+    const commune1 = {
+      insee: '01234',
+      changes: {
+        cultures: {
+          vignes: 10
+        }
+      }
+    }
+    const commune2 = {
+      insee: '01235',
+      changes: {
+        cultures: {
+          vignes: 20
+        }
+      }
+    }
+    const communes = [commune1, commune2]
+    const fluxes = getAnnualFluxes({ communes }, { areaChanges: { cult_verg: 10 } })
+    const fluxAreaSummary = fluxes.areas
+    expect(fluxAreaSummary).toBeDefined()
+    expect(fluxAreaSummary.cultures.vignes.area).toBe(6)
+    expect(fluxAreaSummary.cultures.vignes.originalArea).toBe(6)
+    expect(fluxAreaSummary.cultures.vignes.areaModified).toBe(undefined)
+    expect(fluxAreaSummary.cultures.vergers.area).toBe(10)
+    expect(fluxAreaSummary.cultures.vergers.originalArea).toBe(8)
+    expect(fluxAreaSummary.cultures.vergers.areaModified).toBe(true)
+  })
+
+  // it('allows area overrides, updating the sequestration with the original weighted average for flux multiplied by new area', () => {
+  //   const communes = [
+  //     {
+  //       insee: '00000',
+  //       zpc: '1',
+  //       changes: {
+  //         cultures: {
+  //           vignes: 100
+  //         }
+  //       }
+  //     },
+  //     {
+  //       insee: '11111',
+  //       zpc: '2',
+  //       changes: {
+  //         cultures: {
+  //           vignes: 200
+  //         }
+  //       }
+  //     }
+  //   ]
+  //   const fluxes = getAnnualFluxes({ communes }, { areaChanges: { cult_vign: 20 } })
+  //   const fromCulturesToVignes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol')
+  //   expect(fromCulturesToVignes.length).toBe(1)
+  //   const flux = fromCulturesToVignes[0]
+  //   expect(flux.area).toBe(20)
+  //   expect(flux.annualFlux).toBe()
+  // })
 })

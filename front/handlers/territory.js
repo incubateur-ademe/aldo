@@ -84,6 +84,7 @@ async function territoryHandler (req, res) {
     },
     simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides'],
     fluxSummary: flux?.summary,
+    fluxAreas: flux?.areas,
     allFlux: flux?.allFlux,
     sortedFluxKeys: getSortedFluxKeys(flux),
     fluxCharts: fluxCharts(flux),
