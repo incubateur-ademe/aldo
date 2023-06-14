@@ -160,8 +160,15 @@ describe('The flux calculation module', () => {
   })
 
   it('adds N2O entries for emissions', () => {
+    // not strictly testing functionality, this is a sanity check for later use of variable
+    const communeCount = 7
+    expect(epci.communes.length).toBe(communeCount)
+
+    // the actual test
     const fluxes = getAnnualFluxes({ epci })
-    const flux = fluxes.allFlux[ORIGINAL_FLUX_COUNT]
+    const n20Fluxes = fluxes.allFlux.filter((f) => f.reservoir === 'sol et litière')
+    expect(n20Fluxes.length).toBe(communeCount) // only emission is from cultures -> vignes
+    const flux = n20Fluxes[0]
     expect(flux.gas).toEqual('N2O')
     expect(flux.reservoir).toEqual('sol et litière')
     // value calculated from original spreadsheet
