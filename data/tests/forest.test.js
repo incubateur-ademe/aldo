@@ -1,6 +1,6 @@
 const {
   // getAnnualGroundCarbonFlux,
-  // getAllAnnualFluxes,
+  // getFluxReferenceValues,
   // getAnnualSurfaceChange,
   getForestBiomassFluxesByCommune
 } = require('../flux')

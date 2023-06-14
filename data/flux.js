@@ -205,7 +205,7 @@ function yearMultiplier (reservoir, from, to) {
 
 // returns all known fluxes for from - to combinations
 // TODO: could make more efficient by opening all the files and finding the location data once
-function getAllAnnualFluxes (location, options) {
+function getFluxReferenceValues (location) {
   let fluxes = []
   for (const fromGt of GroundTypes) {
     const from = fromGt.stocksId
@@ -446,7 +446,7 @@ function getForestBiomassFluxesByCommune (location) {
 
 module.exports = {
   getAnnualGroundCarbonFlux,
-  getAllAnnualFluxes,
+  getFluxReferenceValues,
   getForestLitterFlux,
   getAnnualSurfaceChange,
   getAnnualSurfaceChangeFromData,

@@ -26,7 +26,7 @@ jest.mock('../../data/flux', () => {
       return areaChanges ? areaChanges[to] : 0
     }),
     // this is called once per commune
-    getAllAnnualFluxes: jest.fn(() => {
+    getFluxReferenceValues: jest.fn(() => {
       return [
         {
           from: 'cultures',
@@ -311,32 +311,23 @@ describe('The flux calculation module', () => {
     expect(fluxAreaSummary.cultures.vergers.areaModified).toBe(true)
   })
 
-  // it('allows area overrides, updating the sequestration with the original weighted average for flux multiplied by new area', () => {
-  //   const communes = [
-  //     {
-  //       insee: '00000',
-  //       zpc: '1',
-  //       changes: {
-  //         cultures: {
-  //           vignes: 100
-  //         }
-  //       }
-  //     },
-  //     {
-  //       insee: '11111',
-  //       zpc: '2',
-  //       changes: {
-  //         cultures: {
-  //           vignes: 200
-  //         }
-  //       }
-  //     }
-  //   ]
-  //   const fluxes = getAnnualFluxes({ communes }, { areaChanges: { cult_vign: 20 } })
-  //   const fromCulturesToVignes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol')
-  //   expect(fromCulturesToVignes.length).toBe(1)
-  //   const flux = fromCulturesToVignes[0]
-  //   expect(flux.area).toBe(20)
-  //   expect(flux.annualFlux).toBe()
-  // })
+  it('allows area overrides, updating the sequestration with the original weighted average for flux multiplied by new area', () => {
+    const communes = [{ insee: '01234' }, { insee: '01235' }]
+
+    const fluxes = getAnnualFluxes({ communes }, {})
+    const cultVignFluxes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol')
+    expect(cultVignFluxes.length).toBe(2)
+
+    const modifiedFluxes = getAnnualFluxes({ communes }, { areaChanges: { cult_vign: 10 } })
+    const modifiedCultVignFluxes = modifiedFluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol')
+    expect(modifiedCultVignFluxes.length).toBe(1)
+    const flux = modifiedCultVignFluxes[0]
+    expect(flux.value).toBe(40)
+    // TODO: test the weighted averaging for flux.flux
+
+    // TODO: test impact on related flux:
+    // - biomasse
+    // - N20
+    // - forest litter
+  })
 })

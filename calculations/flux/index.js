@@ -1,5 +1,5 @@
 const {
-  getAllAnnualFluxes,
+  getFluxReferenceValues,
   getAnnualSurfaceChange: getAnnualSurfaceChangeData
 } = require('../../data/flux')
 const { getCommunes } = require('../../data/communes')
@@ -56,7 +56,6 @@ function getAnnualFluxes (location, options) {
   })
   // TODO: aggregations for display
   //  - produits bois details
-  //  - how to deal with custom areas?
 
   fluxes.push(...getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas))
 
@@ -73,7 +72,7 @@ function getAnnualFluxes (location, options) {
 }
 
 function getFluxesForLocation (location, options) {
-  const locationFluxes = getAllAnnualFluxes(location, options)
+  const locationFluxes = getFluxReferenceValues(location)
   locationFluxes.forEach(getAreaAndCalculateValue(location, options))
 
   locationFluxes.push(...getNitrousOxideEmissions(locationFluxes))
