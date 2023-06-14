@@ -38,6 +38,23 @@ jest.mock('../dataByCommune/zpc.csv.json', () => {
   ]
 })
 
+jest.mock('../dataByCommune/clc18-change.csv.json', () => {
+  return [
+    {
+      commune: '01234',
+      code12: '221',
+      code18: '111',
+      area: '6'
+    },
+    {
+      commune: '01234',
+      code12: '221',
+      code18: '211',
+      area: '12'
+    }
+  ]
+})
+
 describe('The commune fetching helper', () => {
   it('Can fetch communes by SIREN EPCI', () => {
     const communes = getCommunes({ epci: { code: '200007177', communes: ['01234', '01235'] } })
@@ -90,6 +107,8 @@ describe('The commune fetching helper', () => {
       expect(communes.length).toBe(2)
       expect(communes[0].insee).toBe('01234')
       expect(communes[0].changes).toBeDefined()
+      expect(communes[0].changes.vignes['sols artificiels imperméabilisés']).toBe(1)
+      expect(communes[0].changes.vignes.cultures).toBe(2)
     })
   })
 })
