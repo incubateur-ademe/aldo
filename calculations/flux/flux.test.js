@@ -299,23 +299,7 @@ describe('The flux calculation module', () => {
   // TODO: should be able to override area from a prairie subtype to another
 
   it('aggregates the area changes per-commune into a hash table to provide a total area change per ground type pair for the grouping', () => {
-    const commune1 = {
-      insee: '01234',
-      changes: {
-        cultures: {
-          vignes: 10
-        }
-      }
-    }
-    const commune2 = {
-      insee: '01235',
-      changes: {
-        cultures: {
-          vignes: 20
-        }
-      }
-    }
-    const communes = [commune1, commune2]
+    const communes = [{ insee: '01234' }, { insee: '01235' }]
     const fluxes = getAnnualFluxes({ communes }, { areaChanges: { cult_verg: 10 } })
     const fluxAreaSummary = fluxes.areas
     expect(fluxAreaSummary).toBeDefined()
