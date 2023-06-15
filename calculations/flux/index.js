@@ -29,7 +29,7 @@ function getAnnualFluxes (location, options) {
     fluxes.push(...getFluxesForCommune({ commune }, options))
   })
   const { areas, changePairs } = areaChangesByGroundType(communes, options)
-  changePairs.forEach((changePair) => {
+  Object.values(changePairs).forEach((changePair) => {
     const from = changePair.from
     const to = changePair.to
     fluxes = replaceWithOverride(fluxes, areas, from, to, 'sol')
@@ -121,6 +121,7 @@ function replaceWithOverride (fluxes, areas, from, to, reservoir) {
 function getNitrousOxideEmissions (allFluxes) {
   // need to do a second pass because N2O calculation requires the sum of ground and litter values
   const n2oEmissions = []
+  // TODO: this logic seems suspect - what if there is no groundFlux but there is a litter flux? Is that possible?
   const groundFluxes = allFluxes.filter(flux => flux.reservoir === 'sol')
   groundFluxes.forEach((groundFlux) => {
     const litterFlux = allFluxes.find(flux => flux.reservoir === 'litière' && flux.from === groundFlux.from && flux.to === groundFlux.to) || {}
@@ -240,7 +241,7 @@ function forestBiomassGrowthSummary (allFlux, options) {
 
 function areaChangesByGroundType (communes, options) {
   const areas = {}
-  const changePairs = []
+  const changePairs = {}
   const excludeIds = ['haies', 'produits bois']
   const childGroundTypes = GroundTypes
     .filter((gt) => !gt.children && !excludeIds.includes(gt.stocksId))
@@ -264,7 +265,7 @@ function areaChangesByGroundType (communes, options) {
             // this area is not summed.
             areas[fromGt][toGt].area = options.areaChanges[key]
             areas[fromGt][toGt].areaModified = true
-            changePairs.push({ from: fromGt, to: toGt })
+            changePairs[key] = { from: fromGt, to: toGt }
           }
         }
       })
