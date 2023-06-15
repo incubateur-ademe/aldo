@@ -225,7 +225,8 @@ function getFluxReferenceValues (location) {
             annualFluxEquivalent: cToCo2e(annualFlux),
             yearsForFlux,
             reservoir: 'sol',
-            gas: 'C'
+            gas: 'C',
+            commune: location.commune.insee
           })
         }
         const litterFlux = getForestLitterFlux(from, to)
@@ -236,7 +237,8 @@ function getFluxReferenceValues (location) {
             annualFlux: litterFlux,
             annualFluxEquivalent: cToCo2e(litterFlux),
             reservoir: 'litière',
-            gas: 'C'
+            gas: 'C',
+            commune: location.commune.insee
           })
         }
       }
@@ -252,7 +254,8 @@ function getFluxReferenceValues (location) {
             annualFluxEquivalent: cToCo2e(biomassFlux),
             yearsForFlux,
             reservoir: 'biomasse',
-            gas: 'C'
+            gas: 'C',
+            commune: location.commune.insee
           })
         }
       }

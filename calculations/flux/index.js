@@ -121,10 +121,11 @@ function replaceWithOverride (fluxes, areas, from, to, reservoir) {
 function getNitrousOxideEmissions (allFluxes) {
   // need to do a second pass because N2O calculation requires the sum of ground and litter values
   const n2oEmissions = []
-  // TODO: this logic seems suspect - what if there is no groundFlux but there is a litter flux? Is that possible?
+  // assumes that all litter fluxes will be accompanied by a ground flux
+  // also assumes that all communes will only have one ground x litter pair
   const groundFluxes = allFluxes.filter(flux => flux.reservoir === 'sol')
   groundFluxes.forEach((groundFlux) => {
-    const litterFlux = allFluxes.find(flux => flux.reservoir === 'litière' && flux.from === groundFlux.from && flux.to === groundFlux.to) || {}
+    const litterFlux = allFluxes.find(flux => flux.reservoir === 'litière' && flux.from === groundFlux.from && flux.to === groundFlux.to && flux.commune === groundFlux.commune) || {}
     const groundFluxValue = groundFlux.value || 0
     const litterFluxValue = litterFlux.value || 0
     if (groundFluxValue + litterFluxValue < 0) {
