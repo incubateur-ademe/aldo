@@ -174,7 +174,6 @@ describe('The flux calculation module', () => {
     // value calculated from original spreadsheet
     expect(flux.value).toBeCloseTo(-0.17, 2)
   })
-  // TODO: why are there so many N20 entries for -> sols art 200070720
 
   it('does not add N2O entries for sequestrations', () => {
     const fluxes = getAnnualFluxes({ epci })
@@ -270,8 +269,6 @@ describe('The flux calculation module', () => {
   })
 
   // TODO: test that forest total includes this biomass growth in summary total
-
-  // TODO: area changes can be overridden
 
   // TODO: can provide areas for agricultural practices
   // test per practice?
