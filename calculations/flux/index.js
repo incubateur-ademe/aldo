@@ -1,6 +1,6 @@
 const {
   getFluxReferenceValues,
-  getAnnualSurfaceChange: getAnnualSurfaceChangeData
+  getAnnualSurfaceChange
 } = require('../../data/flux')
 const { getCommunes } = require('../../data/communes')
 const { GroundTypes } = require('../constants')
@@ -16,32 +16,6 @@ function convertN2oToCo2e (valueC) {
   return valueC * 298
 }
 
-function getAnnualSurfaceChange (location, options, from, to) {
-  const overrides = options.areaChanges || {}
-  let area
-  let areaModified = false
-  if (from && overrides) {
-    // sometimes from isn't defined because of the special cases of forest biomass
-    const fromDetail = GroundTypes.find(ground => ground.stocksId === from)
-    const toDetail = GroundTypes.find(ground => ground.stocksId === to)
-    const key = `${fromDetail.altFluxId || fromDetail.fluxId}_${toDetail.altFluxId || toDetail.fluxId}`
-    if (overrides[key] >= 0) {
-      area = overrides[key]
-    }
-  }
-  const originalArea = getAnnualSurfaceChangeData(location, options, from, to)
-  if (area === undefined) {
-    area = originalArea
-  } else {
-    areaModified = true
-  }
-  return {
-    area,
-    originalArea,
-    areaModified
-  }
-}
-
 function convertN2O (flux) {
   return flux < 0 ? flux / 15 * 0.01 * 44 / 25 + flux / 15 * 0.3 * 0.0075 * 44 / 28 : undefined
 }
@@ -49,17 +23,26 @@ function convertN2O (flux) {
 function getAnnualFluxes (location, options) {
   const communes = getCommunes(location)
   options = options || {}
-  const fluxes = []
+  let fluxes = []
 
   communes.forEach((commune) => {
-    fluxes.push(...getFluxesForLocation({ commune }, options))
+    fluxes.push(...getFluxesForCommune({ commune }, options))
   })
+  const { areas, changePairs } = areaChangesByGroundType(communes, options)
+  changePairs.forEach((changePair) => {
+    const from = changePair.from
+    const to = changePair.to
+    fluxes = replaceWithOverride(fluxes, areas, from, to, 'sol')
+    fluxes = replaceWithOverride(fluxes, areas, from, to, 'biomasse')
+    fluxes = replaceWithOverride(fluxes, areas, from, to, 'litière')
+  })
+
+  fluxes.push(...getNitrousOxideEmissions(fluxes))
   // TODO: aggregations for display
   //  - produits bois details
 
   fluxes.push(...getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas))
 
-  const areas = areaChangesByGroundType(communes, options)
   const { summary, biomassSummary, total } = fluxSummary(fluxes, options)
 
   return {
@@ -71,39 +54,68 @@ function getAnnualFluxes (location, options) {
   }
 }
 
-function getFluxesForLocation (location, options) {
+function getFluxesForCommune (location, options) {
   const locationFluxes = getFluxReferenceValues(location)
-  locationFluxes.forEach(getAreaAndCalculateValue(location, options))
-
-  locationFluxes.push(...getNitrousOxideEmissions(locationFluxes))
-  locationFluxes.push(...getFluxWoodProducts(location, options?.woodCalculation, options))
+  locationFluxes.forEach(fetchAreaAndCalculateValue(location, options))
   locationFluxes.push(...deforestationFlux(location, options))
+
+  locationFluxes.push(...getFluxWoodProducts(location, options?.woodCalculation, options))
   return locationFluxes
 }
 
-function getAreaAndCalculateValue (location, options) {
+function fetchAreaAndCalculateValue (location, options) {
+  return (flux) => {
+    fetchArea(location, options)(flux)
+    calculateValue(flux)
+  }
+}
+
+function fetchArea (location, options) {
   return (flux) => {
     if (!flux.area && flux.area !== 0) {
-      const { area, areaModified, originalArea } = getAnnualSurfaceChange(location, options, flux.from, flux.to)
+      const area = getAnnualSurfaceChange(location, options, flux.from, flux.to)
       flux.area = area
-      flux.areaModified = areaModified
-      flux.originalArea = originalArea
+      flux.originalArea = area
     }
-    const area = flux.area
-    flux.flux = flux.annualFlux
-    if (flux.yearsForFlux) flux.flux *= flux.yearsForFlux
-    // TODO: refactor the following so it is just flux.value = flux.flux * flux.area
-    if (flux.to.startsWith('forêt ')) {
-      flux.value = flux.flux * flux.area
-    } else if (flux.reservoir === 'sol') {
-      const annualtC = flux.flux * area
-      flux.value = annualtC
-    } else {
-      const annualtC = flux.flux * area
-      flux.value = annualtC
-    }
-    flux.co2e = convertCToCo2e(flux.value)
   }
+}
+
+function calculateValue (flux) {
+  const area = flux.area
+  flux.flux = flux.annualFlux
+  if (flux.yearsForFlux) flux.flux *= flux.yearsForFlux
+  // TODO: refactor the following so it is just flux.value = flux.flux * flux.area
+  if (flux.to.startsWith('forêt ')) {
+    flux.value = flux.flux * flux.area
+  } else if (flux.reservoir === 'sol') {
+    const annualtC = flux.flux * area
+    flux.value = annualtC
+  } else {
+    const annualtC = flux.flux * area
+    flux.value = annualtC
+  }
+  flux.co2e = convertCToCo2e(flux.value)
+}
+
+function replaceWithOverride (fluxes, areas, from, to, reservoir) {
+  const reservoirFluxes = fluxes.filter((f) => f.to === to && f.from === from && f.reservoir === reservoir)
+  const annualFlux = weightedAverage(reservoirFluxes, 'annualFlux', 'area')
+  const newGroundFlux = {
+    from,
+    to,
+    reservoir,
+    gas: 'C',
+    area: areas[from][to].area,
+    originalArea: areas[from][to].originalArea,
+    areaModified: true,
+    yearsForFlux: reservoirFluxes[0]?.yearsForFlux,
+    annualFlux,
+    annualFluxEquivalent: convertCToCo2e(annualFlux)
+  }
+  const newFluxes = fluxes.filter((f) => !(f.to === to && f.from === from && f.reservoir === reservoir))
+  calculateValue(newGroundFlux)
+  newFluxes.push(newGroundFlux)
+  return newFluxes
 }
 
 function getNitrousOxideEmissions (allFluxes) {
@@ -227,36 +239,38 @@ function forestBiomassGrowthSummary (allFlux, options) {
 }
 
 function areaChangesByGroundType (communes, options) {
-  const changes = {}
+  const areas = {}
+  const changePairs = []
   const excludeIds = ['haies', 'produits bois']
   const childGroundTypes = GroundTypes
     .filter((gt) => !gt.children && !excludeIds.includes(gt.stocksId))
   communes.forEach((commune) => {
     childGroundTypes.forEach((from) => {
       const fromGt = from.stocksId
-      if (!changes[fromGt]) changes[fromGt] = {}
+      if (!areas[fromGt]) areas[fromGt] = {}
       childGroundTypes.forEach((to) => {
         const toGt = to.stocksId
         if (fromGt === toGt) return
 
-        if (!changes[fromGt][toGt]) changes[fromGt][toGt] = { originalArea: 0 }
+        if (!areas[fromGt][toGt]) areas[fromGt][toGt] = { originalArea: 0 }
 
-        changes[fromGt][toGt].originalArea += getAnnualSurfaceChangeData({ commune }, options, fromGt, toGt)
-        changes[fromGt][toGt].area = changes[fromGt][toGt].originalArea
+        areas[fromGt][toGt].originalArea += getAnnualSurfaceChange({ commune }, options, fromGt, toGt)
+        areas[fromGt][toGt].area = areas[fromGt][toGt].originalArea
 
         if (options.areaChanges) {
           // sometimes from isn't defined because of the special cases of forest biomass
           const key = `${from.altFluxId || from.fluxId}_${to.altFluxId || to.fluxId}`
           if (options.areaChanges[key] >= 0) {
             // this area is not summed.
-            changes[fromGt][toGt].area = options.areaChanges[key]
-            changes[fromGt][toGt].areaModified = true
+            areas[fromGt][toGt].area = options.areaChanges[key]
+            areas[fromGt][toGt].areaModified = true
+            changePairs.push({ from: fromGt, to: toGt })
           }
         }
       })
     })
   })
-  return changes
+  return { areas, changePairs }
 }
 
 function sumByProperty (objArray, key) {
@@ -295,15 +309,14 @@ function deforestationFlux (location, options) {
       const annualFlux = getBiomassCarbonDensity(location, to) - initialBiomassDensity
 
       const annualFluxEquivalent = convertCToCo2e(annualFlux)
-      const { area, areaModified, originalArea } = getAnnualSurfaceChange(location, options, from, to)
+      const area = getAnnualSurfaceChange(location, options, from, to)
       if (area && annualFlux) {
         const value = annualFlux * area
         deforestationFluxes.push({
           from,
           to,
           area,
-          originalArea,
-          areaModified,
+          originalArea: area,
           annualFlux,
           annualFluxEquivalent,
           flux: annualFlux,

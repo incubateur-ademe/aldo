@@ -151,7 +151,7 @@ describe('The flux calculation module', () => {
       const fluxes = getAnnualFluxes({ epci })
       const flux = fluxes.allFlux[0]
       expect(flux.area).toEqual(3)
-      expect(flux.areaModified).toBe(false)
+      expect(flux.areaModified).toBeUndefined()
       expect(flux.originalArea).toEqual(3)
       expect(flux.flux).toEqual(-40)
       expect(flux.value).toEqual(-120)
@@ -174,6 +174,7 @@ describe('The flux calculation module', () => {
     // value calculated from original spreadsheet
     expect(flux.value).toBeCloseTo(-0.17, 2)
   })
+  // TODO: why are there so many N20 entries for -> sols art 200070720
 
   it('does not add N2O entries for sequestrations', () => {
     const fluxes = getAnnualFluxes({ epci })
@@ -296,10 +297,14 @@ describe('The flux calculation module', () => {
     })
 
     it('allows change from forest type to be overridden', () => {
+      const originalFluxes = getAnnualFluxes({ epci })
+      expect(epci.communes.length).toBe(3)
+      const forVignFluxes = originalFluxes.allFlux.filter((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
+      expect(forVignFluxes.length).toBe(3)
       const fluxes = getAnnualFluxes({ epci }, { areaChanges: { for_mix_vign: 20 } })
       const toVineyard = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
       expect(toVineyard.area).toBe(20)
-      expect(toVineyard.originalArea).toBe(10)
+      expect(toVineyard.originalArea).toBe(30) // this is 30 whereas previous test is 10 because this is the sum of all commune changes
       expect(toVineyard.areaModified).toBe(true)
     })
   })
@@ -329,7 +334,7 @@ describe('The flux calculation module', () => {
     const modifiedCultVignFluxes = modifiedFluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol')
     expect(modifiedCultVignFluxes.length).toBe(1)
     const flux = modifiedCultVignFluxes[0]
-    expect(flux.value).toBe(40)
+    expect(flux.value).toBe(-400)
     // TODO: test the weighted averaging for flux.flux
 
     // TODO: test impact on related flux:

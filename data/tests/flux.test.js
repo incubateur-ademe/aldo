@@ -690,7 +690,7 @@ describe('The flux data module', () => {
     })
 
     it('adds litter changes for forest subtype -> other ground type changes', () => {
-      const allFlux = getFluxReferenceValues({ epci: { code: '200007177' } })
+      const allFlux = getFluxReferenceValues({ commune: { insee: '1001', zpc: '1_1', epci: '200007177' } })
       const culturesFlux = allFlux.filter(f => f.to === 'cultures')
       const litter = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'litière')
       expect(litter.length).toBe(4)
