@@ -43,13 +43,14 @@ function getAnnualFluxes (location, options) {
 
   fluxes.push(...getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas))
 
-  const { summary, biomassSummary, total } = fluxSummary(fluxes, options)
+  const { summary, biomassSummary, fluxCo2eByGroundType, total } = fluxSummary(fluxes, options)
 
   return {
     allFlux: fluxes,
     summary,
     biomassSummary,
     areas,
+    fluxCo2eByGroundType,
     total
   }
 }
@@ -148,6 +149,7 @@ function getNitrousOxideEmissions (allFluxes) {
 
 function fluxSummary (allFluxes, options) {
   const summary = {}
+  const fluxCo2eByGroundType = {}
   let total = 0
   allFluxes.forEach((flux) => {
     if (!flux.co2e && flux.co2e !== 0) {
@@ -192,6 +194,17 @@ function fluxSummary (allFluxes, options) {
         summary[parent].hasModifications = flux.areaModified
       }
     }
+    // this won't take into account flux from biomass growth
+    const from = flux.from
+    if (from && to) {
+      if (!fluxCo2eByGroundType[from]) {
+        fluxCo2eByGroundType[from] = {}
+      }
+      if (!fluxCo2eByGroundType[from][to]) {
+        fluxCo2eByGroundType[from][to] = 0
+      }
+      fluxCo2eByGroundType[from][to] += flux.co2e
+    }
   })
   const biomassSummary = forestBiomassGrowthSummary(allFluxes, options)
   // update change flag for forests based on if the area used in biomass growth
@@ -199,7 +212,7 @@ function fluxSummary (allFluxes, options) {
   const biomassGrowthAreaModified = biomassSummary.some((subtype) => subtype.areaModified)
   summary.forêts.areaModified = summary.forêts.areaModified || biomassGrowthAreaModified
   summary.forêts.hasModifications = summary.forêts.hasModifications || biomassGrowthAreaModified
-  return { summary, biomassSummary, total }
+  return { summary, biomassSummary, fluxCo2eByGroundType, total }
 }
 
 function forestBiomassGrowthSummary (allFlux, options) {

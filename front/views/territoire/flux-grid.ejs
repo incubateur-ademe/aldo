@@ -29,11 +29,9 @@
         <td>
           <% if (from !== to) { %>
           <% const toDetail = allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to) %>
-          <% let thisFlux = allFlux.filter(f => f.from === fromDetail.stocksId && f.to === toDetail.stocksId && f.gas === 'C') %>
-          <% thisFlux = thisFlux.length ? thisFlux[0] : undefined %>
-          <!-- TODO: what should this matrix be showing? Currently if more than one flux (e.g. sol, litter, biomass) -->
-          <!-- only showing the first one found. -->
-          <%= thisFlux?.co2e ? formatNumber(thisFlux.co2e, 1) : '-' %>
+          <% const fromObj = fluxCo2eByGroundType[fromDetail.stocksId] %>
+          <% const thisFlux = fromObj ? fromObj[toDetail.stocksId] : undefined %>
+          <%= thisFlux ? formatNumber(thisFlux, 1) : '-' %>
           <% } %>
         </td>
         <% } %>
