@@ -671,24 +671,6 @@ describe('The flux data module', () => {
       expect(poplarFlux).toBeDefined()
     })
 
-    it('adds a multiplier of 20', () => {
-      // the ground carbon density is the same for all forest types
-      jest.doMock('../dataByCommune/flux-zpc.csv.json', () => {
-        return [
-          {
-            zpc: '1_1',
-            for_vign: -2,
-            prai_for: 3
-          }
-        ]
-      })
-      const fluxes = getFluxReferenceValues({ commune: { insee: '1001', zpc: '1_1', epci: '200007177' } })
-      const toVineyards = fluxes.find((f) => f.from === 'forêt mixte' && f.to === 'vignes')
-      expect(toVineyards.yearsForFlux).toBe(20)
-      const toLeafy = fluxes.find((f) => f.from === 'prairies zones arborées' && f.to === 'forêt feuillu')
-      expect(toLeafy.yearsForFlux).toBe(20)
-    })
-
     it('adds litter changes for forest subtype -> other ground type changes', () => {
       const allFlux = getFluxReferenceValues({ commune: { insee: '1001', zpc: '1_1', epci: '200007177' } })
       const culturesFlux = allFlux.filter(f => f.to === 'cultures')

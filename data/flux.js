@@ -127,29 +127,16 @@ function getBiomassFlux (location, from, to) {
 function yearMultiplier (reservoir, from, to) {
   const multiplier = 20
   if (reservoir === 'sol') {
-    // order of statements is important (see below)
-    if (from === 'sols artificiels imperméabilisés') {
-      return multiplier
+    if (from === 'zones humides' || to === 'zones humides') {
+      return 1
     } else if (to === 'sols artificiels imperméabilisés') {
       return 1
-    } else if (from === 'zones humides' || to === 'zones humides') {
+    } else if (to === 'sols artificiels arbustifs') {
       return 1
     } else if (to === 'sols artificiels arborés et buissonants') {
       return 1
-    } else if (from === 'sols artificiels arbustifs') {
-      return multiplier
-    } else if (to === 'sols artificiels arbustifs') {
-      return 1
-    } else if (from === 'sols artificiels arborés et buissonants') {
-      return multiplier
-    } else if (from.startsWith('forêt ') || to.startsWith('forêt ')) {
-      return multiplier
-    } else if (from.startsWith('prairies') || to.startsWith('prairies')) {
-      return multiplier
-    } else if (from === 'cultures') {
-      return multiplier
-    } else if (to === 'cultures' || to === 'vergers' || to === 'vignes') {
-      return 1
+    } else {
+      return 20
     }
   } else if (reservoir === 'biomasse') {
     // not relevant for certain types
