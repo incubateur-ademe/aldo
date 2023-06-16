@@ -182,9 +182,9 @@ describe('The flux calculation module', () => {
 
     // the actual test
     const fluxes = getAnnualFluxes({ epci })
-    const n20Fluxes = fluxes.allFlux.filter((f) => f.reservoir === 'sol et litière')
-    expect(n20Fluxes.length).toBe(communeCount) // only emission is from cultures -> vignes
-    const flux = n20Fluxes[0]
+    const n2oFluxes = fluxes.allFlux.filter((f) => f.reservoir === 'sol et litière')
+    expect(n2oFluxes.length).toBe(communeCount) // only emission is from cultures -> vignes
+    const flux = n2oFluxes[0]
     expect(flux.gas).toEqual('N2O')
     expect(flux.reservoir).toEqual('sol et litière')
     // value calculated from original spreadsheet
@@ -193,8 +193,8 @@ describe('The flux calculation module', () => {
 
   it('does not add N2O entries for sequestrations', () => {
     const fluxes = getAnnualFluxes({ epci })
-    const n20VergersFluxes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vergers' && f.reservoir === 'sol et litière')
-    expect(n20VergersFluxes.length).toBe(0)
+    const n2oVergersFluxes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vergers' && f.reservoir === 'sol et litière')
+    expect(n2oVergersFluxes.length).toBe(0)
   })
 
   it('adds sequestrations from wood products by harvest', () => {
