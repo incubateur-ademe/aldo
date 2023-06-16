@@ -35,8 +35,7 @@
             <td>
               <% if (from !== to) { %>
                 <% const toDetail = allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to) %>
-                <% let thisFlux = allFlux.filter(f => f.from === fromDetail.stocksId && f.to === toDetail.stocksId && f.gas === 'C') %>
-                <% thisFlux = thisFlux.length ? thisFlux[0] : undefined %>
+                <% let thisFlux = fluxAreas[fromDetail.stocksId][toDetail.stocksId] %>
                 <input
                   class="fr-input fr-text--lg"
                   type="number"

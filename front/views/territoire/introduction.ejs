@@ -9,7 +9,7 @@
       SIREN : <%= singleLocation.code %>
     </p>
     <p>
-      Population : <%= formatNumber(singleLocation.populationTotale) %>
+      Population : <%= formatNumber(singleLocation.population) %>
     </p>
   </div>
   <div class="fr-col" style="text-align: right;">
@@ -24,20 +24,20 @@
   </div>
 </div>
 
-<% if (singleLocation?.membres.length) { %>
+<% if (singleLocation?.communes.length) { %>
 <section class="fr-accordion">
   <p class="fr-accordion__title">
     <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-communes">
-      <%= singleLocation.membres.length %> communes
+      <%= singleLocation.communes.length %> communes
     </button>
   </p>
   <div class="fr-collapse" id="accordion-communes">
     <ul>
       <div class="fr-grid-row">
-        <% for( let index=0; index < singleLocation.membres.length; index++ ) { %>
+        <% for( let index=0; index < singleLocation.communes.length; index++ ) { %>
         <div class="fr-col-12 fr-sm-col-6 fr-col-md-4">
           <li>
-            <%= singleLocation.membres[index] %>
+            <a href="/commune/<%= singleLocation.communes[index] %>"><%= singleLocation.communes[index] %></a>
           </li>
         </div>
         <% } %>
@@ -57,7 +57,7 @@
       INSEE : <%= singleLocation.insee %>
     </p>
     <p>
-      Population : <%= formatNumber(singleLocation.POPULATION) %>
+      Population : <%= formatNumber(singleLocation.population) %>
     </p>
     <p>
       SIREN EPCI : <a href="/epci/<%= singleLocation.epci %>"><%= singleLocation.epci %></a>
@@ -81,7 +81,7 @@
 <ul>
   <% for( let index=0; index < epcis.length; index++ ) { %>
     <li>
-      <%= epcis[index].nom %> (<%= epcis[index].code %>)
+      <a href="/epci/<%= epcis[index].code %>"><%= epcis[index].nom %> (<%= epcis[index].code %>)</a>
     </li>
   <% } %>
 </ul>
@@ -91,7 +91,7 @@
 <ul>
   <% for( let index=0; index < communes.length; index++ ) { %>
     <li>
-      <%= communes[index].nom %> (<%= communes[index].insee %>)
+      <a href="/commune/<%= communes[index].insee %>"><%= communes[index].nom %> (<%= communes[index].insee %>)</a>
     </li>
   <% } %>
 </ul>

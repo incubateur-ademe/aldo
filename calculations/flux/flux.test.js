@@ -23,9 +23,10 @@ jest.mock('../../data/flux', () => {
           'forêt conifere': 3
         }
       }[from]
-      return areaChanges ? areaChanges[to] : undefined
+      return areaChanges ? areaChanges[to] : 0
     }),
-    getAllAnnualFluxes: jest.fn(() => {
+    // this is called once per commune
+    getFluxReferenceValues: jest.fn(() => {
       return [
         {
           from: 'cultures',
@@ -34,6 +35,15 @@ jest.mock('../../data/flux', () => {
           annualFluxEquivalent: -10,
           yearsForFlux: 20,
           reservoir: 'sol',
+          gas: 'C'
+        },
+        {
+          from: 'cultures',
+          to: 'vignes',
+          annualFlux: -3,
+          annualFluxEquivalent: -15,
+          yearsForFlux: 20,
+          reservoir: 'biomasse',
           gas: 'C'
         },
         {
@@ -51,6 +61,15 @@ jest.mock('../../data/flux', () => {
           annualFlux: 3,
           annualFluxEquivalent: 15,
           yearsForFlux: 20,
+          reservoir: 'sol',
+          gas: 'C'
+        },
+        {
+          from: 'vignes',
+          to: 'cultures',
+          annualFlux: 2,
+          annualFluxEquivalent: 10,
+          yearsForFlux: 1,
           reservoir: 'sol',
           gas: 'C'
         },
@@ -112,8 +131,6 @@ jest.mock('../../data/flux', () => {
   }
 })
 
-const ORIGINAL_FLUX_COUNT = 7
-
 jest.mock('../../data/stocks', () => {
   const originalModule = jest.requireActual('../../data/stocks')
 
@@ -150,7 +167,7 @@ describe('The flux calculation module', () => {
       const fluxes = getAnnualFluxes({ epci })
       const flux = fluxes.allFlux[0]
       expect(flux.area).toEqual(3)
-      expect(flux.areaModified).toBe(false)
+      expect(flux.areaModified).toBeUndefined()
       expect(flux.originalArea).toEqual(3)
       expect(flux.flux).toEqual(-40)
       expect(flux.value).toEqual(-120)
@@ -159,8 +176,15 @@ describe('The flux calculation module', () => {
   })
 
   it('adds N2O entries for emissions', () => {
+    // not strictly testing functionality, this is a sanity check for later use of variable
+    const communeCount = 7
+    expect(epci.communes.length).toBe(communeCount)
+
+    // the actual test
     const fluxes = getAnnualFluxes({ epci })
-    const flux = fluxes.allFlux[ORIGINAL_FLUX_COUNT]
+    const n2oFluxes = fluxes.allFlux.filter((f) => f.reservoir === 'sol et litière')
+    expect(n2oFluxes.length).toBe(communeCount) // only emission is from cultures -> vignes
+    const flux = n2oFluxes[0]
     expect(flux.gas).toEqual('N2O')
     expect(flux.reservoir).toEqual('sol et litière')
     // value calculated from original spreadsheet
@@ -169,13 +193,17 @@ describe('The flux calculation module', () => {
 
   it('does not add N2O entries for sequestrations', () => {
     const fluxes = getAnnualFluxes({ epci })
-    const flux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 1]
-    expect(flux.gas).not.toEqual('N2O')
+    const n2oVergersFluxes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vergers' && f.reservoir === 'sol et litière')
+    expect(n2oVergersFluxes.length).toBe(0)
   })
 
   it('adds sequestrations from wood products by harvest', () => {
     const fluxes = getAnnualFluxes({ epci })
-    const boFlux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 1]
+    const woodFlux = fluxes.allFlux.filter((f) => f.to === 'produits bois')
+    const communeCount = 7
+    expect(epci.communes.length).toBe(communeCount)
+    expect(woodFlux.length).toBe(2 * communeCount)
+    const boFlux = woodFlux[0]
     expect(boFlux.to).toEqual('produits bois')
     expect(boFlux.from).toEqual(undefined)
     expect(boFlux.category).toEqual('bo')
@@ -185,7 +213,7 @@ describe('The flux calculation module', () => {
     expect(boFlux).toHaveProperty('franceSequestration')
     expect(boFlux.value).toEqual(100)
     expect(boFlux.co2e).toEqual(100)
-    const biFlux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 2]
+    const biFlux = woodFlux[1]
     expect(biFlux.to).toEqual('produits bois')
     expect(biFlux.from).toEqual(undefined)
     expect(biFlux.category).toEqual('bi')
@@ -195,7 +223,11 @@ describe('The flux calculation module', () => {
 
   it('adds sequestrations from wood products by consumption', () => {
     const fluxes = getAnnualFluxes({ epci }, { woodCalculation: 'consommation' })
-    const boFlux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 1]
+    const woodFlux = fluxes.allFlux.filter((f) => f.to === 'produits bois')
+    const communeCount = 7
+    expect(epci.communes.length).toBe(communeCount)
+    expect(woodFlux.length).toBe(2 * communeCount)
+    const boFlux = woodFlux[0]
     expect(boFlux.to).toEqual('produits bois')
     expect(boFlux.from).toEqual(undefined)
     expect(boFlux.category).toEqual('bo')
@@ -203,7 +235,7 @@ describe('The flux calculation module', () => {
     expect(boFlux).toHaveProperty('francePopulation')
     expect(boFlux).toHaveProperty('localPortion')
     expect(boFlux).toHaveProperty('franceSequestration')
-    const biFlux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 2]
+    const biFlux = woodFlux[1]
     expect(biFlux.to).toEqual('produits bois')
     expect(biFlux.from).toEqual(undefined)
     expect(biFlux.category).toEqual('bi')
@@ -238,7 +270,8 @@ describe('The flux calculation module', () => {
     it('provides the area as a sum of the areas of the same type', () => {
       const fluxes = getAnnualFluxes({ epci })
       const mixed = fluxes.biomassSummary[0]
-      expect(mixed.area).toBe(3)
+      // there are 7 communes, each with area of 3
+      expect(mixed.area).toBe(21)
       expect(mixed.co2e).toBeDefined()
     })
 
@@ -261,14 +294,13 @@ describe('The flux calculation module', () => {
 
   // TODO: test that forest total includes this biomass growth in summary total
 
-  // TODO: area changes can be overridden
-
   // TODO: can provide areas for agricultural practices
   // test per practice?
 
   describe('the biomass fluxes linked to deforestation', () => {
+    const epci = { code: '243000643', communes: ['01234', '01235', '01236'] }
     it('adds for changes to non-forest types, using the stock biomass densities for both ground types', () => {
-      const fluxes = getAnnualFluxes({ epci: '243000643' })
+      const fluxes = getAnnualFluxes({ epci })
       const flux = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
       expect(flux.annualFlux).toEqual(-6)
       expect(flux.annualFluxEquivalent).toBeDefined()
@@ -278,7 +310,7 @@ describe('The flux calculation module', () => {
     })
 
     it('ignore biomass changes where final ground type is a forest type since these are accounted for by the biomass growth calculations', () => {
-      const fluxes = getAnnualFluxes({ epci: '243000643' })
+      const fluxes = getAnnualFluxes({ epci })
       const toConifer = fluxes.allFlux.find((f) => f.from === 'cultures' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
       expect(toConifer).not.toBeDefined()
       const betweenForests = fluxes.allFlux.find((f) => f.from === 'forêt feuillu' && f.to === 'forêt conifere' && f.reservoir === 'biomasse')
@@ -286,12 +318,74 @@ describe('The flux calculation module', () => {
     })
 
     it('allows change from forest type to be overridden', () => {
-      const fluxes = getAnnualFluxes({ epci: '243000643' }, { areaChanges: { for_mix_vign: 20 } })
+      const originalFluxes = getAnnualFluxes({ epci })
+      expect(epci.communes.length).toBe(3)
+      const forVignFluxes = originalFluxes.allFlux.filter((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
+      expect(forVignFluxes.length).toBe(3)
+      const fluxes = getAnnualFluxes({ epci }, { areaChanges: { for_mix_vign: 20 } })
       const toVineyard = fluxes.allFlux.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'biomasse')
       expect(toVineyard.area).toBe(20)
-      expect(toVineyard.originalArea).toBe(10)
+      expect(toVineyard.originalArea).toBe(30) // this is 30 whereas previous test is 10 because this is the sum of all commune changes
       expect(toVineyard.areaModified).toBe(true)
     })
   })
   // TODO: should be able to override area from a prairie subtype to another
+
+  it('aggregates the area changes per-commune into a hash table to provide a total area change per ground type pair for the grouping', () => {
+    const communes = [{ insee: '01234' }, { insee: '01235' }]
+    const fluxes = getAnnualFluxes({ communes }, { areaChanges: { cult_verg: 10 } })
+    const fluxAreaSummary = fluxes.areas
+    expect(fluxAreaSummary).toBeDefined()
+    expect(fluxAreaSummary.cultures.vignes.area).toBe(6)
+    expect(fluxAreaSummary.cultures.vignes.originalArea).toBe(6)
+    expect(fluxAreaSummary.cultures.vignes.areaModified).toBe(undefined)
+    expect(fluxAreaSummary.cultures.vergers.area).toBe(10)
+    expect(fluxAreaSummary.cultures.vergers.originalArea).toBe(8)
+    expect(fluxAreaSummary.cultures.vergers.areaModified).toBe(true)
+  })
+
+  it('allows area overrides, updating the sequestration with the original weighted average for flux multiplied by new area', () => {
+    const communes = [{ insee: '01234' }, { insee: '01235' }]
+
+    const fluxes = getAnnualFluxes({ communes }, {})
+    const cultVignGroundFluxes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol')
+    const cultVignBiomassFluxes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'biomasse')
+    const cultVignN2OFluxes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol et litière')
+    expect(cultVignGroundFluxes.length).toBe(2)
+    expect(cultVignBiomassFluxes.length).toBe(2)
+    expect(cultVignN2OFluxes.length).toBe(2)
+
+    const modifiedFluxes = getAnnualFluxes({ communes }, { areaChanges: { cult_vign: 10 } })
+    const modifiedCultVignGroundFluxes = modifiedFluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol')
+    const modifiedCultVignBiomassFluxes = modifiedFluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'biomasse')
+    const mmodifiedCultVignN2OFluxes = modifiedFluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol et litière')
+    expect(modifiedCultVignGroundFluxes.length).toBe(1)
+    const flux = modifiedCultVignGroundFluxes[0]
+    expect(flux.area).toBe(10)
+    expect(flux.originalArea).toBe(6)
+    expect(flux.areaModified).toBe(true)
+    expect(flux.value).toBe(-400)
+    // TODO: test the weighted averaging for flux.flux
+
+    expect(modifiedCultVignBiomassFluxes.length).toBe(1)
+    expect(modifiedCultVignBiomassFluxes[0].area).toBe(10)
+    expect(modifiedCultVignBiomassFluxes[0].originalArea).toBe(6)
+    expect(mmodifiedCultVignN2OFluxes.length).toBe(1)
+    expect(mmodifiedCultVignN2OFluxes[0].area).toBe(undefined) // this is undefined whether or not area modified
+    // TODO: test impact on related flux:
+    // - forest litter
+  })
+
+  it('uses a simple average, not weighted, for the flux reference value when there are no original areas for that change pair', () => {
+    const communes = [{ insee: '01234' }, { insee: '01235' }]
+
+    const modifiedFluxes = getAnnualFluxes({ communes }, { areaChanges: { vign_cult: 10 } })
+    const vignCultGroundFlux = modifiedFluxes.allFlux.filter((f) => f.from === 'vignes' && f.to === 'cultures' && f.reservoir === 'sol')
+    expect(vignCultGroundFlux.length).toBe(1)
+    const flux = vignCultGroundFlux[0]
+    expect(flux.area).toBe(10)
+    expect(flux.originalArea).toBe(0)
+    expect(flux.annualFlux).toBe(2)
+    expect(flux.value).toBe(20)
+  })
 })

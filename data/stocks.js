@@ -1,5 +1,4 @@
 const { getIgnLocalisation } = require('./shared')
-const { getCommunes } = require('./communes')
 const { GroundTypes } = require('../calculations/constants')
 
 // Gets the carbon area density of a given ground type using the zone pédo-climatique majoritaire for the commune
@@ -27,75 +26,52 @@ function getCarbonDensity (commune, groundType) {
   return +carbonDensity
 }
 
+function getArea (location, groundType) {
+  if (!location.commune) { console.log('getArea in data/stocks called wrong', location); return }
+  const area = location.commune.clc18[groundType]
+  if (area >= 0) return area
+  else {
+    // console.log('no area saved for', location.commune?.insee, groundType)
+    return getAreaFromData(location, groundType)
+  }
+}
+
 // Gets the area in hectares (ha) of a given ground type in a location.
 // The ground types Corine Land Cover uses are different from the types used by ALDO,
 // so a mapping is used and the sum of ha of all matching CLC types is returned.
 // NB: in the lookup the type names for ground data and the more specific biomass data
 // are placed on the same level, so some CLC codes are used in two types.
-function getArea (location, groundType) {
+function getAreaFromData (location, groundType) {
+  if (!location.commune) { console.log('getAreaFromData in data/stocks called wrong', location); return }
   if (groundType === 'haies') {
     return
   } else if (groundType.startsWith('forêt ')) {
-    return getAreaForests(location, groundType)
+    return getAreaForests(location.commune, groundType)
   }
-  // consider using clcCodes in constants file
-  // TODO: make more standardised keys?
-  const aldoTypeToClcCodes = {
-    cultures: ['211', '212', '213', '241', '242', '243', '244'],
-    prairies: ['231', '321', '322', '323'],
-    'prairies zones herbacées': ['231', '321'],
-    'prairies zones arbustives': ['322'],
-    'prairies zones arborées': ['323'],
-    vignes: ['221'],
-    vergers: ['222', '223'],
-    'sols arborés': ['141'], // aka "sols artificiels arborés et buissonants" in stocks_c tab
-    'sols artificiels non-arborés': ['111', '112', '121', '122', '123', '124', '131', '132', '133', '142'],
-    'sols artificiels imperméabilisés': ['111', '121', '122', '123', '124', '131', '132', '133', '142'],
-    'sols artificialisés': ['112'],
-    // TODO: ask about logic F39: area sols arbustifs stocks_c tab.
-    'zones humides': ['411', '412', '421', '422', '423', '511', '512', '521', '522', '523']
-  }
-  const clcCodes = aldoTypeToClcCodes[groundType]
+  const typeDetails = GroundTypes.find((gt) => gt.stocksId === groundType)
+  const clcCodes = typeDetails?.clcCodes
   if (!clcCodes) {
     throw new Error(`No CLC code mapping found for ground type '${groundType}'`)
   }
   const csvFilePath = './dataByCommune/clc18.csv'
   const areasByCommuneAndClcType = require(csvFilePath + '.json')
-  const communeCodes = getCommunes(location).map((c) => c.insee)
   let totalArea = 0
-  areasByCommuneAndClcType.forEach((areaData) => {
-    if (communeCodes.includes(areaData.insee) && clcCodes.includes(areaData.code18)) {
-      totalArea += +areaData.area
-    }
-  })
+  areasByCommuneAndClcType
+    .filter((areaData) => location.commune.insee === areaData.insee && clcCodes.includes(areaData.code18))
+    .forEach((areaData) => { totalArea += +areaData.area })
   return totalArea
-}
-
-function getAreaHaies (location) {
-  const csvFilePath = './dataByEpci/surface-haies.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const epciSiren = location.epci?.code || location.commune?.epci
-  const data = dataByEpci.filter(data => data.siren === epciSiren)
-  if (data.length > 1) {
-    console.log('WARNING: more than one haies surface area for siren: ', epciSiren)
-  }
-  return parseFloat(data[0].area)
 }
 
 // using IGN, not CLC, data for forests because it is more accurate
 // side effect being that the sum of the areas could be different to the
 // recorded size of the EPCI.
-function getAreaForests (location, forestType) {
+function getAreaForests (commune, forestType) {
   const csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
   let areaDataByCommune = []
-  if (location.epci) {
-    areaDataByCommune = areaData.filter(data => data.CODE_EPCI === location.epci.code)
-  } else if (location.commune) {
-    let code = location.commune.insee
-    if (code.startsWith('0')) code = code.slice(1)
-    areaDataByCommune = areaData.filter(data => data.INSEE_COM === code)
-  }
+  let code = commune.insee
+  if (code.startsWith('0')) code = code.slice(1)
+  areaDataByCommune = areaData.filter(data => data.INSEE_COM === code)
   let sum = 0
   const areaCompositionColumnName = {
     'forêt feuillu': 'SUR_FEUILLUS',
@@ -294,14 +270,15 @@ function getForestLitterCarbonDensity (subtype) {
   return 9 // TODO: ask follow up on source of this data
 }
 
-function getHedgerowsDataByCommune (location) {
+function getHedgerowsDataForCommunes (location) {
+  if (!location.communes) { console.log('getHedgerowsDataForCommunes called wrong', location); return }
   const carbonCsvFilePath = './dataByCommune/carbone-haies.csv'
   const carbonData = require(carbonCsvFilePath + '.json')
   const csvFilePath = './dataByCommune/haie-clc18.csv'
   let lengthData = require(csvFilePath + '.json')
 
-  const communeCodes = getCommunes(location).map((c) => c.insee)
-  lengthData = lengthData.filter((data) => communeCodes.includes(data.INSEE_COM) && data.TOTKM_HAIE)
+  const communes = location.communes.map((c) => c.insee)
+  lengthData = lengthData.filter((data) => communes.includes(data.INSEE_COM) && data.TOTKM_HAIE)
 
   const excludeIds = ['produits bois', 'haies']
   // ignore child types as well
@@ -330,6 +307,7 @@ function getHedgerowsDataByCommune (location) {
 module.exports = {
   getCarbonDensity,
   getArea,
+  getAreaFromData,
   getForestAreaData,
   getSignificantCarbonData,
   getCarbonDataForCommuneAndComposition,
@@ -339,5 +317,5 @@ module.exports = {
   getForestLitterCarbonDensity,
   getAnnualWoodProductsHarvest,
   getAnnualFranceWoodProductsHarvest,
-  getHedgerowsDataByCommune
+  getHedgerowsDataForCommunes
 }
