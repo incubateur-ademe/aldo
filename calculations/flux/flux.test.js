@@ -39,6 +39,15 @@ jest.mock('../../data/flux', () => {
         },
         {
           from: 'cultures',
+          to: 'vignes',
+          annualFlux: -3,
+          annualFluxEquivalent: -15,
+          yearsForFlux: 20,
+          reservoir: 'biomasse',
+          gas: 'C'
+        },
+        {
+          from: 'cultures',
           to: 'vergers',
           annualFlux: 30,
           annualFluxEquivalent: 100,
@@ -113,8 +122,6 @@ jest.mock('../../data/flux', () => {
   }
 })
 
-const ORIGINAL_FLUX_COUNT = 7
-
 jest.mock('../../data/stocks', () => {
   const originalModule = jest.requireActual('../../data/stocks')
 
@@ -177,13 +184,17 @@ describe('The flux calculation module', () => {
 
   it('does not add N2O entries for sequestrations', () => {
     const fluxes = getAnnualFluxes({ epci })
-    const flux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 1]
-    expect(flux.gas).not.toEqual('N2O')
+    const n20VergersFluxes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vergers' && f.reservoir === 'sol et litière')
+    expect(n20VergersFluxes.length).toBe(0)
   })
 
   it('adds sequestrations from wood products by harvest', () => {
     const fluxes = getAnnualFluxes({ epci })
-    const boFlux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 1]
+    const woodFlux = fluxes.allFlux.filter((f) => f.to === 'produits bois')
+    const communeCount = 7
+    expect(epci.communes.length).toBe(communeCount)
+    expect(woodFlux.length).toBe(2 * communeCount)
+    const boFlux = woodFlux[0]
     expect(boFlux.to).toEqual('produits bois')
     expect(boFlux.from).toEqual(undefined)
     expect(boFlux.category).toEqual('bo')
@@ -193,7 +204,7 @@ describe('The flux calculation module', () => {
     expect(boFlux).toHaveProperty('franceSequestration')
     expect(boFlux.value).toEqual(100)
     expect(boFlux.co2e).toEqual(100)
-    const biFlux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 2]
+    const biFlux = woodFlux[1]
     expect(biFlux.to).toEqual('produits bois')
     expect(biFlux.from).toEqual(undefined)
     expect(biFlux.category).toEqual('bi')
@@ -203,7 +214,11 @@ describe('The flux calculation module', () => {
 
   it('adds sequestrations from wood products by consumption', () => {
     const fluxes = getAnnualFluxes({ epci }, { woodCalculation: 'consommation' })
-    const boFlux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 1]
+    const woodFlux = fluxes.allFlux.filter((f) => f.to === 'produits bois')
+    const communeCount = 7
+    expect(epci.communes.length).toBe(communeCount)
+    expect(woodFlux.length).toBe(2 * communeCount)
+    const boFlux = woodFlux[0]
     expect(boFlux.to).toEqual('produits bois')
     expect(boFlux.from).toEqual(undefined)
     expect(boFlux.category).toEqual('bo')
@@ -211,7 +226,7 @@ describe('The flux calculation module', () => {
     expect(boFlux).toHaveProperty('francePopulation')
     expect(boFlux).toHaveProperty('localPortion')
     expect(boFlux).toHaveProperty('franceSequestration')
-    const biFlux = fluxes.allFlux[ORIGINAL_FLUX_COUNT + 2]
+    const biFlux = woodFlux[1]
     expect(biFlux.to).toEqual('produits bois')
     expect(biFlux.from).toEqual(undefined)
     expect(biFlux.category).toEqual('bi')
@@ -324,19 +339,31 @@ describe('The flux calculation module', () => {
     const communes = [{ insee: '01234' }, { insee: '01235' }]
 
     const fluxes = getAnnualFluxes({ communes }, {})
-    const cultVignFluxes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol')
-    expect(cultVignFluxes.length).toBe(2)
+    const cultVignGroundFluxes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol')
+    const cultVignBiomassFluxes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'biomasse')
+    const cultVignN2OFluxes = fluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol et litière')
+    expect(cultVignGroundFluxes.length).toBe(2)
+    expect(cultVignBiomassFluxes.length).toBe(2)
+    expect(cultVignN2OFluxes.length).toBe(2)
 
     const modifiedFluxes = getAnnualFluxes({ communes }, { areaChanges: { cult_vign: 10 } })
-    const modifiedCultVignFluxes = modifiedFluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol')
-    expect(modifiedCultVignFluxes.length).toBe(1)
-    const flux = modifiedCultVignFluxes[0]
+    const modifiedCultVignGroundFluxes = modifiedFluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol')
+    const modifiedCultVignBiomassFluxes = modifiedFluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'biomasse')
+    const mmodifiedCultVignN2OFluxes = modifiedFluxes.allFlux.filter((f) => f.from === 'cultures' && f.to === 'vignes' && f.reservoir === 'sol et litière')
+    expect(modifiedCultVignGroundFluxes.length).toBe(1)
+    const flux = modifiedCultVignGroundFluxes[0]
+    expect(flux.area).toBe(10)
+    expect(flux.originalArea).toBe(6)
+    expect(flux.areaModified).toBe(true)
     expect(flux.value).toBe(-400)
     // TODO: test the weighted averaging for flux.flux
 
+    expect(modifiedCultVignBiomassFluxes.length).toBe(1)
+    expect(modifiedCultVignBiomassFluxes[0].area).toBe(10)
+    expect(modifiedCultVignBiomassFluxes[0].originalArea).toBe(6)
+    expect(mmodifiedCultVignN2OFluxes.length).toBe(1)
+    expect(mmodifiedCultVignN2OFluxes[0].area).toBe(undefined) // this is undefined whether or not area modified
     // TODO: test impact on related flux:
-    // - biomasse
-    // - N20
     // - forest litter
   })
 })
