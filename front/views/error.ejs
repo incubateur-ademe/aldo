@@ -1,0 +1,16 @@
+<%- include('partials/header') -%>
+<main role="main" id="contenu">
+  <div class="fr-container fr-py-6w fr-px-2w">
+    <%- include('partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: 'Erreur', }, ], }) -%>
+
+    <h1>Erreur</h1>
+
+    <p>Une erreur est survenue pour l'EPCI, la commune, ou le regroupement de territoires choisit.</p>
+
+    <p>Veuillez nous <a href="/contact">contacter</a> pour signaler un problème.</p>
+
+    <a class="fr-link fr-fi-arrow-right-line fr-link--icon-right" href="/">
+      Revenir à la page d'acceuil
+    </a>
+  </div>
+</main>
