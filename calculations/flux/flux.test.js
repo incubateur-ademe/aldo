@@ -64,6 +64,15 @@ jest.mock('../../data/flux', () => {
           reservoir: 'sol',
           gas: 'C'
         },
+        {
+          from: 'vignes',
+          to: 'cultures',
+          annualFlux: 2,
+          annualFluxEquivalent: 10,
+          yearsForFlux: 1,
+          reservoir: 'sol',
+          gas: 'C'
+        },
         // per-commune forest biomass entries: not associated with area changes (hence no from)
         // instead, in real usage the entries correspond to today's area for that type
         {
@@ -365,5 +374,18 @@ describe('The flux calculation module', () => {
     expect(mmodifiedCultVignN2OFluxes[0].area).toBe(undefined) // this is undefined whether or not area modified
     // TODO: test impact on related flux:
     // - forest litter
+  })
+
+  it('uses a simple average, not weighted, for the flux reference value when there are no original areas for that change pair', () => {
+    const communes = [{ insee: '01234' }, { insee: '01235' }]
+
+    const modifiedFluxes = getAnnualFluxes({ communes }, { areaChanges: { vign_cult: 10 } })
+    const vignCultGroundFlux = modifiedFluxes.allFlux.filter((f) => f.from === 'vignes' && f.to === 'cultures' && f.reservoir === 'sol')
+    expect(vignCultGroundFlux.length).toBe(1)
+    const flux = vignCultGroundFlux[0]
+    expect(flux.area).toBe(10)
+    expect(flux.originalArea).toBe(0)
+    expect(flux.annualFlux).toBe(2)
+    expect(flux.value).toBe(20)
   })
 })

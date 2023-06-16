@@ -99,7 +99,8 @@ function calculateValue (flux) {
 
 function replaceWithOverride (fluxes, areas, from, to, reservoir) {
   const reservoirFluxes = fluxes.filter((f) => f.to === to && f.from === from && f.reservoir === reservoir)
-  const annualFlux = weightedAverage(reservoirFluxes, 'annualFlux', 'area')
+  // fallback to using average in the case where no original area changes are registered for this pair
+  const annualFlux = weightedAverage(reservoirFluxes, 'annualFlux', 'area') || average(reservoirFluxes, 'annualFlux')
   const newGroundFlux = {
     from,
     to,
@@ -290,6 +291,12 @@ function weightedAverage (objArray, key, keyForWeighting) {
   })
   const total = sumByProperty(objArray, keyForWeighting)
   return total ? weightedSum / total : 0
+}
+
+function average (objArray, key) {
+  const count = objArray.length
+  if (!count) return 0
+  return sumByProperty(objArray, key) / count
 }
 
 function deforestationFlux (location, options) {
