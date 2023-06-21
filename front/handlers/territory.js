@@ -106,6 +106,7 @@ async function territoryHandler (req, res) {
     fluxCharts: fluxCharts(flux),
     fluxDetail,
     fluxIds: GroundTypes.filter(gt => gt.altFluxId || gt.fluxId).map(gt => gt.altFluxId || gt.fluxId),
+    woodFluxSummary: flux.woodSummary,
     stockTotal: stocks?.total,
     stockTotalEquivalent: stocks?.totalEquivalent,
     fluxTotal: flux.total,

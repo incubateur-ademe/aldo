@@ -270,6 +270,7 @@ function getForestLitterCarbonDensity (subtype) {
   return 9 // TODO: ask follow up on source of this data
 }
 
+// TODO: use the average of department hedgerows values for missing departments around 101
 function getHedgerowsDataForCommunes (location) {
   if (!location.communes) { console.log('getHedgerowsDataForCommunes called wrong', location); return }
   const carbonCsvFilePath = './dataByCommune/carbone-haies.csv'
