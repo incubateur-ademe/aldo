@@ -43,7 +43,7 @@ function getAnnualFluxes (location, options) {
 
   fluxes.push(...getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas))
 
-  const { summary, biomassSummary, fluxCo2eByGroundType, total } = fluxSummary(fluxes, options)
+  const { summary, biomassSummary, fluxCo2eByGroundType, woodSummary, total } = fluxSummary(fluxes, options)
 
   return {
     allFlux: fluxes,
@@ -51,7 +51,8 @@ function getAnnualFluxes (location, options) {
     biomassSummary,
     areas,
     fluxCo2eByGroundType,
-    total
+    total,
+    woodSummary
   }
 }
 
@@ -150,6 +151,25 @@ function getNitrousOxideEmissions (allFluxes) {
 function fluxSummary (allFluxes, options) {
   const summary = {}
   const fluxCo2eByGroundType = {}
+  const woodSummary = {
+    localPopulation: 0,
+    francePopulation: 0,
+    populationPortion: 0,
+    bo: {
+      co2e: 0,
+      localHarvest: 0,
+      franceHarvest: 0,
+      harvestPortion: 0,
+      franceSequestration: 0
+    },
+    bi: {
+      co2e: 0,
+      localHarvest: 0,
+      franceHarvest: 0,
+      harvestPortion: 0,
+      franceSequestration: 0
+    }
+  }
   let total = 0
   allFluxes.forEach((flux) => {
     if (!flux.co2e && flux.co2e !== 0) {
@@ -205,6 +225,24 @@ function fluxSummary (allFluxes, options) {
       }
       fluxCo2eByGroundType[from][to] += flux.co2e
     }
+    // wood products - NB handling both calculation methods at once
+    // despite the fluxes for the other type being NaN
+    if (to === 'produits bois') {
+      const category = flux.category
+      woodSummary[category].co2e += flux.co2e
+      woodSummary[category].localHarvest += flux.localHarvest
+      woodSummary[category].harvestPortion += flux.localPortion
+      // France details only need to be set once really
+      woodSummary.francePopulation = flux.francePopulation
+      woodSummary[category].franceSequestration = flux.franceSequestration
+      woodSummary[category].franceHarvest = flux.franceHarvest
+      if (category === 'bo') {
+        // randomly taking bo category - just want to not double the
+        // localPopulation since we have fluxes for 2 categories
+        woodSummary.localPopulation += flux.localPopulation
+        woodSummary.populationPortion += flux.localPortion
+      }
+    }
   })
   const biomassSummary = forestBiomassGrowthSummary(allFluxes, options)
   // update change flag for forests based on if the area used in biomass growth
@@ -212,7 +250,7 @@ function fluxSummary (allFluxes, options) {
   const biomassGrowthAreaModified = biomassSummary.some((subtype) => subtype.areaModified)
   summary.forêts.areaModified = summary.forêts.areaModified || biomassGrowthAreaModified
   summary.forêts.hasModifications = summary.forêts.hasModifications || biomassGrowthAreaModified
-  return { summary, biomassSummary, fluxCo2eByGroundType, total }
+  return { summary, biomassSummary, fluxCo2eByGroundType, woodSummary, total }
 }
 
 function forestBiomassGrowthSummary (allFlux, options) {

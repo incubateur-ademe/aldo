@@ -9,6 +9,9 @@ const { getCommunes } = require(path.join(rootFolder, './data/communes'))
 
 async function territoryHandler (req, res) {
   const location = await getLocationDetail(req, res)
+  // TODO:
+  // - handle bad codes in a grouping of communes/epcis
+  // - improve UI when single commune code wrong (today it shows as if EPCI selected)
   if (!location) {
     const epcis = await epciList()
     const communes = communeList()
@@ -23,9 +26,21 @@ async function territoryHandler (req, res) {
 
   const options = parseOptionsFromQuery(req.query)
   console.log('getting stocks...')
-  const stocks = getStocks(location, options)
+  let stocks
+  try {
+    stocks = getStocks(location, options)
+  } catch (error) {
+    console.log('Error getting stocks for location', location, error)
+    return res.render('error', { pageTitle: 'Erreur' })
+  }
   console.log('getting fluxes')
-  const flux = getAnnualFluxes(location, options)
+  let flux
+  try {
+    flux = getAnnualFluxes(location, options)
+  } catch (error) {
+    console.log('Error getting flux for location', location, error)
+    return res.render('error', { pageTitle: 'Erreur' })
+  }
 
   console.log('formatting fluxes')
   const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
@@ -91,6 +106,7 @@ async function territoryHandler (req, res) {
     fluxCharts: fluxCharts(flux),
     fluxDetail,
     fluxIds: GroundTypes.filter(gt => gt.altFluxId || gt.fluxId).map(gt => gt.altFluxId || gt.fluxId),
+    woodFluxSummary: flux.woodSummary,
     stockTotal: stocks?.total,
     stockTotalEquivalent: stocks?.totalEquivalent,
     fluxTotal: flux.total,
