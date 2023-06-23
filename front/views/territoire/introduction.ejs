@@ -106,7 +106,7 @@
     <%= formatNumber(stockTotal/1000000, 1) %> MtC,
     à préserver&nbsp;!
   </p>
-  <p class="fr-callout__text fr-mb-1w">
+  <p class="fr-callout__text fr-mb-0">
     Si tout ce stock de carbone était réémis vers l'atmosphère, cela représenterait une émission de
     <%= formatNumber(stockTotalEquivalent/1000) %> ktCO2e.
     À ce jour, il y a une <%= fluxTotal > 0 ? "augmentation" : "réduction" %> de
@@ -120,8 +120,8 @@
     donc de ce qui est émit chaque année par le territoire.
   </p>
   <% } else { %>
-  <p class="fr-text--xs">
-    Ajoutez le Bilan GES de Territoire dans <a href="<%= getTabUrl('configuration') %><%= sharingQueryStr %> ">l'onglet configuration</a>.
-  </p>
+    <button class="fr-btn fr-btn--sm fr-btn--secondary to-config">
+      Ajoutez le Bilan GES de Territoire dans l'onglet configuration
+    </button>
   <% } %>
 </div>
