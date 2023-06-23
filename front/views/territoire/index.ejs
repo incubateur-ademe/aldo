@@ -63,8 +63,7 @@
   // for being too long
   $('form#territory').submit((event) => {
     let currentTab = $("button.fr-tabs__tab[aria-selected=true]")[0]
-    // TODO: handle case of ag practices and config that should go to flux
-    currentTab = currentTab?.id.endsWith("flux") ? "flux" : "stocks"
+    currentTab = currentTab?.id.endsWith("stocks") ? "stocks" : "flux"
     const pathParts = window.location.pathname.split('/')
     const locationType = pathParts[1]
     const locationCode = pathParts[2]
