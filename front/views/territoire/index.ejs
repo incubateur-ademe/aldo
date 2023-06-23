@@ -57,10 +57,14 @@
     queryParams.set(event.target.name, event.target.value)
   })
 
-  $('button.to-config').click(() => {
-    $(`#tabpanel-config`).click()
-    document.getElementById('tabpanel-config').scrollIntoView({ behavior: 'smooth' })
-  })
+  function changeTab(tab) {
+    $(`#tabpanel-${tab}`).click()
+    document.getElementById(`tabpanel-${tab}`).scrollIntoView({ behavior: 'smooth' })
+  }
+
+  $('button.to-stocks').click(() => changeTab('stocks'))
+  $('button.to-flux').click(() => changeTab('flux'))
+  $('button.to-config').click(() => changeTab('config'))
 
   // handle URL here so that only relevant params are sent and we avoid URLs that get cut off
   // for being too long

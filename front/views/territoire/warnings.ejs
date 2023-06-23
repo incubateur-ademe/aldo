@@ -11,6 +11,19 @@
     <% } else if (warning === 'communesDeduplicated') { %>
       <p class="fr-alert__title fr-mb-2w">Vous avez séléctionné plusieurs territoires qui se superposent</p>
       <p>Par exemple : 1 EPCI + 1 commune déjà contenu dans le périmètre de l'EPCI. Les résultats présentés éliminent automatiquement les doublons.</p>
+    <% } else if (warning === 'forestAreasChanged') { %>
+      <p class="fr-alert__title fr-mb-2w">Vous avez modifié la variation de surfaces forestières</p>
+      <p>Le calcul des flux de carbone dans les forêts se base sur deux calculs : la variation de surfaces forestières (changements d'occupation du sol) et les flux annuels liés à l'accroissement net de la biomasse en forêts.</p>
+      <p>Les surfaces cumulées que vous venez de renseigner pour les typologies Forêts sont différentes dans l'onglet flux et dans l'onglet stock.</p>
+      <p>Veuillez à uniformiser si besoin :</p>
+      <div class="fr-grid-row">
+        <button class="fr-btn fr-btn--sm fr-btn--secondary fr-mr-2w to-stocks">
+          les surfaces actuelles
+        </button>
+        <button class="fr-btn fr-btn--sm fr-btn--secondary to-flux">
+          les changements d'occupation des sols
+        </button>
+      </div>
     <% } %>
   </div>
 <% } %>

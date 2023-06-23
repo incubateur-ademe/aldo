@@ -74,7 +74,7 @@ async function territoryHandler (req, res) {
     singleLocation,
     communes: location.communes,
     epcis: location.epcis,
-    userWarnings: userWarnings(location),
+    userWarnings: userWarnings(location, options),
     groundTypes: getSortedGroundTypes(stocks),
     allGroundTypes: GroundTypes,
     // these are the types that can be modified to customise the stocks calculations
@@ -439,7 +439,7 @@ function pieChart (title, labels, values) {
   }
 }
 
-function userWarnings (location) {
+function userWarnings (location, options) {
   const warnings = []
   const allCommunes = getCommunes(location)
   let requestedCommunesCount = (location.epci?.communes.length || 0) + (!!location.commune && 1) + (location.communes?.length || 0)
@@ -468,6 +468,13 @@ function userWarnings (location) {
   const selectedCommunes = location.commune || location.communes?.length
   if (selectedCommunes && epcisFromSelectedCommunes.length > 1) {
     warnings.push('multipleEpcis')
+  }
+  const forestAreaKeys = ['for_mix', 'for_feu', 'for_con', 'for_peu']
+  const changeToForest = Object.keys(options.areaChanges).some((k) => {
+    return options.areaChanges[k] >= 0 && forestAreaKeys.some((fKey) => k.endsWith(fKey))
+  })
+  if (changeToForest) {
+    warnings.push('forestAreasChanged')
   }
   return warnings
 }
