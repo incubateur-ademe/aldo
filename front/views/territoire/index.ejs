@@ -57,7 +57,10 @@
     queryParams.set(event.target.name, event.target.value)
   })
 
-  $('button.to-config').click(() => $(`#tabpanel-config`).click())
+  $('button.to-config').click(() => {
+    $(`#tabpanel-config`).click()
+    document.getElementById('tabpanel-config').scrollIntoView({ behavior: 'smooth' })
+  })
 
   // handle URL here so that only relevant params are sent and we avoid URLs that get cut off
   // for being too long
