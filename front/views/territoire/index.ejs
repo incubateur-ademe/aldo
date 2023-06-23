@@ -5,7 +5,6 @@
     <%- include('./warnings') -%>
     <%- include('./introduction') -%>
     <form method="GET" class="fr-tabs fr-mt-4w" id="territory">
-      <!-- <input type="hidden" name="epci" value="<%= singleLocation?.nom %>" /> -->
       <ul class="fr-tabs__list" role="tablist" aria-label="Données du territoire">
         <li role="presentation">
           <button type="button" id="tabpanel-stocks" class="fr-tabs__tab" tabindex="0" role="tab" aria-selected="<%=tab === 'stocks'%>" aria-controls="tabpanel-stocks-panel" data-fr-js-tab-button="true">Stocks</button>
@@ -58,9 +57,16 @@
     queryParams.set(event.target.name, event.target.value)
   })
 
+  $('button.to-config').click(() => {
+    $(`#tabpanel-config`).click()
+    document.getElementById('tabpanel-config').scrollIntoView({ behavior: 'smooth' })
+  })
+
+  // handle URL here so that only relevant params are sent and we avoid URLs that get cut off
+  // for being too long
   $('form#territory').submit((event) => {
     let currentTab = $("button.fr-tabs__tab[aria-selected=true]")[0]
-    currentTab = currentTab?.id.endsWith("flux") ? "flux" : "stocks"
+    currentTab = currentTab?.id.endsWith("stocks") ? "stocks" : "flux"
     const pathParts = window.location.pathname.split('/')
     const locationType = pathParts[1]
     const locationCode = pathParts[2]
