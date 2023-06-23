@@ -449,17 +449,24 @@ function userWarnings (location) {
   if (requestedCommunesCount > allCommunes.length) {
     warnings.push('communesDeduplicated')
   }
-  if (allCommunes.length < 10 && (!location.epci && !location.epcis?.length)) {
+  const selectedEpcis = location.epci || location.epcis?.length
+  if (allCommunes.length < 10 && !selectedEpcis) {
     // some EPCIs are <10 communes, don't show message for them
     warnings.push('tooFewCommunes')
   }
   const epcisFromSelectedCommunes = []
-  for (const commune of allCommunes) {
+  const department = allCommunes[0].departement
+  allCommunes.forEach((commune) => {
     if (epcisFromSelectedCommunes.indexOf(commune.epci) === -1) {
       epcisFromSelectedCommunes.push(commune.epci)
     }
-  }
-  if (epcisFromSelectedCommunes.length > 1) {
+    if (location.epcis?.length && commune.departement !== department) {
+      // want this warning if selected EPCIs and if they aren't in the same department
+      warnings.push('multipleDepartments')
+    }
+  })
+  const selectedCommunes = location.commune || location.communes?.length
+  if (selectedCommunes && epcisFromSelectedCommunes.length > 1) {
     warnings.push('multipleEpcis')
   }
   return warnings
