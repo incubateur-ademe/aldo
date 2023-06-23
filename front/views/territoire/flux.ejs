@@ -120,6 +120,11 @@
               Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %> sont séparés par sous-typologie.
             </p>
             <% } %>
+            <% if (groundType.stocksId === 'sols artificiels') { %>
+              <button class="fr-btn fr-btn--sm fr-btn--secondary to-config fr-mb-2w" type="button">
+                Modifier la répartition des sols artificialisés
+              </button>
+            <% } %>
             <% for (const child of groundType.children) { %>
             <% if(hasData(child)) { %>
             <% const childName = allGroundTypes.find((g) => g.stocksId === child).name.toLowerCase() %>
