@@ -9455,7 +9455,7 @@
   "200046977": {
     "code": "200046977",
     "nom": "Métropole de LYON",
-    "population": null,
+    "population": 1370678,
     "communes": [
       "69286",
       "69259",
@@ -9700,7 +9700,7 @@
   "200054781": {
     "code": "200054781",
     "nom": "Métropole du Grand Paris",
-    "population": null,
+    "population": 7020210,
     "communes": [
       "92004",
       "92064",
@@ -9858,7 +9858,7 @@
   "200054807": {
     "code": "200054807",
     "nom": "Métropole d'Aix-Marseille-Provence",
-    "population": null,
+    "population": 1869055,
     "communes": [
       "13007",
       "13117",

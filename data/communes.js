@@ -17,6 +17,8 @@ function getCommunes (location) {
   if (location.commune) remainingCommunes.push(location.commune)
   addCommunesIfUnique(allCommunes, remainingCommunes)
 
+  addArrondissements(allCommunes)
+
   return allCommunes
 }
 
@@ -26,6 +28,19 @@ function addCommunesIfUnique (communes, communesToAdd) {
     const alreadyIncluded = communes.some((c) => c.insee === insee)
     if (!alreadyIncluded) communes.push(commune.insee ? commune : communesData[insee])
   })
+}
+
+function addArrondissements (communes) {
+  let arrondissementsToAdd = []
+  communes.forEach((commune) => {
+    commune.zpc = zpcByCommune.find((zpcData) => zpcData.insee === commune.insee)?.zpc
+    let arrondissements = COMMUNES_WITH_ARRONDISSEMENTS[commune.insee]
+    if (arrondissements) {
+      arrondissements = arrondissements.map((aInsee) => communesData[aInsee])
+      arrondissementsToAdd = arrondissementsToAdd.concat(arrondissements)
+    }
+  })
+  arrondissementsToAdd.forEach((a) => communes.push(a))
 }
 
 // adds data about:
