@@ -1,0 +1,54 @@
+{
+  "11": {
+    "regionName": "Île-de-France",
+    "interRegion": "NORD-OUEST"
+  },
+  "24": {
+    "regionName": "Centre-Val de Loire",
+    "interRegion": "NORD-OUEST"
+  },
+  "27": {
+    "regionName": "Bourgogne-Franche-Comté",
+    "interRegion": "NORD-EST"
+  },
+  "28": {
+    "regionName": "Normandie",
+    "interRegion": "NORD-OUEST"
+  },
+  "32": {
+    "regionName": "Hauts-de-France",
+    "interRegion": "NORD-OUEST"
+  },
+  "44": {
+    "regionName": "Grand Est",
+    "interRegion": "NORD-EST"
+  },
+  "52": {
+    "regionName": "Pays de la Loire",
+    "interRegion": "NORD-OUEST"
+  },
+  "53": {
+    "regionName": "Bretagne",
+    "interRegion": "NORD-OUEST"
+  },
+  "75": {
+    "regionName": "Nouvelle-Aquitaine",
+    "interRegion": "SUD-OUEST"
+  },
+  "76": {
+    "regionName": "Occitanie",
+    "interRegion": "SUD-EST"
+  },
+  "84": {
+    "regionName": "Auvergne-Rhône-Alpes",
+    "interRegion": "CENTRE-EST"
+  },
+  "93": {
+    "regionName": "Provence-Alpes-Côte d'Azur",
+    "interRegion": "SUD-EST"
+  },
+  "94": {
+    "regionName": "Corse",
+    "interRegion": "SUD-EST"
+  }
+}
