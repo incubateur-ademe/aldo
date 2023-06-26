@@ -180,6 +180,61 @@ function getForestBiomassCarbonDensities (location, forestSubtype) {
   return { live, dead }
 }
 
+const REGION_TO_INTER_REGION = {
+  11: {
+    regionName: 'Île-de-France',
+    interRegion: 'NORD-OUEST'
+  },
+  24: {
+    regionName: 'Centre-Val de Loire',
+    interRegion: 'NORD-OUEST'
+  },
+  27: {
+    regionName: 'Bourgogne-Franche-Comté',
+    interRegion: 'NORD-EST'
+  },
+  28: {
+    regionName: 'Normandie',
+    interRegion: 'NORD-OUEST'
+  },
+  32: {
+    regionName: 'Hauts-de-France',
+    interRegion: 'NORD-OUEST'
+  },
+  44: {
+    regionName: 'Grand Est',
+    interRegion: 'NORD-EST'
+  },
+  52: {
+    regionName: 'Pays de la Loire',
+    interRegion: 'NORD-OUEST'
+  },
+  53: {
+    regionName: 'Bretagne',
+    interRegion: 'NORD-OUEST'
+  },
+  75: {
+    regionName: 'Nouvelle-Aquitaine',
+    interRegion: 'SUD-OUEST'
+  },
+  76: {
+    regionName: 'Occitanie',
+    interRegion: 'SUD-EST'
+  },
+  84: {
+    regionName: 'Auvergne-Rhône-Alpes',
+    interRegion: 'CENTRE-EST'
+  },
+  93: {
+    regionName: 'Provence-Alpes-Côte d\'Azur',
+    interRegion: 'SUD-EST'
+  },
+  94: {
+    regionName: 'Corse',
+    interRegion: 'SUD-EST'
+  }
+}
+
 function getBiomassCarbonDensity (location, groundType) {
   if (groundType.startsWith('forêt')) {
     return
@@ -187,10 +242,18 @@ function getBiomassCarbonDensity (location, groundType) {
   if (groundType === 'haies') {
     return getForestBiomassCarbonDensities(location, 'forêt mixte').live
   }
-  const csvFilePath = './dataByEpci/biomass-hors-forets.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const epciSiren = location.epci?.code || location.commune?.epci
-  const data = dataByEpci.find(data => data.siren === epciSiren)
+  if (!location.commune?.region) {
+    console.log('No region for commune', location)
+    return 0
+  }
+  const csvFilePath = './dataByCommune/biomass-hors-forets.csv'
+  const interRegionData = require(csvFilePath + '.json')
+  const interRegionForCommune = REGION_TO_INTER_REGION[location.commune.region]?.interRegion
+  if (!location.commune?.region) {
+    console.log('No inter-region found for region of commune', location)
+    return 0
+  }
+  const data = interRegionData.find(data => data.INTER_REG === interRegionForCommune)
   // NB: all stocks are integers, but flux has decimals
   return parseInt(data[groundType], 10) || 0
 }
