@@ -319,6 +319,12 @@ function aggregateStocks (stocksForLocations) {
     'totalReservoirStock',
     'totalStock',
     'localPopulation',
+    'portionPopulation',
+    'biPortion',
+    'boPortion',
+    'biLocalHarvestTotal',
+    'boLocalHarvestTotal',
+    'localHarvestTotal',
     'biStock',
     'boStock'
   ]
@@ -337,7 +343,9 @@ function aggregateStocks (stocksForLocations) {
     'parent',
     'francePopulation',
     'biFranceStocksTotal',
-    'boFranceStocksTotal'
+    'boFranceStocksTotal',
+    'biFranceHarvestTotal',
+    'boFranceHarvestTotal'
   ]
   // TODO: stockPercentage?
   stocksForLocations.forEach((stocksForLocation) => {
