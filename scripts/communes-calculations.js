@@ -25,7 +25,7 @@ extendedCommunes.forEach((commune) => {
         communes: [commune.insee]
       }
     } else {
-      epciDict[commune.epci].population += commune.population
+      epciDict[commune.epci].population += commune.population || 0 // don't have population for arrondissements
       epciDict[commune.epci].communes.push(commune.insee)
     }
   }
