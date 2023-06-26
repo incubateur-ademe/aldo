@@ -133,19 +133,23 @@ describe('The stocks data module', () => {
   })
 
   it('returns biomass carbon density (as tC/ha) given valid ground type and EPCI SIREN', () => {
-    jest.doMock('../dataByEpci/biomass-hors-forets.csv.json', () => {
+    jest.doMock('../dataByCommune/biomass-hors-forets.csv.json', () => {
       return [
         {
-          siren: '200000172',
+          INTER_REG: 'SUD-OUEST',
+          'prairies zones arborées': 5
+        },
+        {
+          INTER_REG: 'NORD-OUEST',
           'prairies zones arborées': 10
         }
       ]
     })
-    expect(getBiomassCarbonDensity({ epci: { code: '200000172' } }, 'prairies zones arborées')).toBe(10)
+    expect(getBiomassCarbonDensity({ commune: { region: '11' } }, 'prairies zones arborées')).toBe(10)
   })
 
   it('relies on a different biomass function for forest biomass', () => {
-    expect(getBiomassCarbonDensity({ epci: { code: '200000172' } }, 'forêt mixte')).toBeUndefined()
+    expect(getBiomassCarbonDensity({ commune: { region: '11' } }, 'forêt mixte')).toBeUndefined()
   })
 
   it('returns an array of area information per commune for an EPCI', () => {

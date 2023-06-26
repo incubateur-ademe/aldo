@@ -94,11 +94,21 @@ function getForestLitterFlux (from, to) {
   }
 }
 
+const REGION_TO_INTER_REGION = require('./dataByCommune/region-to-inter-region.json')
+
 function getBiomassFlux (location, from, to) {
-  const csvFilePath = './dataByEpci/biomass-hors-forets.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const epciSiren = location.epci?.code || location.commune?.epci
-  const data = dataByEpci.find(data => data.siren === epciSiren)
+  if (!location.commune?.region) {
+    console.log('No region for commune', location)
+    return 0
+  }
+  const csvFilePath = './dataByCommune/biomass-hors-forets.csv'
+  const interRegionData = require(csvFilePath + '.json')
+  const interRegionForCommune = REGION_TO_INTER_REGION[location.commune.region]?.interRegion
+  if (!location.commune?.region) {
+    console.log('No inter-region found for region of commune', location)
+    return 0
+  }
+  const data = interRegionData.find(data => data.INTER_REG === interRegionForCommune)
   let key = `${from} vers ${to}`
   // TODO: why is this done ? esp herbacés to imperméables
   const keyReplacements = {
