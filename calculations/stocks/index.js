@@ -225,11 +225,9 @@ options: {
   proportionSolsImpermeables: 0 - 1
 }
 */
-function getStocks (location, options) {
+function getStocks (communes, options) {
   options = options || {}
   options.areas = options.areas || {}
-
-  const communes = getCommunes(location)
 
   const stocksForLocations = []
   // area overrides shouldn't be passed down at this level

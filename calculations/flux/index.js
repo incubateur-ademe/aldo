@@ -20,8 +20,7 @@ function convertN2O (flux) {
   return flux < 0 ? flux / 15 * 0.01 * 44 / 25 + flux / 15 * 0.3 * 0.0075 * 44 / 28 : undefined
 }
 
-function getAnnualFluxes (location, options) {
-  const communes = getCommunes(location)
+function getAnnualFluxes (communes, options) {
   options = options || {}
   let fluxes = []
 
