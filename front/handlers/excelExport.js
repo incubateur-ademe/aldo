@@ -5,6 +5,7 @@ const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
 const { parseOptionsFromQuery, getLocationDetail } = require('./shared')
+const { getCommunes } = require(path.join(rootFolder, './data/communes'))
 
 async function excelExportHandler (req, res) {
   const location = await getLocationDetail(req, res)
@@ -13,12 +14,16 @@ async function excelExportHandler (req, res) {
     // for now only support single location
     if (!singleLocation) {
       res.status(404)
+      res.render('404', {
+        attemptedSearch: req.params.epci
+      })
       return
     }
 
+    const communes = getCommunes(location)
     const options = parseOptionsFromQuery(req.query)
-    const stocks = await getStocks(location, options)
-    const flux = getAnnualFluxes(location, options)
+    const stocks = getStocks(communes, options)
+    const flux = getAnnualFluxes(communes, options)
 
     // prepare export
     const wb = new xl.Workbook()

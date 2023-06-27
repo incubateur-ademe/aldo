@@ -36,12 +36,13 @@
   <div class="fr-collapse" id="accordion-communes">
     <ul>
       <div class="fr-grid-row">
-        <% for( let index=0; index < singleLocation.communes.length; index++ ) { %>
-        <div class="fr-col-12 fr-sm-col-6 fr-col-md-4">
-          <li>
-            <a href="/commune/<%= singleLocation.communes[index] %>"><%= singleLocation.communes[index] %></a>
-          </li>
-        </div>
+        <% for( let index=0; index < communes.length; index++ ) { %>
+          <!-- a bit of a hacky workaround to ignore arrondissements -->
+          <% if (communes[index].nom) { %>
+            <li class="fr-col-12 fr-sm-col-6 fr-col-md-4">
+              <a href="/commune/<%= communes[index].insee %>"><%= communes[index].nom %> (<%= communes[index].insee %>)</a>
+            </li>
+          <% } %>
         <% } %>
       </div>
     </ul>
@@ -90,12 +91,12 @@
   <% } %>
 </ul>
 <% } %>
-<% if (communes && communes.length) { %>
+<% if (location.communes && location.communes.length) { %>
 <p class="fr-mb-0">Commune :</p>
 <ul>
-  <% for( let index=0; index < communes.length; index++ ) { %>
+  <% for( let index=0; index < location.communes.length; index++ ) { %>
     <li>
-      <a href="/commune/<%= communes[index].insee %>"><%= communes[index].nom %> (<%= communes[index].insee %>)</a>
+      <a href="/commune/<%= location.communes[index].insee %>"><%= location.communes[index].nom %> (<%= location.communes[index].insee %>)</a>
     </li>
   <% } %>
 </ul>

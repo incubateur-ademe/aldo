@@ -25,24 +25,22 @@ async function territoryHandler (req, res) {
   }
 
   const options = parseOptionsFromQuery(req.query)
-  console.log('getting stocks...')
   let stocks
+  const communes = getCommunes(location)
   try {
-    stocks = getStocks(location, options)
+    stocks = getStocks(communes, options)
   } catch (error) {
     console.log('Error getting stocks for location', location, error)
     return res.render('error', { pageTitle: 'Erreur' })
   }
-  console.log('getting fluxes')
   let flux
   try {
-    flux = getAnnualFluxes(location, options)
+    flux = getAnnualFluxes(communes, options)
   } catch (error) {
     console.log('Error getting flux for location', location, error)
     return res.render('error', { pageTitle: 'Erreur' })
   }
 
-  console.log('formatting fluxes')
   const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
   const singleLocation = location.epci || location.commune
 
@@ -75,12 +73,12 @@ async function territoryHandler (req, res) {
   if (params.length) {
     sharingQueryStr = `?${params.join('&')}`
   }
-  console.log('rendering')
   res.render('territoire', {
     pageTitle,
     tab: req.params.tab || 'stocks',
     singleLocation,
-    communes: location.communes,
+    location,
+    communes,
     epcis: location.epcis,
     userWarnings: userWarnings(location, options),
     groundTypes: getSortedGroundTypes(stocks),
