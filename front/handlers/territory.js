@@ -67,6 +67,14 @@ async function territoryHandler (req, res) {
     const communeStr = location.communes.map(c => `communes[]=${c.insee}`).join('&')
     resetQueryStr += (location.communes.length ? '&' : '') + communeStr
   }
+  // this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
+  let sharingQueryStr = ''
+  const params = Object.keys(req.query).map(queryParam => {
+    return `${queryParam}=${req.query[queryParam]}`
+  })
+  if (params.length) {
+    sharingQueryStr = `?${params.join('&')}`
+  }
   console.log('rendering')
   res.render('territoire', {
     pageTitle,
@@ -114,11 +122,11 @@ async function territoryHandler (req, res) {
     agriculturalPractices: AgriculturalPractices,
     agriculturalPracticeDetail,
     resetQueryStr,
-    sharingQueryStr: req.search,
+    sharingQueryStr,
     getTabUrl: (tabName, withQuery) => {
       let url = req.path
       if (tabName) url = `/regroupement/${tabName}`
-      return url + withQuery ? req.search : ''
+      return url + withQuery ? sharingQueryStr : ''
     },
     beges: req.query.beges,
     perimetre: req.query.perimetre,
