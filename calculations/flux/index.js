@@ -36,8 +36,6 @@ function getAnnualFluxes (communes, options) {
   })
 
   fluxes.push(...getNitrousOxideEmissions(fluxes))
-  // TODO: aggregations for display
-  //  - produits bois details
 
   fluxes.push(...getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas))
 
