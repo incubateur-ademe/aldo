@@ -37,9 +37,12 @@
     <ul>
       <div class="fr-grid-row">
         <% for( let index=0; index < communes.length; index++ ) { %>
-          <li class="fr-col-12 fr-sm-col-6 fr-col-md-4">
-            <a href="/commune/<%= communes[index].insee %>"><%= communes[index].nom %> (<%= communes[index].insee %>)</a>
-          </li>
+          <!-- a bit of a hacky workaround to ignore arrondissements -->
+          <% if (communes[index].nom) { %>
+            <li class="fr-col-12 fr-sm-col-6 fr-col-md-4">
+              <a href="/commune/<%= communes[index].insee %>"><%= communes[index].nom %> (<%= communes[index].insee %>)</a>
+            </li>
+          <% } %>
         <% } %>
       </div>
     </ul>
