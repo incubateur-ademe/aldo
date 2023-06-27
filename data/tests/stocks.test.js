@@ -497,11 +497,11 @@ describe('The stocks data module', () => {
         return [
           {
             dep: '2',
-            C_aerien_km: '10'
+            C_tot_km: '10'
           },
           {
             dep: '3',
-            C_aerien_km: '50'
+            C_tot_km: '50'
           }
         ]
       })
@@ -536,7 +536,7 @@ describe('The stocks data module', () => {
         return [
           {
             dep: '3',
-            C_aerien_km: '50'
+            C_tot_km: '50'
           }
         ]
       })
@@ -551,7 +551,7 @@ describe('The stocks data module', () => {
       })
       const data = getHedgerowsDataForCommunes({ communes: [{ insee: '01234' }, { insee: '01235' }] })
       const first = data[0]
-      expect(first.carbonDensity).toBe(78)
+      expect(first.carbonDensity).toBe(100)
     })
 
     // TODO: could write test for the sum of hedgerow length byGroundType - expecting sum using CLC codes at level 1 (not child types)
