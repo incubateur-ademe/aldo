@@ -7,8 +7,8 @@ const { getPopulationTotal } = require('../../data')
 
 function getStocksByConsumption (location) {
   const popTotal = getPopulationTotal()
-  const epciPop = location.epci.populationTotale
-  const proportion = epciPop / popTotal
+  const population = (location.epci ? location.epci.population : location.commune.population) || 0
+  const proportion = population / popTotal
   const franceStocks = getFranceStocksWoodProducts()
   const biStock = proportion * franceStocks.bi
   const boStock = proportion * franceStocks.bo
@@ -16,7 +16,7 @@ function getStocksByConsumption (location) {
   return {
     totalReservoirStock: stock,
     totalStock: stock,
-    localPopulation: epciPop,
+    localPopulation: population,
     francePopulation: popTotal,
     portionPopulation: proportion,
     biFranceStocksTotal: franceStocks.bi,
@@ -27,7 +27,6 @@ function getStocksByConsumption (location) {
 }
 
 function getStocksByHarvest (location) {
-  location = { epci: location.epci.code } // see getStocks
   const localAnnualWoodProductsHarvest = getAnnualWoodProductsHarvest(location)
   const franceAnnualWoodProductsHarvest = getAnnualFranceWoodProductsHarvest()
   const franceStocksByCategory = getFranceStocksWoodProducts()

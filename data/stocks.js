@@ -1,11 +1,39 @@
 const { getIgnLocalisation } = require('./shared')
+const { GroundTypes } = require('../calculations/constants')
 
-// Gets the carbon area density of a given ground type.
-function getCarbonDensity (location, groundType) {
-  const csvFilePath = './dataByEpci/ground.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci)
-  return parseFloat(data[groundType]) || 0
+// Gets the carbon area density of a given ground type using the zone pédo-climatique majoritaire for the commune
+function getCarbonDensity (commune, groundType) {
+  const zpcForCommune = commune.zpc
+  if (!zpcForCommune) {
+    // Not expecting this to happen but in case it does, fail silently
+    console.log('No ZPC for commune : ', commune)
+    return 0
+  }
+  const zpcStocksPath = './dataByCommune/stocks-zpc.csv'
+  const stocksForZpcs = require(zpcStocksPath + '.json')
+  const stocksForZpc = stocksForZpcs.find((data) => data.zpc === zpcForCommune)
+  if (!stocksForZpc) {
+    // Not expecting this to happen but in case it does, fail silently
+    console.log('No stocks for ZPC : ', zpcForCommune)
+    return 0
+  }
+  const carbonDensity = stocksForZpc[groundType]
+  if (!carbonDensity) {
+    // Not expecting this to happen but in case it does, fail silently
+    console.log('No stocks for ground type and ZPC : ', groundType, stocksForZpc)
+    return 0
+  }
+  return +carbonDensity
+}
+
+function getArea (location, groundType) {
+  if (!location.commune) { console.log('getArea in data/stocks called wrong', location); return }
+  const area = location.commune.clc18[groundType]
+  if (area >= 0) return area
+  else {
+    // console.log('no area saved for', location.commune?.insee, groundType)
+    return getAreaFromData(location, groundType)
+  }
 }
 
 // Gets the area in hectares (ha) of a given ground type in a location.
@@ -13,64 +41,37 @@ function getCarbonDensity (location, groundType) {
 // so a mapping is used and the sum of ha of all matching CLC types is returned.
 // NB: in the lookup the type names for ground data and the more specific biomass data
 // are placed on the same level, so some CLC codes are used in two types.
-function getArea (location, groundType) {
+function getAreaFromData (location, groundType) {
+  if (!location.commune) { console.log('getAreaFromData in data/stocks called wrong', location); return }
   if (groundType === 'haies') {
-    return getAreaHaies(location)
+    return
   } else if (groundType.startsWith('forêt ')) {
-    return getAreaForests(location, groundType)
+    return getAreaForests(location.commune, groundType)
   }
-  // consider using clcCodes in constants file
-  // TODO: make more standardised keys?
-  const aldoTypeToClcCodes = {
-    cultures: ['211', '212', '213', '241', '242', '243', '244'],
-    prairies: ['231', '321', '322', '323'],
-    'prairies zones herbacées': ['231', '321'],
-    'prairies zones arbustives': ['322'],
-    'prairies zones arborées': ['323'],
-    vignes: ['221'],
-    vergers: ['222', '223'],
-    'sols arborés': ['141'], // aka "sols artificiels arborés et buissonants" in stocks_c tab
-    'sols artificiels non-arborés': ['111', '112', '121', '122', '123', '124', '131', '132', '133', '142'],
-    'sols artificiels imperméabilisés': ['111', '121', '122', '123', '124', '131', '132', '133', '142'],
-    'sols artificialisés': ['112'],
-    // TODO: ask about logic F39: area sols arbustifs stocks_c tab.
-    'zones humides': ['411', '412', '421', '422', '423', '511', '512', '521', '522', '523']
-  }
-  const clcCodes = aldoTypeToClcCodes[groundType]
+  const typeDetails = GroundTypes.find((gt) => gt.stocksId === groundType)
+  const clcCodes = typeDetails?.clcCodes
   if (!clcCodes) {
     throw new Error(`No CLC code mapping found for ground type '${groundType}'`)
   }
-  const csvFilePath = './dataByEpci/clc18.csv'
-  const areasByClcType = require(csvFilePath + '.json')
-  const areaForSiren = areasByClcType.find(data => data.siren === location.epci)
+  const csvFilePath = './dataByCommune/clc18.csv'
+  const areasByCommuneAndClcType = require(csvFilePath + '.json')
   let totalArea = 0
-  for (const clcCode of clcCodes) {
-    const area = areaForSiren[clcCode]
-    // TODO: output warnings for codes that aren't in data at all? As opposed to empty value
-    if (area) {
-      totalArea += parseFloat(area)
-    }
-  }
+  areasByCommuneAndClcType
+    .filter((areaData) => location.commune.insee === areaData.insee && clcCodes.includes(areaData.code18))
+    .forEach((areaData) => { totalArea += +areaData.area })
   return totalArea
-}
-
-function getAreaHaies (location) {
-  const csvFilePath = './dataByEpci/surface-haies.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.filter(data => data.siren === location.epci)
-  if (data.length > 1) {
-    console.log('WARNING: more than one haies surface area for siren: ', location.epci)
-  }
-  return parseFloat(data[0].area)
 }
 
 // using IGN, not CLC, data for forests because it is more accurate
 // side effect being that the sum of the areas could be different to the
 // recorded size of the EPCI.
-function getAreaForests (location, forestType) {
-  const csvFilePath = './dataByEpci/surface-foret-par-commune.csv'
+function getAreaForests (commune, forestType) {
+  const csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
-  const areaDataForEpci = areaData.filter(data => data.CODE_EPCI === location.epci)
+  let areaDataByCommune = []
+  let code = commune.insee
+  if (code.startsWith('0')) code = code.slice(1)
+  areaDataByCommune = areaData.filter(data => data.INSEE_COM === code)
   let sum = 0
   const areaCompositionColumnName = {
     'forêt feuillu': 'SUR_FEUILLUS',
@@ -78,7 +79,7 @@ function getAreaForests (location, forestType) {
     'forêt mixte': 'SUR_MIXTES',
     'forêt peupleraie': 'SUR_PEUPLERAIES'
   }[forestType]
-  areaDataForEpci.forEach((communeData) => {
+  areaDataByCommune.forEach((communeData) => {
     sum += +communeData[areaCompositionColumnName]
   })
   return sum
@@ -92,13 +93,21 @@ function getSignificantCarbonData () {
   return carbonData.filter((data) => data.surface_ic === 's')
 }
 
-function getCommuneAreaDataForEpci (location) {
-  const csvFilePath = './dataByEpci/surface-foret-par-commune.csv'
+function getForestAreaData (location) {
+  const csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
-  return areaData.filter(data => data.CODE_EPCI === location.epci)
+  if (location.epci) {
+    return areaData.filter(data => data.CODE_EPCI === location.epci.code)
+  } else if (location.commune) {
+    // TODO: fix file to append 0 to all the codes that are just 4 characters long
+    let code = location.commune.insee
+    if (code.startsWith('0')) code = code.slice(1)
+    return areaData.filter(data => data.INSEE_COM === code)
+  }
+  return areaData.filter(data => location.communes?.includes(data.INSEE_COM) || location.epcis?.includes(data.CODE_EPCI))
 }
 
-// communeData is one entry from the array returned by getCommuneAreaDataForEpci
+// communeData is one entry from the array returned by getForestAreaData
 // carbon data is the array returned by getSignificantCarbonData
 // composition is a forest subtype
 function getCarbonDataForCommuneAndComposition (communeData, carbonData, forestSubtype) {
@@ -139,11 +148,16 @@ function getCarbonDataForCommuneAndComposition (communeData, carbonData, forestS
 }
 
 function getForestBiomassCarbonDensities (location, forestSubtype) {
-  const areaDataForEpci = getCommuneAreaDataForEpci(location)
+  const areaDataByCommune = getForestAreaData(location)
+  if (!areaDataByCommune.length) {
+    return { live: 0, dead: 0 }
+  }
   const significantCarbonData = getSignificantCarbonData()
 
   let weightedLiveSum = 0
   let weightedDeadSum = 0
+  let meanLiveSum = 0
+  let meanDeadSum = 0
   let totalArea = 0
   const areaCompositionColumnName = {
     'forêt feuillu': 'SUR_FEUILLUS',
@@ -151,17 +165,22 @@ function getForestBiomassCarbonDensities (location, forestSubtype) {
     'forêt mixte': 'SUR_MIXTES',
     'forêt peupleraie': 'SUR_PEUPLERAIES'
   }[forestSubtype]
-  areaDataForEpci.forEach((communeData) => {
+  areaDataByCommune.forEach((communeData) => {
     const area = +communeData[areaCompositionColumnName]
     const carbonData = getCarbonDataForCommuneAndComposition(communeData, significantCarbonData, forestSubtype)
     weightedLiveSum += +carbonData['carbone_(tC∙ha-1)'] * area
     weightedDeadSum += +carbonData['bois_mort_carbone_(tC∙ha-1)'] * area
+    meanLiveSum += +carbonData['carbone_(tC∙ha-1)']
+    meanDeadSum += +carbonData['bois_mort_carbone_(tC∙ha-1)']
     totalArea += area
   })
-  const live = totalArea ? weightedLiveSum / totalArea : 0
-  const dead = totalArea ? weightedDeadSum / totalArea : 0
+  // if there is some area, take weighted sum, otherwise take mean to allow for user customisations of areas
+  const live = totalArea ? weightedLiveSum / totalArea : meanLiveSum / areaDataByCommune.length
+  const dead = totalArea ? weightedDeadSum / totalArea : meanDeadSum / areaDataByCommune.length
   return { live, dead }
 }
+
+const REGION_TO_INTER_REGION = require('./dataByCommune/region-to-inter-region.json')
 
 function getBiomassCarbonDensity (location, groundType) {
   if (groundType.startsWith('forêt')) {
@@ -170,9 +189,18 @@ function getBiomassCarbonDensity (location, groundType) {
   if (groundType === 'haies') {
     return getForestBiomassCarbonDensities(location, 'forêt mixte').live
   }
-  const csvFilePath = './dataByEpci/biomass-hors-forets.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci)
+  if (!location.commune?.region) {
+    console.log('No region for commune', location)
+    return 0
+  }
+  const csvFilePath = './dataByCommune/biomass-hors-forets.csv'
+  const interRegionData = require(csvFilePath + '.json')
+  const interRegionForCommune = REGION_TO_INTER_REGION[location.commune.region]?.interRegion
+  if (!location.commune?.region) {
+    console.log('No inter-region found for region of commune', location)
+    return 0
+  }
+  const data = interRegionData.find(data => data.INTER_REG === interRegionForCommune)
   // NB: all stocks are integers, but flux has decimals
   return parseInt(data[groundType], 10) || 0
 }
@@ -212,10 +240,10 @@ function getAnnualWoodProductsHarvest (location) {
     'forêt mixte': 1.37,
     'forêt peupleraie': 1.3
   }
-  const areaDataForEpci = getCommuneAreaDataForEpci(location)
+  const areaDataByCommune = getForestAreaData(location)
   const significantCarbonData = getSignificantCarbonData()
   const regionProportionData = getRegionProportionData()
-  areaDataForEpci.forEach((communeData) => {
+  areaDataByCommune.forEach((communeData) => {
     ['forêt conifere', 'forêt feuillu', 'forêt mixte', 'forêt peupleraie'].forEach((forestSubtype) => {
       const areaCompositionColumnName = typeToColumn[forestSubtype]
       const area = +communeData[areaCompositionColumnName]
@@ -252,13 +280,50 @@ function getForestLitterCarbonDensity (subtype) {
   return 9 // TODO: ask follow up on source of this data
 }
 
+function getHedgerowsDataForCommunes (location) {
+  if (!location.communes) { console.log('getHedgerowsDataForCommunes called wrong', location); return }
+  const carbonCsvFilePath = './dataByCommune/carbone-haies.csv'
+  const carbonData = require(carbonCsvFilePath + '.json')
+  const csvFilePath = './dataByCommune/haie-clc18.csv'
+  let lengthData = require(csvFilePath + '.json')
+
+  const communes = location.communes.map((c) => c.insee)
+  lengthData = lengthData.filter((data) => communes.includes(data.INSEE_COM) && data.TOTKM_HAIE)
+
+  const excludeIds = ['produits bois', 'haies']
+  // ignore child types as well
+  const groundTypes = GroundTypes.filter((gt) => !gt.parentType && !excludeIds.includes(gt.stocksId))
+  return lengthData.map((data) => {
+    // default to the average of all the values (calculated in excel) if department not in file
+    const carbonDensity = carbonData.find((cd) => cd.dep === data.INSEE_DEP)?.C_tot_km || 101.347
+
+    const byGroundType = {}
+    groundTypes.forEach((gt) => { byGroundType[gt.stocksId] = 0 })
+    groundTypes.forEach((gt) => {
+      gt.clcCodes.forEach((clcCode) => {
+        byGroundType[gt.stocksId] += +data[`CLC_${clcCode}`] || 0
+      })
+    })
+    return {
+      length: +data.TOTKM_HAIE,
+      carbonDensity: +carbonDensity,
+      byGroundType
+    }
+  })
+}
+
 module.exports = {
   getCarbonDensity,
   getArea,
+  getAreaFromData,
+  getForestAreaData,
+  getSignificantCarbonData,
+  getCarbonDataForCommuneAndComposition,
   getBiomassCarbonDensity,
   getForestBiomassCarbonDensities,
   getFranceStocksWoodProducts,
   getForestLitterCarbonDensity,
   getAnnualWoodProductsHarvest,
-  getAnnualFranceWoodProductsHarvest
+  getAnnualFranceWoodProductsHarvest,
+  getHedgerowsDataForCommunes
 }

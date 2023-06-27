@@ -45,6 +45,10 @@
         <% for( let index=0; index < groundTypes.length; index++ ) { %>
         <% const groundType = groundTypes[index] %>
         <% const thisStock = stocks[groundType.stocksId] %>
+        <% const stocksId = groundTypes[index].stocksId %>
+        <% if (stocksId === 'produits bois' || stocksId === 'haies') { %>
+        <% continue %>
+        <% } %>
         <!-- TODO: make row blue if area modified -->
         <tr class="expandable-row stocks-row">
           <td onClick='toggleRow(this)'>
@@ -76,15 +80,10 @@
           </td>
           <td class='expanded-row-content hide-row'>
             <!-- TODO: reset input values if URL doesn't contain the relevant query value -->
-            <% const stocksId = groundTypes[index].stocksId %>
             <% if (simpleStocks.indexOf(stocksId) > -1) { %>
             <%- include('stockCalculations/simple', {index, stocksId, stock: thisStock }) -%>
             <% } else if (thisStock.children) { %>
             <%- include('stockCalculations/subtypes', {stocksId, stock: thisStock}) -%>
-            <% } else if (stocksId === 'produits bois' ) { %>
-            <%- include('stockCalculations/wood', {stock: thisStock, woodCalculation }) -%>
-            <% } else if (stocksId === 'haies' ) { %>
-            <%- include('stockCalculations/hedges', {stock: thisStock }) -%>
             <% } %>
             <!-- indicate if sols artificiels proportion was changed ? -->
           </td>
@@ -94,7 +93,71 @@
     </table>
     <% if (stocksHaveModifications) { %>
     <p class="fr-text--sm fr-mt-1w">* Données modifiées</p>
-    <a class="fr-btn fr-btn--secondary fr-mt-1w" href="<%= baseUrl %>/stocks<%= resetQueryStr %>">
+    <a class="fr-btn fr-btn--secondary fr-mt-1w" href="<%= getTabUrl('stocks') %><%= resetQueryStr %>">
+      Réinitialiser les données
+    </a>
+    <% } %>
+    <p class="fr-text--sm fr-mt-1w">
+      <a href="https://docs.datagir.ademe.fr/documentation-aldo/stocks/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">
+        En savoir plus sur les méthodes de calculs
+      </a>
+    </p>
+  </div>
+  <div class="fr-table fr-col-12 fr-col-lg-10 fr-pr-md-1w fr-mt-2w">
+    <table class="detail-table">
+      <caption>Autres stocks de carbone</caption>
+      <thead>
+        <tr class="expandable-row-header other-stocks-row">
+          <th scope="col">Réservoir</th>
+          <th scope="col">Stocks de carbone (tC)</th>
+          <th scope="col">Stocks de carbone (%)</th>
+          <td scope="col"></td>
+        </tr>
+      </thead>
+      <tbody>
+        <% for( let index=0; index < groundTypes.length; index++ ) { %>
+        <% const groundType = groundTypes[index] %>
+        <% const thisStock = stocks[groundType.stocksId] %>
+        <% const stocksId = groundTypes[index].stocksId %>
+        <% if (stocksId !== 'produits bois' && stocksId !== 'haies') { %>
+        <% continue %>
+        <% } %>
+        <tr class="expandable-row other-stocks-row">
+          <td onClick='toggleRow(this)'>
+            <%= groundType.name %> <%= thisStock.hasModifications ? '*' : '' %>
+          </td>
+          <td onClick='toggleRow(this)' style="text-align: right;">
+            <%= formatNumber(thisStock.totalStock) %>
+          </td>
+          <td onClick='toggleRow(this)' style="text-align: right;">
+            <% if (thisStock.stockPercentage > 10) { %>
+            <b>
+              <%= formatNumber(thisStock.stockPercentage) %> %
+            </b>
+            <% } else { %>
+            <%= formatNumber(thisStock.stockPercentage) %> %
+            <% } %>
+          </td>
+          <td onClick='toggleRow(this)'>
+            <button onClick='toggleRow(this)' type="button">
+              <span class="fr-fi-question-line" aria-hidden="true" style="color: #555"></span>
+            </button>
+          </td>
+          <td class='expanded-row-content hide-row'>
+            <!-- TODO: reset input values if URL doesn't contain the relevant query value -->
+            <% if ( stocksId === 'produits bois' ) { %>
+            <%- include('stockCalculations/wood', { stock: thisStock, woodCalculation }) -%>
+            <% } else if ( stocksId === 'haies' ) { %>
+            <%- include('stockCalculations/hedges', { stock: thisStock }) -%>
+            <% } %>
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+    <% if (stocksHaveModifications) { %>
+    <p class="fr-text--sm fr-mt-1w">* Données modifiées</p>
+    <a class="fr-btn fr-btn--secondary fr-mt-1w" href="<%= getTabUrl('stocks') %><%= resetQueryStr %>">
       Réinitialiser les données
     </a>
     <% } %>

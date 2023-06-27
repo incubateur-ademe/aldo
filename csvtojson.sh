@@ -8,3 +8,10 @@ for file in *.csv;
 do touch $file.json;
 npx csvtojson $file > $file.json;
 done;
+
+cd ../dataByCommune;
+for file in *.csv;
+# looks a bit funny because filenames become X.csv.json but it works
+do touch $file.json;
+npx csvtojson $file > $file.json;
+done;

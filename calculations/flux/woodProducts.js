@@ -11,8 +11,8 @@ const { getPopulationTotal } = require('../../data')
 
 function getFluxByConsumption (location) {
   const popTotal = getPopulationTotal()
-  const epciPop = location.epci.populationTotale
-  const proportion = epciPop / popTotal
+  const population = (location.epci ? location.epci.population : location.commune.population) || 0
+  const proportion = population / popTotal
   const franceFlux = getFranceFluxWoodProducts()
   const bo = franceFlux.bo * proportion
   const bi = franceFlux.bi * proportion
@@ -23,7 +23,7 @@ function getFluxByConsumption (location) {
       category: 'bo',
       value: bo,
       co2e: bo,
-      localPopulation: epciPop,
+      localPopulation: population,
       francePopulation: popTotal,
       localPortion: proportion,
       franceSequestration: franceFlux.bo
@@ -34,7 +34,7 @@ function getFluxByConsumption (location) {
       category: 'bi',
       value: bi,
       co2e: bi,
-      localPopulation: epciPop,
+      localPopulation: population,
       francePopulation: popTotal,
       localPortion: proportion,
       franceSequestration: franceFlux.bi
@@ -43,7 +43,6 @@ function getFluxByConsumption (location) {
 }
 
 function getFluxByHarvest (location) {
-  location = { epci: location.epci.code } // see getFlux
   const allLocalHarvest = getAnnualWoodProductsHarvest(location)
   const allFranceHarvest = getAnnualFranceWoodProductsHarvest()
   const franceSequestration = getFranceFluxWoodProducts()

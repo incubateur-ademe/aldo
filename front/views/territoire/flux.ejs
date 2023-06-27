@@ -120,6 +120,11 @@
               Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %> sont séparés par sous-typologie.
             </p>
             <% } %>
+            <% if (groundType.stocksId === 'sols artificiels') { %>
+              <button class="fr-btn fr-btn--sm fr-btn--secondary to-config fr-mb-2w" type="button">
+                Modifier la répartition des sols artificialisés
+              </button>
+            <% } %>
             <% for (const child of groundType.children) { %>
             <% if(hasData(child)) { %>
             <% const childName = allGroundTypes.find((g) => g.stocksId === child).name.toLowerCase() %>
@@ -153,7 +158,7 @@
     <% if (Object.keys(agriculturalPracticeDetail).length) { %>
     <p class="fr-text--sm fr-mt-1w">Ces flux comprisent ceux qui sont reliés a vos pratiques agricoles. Modifiez-les dans l'onglet « Pratiques agricoles ».</p>
     <% } else { %>
-    <p class="fr-text--sm fr-mt-1w">Mettez à jour vos pratiques agricoles pour voir comment elles influencent les flux dans votre térritoire avec l'onglet « Pratiques agricoles ».</p>
+    <p class="fr-text--sm fr-mt-1w">Mettez à jour vos pratiques agricoles pour voir comment elles influencent les flux dans votre territoire avec l'onglet « Pratiques agricoles ».</p>
     <% } %>
     <p class="fr-text--sm fr-mt-1w"><a href="https://docs.datagir.ademe.fr/documentation-aldo/flux/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">En savoir plus sur les méthodes de calculs</a></p>
   </div>

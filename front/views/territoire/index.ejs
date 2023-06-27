@@ -1,10 +1,10 @@
-<%- include('../partials/search-header') -%>
+<%- include('../partials/header') -%>
 <main role="main" id="contenu">
   <div class="fr-container fr-pb-6w fr-px-2w">
-    <%- include('../partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: epci.nom, }, ], }) -%>
+    <%- include('../partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: singleLocation?.nom || 'Regroupement', }, ], }) -%>
+    <%- include('./warnings') -%>
     <%- include('./introduction') -%>
-    <form action="<%= baseUrl %>/stocks" method="GET" class="fr-tabs fr-mt-4w" id="territory">
-      <input type="hidden" name="epci" value="<%= epci.nom %>" />
+    <form method="GET" class="fr-tabs fr-mt-4w" id="territory">
       <ul class="fr-tabs__list" role="tablist" aria-label="Données du territoire">
         <li role="presentation">
           <button type="button" id="tabpanel-stocks" class="fr-tabs__tab" tabindex="0" role="tab" aria-selected="<%=tab === 'stocks'%>" aria-controls="tabpanel-stocks-panel" data-fr-js-tab-button="true">Stocks</button>
@@ -57,11 +57,28 @@
     queryParams.set(event.target.name, event.target.value)
   })
 
+  function changeTab(tab) {
+    $(`#tabpanel-${tab}`).click()
+    document.getElementById(`tabpanel-${tab}`).scrollIntoView({ behavior: 'smooth' })
+  }
+
+  $('button.to-stocks').click(() => changeTab('stocks'))
+  $('button.to-flux').click(() => changeTab('flux'))
+  $('button.to-config').click(() => changeTab('config'))
+
+  // handle URL here so that only relevant params are sent and we avoid URLs that get cut off
+  // for being too long
   $('form#territory').submit((event) => {
     let currentTab = $("button.fr-tabs__tab[aria-selected=true]")[0]
-    currentTab = currentTab?.id.endsWith("flux") ? "flux" : "stocks"
-    const epciCode = window.location.pathname.split('/')[2]
-    window.location.href = `/epci/${epciCode}/${currentTab}?${queryParams.toString()}`
+    currentTab = currentTab?.id.endsWith("stocks") ? "stocks" : "flux"
+    const pathParts = window.location.pathname.split('/')
+    const locationType = pathParts[1]
+    const locationCode = pathParts[2]
+    if (locationType === 'regroupement') {
+      window.location.href = `/regroupement/${currentTab}?${queryParams.toString()}`
+    } else {
+      window.location.href = `/${locationType}/${locationCode}/${currentTab}?${queryParams.toString()}`
+    }
     event.preventDefault()
   })
 </script>

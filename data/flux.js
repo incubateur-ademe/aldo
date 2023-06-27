@@ -4,53 +4,81 @@ const { getIgnLocalisation } = require('./shared')
 // dependency tree
 const { GroundTypes } = require('../calculations/constants')
 
-function getGroundCarbonFluxKey (from, to) {
-  const fromDetails = GroundTypes.find(groundType => groundType.stocksId === from)
-  const toDetails = GroundTypes.find(groundType => groundType.stocksId === to)
-  return `f_${fromDetails.fluxId}_${toDetails.fluxId}_%zpc`
+function handleGroundCarbonFluxExceptions (location, from, to) {
+  const saArbId = 'sols artificiels arborés et buissonants'
+  const saImpId = 'sols artificiels imperméabilisés'
+  const saEnhId = 'sols artificiels arbustifs'
+  const vergersId = 'vergers'
+  const vignesId = 'vignes'
+  const culturesId = 'cultures'
+  const zhId = 'zones humides'
+  if (from === culturesId) {
+    if (to === vergersId || to === vignesId) return 0
+  } else if (from.startsWith('prairies')) {
+    if (to === saArbId) {
+      // doesn't matter which forest subtype used here
+      return getAnnualGroundCarbonFlux(location, from, 'forêt mixte')
+    } else if (to === saEnhId) return 0
+  } else if (from.startsWith('forêt')) {
+    if (to === saArbId) return 0
+  } else if (from === zhId) {
+    if (to === vergersId || to === vignesId) {
+      return getAnnualGroundCarbonFlux(location, from, culturesId)
+    } else if (to === saImpId) {
+      return getAnnualGroundCarbonFlux(location, from, culturesId) + getAnnualGroundCarbonFlux(location, culturesId, saImpId)
+    } else if (to === 'sols artificiels arbustifs') {
+      // doesn't matter which prairie subtype used here
+      return getAnnualGroundCarbonFlux(location, from, 'prairies zones arbustives')
+    } else if (to === saArbId) {
+      // doesn't matter which forest subtype used here
+      return getAnnualGroundCarbonFlux(location, from, 'forêt mixte')
+    }
+  } else if (from === vergersId) {
+    if (to === culturesId) return 0
+    else if (to === zhId || to.startsWith('sols')) {
+      return getAnnualGroundCarbonFlux(location, culturesId, to)
+    } else if (to === vignesId) return 0
+  } else if (from === vignesId) {
+    if (to === culturesId) return 0
+    else if (to === zhId || to.startsWith('sols')) {
+      return getAnnualGroundCarbonFlux(location, culturesId, to)
+    } else if (to === vergersId) return 0
+  } else if (from === saImpId) {
+    return getAnnualGroundCarbonFlux(location, culturesId, to)
+  } else if (from === saEnhId) {
+    // doesn't matter which prairie subtype used here
+    return getAnnualGroundCarbonFlux(location, 'prairies zones arbustives', to)
+  } else if (from === saArbId) {
+    // doesn't matter which forest subtype used here
+    return getAnnualGroundCarbonFlux(location, 'forêt mixte', to)
+  }
 }
 
+// TODO: incorporate yearsForFlux setting in here?
 function getAnnualGroundCarbonFlux (location, from, to) {
-  // to start, deal with some exceptions in flux lookups
-  if (from === 'sols artificiels arbustifs') {
-    if (to === 'zones humides') return
-    // could've chosen any prairie type, they have the same flux
-    return getAnnualGroundCarbonFlux(location, 'prairies zones arborées', to)
-  } else if (from === 'sols artificiels arborés et buissonants') {
-    if (to === 'zones humides' || to === 'forêts') return
-    return getAnnualGroundCarbonFlux(location, 'forêts', to)
-  }
-  // all vergers/vignes -> sols artificiels X use the flux for vergers/vignes -> cultures instead
-  if (to.startsWith('sols')) {
-    if (from === 'vergers' || from === 'vignes') {
-      return getAnnualGroundCarbonFlux(location, 'cultures', to)
-    }
-  }
-  if (to === 'sols artificiels imperméabilisés') {
-    if (from === 'zones humides') {
-      return getAnnualGroundCarbonFlux(location, from, 'cultures') + getAnnualGroundCarbonFlux(location, 'cultures', to)
-    }
-  } else if (to === 'sols artificiels arbustifs') {
-    if (from.startsWith('prairies')) {
-      return
-    } else if (from === 'zones humides') {
-      // could've chosen any prairie type, they have the same flux
-      return getAnnualGroundCarbonFlux(location, from, 'prairies zones arborées')
-    }
-  } else if (to === 'sols artificiels arborés et buissonants') {
-    if (from.startsWith('forêts')) {
-      return
-    } else if (from === 'zones humides') {
-      return getAnnualGroundCarbonFlux(location, from, 'forêts')
-    }
-  }
+  const commune = location.commune
+  if (!commune) { console.log('getAnnualGroundCarbonFlux called with bad location', location); return 0 }
+
+  const fromDetails = GroundTypes.find(groundType => groundType.stocksId === from)
+  const toDetails = GroundTypes.find(groundType => groundType.stocksId === to)
+  if (fromDetails.fluxId === toDetails.fluxId) return 0
+
+  const exceptionValue = handleGroundCarbonFluxExceptions(location, from, to)
+  if (exceptionValue || exceptionValue === 0) return exceptionValue
   // normal flux value lookup
-  const csvFilePath = './dataByEpci/ground.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci)
-  const dataValue = data[getGroundCarbonFluxKey(from, to)]
+  const zpc = commune.zpc
+
+  const fluxForZpcs = require('./dataByCommune/flux-zpc.csv.json')
+  const fluxForZpc = fluxForZpcs.find(data => data.zpc === zpc)
+  if (!fluxForZpc) { console.log('No ZPC for commune', commune.insee, zpc); return }
+
+  const key = fromDetails.fluxId + '_' + toDetails.fluxId
+
+  const dataValue = fluxForZpc[key]
   if (dataValue) {
     return parseFloat(dataValue)
+  } else {
+    console.log('ZPC does not have value for key', zpc, key, fromDetails, toDetails)
   }
 }
 
@@ -66,10 +94,21 @@ function getForestLitterFlux (from, to) {
   }
 }
 
+const REGION_TO_INTER_REGION = require('./dataByCommune/region-to-inter-region.json')
+
 function getBiomassFlux (location, from, to) {
-  const csvFilePath = './dataByEpci/biomass-hors-forets.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci)
+  if (!location.commune?.region) {
+    console.log('No region for commune', location)
+    return 0
+  }
+  const csvFilePath = './dataByCommune/biomass-hors-forets.csv'
+  const interRegionData = require(csvFilePath + '.json')
+  const interRegionForCommune = REGION_TO_INTER_REGION[location.commune.region]?.interRegion
+  if (!location.commune?.region) {
+    console.log('No inter-region found for region of commune', location)
+    return 0
+  }
+  const data = interRegionData.find(data => data.INTER_REG === interRegionForCommune)
   let key = `${from} vers ${to}`
   // TODO: why is this done ? esp herbacés to imperméables
   const keyReplacements = {
@@ -98,29 +137,16 @@ function getBiomassFlux (location, from, to) {
 function yearMultiplier (reservoir, from, to) {
   const multiplier = 20
   if (reservoir === 'sol') {
-    // order of statements is important (see below)
-    if (from === 'sols artificiels imperméabilisés') {
-      return multiplier
+    if (from === 'zones humides' || to === 'zones humides') {
+      return 1
     } else if (to === 'sols artificiels imperméabilisés') {
       return 1
-    } else if (from === 'zones humides' || to === 'zones humides') {
+    } else if (to === 'sols artificiels arbustifs') {
       return 1
     } else if (to === 'sols artificiels arborés et buissonants') {
       return 1
-    } else if (from === 'sols artificiels arbustifs') {
-      return multiplier
-    } else if (to === 'sols artificiels arbustifs') {
-      return 1
-    } else if (from === 'sols artificiels arborés et buissonants') {
-      return multiplier
-    } else if (from.startsWith('forêt ') || to.startsWith('forêt ')) {
-      return multiplier
-    } else if (from.startsWith('prairies') || to.startsWith('prairies')) {
-      return multiplier
-    } else if (from === 'cultures') {
-      return multiplier
-    } else if (to === 'cultures' || to === 'vergers' || to === 'vignes') {
-      return 1
+    } else {
+      return 20
     }
   } else if (reservoir === 'biomasse') {
     // not relevant for certain types
@@ -176,7 +202,7 @@ function yearMultiplier (reservoir, from, to) {
 
 // returns all known fluxes for from - to combinations
 // TODO: could make more efficient by opening all the files and finding the location data once
-function getAllAnnualFluxes (location, options) {
+function getFluxReferenceValues (location) {
   let fluxes = []
   for (const fromGt of GroundTypes) {
     const from = fromGt.stocksId
@@ -185,7 +211,7 @@ function getAllAnnualFluxes (location, options) {
       if (from === to) {
         continue
       }
-      if (fromGt.fluxId && toGt.fluxId) {
+      if (fromGt.fluxId && toGt.fluxId && fromGt.fluxId !== toGt.fluxId) {
         const annualFlux = getAnnualGroundCarbonFlux(location, from, to)
         const yearsForFlux = yearMultiplier('sol', from, to)
         if (annualFlux !== undefined) {
@@ -196,7 +222,8 @@ function getAllAnnualFluxes (location, options) {
             annualFluxEquivalent: cToCo2e(annualFlux),
             yearsForFlux,
             reservoir: 'sol',
-            gas: 'C'
+            gas: 'C',
+            commune: location.commune.insee
           })
         }
         const litterFlux = getForestLitterFlux(from, to)
@@ -206,8 +233,10 @@ function getAllAnnualFluxes (location, options) {
             to,
             annualFlux: litterFlux,
             annualFluxEquivalent: cToCo2e(litterFlux),
+            yearsForFlux: 1,
             reservoir: 'litière',
-            gas: 'C'
+            gas: 'C',
+            commune: location.commune.insee
           })
         }
       }
@@ -223,7 +252,8 @@ function getAllAnnualFluxes (location, options) {
             annualFluxEquivalent: cToCo2e(biomassFlux),
             yearsForFlux,
             reservoir: 'biomasse',
-            gas: 'C'
+            gas: 'C',
+            commune: location.commune.insee
           })
         }
       }
@@ -239,29 +269,32 @@ function cToCo2e (valueC) {
 }
 
 function getAnnualSurfaceChange (location, options, from, to) {
-  const csvFilePath = './dataByEpci/clc18-change.csv'
-  const dataByEpci = require(csvFilePath + '.json')
-  const data = dataByEpci.find(data => data.siren === location.epci)
-  const fromClcCodes = GroundTypes.find(groundType => groundType.stocksId === from).clcCodes
-  const toClcCodes = GroundTypes.find(groundType => groundType.stocksId === to).clcCodes
-  let totalAreaChange = 0
-  if (!fromClcCodes || !toClcCodes) {
-    return 0
-  }
-  for (const fromCode of fromClcCodes) {
-    for (const toCode of toClcCodes) {
-      const key = `${fromCode}-${toCode}`
-      if (data[key]) {
-        totalAreaChange += parseFloat(data[key])
-      }
-    }
-  }
-  const yearsBetweenStudies = 6
-  const yearlyAreaChange = totalAreaChange / yearsBetweenStudies
+  const yearlyAreaChange = location.commune.changes[from]?.[to] || 0
   const solsArtificielsException = getSolsArtificielsException(location, options, from, to, yearlyAreaChange)
   if (solsArtificielsException !== undefined) {
     return solsArtificielsException
   }
+  return yearlyAreaChange
+}
+
+function getAnnualSurfaceChangeFromData (location, from, to) {
+  if (!location.commune) { console.log('getAnnualSurfaceChangeFromData called with bad location', location); return 0 }
+  const fromClcCodes = GroundTypes.find(groundType => groundType.stocksId === from).clcCodes
+  const toClcCodes = GroundTypes.find(groundType => groundType.stocksId === to).clcCodes
+  if (!fromClcCodes || !toClcCodes) {
+    return 0
+  }
+
+  const csvFilePath = './dataByCommune/clc18-change.csv'
+  const dataByCommune = require(csvFilePath + '.json')
+  const areaChangesForCommune = dataByCommune.filter(data => data.commune === location.commune.insee)
+  const changesForGroundTypes = areaChangesForCommune.filter((change) => {
+    return fromClcCodes.includes(change.code12) && toClcCodes.includes(change.code18)
+  })
+  const totalAreaChange = changesForGroundTypes.reduce((acc, change) => acc + Number(change.area), 0)
+
+  const yearsBetweenStudies = 6
+  const yearlyAreaChange = totalAreaChange / yearsBetweenStudies
   return yearlyAreaChange
 }
 
@@ -326,7 +359,7 @@ function getFranceFluxWoodProducts () {
 //     because the land can be split by different ignLocalisationCode
 // So a flux entry is unique on commune, to, ignLocalisationCode keys.
 function getForestBiomassFluxesByCommune (location) {
-  let csvFilePath = './dataByEpci/surface-foret-par-commune.csv'
+  let csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
   csvFilePath = './dataByEpci/bilan-carbone-foret-par-localisation.csv'
   const carbonData = require(csvFilePath + '.json')
@@ -334,10 +367,17 @@ function getForestBiomassFluxesByCommune (location) {
   // there is data with null values because it isn't statistically significant at that
   // level. Remove these lines because they are not used.
   const significantCarbonData = carbonData.filter((data) => data.surface_ic === 's')
-  const areaDataForEpci = areaData.filter(data => data.CODE_EPCI === location.epci)
+  let areaDataByCommune = []
+  if (location.epci) {
+    areaDataByCommune = areaData.filter(data => data.CODE_EPCI === location.epci.code)
+  } else if (location.commune) {
+    let code = location.commune.insee
+    if (code.startsWith('0')) code = code.slice(1)
+    areaDataByCommune = areaData.filter(data => data.INSEE_COM === code)
+  }
   const forestSubtypes = GroundTypes.find((gt) => gt.stocksId === 'forêts').children
   const fluxes = []
-  areaDataForEpci.forEach((communeData) => {
+  areaDataByCommune.forEach((communeData) => {
     // for each line of data by commune + localisationCode, we need to add a flux
     //   for each of the four forest subtypes
     forestSubtypes.forEach((forestSubtype) => {
@@ -380,8 +420,6 @@ function getForestBiomassFluxesByCommune (location) {
         flux.ignLocalisationCode = france
         carbonDataForCommuneAndLocalisation =
           compositionCarbonData.find((data) => data.code_localisation === france)
-        // TODO: remove this console log?
-        console.log(flux)
         if (!carbonDataForCommuneAndLocalisation) {
           // this is unexpected
           const message =
@@ -409,9 +447,10 @@ function getForestBiomassFluxesByCommune (location) {
 
 module.exports = {
   getAnnualGroundCarbonFlux,
-  getAllAnnualFluxes,
+  getFluxReferenceValues,
   getForestLitterFlux,
   getAnnualSurfaceChange,
+  getAnnualSurfaceChangeFromData,
   getFranceFluxWoodProducts,
   getForestBiomassFluxesByCommune,
   cToCo2e

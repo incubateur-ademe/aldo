@@ -1,26 +1,139 @@
 const path = require('path')
 const rootFolder = path.join(__dirname, '../../')
-const { getEpci } = require(path.join(rootFolder, './calculations/epcis'))
-const { epciList } = require(path.join(rootFolder, './data'))
+const { epciList, communeList } = require(path.join(rootFolder, './data'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
-const { parseOptionsFromQuery } = require('./options')
+const { parseOptionsFromQuery, getLocationDetail } = require('./shared')
+const { getCommunes } = require(path.join(rootFolder, './data/communes'))
 
 async function territoryHandler (req, res) {
-  const epcis = await epciList()
-  const epci = await getEpci(req.params.epci, true) || {}
-  if (!epci.code) {
+  const location = await getLocationDetail(req, res)
+  // TODO:
+  // - handle bad codes in a grouping of communes/epcis
+  // - improve UI when single commune code wrong (today it shows as if EPCI selected)
+  if (!location) {
+    const epcis = await epciList()
+    const communes = communeList()
     res.status(404)
     res.render('404-epci', {
       epcis,
+      communes,
       attemptedSearch: req.params.epci
     })
     return
   }
+
   const options = parseOptionsFromQuery(req.query)
-  const stocks = await getStocks({ epci }, options)
-  const flux = getAnnualFluxes({ epci }, options)
+  let stocks
+  const communes = getCommunes(location)
+  try {
+    stocks = getStocks(communes, options)
+  } catch (error) {
+    console.log('Error getting stocks for location', location, error)
+    return res.render('error', { pageTitle: 'Erreur' })
+  }
+  let flux
+  try {
+    flux = getAnnualFluxes(communes, options)
+  } catch (error) {
+    console.log('Error getting flux for location', location, error)
+    return res.render('error', { pageTitle: 'Erreur' })
+  }
+
+  const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
+  const singleLocation = location.epci || location.commune
+
+  let pageTitle = singleLocation?.nom
+  const epciCount = location.epcis?.length
+  const communeCount = location.communes?.length
+  if (epciCount || communeCount) {
+    pageTitle = 'Regroupement'
+    const epcis = epciCount ? `de ${epciCount} EPCI${epciCount > 1 ? 's' : ''}` : ''
+    const communes = communeCount ? `de ${communeCount} commune${communeCount > 1 ? 's' : ''}` : ''
+    if (epcis) {
+      pageTitle += ' ' + epcis
+      if (communes) pageTitle += ' et'
+    }
+    if (communes) pageTitle += ' ' + communes
+  }
+  let resetQueryStr
+  if (singleLocation) {
+    resetQueryStr = options.stocksHaveModifications || options.fluxHaveModifications ? '?' : undefined
+  } else {
+    resetQueryStr = '?' + location.epcis.map(c => `epcis[]=${c.code}`).join('&')
+    const communeStr = location.communes.map(c => `communes[]=${c.insee}`).join('&')
+    resetQueryStr += (location.communes.length ? '&' : '') + communeStr
+  }
+  // this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
+  let sharingQueryStr = ''
+  const params = Object.keys(req.query).map(queryParam => {
+    return `${queryParam}=${req.query[queryParam]}`
+  })
+  if (params.length) {
+    sharingQueryStr = `?${params.join('&')}`
+  }
+  res.render('territoire', {
+    pageTitle,
+    tab: req.params.tab || 'stocks',
+    singleLocation,
+    location,
+    communes,
+    epcis: location.epcis,
+    userWarnings: userWarnings(location, options),
+    groundTypes: getSortedGroundTypes(stocks),
+    allGroundTypes: GroundTypes,
+    // these are the types that can be modified to customise the stocks calculations
+    stocksGroundTypes: GroundTypes.filter(gt => !gt.children && gt.stocksId !== 'produits bois').sort((a, b) => {
+      if (a.name > b.name) return 1
+      else if (a.name === b.name) return 0
+      else return -1
+    }),
+    stocks,
+    charts: stocks && charts(stocks),
+    formatNumber (number, fractionDigits = 0) {
+      if (!number && number !== 0) return '-'
+      return number.toLocaleString('fr-FR', {
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits
+      })
+    },
+    round (number) {
+      return Math.round(number)
+    },
+    pascalCase (text) {
+      return text.replace(/ /g, '_')
+    },
+    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides'],
+    fluxSummary: flux.summary,
+    fluxAreas: flux.areas,
+    fluxCo2eByGroundType: flux.fluxCo2eByGroundType,
+    allFlux: flux.allFlux,
+    sortedFluxKeys: getSortedFluxKeys(flux),
+    fluxCharts: fluxCharts(flux),
+    fluxDetail,
+    fluxIds: GroundTypes.filter(gt => gt.altFluxId || gt.fluxId).map(gt => gt.altFluxId || gt.fluxId),
+    woodFluxSummary: flux.woodSummary,
+    stockTotal: stocks?.total,
+    stockTotalEquivalent: stocks?.totalEquivalent,
+    fluxTotal: flux.total,
+    agriculturalPractices: AgriculturalPractices,
+    agriculturalPracticeDetail,
+    resetQueryStr,
+    sharingQueryStr,
+    getTabUrl: (tabName, withQuery) => {
+      let url = req.path
+      if (tabName) url = `/regroupement/${tabName}`
+      return url + withQuery ? sharingQueryStr : ''
+    },
+    beges: req.query.beges,
+    perimetre: req.query.perimetre,
+    forestBiomassSummaryByType: flux?.biomassSummary,
+    ...options
+  })
+}
+
+function formatFluxForDisplay (flux) {
   const fluxDetail = {}
   const agriculturalPracticeDetail = {}
   flux.allFlux.forEach(f => {
@@ -47,88 +160,31 @@ async function territoryHandler (req, res) {
       else return 1
     })
   })
-  // ordering for display greatest stocks/flux (seq or emission) descending
-  const groundTypes = GroundTypes.filter(type => !type.parentType)
-  groundTypes.sort((a, b) => {
+  return { fluxDetail, agriculturalPracticeDetail }
+}
+
+function getSortedGroundTypes (stocks) {
+  const parentTypes = GroundTypes.filter(type => !type.parentType)
+  parentTypes.sort((a, b) => {
     const stockA = stocks[a.stocksId].totalStock
     const stockB = stocks[b.stocksId].totalStock
     if (stockA < stockB) return 1
     else if (stockA === stockB) return 0
     else return -1
   })
-  const sortedFluxKeys = GroundTypes.filter(type => !type.parentType)
-  sortedFluxKeys.sort((a, b) => {
+  return parentTypes
+}
+
+function getSortedFluxKeys (flux) {
+  const parentTypes = GroundTypes.filter(type => !type.parentType)
+  parentTypes.sort((a, b) => {
     const fluxA = Math.abs(flux.summary[a.stocksId]?.totalSequestration || 0)
     const fluxB = Math.abs(flux.summary[b.stocksId]?.totalSequestration || 0)
     if (fluxA < fluxB) return 1
     else if (fluxA === fluxB) return 0
     else return -1
   })
-  const fluxIds = []
-  GroundTypes.forEach(gt => {
-    if (gt.altFluxId || gt.fluxId) {
-      fluxIds.push(gt.altFluxId || gt.fluxId)
-    }
-  })
-  // these are the types that can be modified to customise the stocks calculations
-  const stocksGroundTypes = GroundTypes.filter(gt => !gt.children && gt.stocksId !== 'produits bois')
-  stocksGroundTypes.sort((a, b) => {
-    if (a.name > b.name) return 1
-    else if (a.name === b.name) return 0
-    else return -1
-  })
-  const resetQueryStr = options.stocksHaveModifications || options.fluxHaveModifications ? '?' : undefined
-  // this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
-  let sharingQueryStr = ''
-  const params = Object.keys(req.query).map(queryParam => {
-    return `${queryParam}=${req.query[queryParam]}`
-  })
-  if (params.length) {
-    sharingQueryStr = `?${params.join('&')}`
-  }
-
-  res.render('territoire', {
-    pageTitle: `${epci.nom}`,
-    tab: req.params.tab || 'stocks',
-    epcis,
-    epci,
-    groundTypes,
-    allGroundTypes: GroundTypes,
-    stocksGroundTypes,
-    stocks,
-    charts: stocks && charts(stocks),
-    formatNumber (number, fractionDigits = 0) {
-      return number.toLocaleString('fr-FR', {
-        minimumFractionDigits: fractionDigits,
-        maximumFractionDigits: fractionDigits
-      })
-    },
-    round (number) {
-      return Math.round(number)
-    },
-    pascalCase (text) {
-      return text.replace(/ /g, '_')
-    },
-    simpleStocks: ['cultures', 'vignes', 'vergers', 'zones humides'],
-    fluxSummary: flux?.summary,
-    allFlux: flux?.allFlux,
-    sortedFluxKeys,
-    fluxCharts: fluxCharts(flux),
-    fluxDetail,
-    fluxIds,
-    stockTotal: stocks?.total,
-    stockTotalEquivalent: stocks?.totalEquivalent,
-    fluxTotal: flux?.total,
-    agriculturalPractices: AgriculturalPractices,
-    agriculturalPracticeDetail,
-    baseUrl: `/epci/${epci.code}`,
-    resetQueryStr,
-    sharingQueryStr,
-    beges: req.query.beges,
-    perimetre: req.query.perimetre,
-    forestBiomassSummaryByType: flux?.biomassSummary,
-    ...options
-  })
+  return parentTypes
 }
 
 function charts (stocks) {
@@ -388,6 +444,49 @@ function pieChart (title, labels, values) {
       }
     })
   }
+}
+
+// TODO: pass communes to this function as well
+function userWarnings (location, options) {
+  const warnings = []
+  const allCommunes = getCommunes(location)
+  let requestedCommunesCount = (location.epci?.communes.length || 0) + (!!location.commune && 1) + (location.communes?.length || 0)
+  location.epcis?.forEach(epci => {
+    requestedCommunesCount += epci.communes.length
+  })
+  if (requestedCommunesCount > allCommunes.length) {
+    warnings.push('communesDeduplicated')
+  }
+  const selectedEpcis = location.epci || location.epcis?.length
+  if (allCommunes.length < 10 && !selectedEpcis) {
+    // some EPCIs are <10 communes, don't show message for them
+    warnings.push('tooFewCommunes')
+  }
+  const epcisFromSelectedCommunes = []
+  const department = allCommunes[0].departement
+  let multipleDepartments = false
+  allCommunes.forEach((commune) => {
+    if (epcisFromSelectedCommunes.indexOf(commune.epci) === -1) {
+      epcisFromSelectedCommunes.push(commune.epci)
+    }
+    if (location.epcis?.length && commune.departement !== department) {
+      // want this warning if selected EPCIs and if they aren't in the same department
+      multipleDepartments = true
+    }
+  })
+  if (multipleDepartments) warnings.push('multipleDepartments')
+  const selectedCommunes = location.commune || location.communes?.length
+  if (!multipleDepartments && selectedCommunes && epcisFromSelectedCommunes.length > 1) {
+    warnings.push('multipleEpcis')
+  }
+  const forestAreaKeys = ['for_mix', 'for_feu', 'for_con', 'for_peu']
+  const changeToForest = Object.keys(options.areaChanges).some((k) => {
+    return options.areaChanges[k] >= 0 && forestAreaKeys.some((fKey) => k.endsWith(fKey))
+  })
+  if (changeToForest) {
+    warnings.push('forestAreasChanged')
+  }
+  return warnings
 }
 
 module.exports = {

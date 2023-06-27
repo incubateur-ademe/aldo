@@ -2,13 +2,13 @@
   <table>
     <caption>
       <h2>Changement d'occupation des sols (ha/an)</h2>
-      <p class="fr-text--sm fr-mt-2w" style="font-weight: normal;">
+      <p class="fr-mt-2w" style="font-weight: normal;">
         Les surfaces annuelles moyennes de changement d’occupation de sols sont issues de la comparaison de
         Corine Land Cover 2012 et 2018 divisées par 6 ans pour calculer la surface moyenne annuelle de changement (ha / an).
         L’année concernée par le diagnostic des flux des changements d’occupation des sols correspond donc à
         une année théorique moyenne des 6 dernières années.
       </p>
-      <p class="fr-text--sm fr-mt-2w" style="font-weight: normal;">
+      <p class="fr-mt-2w" style="font-weight: normal;">
         Vous pouvez les mettre à jour ci-dessous si vous avez des données locales plus précises ou plus récentes.
       </p>
     </caption>
@@ -35,8 +35,7 @@
             <td>
               <% if (from !== to) { %>
                 <% const toDetail = allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to) %>
-                <% let thisFlux = allFlux.filter(f => f.from === fromDetail.stocksId && f.to === toDetail.stocksId && f.gas === 'C') %>
-                <% thisFlux = thisFlux.length ? thisFlux[0] : undefined %>
+                <% let thisFlux = fluxAreas[fromDetail.stocksId][toDetail.stocksId] %>
                 <input
                   class="fr-input fr-text--lg"
                   type="number"
@@ -54,11 +53,11 @@
       <% } %>
     </tbody>
   </table>
-  <button class="fr-btn fr-mt-2w" type="submit" formaction="<%= baseUrl %>/flux">
+  <button class="fr-btn fr-mt-2w" type="submit">
     Mettre à jour les calculs
   </button>
   <% if (fluxHaveModifications) { %>
-    <a class="fr-btn fr-btn--secondary fr-ml-2w" href="<%= baseUrl %>/flux<%= resetQueryStr %>">
+    <a class="fr-btn fr-btn--secondary fr-ml-2w" href="<%= getTabUrl('flux') %><%= resetQueryStr %>">
       Réinitialiser
     </a>
   <% } %>
