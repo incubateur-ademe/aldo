@@ -6,14 +6,6 @@ const {
   getForestLitterFlux
 } = require('../flux')
 
-jest.mock('../communes', () => {
-  return {
-    getCommunes: jest.fn(() => {
-      return [{ insee: '01234' }, { insee: '01235' }]
-    })
-  }
-})
-
 // test('returns all carbon flux in tc/(ha.year) for biomass cultures', () => {
 //   const fluxes = getFluxReferenceValues({ epci: {code:'200007177'} })
 //   const biomassFlux = fluxes.filter(f => f.reservoir === 'biomasse')
@@ -384,7 +376,6 @@ describe('The flux data module', () => {
   })
 
   describe('sols artificiels area changes', () => {
-    const communeLocation = { commune: { insee: '01234' } }
     // NB: in constants arbustifs and impermeable are the same codes
     describe('when final occupation is impermeable', () => {
       it('always returns 0 when initial occupation is shrubby', () => {

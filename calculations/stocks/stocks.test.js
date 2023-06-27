@@ -1,15 +1,5 @@
 const { getStocks } = require('./index')
 
-jest.mock('../../data/communes', () => {
-  return {
-    getCommunes: jest.fn((location) => {
-      if (location.epcis) return [{ insee: '01234' }, { insee: '01235' }, { insee: '11234' }]
-      if (location.commune) return [location.commune]
-      return location.communes || [{ insee: '01234', population: 200 }, { insee: '01235', population: 800 }]
-    })
-  }
-})
-
 jest.mock('../../data', () => {
   return {
     getPopulationTotal: jest.fn((location) => 10000)
@@ -138,9 +128,10 @@ jest.mock('../../data/stocks', () => {
 })
 
 describe('The stocks calculation module', () => {
-  const epci = { code: '00000000' }
+  const communes = [{ insee: '01234', population: 200 }, { insee: '01235', population: 800 }]
+
   it('has data for all ground types', () => {
-    const stocks = getStocks({ epci })
+    const stocks = getStocks(communes)
     expect(stocks.cultures).toBeDefined()
     expect(stocks.prairies).toBeDefined()
     expect(stocks['prairies zones arborées']).toBeDefined()
@@ -166,7 +157,7 @@ describe('The stocks calculation module', () => {
     const overrides = {
       areas: { vignes: 70 }
     }
-    const stocks = getStocks({ epci }, overrides)
+    const stocks = getStocks(communes, overrides)
     const simpleStock = stocks.cultures // has neither parent nor children
 
     it('calculates ground stock by taking the sum of the products of density and area for every commune', () => {
@@ -213,14 +204,14 @@ describe('The stocks calculation module', () => {
 
   describe('for child ground types', () => {
     it('returns parent type for child type', () => {
-      const stocks = getStocks({ epci })
+      const stocks = getStocks(communes)
       expect(stocks['prairies zones arborées'].parent).toBe('prairies')
       expect(stocks['prairies zones arborées'].children).not.toBeDefined()
     })
   })
 
   describe('for parent ground types', () => {
-    const stocks = getStocks({ epci })
+    const stocks = getStocks(communes)
 
     it('returns children for parent type', () => {
       expect(stocks.forêts.children.length).toEqual(4)
@@ -245,7 +236,7 @@ describe('The stocks calculation module', () => {
   })
 
   describe('for forest subtype', () => {
-    const stocks = getStocks({ epci })
+    const stocks = getStocks(communes)
     const forestChild = stocks['forêt mixte']
 
     it('has live biomass stock', () => {
@@ -272,14 +263,14 @@ describe('The stocks calculation module', () => {
 
   describe('for wood products', () => {
     // implicit test: the default wood calculation setting is by harvest
-    const stocksByHarvest = getStocks({ epci })
+    const stocksByHarvest = getStocks(communes)
 
     it('for harvest, calculates stock by multiplying France stocks with the proportion of all m^3 of wood harvested locally', () => {
       expect(stocksByHarvest['produits bois'].boStock).toEqual(100)
       expect(stocksByHarvest['produits bois'].biStock).toEqual(200)
     })
 
-    const stocksByConsumption = getStocks({ epci }, { woodCalculation: 'consommation' })
+    const stocksByConsumption = getStocks(communes, { woodCalculation: 'consommation' })
 
     it('for consumption, calculates stock by multipling France stocks with the proportion of local population', () => {
       // epci population calculated from mocked commune populations
@@ -292,7 +283,7 @@ describe('The stocks calculation module', () => {
 
   describe('for hedgerows', () => {
     it('returns the stock as the product of the length and carbon density for an EPCI', () => {
-      const stocks = getStocks({ epci })
+      const stocks = getStocks(communes)
       const hedgerows = stocks.haies
       expect(hedgerows.area).toBe(20)
       expect(hedgerows.totalDensity).toBe(30) // weighted average
@@ -300,13 +291,13 @@ describe('The stocks calculation module', () => {
     })
 
     it('returns the stock as the product of the length and carbon density for a commune', () => {
-      const stocks = getStocks({ commune: { departement: 2 } })
+      const stocks = getStocks([{ departement: 2 }])
       const hedgerows = stocks.haies
       expect(hedgerows.totalStock).toBe(500)
     })
 
     it('returns the stock as the sum of the products of the length and carbon density for a grouping', () => {
-      const stocks = getStocks({ communes: [{ departement: 2 }, { departement: 2 }, { departement: 3 }] })
+      const stocks = getStocks([{ departement: 2 }, { departement: 2 }, { departement: 3 }])
       const hedgerows = stocks.haies
       expect(hedgerows.area).toBe(30)
       expect(hedgerows.totalDensity).toBe(30) // weighted average
@@ -314,7 +305,7 @@ describe('The stocks calculation module', () => {
     })
 
     it('supports length overrides', () => {
-      const stocks = getStocks({ epci }, { areas: { haies: 10 } })
+      const stocks = getStocks(communes, { areas: { haies: 10 } })
       const hedgerows = stocks.haies
       expect(hedgerows.area).toBe(10)
       expect(hedgerows.originalArea).toBe(20)
@@ -331,11 +322,11 @@ describe('The stocks calculation module', () => {
     const impermeableKey = 'sols artificiels imperméabilisés'
     const shrubbyKey = 'sols artificiels arbustifs'
     const treeKey = 'sols artificiels arborés et buissonants'
-    const unmodifiedStocks = getStocks({ epci })
+    const unmodifiedStocks = getStocks(communes)
 
     describe('the tree area', () => {
       it('can be set by the user without impacting the other area calculations', () => {
-        const stocks = getStocks({ epci }, {
+        const stocks = getStocks(communes, {
           areas: {
             'sols artificiels arborés et buissonants': 20
           }
@@ -346,7 +337,7 @@ describe('The stocks calculation module', () => {
       })
 
       it('can be fetched from the data as the sum of the areas of the communes', () => {
-        const stocks = getStocks({ epci })
+        const stocks = getStocks(communes)
         expect(stocks[treeKey].area).toEqual(50)
       })
     })
@@ -355,7 +346,7 @@ describe('The stocks calculation module', () => {
     //  which is impermeable. The value can be 0 - 1 inclusive.
     describe('the impermeable area', () => {
       it('can be set by the user without impacting the other area calculations', () => {
-        const fixedImpermeableStocks = getStocks({ epci }, {
+        const fixedImpermeableStocks = getStocks(communes, {
           areas: {
             'sols artificiels imperméabilisés': 20
           }
@@ -366,26 +357,26 @@ describe('The stocks calculation module', () => {
       })
 
       it('is the product of the proportion and the total when there are not many trees', () => {
-        const stocks = getStocks({ commune: { insee: 'no trees' } })
+        const stocks = getStocks([{ insee: 'no trees' }])
         // proportion defaults to 0.8, or 80%. 80% of 25 is 20.
         expect(stocks[impermeableKey].area).toEqual(20)
       })
 
       it('is the product of the proportion and the total when there are not many trees, and the proportion can be customised', () => {
-        const stocks = getStocks({ commune: { insee: 'no trees' } }, { proportionSolsImpermeables: 0.5 })
+        const stocks = getStocks([{ insee: 'no trees' }], { proportionSolsImpermeables: 0.5 })
         expect(stocks[impermeableKey].area).toEqual(12.5)
       })
 
       it('is the area without trees minus the area with trees if there are >= 0.2 * area trees', () => {
         // with the trees area mocked at 50 we trigger this condition
-        const stocks = getStocks({ epci })
+        const stocks = getStocks(communes)
         expect(stocks[impermeableKey].area).toEqual(0)
       })
     })
 
     describe('the shrubby area', () => {
       it('can be set by the user without impacting the other area calculations', () => {
-        const stocks = getStocks({ epci }, {
+        const stocks = getStocks(communes, {
           areas: {
             'sols artificiels arbustifs': 20
           }
@@ -396,7 +387,7 @@ describe('The stocks calculation module', () => {
       })
 
       it('is the green portion of the total area minus the area with trees if there are not many trees', () => {
-        const stocks = getStocks({ commune: { insee: 'few trees' } })
+        const stocks = getStocks([{ insee: 'few trees' }])
         // areaWithoutTrees = 25 (from mocked getArea fn)
         // areaWithTrees = 5
         // 5 < 0.2 * (areaWithoutTrees + areaWithTrees)
@@ -413,7 +404,7 @@ describe('The stocks calculation module', () => {
 
       it('is zero if there are proportionally a lot of trees', () => {
         // with the trees area mocked at 50 we trigger this condition
-        const stocks = getStocks({ epci })
+        const stocks = getStocks(communes)
         expect(stocks[shrubbyKey].area).toEqual(0)
       })
     })
@@ -422,7 +413,7 @@ describe('The stocks calculation module', () => {
 
   describe('data aggregations', () => {
     it('returns sum of stocks', () => {
-      const stocks = getStocks({ epci })
+      const stocks = getStocks(communes)
       expect(stocks.total).toBeDefined()
       // smoke test - 50 * 16 (ground type count) * 2
       // not hardcoding the calculation because have previously tested all the stock calculations
@@ -432,20 +423,20 @@ describe('The stocks calculation module', () => {
 
     it('for each parent type, calculates the proportion of the stock for that type against the total', () => {
       // TODO: could improve these tests with expected values
-      const stocks = getStocks({ epci })
+      const stocks = getStocks(communes)
       expect(stocks.cultures.stockPercentage).toBeDefined()
       expect(stocks.cultures.groundAndLitterStockPercentage).toBeDefined()
       expect(stocks.cultures.biomassStockPercentage).toBeDefined()
     })
 
     it('provides the total carbon densities for all sources', () => {
-      const stocks = getStocks({ epci })
+      const stocks = getStocks(communes)
       expect(stocks.byDensity.cultures).toBe(5)
       expect(stocks.byDensity['forêt mixte']).toBe(17)
     })
 
     describe('percentage of stock per reservoir', () => {
-      const stocks = getStocks({ epci })
+      const stocks = getStocks(communes)
       const percentageByReservoir = stocks.percentageByReservoir
 
       it('contains all reservoir types', () => {
@@ -481,9 +472,10 @@ describe('The stocks calculation module', () => {
   // getStocks for a commune
   // getStocks for multiple epcis and communes
   describe('for a custom grouping of territories', () => {
-    const epci2 = { code: '99999999' }
+    const threeCommunes = [{ insee: '01234' }, { insee: '01235' }, { insee: '11234' }]
+
     it('outputs area as sum of location areas', () => {
-      const stocks = getStocks({ epcis: [epci, epci2] })
+      const stocks = getStocks(threeCommunes)
       expect(stocks.cultures.area).toEqual(75)
       expect(stocks.cultures.originalArea).toEqual(75)
       // (4 forest child types) 4 * 25 * 3 communes
@@ -493,7 +485,7 @@ describe('The stocks calculation module', () => {
     })
 
     it('outputs ground density as weighted average of location areas', () => {
-      const stocks = getStocks({ epcis: [epci, epci2] })
+      const stocks = getStocks(threeCommunes)
       expect(stocks.cultures.groundDensity).toEqual(4)
     })
 
@@ -501,7 +493,7 @@ describe('The stocks calculation module', () => {
       const overrides = {
         areas: { cultures: 1000 }
       }
-      const stocks = getStocks({ epcis: [epci, epci2] }, overrides)
+      const stocks = getStocks(threeCommunes, overrides)
       expect(stocks.cultures.area).toEqual(1000)
       expect(stocks.cultures.originalArea).toEqual(75)
       expect(stocks.cultures.areaModified).toBe(true)
@@ -514,7 +506,7 @@ describe('The stocks calculation module', () => {
       const overrides = {
         areas: { 'forêt feuillu': 1000 }
       }
-      const stocks = getStocks({ epcis: [epci, epci2] }, overrides)
+      const stocks = getStocks(threeCommunes, overrides)
       const forestChild = stocks['forêt feuillu']
       expect(forestChild.area).toEqual(1000)
       expect(forestChild.liveBiomassDensity).toEqual(4)

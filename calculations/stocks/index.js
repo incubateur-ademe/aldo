@@ -6,9 +6,6 @@ const {
   getForestBiomassCarbonDensities,
   getHedgerowsDataForCommunes
 } = require('../../data/stocks')
-const {
-  getCommunes
-} = require('../../data/communes')
 const { getStocksWoodProducts } = require('./woodProducts')
 const { GroundTypes } = require('../constants')
 

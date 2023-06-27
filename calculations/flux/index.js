@@ -2,7 +2,6 @@ const {
   getFluxReferenceValues,
   getAnnualSurfaceChange
 } = require('../../data/flux')
-const { getCommunes } = require('../../data/communes')
 const { GroundTypes } = require('../constants')
 const { getFluxWoodProducts } = require('./woodProducts')
 const { getFluxAgriculturalPractices } = require('./agriculturalPractices')

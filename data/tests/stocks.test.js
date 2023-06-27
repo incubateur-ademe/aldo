@@ -13,14 +13,6 @@ const {
   getHedgerowsDataForCommunes
 } = require('../stocks')
 
-jest.mock('../communes', () => {
-  return {
-    getCommunes: jest.fn(() => {
-      return [{ insee: '01234', zpc: '1_1' }, { insee: '01235', zpc: '1_1' }]
-    })
-  }
-})
-
 describe('The stocks data module', () => {
   beforeEach(() => {
     jest.resetModules()
