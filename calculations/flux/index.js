@@ -353,8 +353,11 @@ function average (objArray, key) {
 function deforestationFlux (location, options) {
   const deforestationFluxes = []
   const forestSubtypes = GroundTypes.find((gt) => gt.stocksId === 'forêts').children
+  const excludeIds = ['haies', 'produits bois']
+  const childGroundTypes = GroundTypes
+    .filter((gt) => !gt.children && !excludeIds.includes(gt.stocksId))
   for (const from of forestSubtypes) {
-    for (const toGt of GroundTypes) {
+    for (const toGt of childGroundTypes) {
       const to = toGt.stocksId
       if (from === to) {
         continue
@@ -370,8 +373,8 @@ function deforestationFlux (location, options) {
 
       const annualFluxEquivalent = convertCToCo2e(annualFlux)
       const area = getAnnualSurfaceChange(location, options, from, to)
-      if (area && annualFlux) {
-        const value = annualFlux * area
+      if (annualFlux) {
+        const value = annualFlux * area || 0
         deforestationFluxes.push({
           from,
           to,
@@ -379,6 +382,7 @@ function deforestationFlux (location, options) {
           originalArea: area,
           annualFlux,
           annualFluxEquivalent,
+          yearsForFlux: 1,
           flux: annualFlux,
           value,
           co2e: convertCToCo2e(value),
