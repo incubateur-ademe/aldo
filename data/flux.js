@@ -233,6 +233,7 @@ function getFluxReferenceValues (location) {
             to,
             annualFlux: litterFlux,
             annualFluxEquivalent: cToCo2e(litterFlux),
+            yearsForFlux: 1,
             reservoir: 'litière',
             gas: 'C',
             commune: location.commune.insee

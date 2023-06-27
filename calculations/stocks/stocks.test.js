@@ -1,13 +1,18 @@
 const { getStocks } = require('./index')
-const { getPopulationTotal } = require('../../data')
 
 jest.mock('../../data/communes', () => {
   return {
     getCommunes: jest.fn((location) => {
       if (location.epcis) return [{ insee: '01234' }, { insee: '01235' }, { insee: '11234' }]
       if (location.commune) return [location.commune]
-      return location.communes || [{ insee: '01234' }, { insee: '01235' }]
+      return location.communes || [{ insee: '01234', population: 200 }, { insee: '01235', population: 800 }]
     })
+  }
+})
+
+jest.mock('../../data', () => {
+  return {
+    getPopulationTotal: jest.fn((location) => 10000)
   }
 })
 
@@ -277,10 +282,11 @@ describe('The stocks calculation module', () => {
     const stocksByConsumption = getStocks({ epci }, { woodCalculation: 'consommation' })
 
     it('for consumption, calculates stock by multipling France stocks with the proportion of local population', () => {
-      // TODO: mock getPopulationTotal and epci.populationTotale and remove logic for a better test
-      const populationShare = epci.population / getPopulationTotal()
-      expect(stocksByConsumption['produits bois'].boStock).toEqual(500 * populationShare)
-      expect(stocksByConsumption['produits bois'].biStock).toEqual(200 * populationShare)
+      // epci population calculated from mocked commune populations
+      // france population mocked in this test suite
+      // bo and bi for france mocked using getFranceStocksWoodProducts
+      expect(stocksByConsumption['produits bois'].boStock).toBe(50)
+      expect(stocksByConsumption['produits bois'].biStock).toBe(20)
     })
   })
 

@@ -68,6 +68,14 @@ async function territoryHandler (req, res) {
     const communeStr = location.communes.map(c => `communes[]=${c.insee}`).join('&')
     resetQueryStr += (location.communes.length ? '&' : '') + communeStr
   }
+  // this sharingQueryStr query will be passed to excel export link. Need to make it as short as possible because excel bugs out at long links
+  let sharingQueryStr = ''
+  const params = Object.keys(req.query).map(queryParam => {
+    return `${queryParam}=${req.query[queryParam]}`
+  })
+  if (params.length) {
+    sharingQueryStr = `?${params.join('&')}`
+  }
   console.log('rendering')
   res.render('territoire', {
     pageTitle,
@@ -116,11 +124,11 @@ async function territoryHandler (req, res) {
     agriculturalPractices: AgriculturalPractices,
     agriculturalPracticeDetail,
     resetQueryStr,
-    sharingQueryStr: req.search,
+    sharingQueryStr,
     getTabUrl: (tabName, withQuery) => {
       let url = req.path
       if (tabName) url = `/regroupement/${tabName}`
-      return url + withQuery ? req.search : ''
+      return url + withQuery ? sharingQueryStr : ''
     },
     beges: req.query.beges,
     perimetre: req.query.perimetre,
@@ -442,6 +450,7 @@ function pieChart (title, labels, values) {
   }
 }
 
+// TODO: pass communes to this function as well
 function userWarnings (location, options) {
   const warnings = []
   const allCommunes = getCommunes(location)
@@ -459,17 +468,19 @@ function userWarnings (location, options) {
   }
   const epcisFromSelectedCommunes = []
   const department = allCommunes[0].departement
+  let multipleDepartments = false
   allCommunes.forEach((commune) => {
     if (epcisFromSelectedCommunes.indexOf(commune.epci) === -1) {
       epcisFromSelectedCommunes.push(commune.epci)
     }
     if (location.epcis?.length && commune.departement !== department) {
       // want this warning if selected EPCIs and if they aren't in the same department
-      warnings.push('multipleDepartments')
+      multipleDepartments = true
     }
   })
+  if (multipleDepartments) warnings.push('multipleDepartments')
   const selectedCommunes = location.commune || location.communes?.length
-  if (selectedCommunes && epcisFromSelectedCommunes.length > 1) {
+  if (!multipleDepartments && selectedCommunes && epcisFromSelectedCommunes.length > 1) {
     warnings.push('multipleEpcis')
   }
   const forestAreaKeys = ['for_mix', 'for_feu', 'for_con', 'for_peu']

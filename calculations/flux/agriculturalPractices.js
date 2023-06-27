@@ -8,7 +8,7 @@ function getPracticeFlux (practice, reservoir) {
     // ground flux unitaires
     return {
       prairieExtension: 0.14,
-      // prairieIntensification: 0.39, // currently not used in excel format
+      prairieIntensification: 0.39,
       cropsAgroforestry: 0.3,
       prairiesAgroforestry: 0.3,
       catchCrops: 0.24,
@@ -24,7 +24,7 @@ function getPracticeFlux (practice, reservoir) {
     // biomass flux unitaires
     return {
       prairieExtension: 0,
-      // prairieIntensification: 0,
+      prairieIntensification: 0,
       cropsAgroforestry: 0.7,
       prairiesAgroforestry: 0.7,
       catchCrops: 0,
