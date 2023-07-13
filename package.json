@@ -34,6 +34,7 @@
     "sib-api-v3-sdk": "^8.4.2"
   },
   "devDependencies": {
+    "csv-writer": "^1.6.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.4",
