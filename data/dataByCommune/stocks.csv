@@ -1,0 +1,52 @@
+insee,nom,epci,departement,region,zpc,inter_region,groupe_ser,greco,rad_13,bassin_populicole,population,occupation_du_sol_1,occupation_du_sol_2,surface_ha,lineaire_haies_km,reservoir,usage_produits_bois,approche_calculation_produits_bois,recolte_locale_m3_an_-1,ratio_recolte_France,ratio_population_France,stock_de_reference_tC_ha_-1,stock_de_reference_tC_km_-1,stock_tC
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,cultures,cultures,174.54974891499998,,sol,,,,,,43,,7505.639203344999
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,cultures,cultures,174.54974891499998,,biomasse vivante,,,,,,0,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,prairies,prairies zones arborées,339.54284999099997,,sol,,,,,,55,,18674.856749504997
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,prairies,prairies zones arborées,339.54284999099997,,biomasse vivante,,,,,,44,,14939.885399603998
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,prairies,prairies zones herbacées,0,,sol,,,,,,55,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,prairies,prairies zones herbacées,0,,biomasse vivante,,,,,,0,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,prairies,prairies zones arbustives,0.000209265,,sol,,,,,,55,,0.011509575000000001
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,prairies,prairies zones arbustives,0.000209265,,biomasse vivante,,,,,,7,,0.0014648550000000002
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,zones humides,zones humides,0,,sol,,,,,,125,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,zones humides,zones humides,0,,biomasse vivante,,,,,,0,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,vergers,vergers,0,,sol,,,,,,46,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,vergers,vergers,0,,biomasse vivante,,,,,,16,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,vignes,vignes,282.04579413799996,,sol,,,,,,39,,10999.785971381998
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,vignes,vignes,282.04579413799996,,biomasse vivante,,,,,,5,,1410.2289706899999
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,sols artificiels,sols artificiels arbustifs,26.83202071,,sol,,,,,,55.00000000000001,,295.15222780999994
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,sols artificiels,sols artificiels arbustifs,26.83202071,,biomasse vivante,,,,,,7,,37.56482899399999
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,sols artificiels,sols artificiels imperméabilisés,26.83202071,,sol,,,,,,30.000000000000004,,643.9684970400001
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,sols artificiels,sols artificiels imperméabilisés,26.83202071,,biomasse vivante,,,,,,0,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,sols artificiels,sols artificiels arborés et buissonants,0,,sol,,,,,,83,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,sols artificiels,sols artificiels arborés et buissonants,0,,biomasse vivante,,,,,,44,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt mixte,181.3,,sol,,,,,,83,,15047.900000000001
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt mixte,181.3,,biomasse vivante,,,,,,0,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt mixte,181.3,,biomasse vivante,,,,,,39.68351351351352,,7194.621000000001
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt mixte,181.3,,biomasse morte,,,,,,3.2016326530612242,,580.456
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt mixte,181.3,,litière,,,,,,9,,1631.7
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt feuillu,469.20000000000005,,sol,,,,,,83,,38943.600000000006
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt feuillu,469.20000000000005,,biomasse vivante,,,,,,0,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt feuillu,469.20000000000005,,biomasse vivante,,,,,,63.09586530264279,,29604.58
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt feuillu,469.20000000000005,,biomasse morte,,,,,,6.516760443307756,,3057.6639999999998
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt feuillu,469.20000000000005,,litière,,,,,,9,,4222.8
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt conifere,127.6,,sol,,,,,,83,,10590.8
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt conifere,127.6,,biomasse vivante,,,,,,0,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt conifere,127.6,,biomasse vivante,,,,,,34.73,,4431.548
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt conifere,127.6,,biomasse morte,,,,,,2.03,,259.02799999999996
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt conifere,127.6,,litière,,,,,,9,,1148.3999999999999
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt peupleraie,0,,sol,,,,,,83,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt peupleraie,0,,biomasse vivante,,,,,,0,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt peupleraie,0,,biomasse vivante,,,,,,59.38,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt peupleraie,0,,biomasse morte,,,,,,4.32,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,forêt peupleraie,0,,litière,,,,,,9,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,cultures,haies,,1.026425275576962,biomasse vivante,,,,,,101.347,,104.02512240389837
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,prairies,haies,,0.648895044868882,biomasse vivante,,,,,,101.347,,65.76356611232659
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,zones humides,haies,,0,biomasse vivante,,,,,,101.347,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,vergers,haies,,0,biomasse vivante,,,,,,101.347,,0
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,vignes,haies,,8.08794372273134,biomasse vivante,,,,,,101.347,,819.6888324676531
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,sols artificiels,haies,,0.819338769349707,biomasse vivante,,,,,,101.347,,83.03752625728474
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,forêts,haies,,0.199512777152389,biomasse vivante,,,,,,101.347,,20.220021426063166
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,,,,,produits bois,BO,production,180.4824339635827,0.00000937384420391587,,,,316.28706542417723
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,,,,,produits bois,BI,production,120.02449553375199,0.00001146073863666206,,,,669.7263363912144
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,,,,,produits bois,BO,consommmation,,,0.000004541233898351478,,,316.28706542417723
+34201,Pierrerue,200042653,34,76,2_2,,,,,,292,,,,,produits bois,BI,consommmation,,,0.000004541233898351478,,,669.7263363912144
