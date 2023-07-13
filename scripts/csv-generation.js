@@ -5,6 +5,8 @@ const communeData = require('../data/dataByCommune/communes.json')
 const REGION_TO_INTER_REGION = require('../data/dataByCommune/region-to-inter-region.json')
 const { GroundTypes } = require('../calculations/constants')
 const { getStocks } = require('../calculations/stocks')
+const { getForestAreaData } = require('../data/stocks')
+const { getIgnLocalisation } = require('../data/shared')
 
 function copyObject (obj) {
   return JSON.parse(JSON.stringify(obj))
@@ -22,7 +24,7 @@ function main () {
       { id: 'region', title: 'region' },
       { id: 'zpc', title: 'zpc' },
       { id: 'interregion', title: 'inter_region' },
-      { id: 'groupe_ser', title: 'groupe_ser' },
+      { id: 'groupeser', title: 'groupe_ser' },
       { id: 'greco', title: 'greco' },
       { id: 'rad13', title: 'rad_13' },
       { id: 'bassinPopulicole', title: 'bassin_populicole' },
@@ -64,7 +66,16 @@ function main () {
   testCommunes.forEach((commune) => {
     const record = communeData[commune.insee]
     const stocks = getStocks([record])
-    record.inter_region = REGION_TO_INTER_REGION[record.region].interRegion
+    // fill in geographical data not in extended commune data
+    record.interregion = REGION_TO_INTER_REGION[record.region].interRegion
+    let forestDataForCommune = getForestAreaData({ commune: record })
+    if (forestDataForCommune.length) {
+      forestDataForCommune = forestDataForCommune[0]
+      record.groupeser = getIgnLocalisation(forestDataForCommune, 'groupeser').localisationCode
+      record.greco = getIgnLocalisation(forestDataForCommune, 'greco').localisationCode
+      record.rad13 = getIgnLocalisation(forestDataForCommune, 'rad13').localisationCode
+      record.bassinPopulicole = getIgnLocalisation(forestDataForCommune, 'bassin_populicole').localisationCode
+    }
     // the stocks linked to areas
     Object.entries(record.clc18).forEach(([groundType, area]) => {
       const groundRecord = copyObject(record)
