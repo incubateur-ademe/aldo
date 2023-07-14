@@ -5,6 +5,7 @@ const communeData = require('../data/dataByCommune/communes.json')
 const REGION_TO_INTER_REGION = require('../data/dataByCommune/region-to-inter-region.json')
 const { GroundTypes } = require('../calculations/constants')
 const { getStocks } = require('../calculations/stocks')
+const { getAnnualFluxes } = require('../calculations/flux')
 const { getForestAreaData } = require('../data/stocks')
 const { getIgnLocalisation } = require('../data/shared')
 
@@ -59,7 +60,7 @@ function createRecordForCommune (commune) {
   return record
 }
 
-function addStocksData (records, record) {
+function addStocksRecords (records, record) {
   // the stocks linked to areas
   const stocks = getStocks([record])
   Object.entries(record.clc18).forEach(([groundType, area]) => {
@@ -116,6 +117,49 @@ function addStocksData (records, record) {
   })
 }
 
+function addFluxRecords (records, record) {
+  const fluxes = getAnnualFluxes([record])
+  fluxes.allFlux.forEach((f) => {
+    const fluxRecord = copyObject(record)
+    Object.assign(fluxRecord, f)
+    if (fluxRecord.from) {
+      fluxRecord.fromLevel1 = GROUND_TYPE_2_TO_1[fluxRecord.from]
+      fluxRecord.toLevel1 = GROUND_TYPE_2_TO_1[fluxRecord.to]
+    } else if (fluxRecord.to === 'produits bois') {
+      fluxRecord.reservoir = 'produits bois'
+      fluxRecord.to = undefined
+      fluxRecord.approche = 'production'
+      fluxRecord.harvestRatio = fluxRecord.localPortion
+      fluxRecord.category = fluxRecord.category.toUpperCase()
+    } else {
+      // biomass flux in forests is based on today's area and not an area change
+      // reformat this data to clarify this
+      fluxRecord.gt2 = fluxRecord.to
+      fluxRecord.gt1 = GROUND_TYPE_2_TO_1[fluxRecord.to]
+      fluxRecord.to = undefined
+      fluxRecord.forestArea = fluxRecord.area
+      fluxRecord.area = undefined
+    }
+    if (fluxRecord.reservoir === 'biomasse') {
+      fluxRecord.reservoir = 'biomasse vivante'
+    }
+    records.push(fluxRecord)
+  })
+  const woodConsumptionFluxes = getAnnualFluxes([record], { woodCalculation: 'consommation' })
+    .allFlux
+    .filter((f) => f.to === 'produits bois')
+  woodConsumptionFluxes.forEach((f) => {
+    const woodRecord = copyObject(record)
+    Object.assign(woodRecord, f)
+    woodRecord.reservoir = 'produits bois'
+    woodRecord.to = undefined
+    woodRecord.approche = 'consommmation'
+    woodRecord.populationRatio = woodRecord.localPortion
+    woodRecord.category = woodRecord.category.toUpperCase()
+    records.push(woodRecord)
+  })
+}
+
 function main () {
   const createCsvWriter = require('csv-writer').createObjectCsvWriter
   const stocksWriter = createCsvWriter({
@@ -129,29 +173,68 @@ function main () {
       { id: 'reservoir', title: 'reservoir' },
       { id: 'usage', title: 'usage_produits_bois' },
       { id: 'approche', title: 'approche_calculation_produits_bois' },
-      { id: 'harvest', title: 'recolte_locale_m3_an_-1' },
+      { id: 'harvest', title: 'recolte_locale_m3_an-1' },
       { id: 'harvestRatio', title: 'ratio_recolte_France' },
       { id: 'populationRatio', title: 'ratio_population_France' },
-      { id: 'density', title: 'stock_de_reference_tC_ha_-1' },
-      { id: 'haiesDensity', title: 'stock_de_reference_tC_km_-1' },
+      { id: 'density', title: 'stock_de_reference_tC_ha-1' },
+      { id: 'haiesDensity', title: 'stock_de_reference_tC_km-1' },
       { id: 'stock', title: 'stock_tC' }
+    ]
+  })
+  const fluxWriter = createCsvWriter({
+    path: '../data/dataByCommune/flux.csv',
+    header: [
+      ...COMMUNE_HEADERS,
+      { id: 'gas', title: 'gaz' },
+      { id: 'reservoir', title: 'reservoir' },
+      { id: 'category', title: 'usage_produits_bois' },
+      { id: 'approche', title: 'approche_calculation_produits_bois' },
+      { id: 'localHarvest', title: 'recolte_locale_m3_an-1' },
+      { id: 'harvestRatio', title: 'ratio_recolte_France' },
+      { id: 'populationRatio', title: 'ratio_population_France' },
+      { id: 'fromLevel1', title: 'occupation_du_sol_initiale_1' },
+      { id: 'from', title: 'occupation_du_sol_initiale_2' },
+      { id: 'toLevel1', title: 'occupation_du_sol_finale_1' },
+      { id: 'to', title: 'occupation_du_sol_finale_2' },
+      { id: 'area', title: 'surface_moyenne_convertie_ha_an-1' },
+      { id: 'gt1', title: 'occupation_du_sol_1' },
+      { id: 'gt2', title: 'occupation_du_sol_2' },
+      { id: 'forestArea', title: 'surface_ha' },
+      { id: 'bioGrowth', title: 'accroissement_biologique_unitaire_m3_BFT_ha-1_an-1' },
+      { id: 'bioMortality', title: 'mortalite_biologique_unitaire_m3_BFT_ha-1_an-1' },
+      { id: 'bioRemoval', title: 'prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1' },
+      { id: 'bioRemoval', title: 'prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1' },
+      { id: 'bioTotal', title: 'bilan_total_unitaire_m3_BFT_ha-1_an-1' },
+      { id: 'conversionFactor', title: 'facteur_de_conversion_tC_m3_BFT-1' },
+      { id: 'annualFluxEquivalent', title: 'flux_unitaire_tCO2e_ha-1_an-1' },
+      { id: 'co2e', title: 'flux_tCO2e_an-1' }
     ]
   })
 
   const stocksRecords = []
+  const fluxRecords = []
 
   const testCommunes = communes.splice(0, 1)
   testCommunes.forEach((commune) => {
     const record = createRecordForCommune(commune)
-    addStocksData(stocksRecords, record)
+    addStocksRecords(stocksRecords, record)
+    addFluxRecords(fluxRecords, record)
   })
 
   stocksWriter.writeRecords(stocksRecords) // returns a promise
     .then(() => {
-      console.log('...Done')
+      console.log('...stocks done')
     })
     .catch((e) => {
-      console.log('Error writing records')
+      console.log('Error writing stocks records')
+      console.log(e)
+    })
+  fluxWriter.writeRecords(fluxRecords)
+    .then(() => {
+      console.log('...flux done')
+    })
+    .catch((e) => {
+      console.log('Error writing flux records')
       console.log(e)
     })
 }
