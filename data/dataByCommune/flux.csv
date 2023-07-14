@@ -1,0 +1,366 @@
+insee,nom,epci,departement,region,zpc,inter_region,groupe_ser,greco,rad_13,bassin_populicole,population,gaz,reservoir,usage_produits_bois,approche_calculation_produits_bois,recolte_locale_m3_an-1,ratio_recolte_France,ratio_population_France,occupation_du_sol_initiale_1,occupation_du_sol_initiale_2,occupation_du_sol_finale_1,occupation_du_sol_finale_2,surface_moyenne_convertie_ha_an-1,occupation_du_sol_1,occupation_du_sol_2,surface_ha,accroissement_biologique_unitaire_m3_BFT_ha-1_an-1,mortalite_biologique_unitaire_m3_BFT_ha-1_an-1,prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1,prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1,bilan_total_unitaire_m3_BFT_ha-1_an-1,facteur_de_conversion_tC_m3_BFT-1,flux_unitaire_tCO2e_ha-1_an-1,flux_tCO2e_an-1
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,prairies,prairies zones arborées,0,,,,,,,,,,0.8799999999999999,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,cultures,cultures,prairies,prairies zones arborées,0,,,,,,,,,,8.066666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,prairies,prairies zones herbacées,0,,,,,,,,,,0.8799999999999999,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,prairies,prairies zones arbustives,0,,,,,,,,,,0.8799999999999999,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,cultures,cultures,prairies,prairies zones arbustives,0,,,,,,,,,,1.2833333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,zones humides,zones humides,0,,,,,,,,,,300.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,vergers,vergers,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,cultures,cultures,vergers,vergers,0,,,,,,,,,,2.9333333333333336,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,vignes,vignes,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,cultures,cultures,vignes,vignes,0,,,,,,,,,,0.9166666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,44,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,cultures,cultures,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,1.2833333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-47.666666666666664,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,146.66666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,cultures,cultures,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,cultures,cultures,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,8.066666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,forêts,forêt mixte,0,,,,,,,,,,2.163333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,cultures,cultures,forêts,forêt mixte,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,forêts,forêt feuillu,0,,,,,,,,,,2.163333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,cultures,cultures,forêts,forêt feuillu,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,forêts,forêt conifere,0,,,,,,,,,,2.163333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,cultures,cultures,forêts,forêt conifere,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,cultures,cultures,forêts,forêt peupleraie,0,,,,,,,,,,2.163333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,cultures,cultures,forêts,forêt peupleraie,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arborées,cultures,cultures,0,,,,,,,,,,-1.6866666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arborées,cultures,cultures,0,,,,,,,,,,-161.33333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arborées,prairies,prairies zones herbacées,0,,,,,,,,,,-161.33333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arborées,prairies,prairies zones arbustives,0,,,,,,,,,,-135.66666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arborées,zones humides,zones humides,0,,,,,,,,,,256.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arborées,zones humides,zones humides,0,,,,,,,,,,-209,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arborées,vergers,vergers,0,,,,,,,,,,-1.2466666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arborées,vergers,vergers,0,,,,,,,,,,-102.66666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arborées,vignes,vignes,0,,,,,,,,,,-2.236666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arborées,vignes,vignes,0,,,,,,,,,,-143,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arborées,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arborées,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-135.66666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arborées,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-91.66666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arborées,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-161.33333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arborées,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones arborées,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arborées,forêts,forêt mixte,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones arborées,forêts,forêt mixte,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arborées,forêts,forêt feuillu,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones arborées,forêts,forêt feuillu,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arborées,forêts,forêt conifere,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones arborées,forêts,forêt conifere,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arborées,forêts,forêt peupleraie,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones arborées,forêts,forêt peupleraie,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones herbacées,cultures,cultures,0,,,,,,,,,,-1.6866666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones herbacées,prairies,prairies zones arborées,0,,,,,,,,,,8.066666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones herbacées,prairies,prairies zones arbustives,0,,,,,,,,,,1.2833333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones herbacées,zones humides,zones humides,0,,,,,,,,,,256.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones herbacées,vergers,vergers,0,,,,,,,,,,-1.2466666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones herbacées,vergers,vergers,0,,,,,,,,,,2.9333333333333336,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones herbacées,vignes,vignes,0,,,,,,,,,,-2.236666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones herbacées,vignes,vignes,0,,,,,,,,,,0.9166666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones herbacées,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones herbacées,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,1.2833333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones herbacées,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-91.66666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones herbacées,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones herbacées,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones herbacées,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,8.066666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones herbacées,forêts,forêt mixte,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones herbacées,forêts,forêt mixte,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones herbacées,forêts,forêt feuillu,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones herbacées,forêts,forêt feuillu,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones herbacées,forêts,forêt conifere,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones herbacées,forêts,forêt conifere,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones herbacées,forêts,forêt peupleraie,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones herbacées,forêts,forêt peupleraie,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arbustives,cultures,cultures,0,,,,,,,,,,-1.6866666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arbustives,cultures,cultures,0,,,,,,,,,,-25.666666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arbustives,prairies,prairies zones arborées,0,,,,,,,,,,6.783333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arbustives,prairies,prairies zones herbacées,0,,,,,,,,,,-25.666666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arbustives,zones humides,zones humides,0,,,,,,,,,,256.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arbustives,zones humides,zones humides,0,,,,,,,,,,-25.666666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arbustives,vergers,vergers,0,,,,,,,,,,-1.2466666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arbustives,vergers,vergers,0,,,,,,,,,,1.6500000000000001,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arbustives,vignes,vignes,0,,,,,,,,,,-2.236666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arbustives,vignes,vignes,0,,,,,,,,,,-7.333333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arbustives,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arbustives,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-91.66666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arbustives,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-25.666666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arbustives,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones arbustives,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,prairies,prairies zones arbustives,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,6.783333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arbustives,forêts,forêt mixte,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones arbustives,forêts,forêt mixte,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arbustives,forêts,forêt feuillu,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones arbustives,forêts,forêt feuillu,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arbustives,forêts,forêt conifere,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones arbustives,forêts,forêt conifere,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,prairies,prairies zones arbustives,forêts,forêt peupleraie,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,prairies,prairies zones arbustives,forêts,forêt peupleraie,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,cultures,cultures,0,,,,,,,,,,-300.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,prairies,prairies zones arborées,0,,,,,,,,,,-256.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,zones humides,zones humides,prairies,prairies zones arborées,0,,,,,,,,,,8.066666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,prairies,prairies zones herbacées,0,,,,,,,,,,-256.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,prairies,prairies zones arbustives,0,,,,,,,,,,-256.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,zones humides,zones humides,prairies,prairies zones arbustives,0,,,,,,,,,,1.2833333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,vergers,vergers,0,,,,,,,,,,-300.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,zones humides,zones humides,vergers,vergers,0,,,,,,,,,,2.9333333333333336,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,vignes,vignes,0,,,,,,,,,,-300.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,zones humides,zones humides,vignes,vignes,0,,,,,,,,,,0.9166666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-256.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,zones humides,zones humides,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,1.2833333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-348.3333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,-154,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,zones humides,zones humides,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,zones humides,zones humides,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,8.066666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,forêts,forêt mixte,0,,,,,,,,,,-154,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,zones humides,zones humides,forêts,forêt mixte,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,forêts,forêt feuillu,0,,,,,,,,,,-154,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,zones humides,zones humides,forêts,forêt feuillu,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,forêts,forêt conifere,0,,,,,,,,,,-154,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,zones humides,zones humides,forêts,forêt conifere,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,zones humides,zones humides,forêts,forêt peupleraie,0,,,,,,,,,,-154,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,zones humides,zones humides,forêts,forêt peupleraie,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,cultures,cultures,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vergers,vergers,cultures,cultures,0,,,,,,,,,,-58.666666666666664,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,prairies,prairies zones arborées,0,,,,,,,,,,0.66,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vergers,vergers,prairies,prairies zones arborées,0,,,,,,,,,,5.133333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,prairies,prairies zones herbacées,0,,,,,,,,,,0.66,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vergers,vergers,prairies,prairies zones herbacées,0,,,,,,,,,,-58.666666666666664,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,prairies,prairies zones arbustives,0,,,,,,,,,,0.66,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vergers,vergers,prairies,prairies zones arbustives,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,zones humides,zones humides,0,,,,,,,,,,300.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vergers,vergers,zones humides,zones humides,0,,,,,,,,,,-58.666666666666664,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,vignes,vignes,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vergers,vergers,vignes,vignes,0,,,,,,,,,,-40.333333333333336,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,44,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vergers,vergers,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-47.666666666666664,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vergers,vergers,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-58.666666666666664,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,146.66666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,vergers,vergers,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vergers,vergers,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,5.133333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,forêts,forêt mixte,0,,,,,,,,,,1.9800000000000002,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,vergers,vergers,forêts,forêt mixte,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,forêts,forêt feuillu,0,,,,,,,,,,1.9800000000000002,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,vergers,vergers,forêts,forêt feuillu,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,forêts,forêt conifere,0,,,,,,,,,,1.9800000000000002,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,vergers,vergers,forêts,forêt conifere,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vergers,vergers,forêts,forêt peupleraie,0,,,,,,,,,,1.9800000000000002,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,vergers,vergers,forêts,forêt peupleraie,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,cultures,cultures,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vignes,vignes,cultures,cultures,0,,,,,,,,,,-18.333333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,prairies,prairies zones arborées,0,,,,,,,,,,1.1366666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vignes,vignes,prairies,prairies zones arborées,0,,,,,,,,,,7.1499999999999995,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,prairies,prairies zones herbacées,0,,,,,,,,,,1.1366666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vignes,vignes,prairies,prairies zones herbacées,0,,,,,,,,,,-18.333333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,prairies,prairies zones arbustives,0,,,,,,,,,,1.1366666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vignes,vignes,prairies,prairies zones arbustives,0,,,,,,,,,,0.3666666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,zones humides,zones humides,0,,,,,,,,,,300.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vignes,vignes,zones humides,zones humides,0,,,,,,,,,,-18.333333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,vergers,vergers,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vignes,vignes,vergers,vergers,0,,,,,,,,,,2.016666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,44,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vignes,vignes,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,0.3666666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-47.666666666666664,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vignes,vignes,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-18.333333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,146.66666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,vignes,vignes,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,vignes,vignes,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,7.1499999999999995,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,forêts,forêt mixte,0,,,,,,,,,,2.3833333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,vignes,vignes,forêts,forêt mixte,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,forêts,forêt feuillu,0,,,,,,,,,,2.3833333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,vignes,vignes,forêts,forêt feuillu,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,forêts,forêt conifere,0,,,,,,,,,,2.3833333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,vignes,vignes,forêts,forêt conifere,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,vignes,vignes,forêts,forêt peupleraie,0,,,,,,,,,,2.3833333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,vignes,vignes,forêts,forêt peupleraie,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,cultures,cultures,0,,,,,,,,,,-1.6866666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arbustifs,cultures,cultures,0,,,,,,,,,,-25.666666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,prairies,prairies zones arborées,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arbustifs,prairies,prairies zones arborées,0,,,,,,,,,,6.783333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,prairies,prairies zones herbacées,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arbustifs,prairies,prairies zones herbacées,0,,,,,,,,,,-25.666666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,prairies,prairies zones arbustives,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,zones humides,zones humides,0,,,,,,,,,,256.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arbustifs,zones humides,zones humides,0,,,,,,,,,,-25.666666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,vergers,vergers,0,,,,,,,,,,-1.2466666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arbustifs,vergers,vergers,0,,,,,,,,,,1.6500000000000001,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,vignes,vignes,0,,,,,,,,,,-2.236666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arbustifs,vignes,vignes,0,,,,,,,,,,-7.333333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-91.66666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,sols artificiels,sols artificiels arbustifs,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arbustifs,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,8.066666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,forêts,forêt mixte,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,sols artificiels,sols artificiels arbustifs,forêts,forêt mixte,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,forêts,forêt feuillu,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,sols artificiels,sols artificiels arbustifs,forêts,forêt feuillu,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,forêts,forêt conifere,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,sols artificiels,sols artificiels arbustifs,forêts,forêt conifere,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arbustifs,forêts,forêt peupleraie,0,,,,,,,,,,2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,sols artificiels,sols artificiels arbustifs,forêts,forêt peupleraie,0,,,,,,,,,,33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,cultures,cultures,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,prairies,prairies zones arborées,0,,,,,,,,,,0.8799999999999999,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels imperméabilisés,prairies,prairies zones arborées,0,,,,,,,,,,8.066666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,prairies,prairies zones herbacées,0,,,,,,,,,,0.8799999999999999,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,prairies,prairies zones arbustives,0,,,,,,,,,,0.8799999999999999,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels imperméabilisés,prairies,prairies zones arbustives,0,,,,,,,,,,1.2833333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,zones humides,zones humides,0,,,,,,,,,,300.6666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,vergers,vergers,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels imperméabilisés,vergers,vergers,0,,,,,,,,,,2.9333333333333336,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,vignes,vignes,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels imperméabilisés,vignes,vignes,0,,,,,,,,,,0.9166666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,44,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels imperméabilisés,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,1.2833333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,146.66666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels imperméabilisés,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,8.066666666666668,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,forêts,forêt mixte,0,,,,,,,,,,2.163333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,forêts,forêt feuillu,0,,,,,,,,,,2.163333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,forêts,forêt conifere,0,,,,,,,,,,2.163333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels imperméabilisés,forêts,forêt peupleraie,0,,,,,,,,,,2.163333333333333,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,cultures,cultures,0,,,,,,,,,,-3.6666666666666665,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arborés et buissonants,cultures,cultures,0,,,,,,,,,,-161.33333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,prairies,prairies zones arborées,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,prairies,prairies zones herbacées,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arborés et buissonants,prairies,prairies zones herbacées,0,,,,,,,,,,-161.33333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,prairies,prairies zones arbustives,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arborés et buissonants,prairies,prairies zones arbustives,0,,,,,,,,,,-135.66666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,zones humides,zones humides,0,,,,,,,,,,154,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arborés et buissonants,zones humides,zones humides,0,,,,,,,,,,-161.33333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,vergers,vergers,0,,,,,,,,,,-3.41,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arborés et buissonants,vergers,vergers,0,,,,,,,,,,-102.66666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,vignes,vignes,0,,,,,,,,,,-4.033333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arborés et buissonants,vignes,vignes,0,,,,,,,,,,-143,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-102.66666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arborés et buissonants,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-135.66666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-194.33333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,sols artificiels,sols artificiels arborés et buissonants,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-161.33333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,forêts,forêt mixte,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,forêts,forêt feuillu,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,forêts,forêt conifere,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,sols artificiels,sols artificiels arborés et buissonants,forêts,forêt peupleraie,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt mixte,cultures,cultures,0,,,,,,,,,,-3.6666666666666665,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt mixte,cultures,cultures,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt mixte,prairies,prairies zones arborées,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt mixte,prairies,prairies zones arborées,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt mixte,prairies,prairies zones herbacées,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt mixte,prairies,prairies zones herbacées,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt mixte,prairies,prairies zones arbustives,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt mixte,prairies,prairies zones arbustives,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt mixte,zones humides,zones humides,0,,,,,,,,,,154,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt mixte,zones humides,zones humides,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt mixte,vergers,vergers,0,,,,,,,,,,-3.41,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt mixte,vergers,vergers,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt mixte,vignes,vignes,0,,,,,,,,,,-4.033333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt mixte,vignes,vignes,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt mixte,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-102.66666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt mixte,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt mixte,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-194.33333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt mixte,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt mixte,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt feuillu,cultures,cultures,0,,,,,,,,,,-3.6666666666666665,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt feuillu,cultures,cultures,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt feuillu,prairies,prairies zones arborées,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt feuillu,prairies,prairies zones arborées,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt feuillu,prairies,prairies zones herbacées,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt feuillu,prairies,prairies zones herbacées,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt feuillu,prairies,prairies zones arbustives,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt feuillu,prairies,prairies zones arbustives,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt feuillu,zones humides,zones humides,0,,,,,,,,,,154,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt feuillu,zones humides,zones humides,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt feuillu,vergers,vergers,0,,,,,,,,,,-3.41,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt feuillu,vergers,vergers,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt feuillu,vignes,vignes,0,,,,,,,,,,-4.033333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt feuillu,vignes,vignes,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt feuillu,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-102.66666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt feuillu,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt feuillu,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-194.33333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt feuillu,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt feuillu,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt conifere,cultures,cultures,0,,,,,,,,,,-3.6666666666666665,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt conifere,cultures,cultures,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt conifere,prairies,prairies zones arborées,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt conifere,prairies,prairies zones arborées,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt conifere,prairies,prairies zones herbacées,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt conifere,prairies,prairies zones herbacées,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt conifere,prairies,prairies zones arbustives,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt conifere,prairies,prairies zones arbustives,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt conifere,zones humides,zones humides,0,,,,,,,,,,154,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt conifere,zones humides,zones humides,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt conifere,vergers,vergers,0,,,,,,,,,,-3.41,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt conifere,vergers,vergers,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt conifere,vignes,vignes,0,,,,,,,,,,-4.033333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt conifere,vignes,vignes,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt conifere,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-102.66666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt conifere,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt conifere,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-194.33333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt conifere,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt conifere,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt peupleraie,cultures,cultures,0,,,,,,,,,,-3.6666666666666665,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt peupleraie,cultures,cultures,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt peupleraie,prairies,prairies zones arborées,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt peupleraie,prairies,prairies zones arborées,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt peupleraie,prairies,prairies zones herbacées,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt peupleraie,prairies,prairies zones herbacées,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt peupleraie,prairies,prairies zones arbustives,0,,,,,,,,,,-2.09,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt peupleraie,prairies,prairies zones arbustives,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt peupleraie,zones humides,zones humides,0,,,,,,,,,,154,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt peupleraie,zones humides,zones humides,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt peupleraie,vergers,vergers,0,,,,,,,,,,-3.41,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt peupleraie,vergers,vergers,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt peupleraie,vignes,vignes,0,,,,,,,,,,-4.033333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt peupleraie,vignes,vignes,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt peupleraie,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-102.66666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt peupleraie,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt peupleraie,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-194.33333333333334,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,litière,,,,,,forêts,forêt peupleraie,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-33,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,sol,,,,,,forêts,forêt peupleraie,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,0,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,,,,,,forêts,forêt mixte,6,,,,,,0.4,5.316666666666666,31.899999999999995
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,,,,,,forêts,forêt feuillu,231.4,,,,,,0.57,5.426666666666667,1255.7306666666666
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,,,,,,forêts,forêt conifere,0,,,,,,0.31,1.5766666666666664,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,,,,,,forêts,forêt peupleraie,0,,,,,,0.3,-1.2100000000000002,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,,,,,,forêts,forêt mixte,175.3,,,,,,0.57,2.3833333333333333,417.79833333333335
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,,,,,,forêts,forêt feuillu,237.8,,,,,,0.73,2.2733333333333334,540.5986666666666
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,,,,,,forêts,forêt conifere,127.6,,,,,,0.44,2.163333333333333,276.0413333333333
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,,,,,,forêts,forêt peupleraie,0,,,,,,0.3,-1.2100000000000002,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt mixte,cultures,cultures,0,,,,,,,,,,-157.2455359441074,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt mixte,prairies,prairies zones arborées,0,,,,,,,,,,4.087797389225945,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt mixte,prairies,prairies zones herbacées,0,,,,,,,,,,-157.2455359441074,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt mixte,prairies,prairies zones arbustives,0,,,,,,,,,,-131.57886927744073,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt mixte,zones humides,zones humides,0,,,,,,,,,,-157.2455359441074,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt mixte,vergers,vergers,0,,,,,,,,,,-98.57886927744073,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt mixte,vignes,vignes,0,,,,,,,,,,-138.91220261077407,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt mixte,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-131.57886927744073,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt mixte,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-157.2455359441074,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt mixte,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,4.087797389225945,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt feuillu,cultures,cultures,0,,,,,,,,,,-255.2462944018187,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt feuillu,prairies,prairies zones arborées,0,,,,,,,,,,-93.91296106848536,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt feuillu,prairies,prairies zones herbacées,0,,,,,,,,,,-255.2462944018187,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt feuillu,prairies,prairies zones arbustives,0,,,,,,,,,,-229.57962773515203,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt feuillu,zones humides,zones humides,0,,,,,,,,,,-255.2462944018187,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt feuillu,vergers,vergers,0,,,,,,,,,,-196.57962773515203,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt feuillu,vignes,vignes,0,,,,,,,,,,-236.91296106848537,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt feuillu,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-229.57962773515203,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt feuillu,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-255.2462944018187,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt feuillu,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,-93.91296106848536,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt conifere,cultures,cultures,0,,,,,,,,,,-134.78666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt conifere,prairies,prairies zones arborées,0,,,,,,,,,,26.54666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt conifere,prairies,prairies zones herbacées,0,,,,,,,,,,-134.78666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt conifere,prairies,prairies zones arbustives,0,,,,,,,,,,-109.11999999999999,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt conifere,zones humides,zones humides,0,,,,,,,,,,-134.78666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt conifere,vergers,vergers,0,,,,,,,,,,-76.11999999999999,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt conifere,vignes,vignes,0,,,,,,,,,,-116.45333333333332,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt conifere,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-109.11999999999999,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt conifere,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-134.78666666666666,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt conifere,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,26.54666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt peupleraie,cultures,cultures,0,,,,,,,,,,-233.5666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt peupleraie,prairies,prairies zones arborées,0,,,,,,,,,,-72.23333333333335,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt peupleraie,prairies,prairies zones herbacées,0,,,,,,,,,,-233.5666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt peupleraie,prairies,prairies zones arbustives,0,,,,,,,,,,-207.9,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt peupleraie,zones humides,zones humides,0,,,,,,,,,,-233.5666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt peupleraie,vergers,vergers,0,,,,,,,,,,-174.9,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt peupleraie,vignes,vignes,0,,,,,,,,,,-215.23333333333335,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt peupleraie,sols artificiels,sols artificiels arbustifs,0,,,,,,,,,,-207.9,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt peupleraie,sols artificiels,sols artificiels imperméabilisés,0,,,,,,,,,,-233.5666666666667,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,C,biomasse vivante,,,,,,forêts,forêt peupleraie,sols artificiels,sols artificiels arborés et buissonants,0,,,,,,,,,,-72.23333333333335,0
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,CO2,produits bois,BO,production,180.4824339635827,0.00000937384420391587,,,,,,,,,,,,,,,,,8.606694654794792
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,CO2,produits bois,BI,production,120.02449553375199,0.00001146073863666206,,,,,,,,,,,,,,,,,5.060292359551446
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,CO2,produits bois,BO,consommmation,,,0.000004541233898351478,,,,,,,,,,,,,,,,4.1695821552898265
+34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,CO2,produits bois,BI,consommmation,,,0.000004541233898351478,,,,,,,,,,,,,,,,2.0051038530145666

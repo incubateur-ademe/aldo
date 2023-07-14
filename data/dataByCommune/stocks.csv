@@ -1,4 +1,4 @@
-insee,nom,epci,departement,region,zpc,inter_region,groupe_ser,greco,rad_13,bassin_populicole,population,occupation_du_sol_1,occupation_du_sol_2,surface_ha,lineaire_haies_km,reservoir,usage_produits_bois,approche_calculation_produits_bois,recolte_locale_m3_an_-1,ratio_recolte_France,ratio_population_France,stock_de_reference_tC_ha_-1,stock_de_reference_tC_km_-1,stock_tC
+insee,nom,epci,departement,region,zpc,inter_region,groupe_ser,greco,rad_13,bassin_populicole,population,occupation_du_sol_1,occupation_du_sol_2,surface_ha,lineaire_haies_km,reservoir,usage_produits_bois,approche_calculation_produits_bois,recolte_locale_m3_an-1,ratio_recolte_France,ratio_population_France,stock_de_reference_tC_ha-1,stock_de_reference_tC_km-1,stock_tC
 34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,cultures,cultures,174.54974891499998,,sol,,,,,,43,,7505.639203344999
 34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,cultures,cultures,174.54974891499998,,biomasse vivante,,,,,,0,,0
 34201,Pierrerue,200042653,34,76,2_2,SUD-EST,G8,G,OCC,Sud,292,prairies,prairies zones arborées,339.54284999099997,,sol,,,,,,55,,18674.856749504997
