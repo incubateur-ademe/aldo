@@ -214,7 +214,7 @@ function main () {
   const stocksRecords = []
   const fluxRecords = []
 
-  const testCommunes = communes.splice(0, 1)
+  const testCommunes = communes.splice(0, 100)
   testCommunes.forEach((commune) => {
     const record = createRecordForCommune(commune)
     addStocksRecords(stocksRecords, record)
