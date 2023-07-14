@@ -1,7 +1,7 @@
 // This script fetches data per-commune and saves it in order to avoid re-fetching data that doesn't change.
 // This is done once in advance rather than per-request since this data does not change per-request.
 // The JSON versions of the files must be generated before this script is run using the csvtojson.sh script.
-// To run, enter the scripts directory and call `node epci-post-processing`
+// To run, enter the scripts directory and call `node communes-calculations`
 // TODO: write tests for this script
 
 const fs = require('fs')
