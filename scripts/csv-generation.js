@@ -8,6 +8,7 @@ const { getStocks } = require('../calculations/stocks')
 const { getAnnualFluxes } = require('../calculations/flux')
 const { getForestAreaData } = require('../data/stocks')
 const { getIgnLocalisation } = require('../data/shared')
+const createCsvWriter = require('csv-writer').createObjectCsvWriter
 
 function copyObject (obj) {
   return JSON.parse(JSON.stringify(obj))
@@ -26,6 +27,50 @@ const COMMUNE_HEADERS = [
   { id: 'rad13', title: 'rad_13' },
   { id: 'bassinPopulicole', title: 'bassin_populicole' },
   { id: 'population', title: 'population' }
+]
+
+const STOCKS_HEADERS = [
+  ...COMMUNE_HEADERS,
+  { id: 'gt1', title: 'occupation_du_sol_1' },
+  { id: 'gt2', title: 'occupation_du_sol_2' },
+  { id: 'area', title: 'surface_ha' },
+  { id: 'haies', title: 'lineaire_haies_km' },
+  { id: 'reservoir', title: 'reservoir' },
+  { id: 'usage', title: 'usage_produits_bois' },
+  { id: 'approche', title: 'approche_calculation_produits_bois' },
+  { id: 'harvest', title: 'recolte_locale_m3_an-1' },
+  { id: 'harvestRatio', title: 'ratio_recolte_France' },
+  { id: 'populationRatio', title: 'ratio_population_France' },
+  { id: 'density', title: 'stock_de_reference_tC_ha-1' },
+  { id: 'haiesDensity', title: 'stock_de_reference_tC_km-1' },
+  { id: 'stock', title: 'stock_tC' }
+]
+
+const FLUX_HEADERS = [
+  ...COMMUNE_HEADERS,
+  { id: 'gas', title: 'gaz' },
+  { id: 'reservoir', title: 'reservoir' },
+  { id: 'category', title: 'usage_produits_bois' },
+  { id: 'approche', title: 'approche_calculation_produits_bois' },
+  { id: 'localHarvest', title: 'recolte_locale_m3_an-1' },
+  { id: 'harvestRatio', title: 'ratio_recolte_France' },
+  { id: 'populationRatio', title: 'ratio_population_France' },
+  { id: 'fromLevel1', title: 'occupation_du_sol_initiale_1' },
+  { id: 'from', title: 'occupation_du_sol_initiale_2' },
+  { id: 'toLevel1', title: 'occupation_du_sol_finale_1' },
+  { id: 'to', title: 'occupation_du_sol_finale_2' },
+  { id: 'area', title: 'surface_moyenne_convertie_ha_an-1' },
+  { id: 'gt1', title: 'occupation_du_sol_1' },
+  { id: 'gt2', title: 'occupation_du_sol_2' },
+  { id: 'forestArea', title: 'surface_ha' },
+  { id: 'bioGrowth', title: 'accroissement_biologique_unitaire_m3_BFT_ha-1_an-1' },
+  { id: 'bioMortality', title: 'mortalite_biologique_unitaire_m3_BFT_ha-1_an-1' },
+  { id: 'bioRemoval', title: 'prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1' },
+  { id: 'bioRemoval', title: 'prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1' },
+  { id: 'bioTotal', title: 'bilan_total_unitaire_m3_BFT_ha-1_an-1' },
+  { id: 'conversionFactor', title: 'facteur_de_conversion_tC_m3_BFT-1' },
+  { id: 'annualFluxEquivalent', title: 'flux_unitaire_tCO2e_ha-1_an-1' },
+  { id: 'co2e', title: 'flux_tCO2e_an-1' }
 ]
 
 const RESERVOIR_TRANSLATION = {
@@ -160,83 +205,76 @@ function addFluxRecords (records, record) {
   })
 }
 
-function main () {
-  const createCsvWriter = require('csv-writer').createObjectCsvWriter
-  const stocksWriter = createCsvWriter({
+function resetFiles () {
+  const stocksHeaderWriter = createCsvWriter({
     path: '../data/dataByCommune/stocks.csv',
-    header: [
-      ...COMMUNE_HEADERS,
-      { id: 'gt1', title: 'occupation_du_sol_1' },
-      { id: 'gt2', title: 'occupation_du_sol_2' },
-      { id: 'area', title: 'surface_ha' },
-      { id: 'haies', title: 'lineaire_haies_km' },
-      { id: 'reservoir', title: 'reservoir' },
-      { id: 'usage', title: 'usage_produits_bois' },
-      { id: 'approche', title: 'approche_calculation_produits_bois' },
-      { id: 'harvest', title: 'recolte_locale_m3_an-1' },
-      { id: 'harvestRatio', title: 'ratio_recolte_France' },
-      { id: 'populationRatio', title: 'ratio_population_France' },
-      { id: 'density', title: 'stock_de_reference_tC_ha-1' },
-      { id: 'haiesDensity', title: 'stock_de_reference_tC_km-1' },
-      { id: 'stock', title: 'stock_tC' }
-    ]
+    header: STOCKS_HEADERS
   })
-  const fluxWriter = createCsvWriter({
+  const fluxHeaderWriter = createCsvWriter({
     path: '../data/dataByCommune/flux.csv',
-    header: [
-      ...COMMUNE_HEADERS,
-      { id: 'gas', title: 'gaz' },
-      { id: 'reservoir', title: 'reservoir' },
-      { id: 'category', title: 'usage_produits_bois' },
-      { id: 'approche', title: 'approche_calculation_produits_bois' },
-      { id: 'localHarvest', title: 'recolte_locale_m3_an-1' },
-      { id: 'harvestRatio', title: 'ratio_recolte_France' },
-      { id: 'populationRatio', title: 'ratio_population_France' },
-      { id: 'fromLevel1', title: 'occupation_du_sol_initiale_1' },
-      { id: 'from', title: 'occupation_du_sol_initiale_2' },
-      { id: 'toLevel1', title: 'occupation_du_sol_finale_1' },
-      { id: 'to', title: 'occupation_du_sol_finale_2' },
-      { id: 'area', title: 'surface_moyenne_convertie_ha_an-1' },
-      { id: 'gt1', title: 'occupation_du_sol_1' },
-      { id: 'gt2', title: 'occupation_du_sol_2' },
-      { id: 'forestArea', title: 'surface_ha' },
-      { id: 'bioGrowth', title: 'accroissement_biologique_unitaire_m3_BFT_ha-1_an-1' },
-      { id: 'bioMortality', title: 'mortalite_biologique_unitaire_m3_BFT_ha-1_an-1' },
-      { id: 'bioRemoval', title: 'prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1' },
-      { id: 'bioRemoval', title: 'prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1' },
-      { id: 'bioTotal', title: 'bilan_total_unitaire_m3_BFT_ha-1_an-1' },
-      { id: 'conversionFactor', title: 'facteur_de_conversion_tC_m3_BFT-1' },
-      { id: 'annualFluxEquivalent', title: 'flux_unitaire_tCO2e_ha-1_an-1' },
-      { id: 'co2e', title: 'flux_tCO2e_an-1' }
-    ]
+    header: FLUX_HEADERS
   })
+  return writeFiles(stocksHeaderWriter, [], fluxHeaderWriter, [])
+}
 
-  const stocksRecords = []
-  const fluxRecords = []
-
-  const testCommunes = communes.splice(0, 100)
-  testCommunes.forEach((commune) => {
-    const record = createRecordForCommune(commune)
-    addStocksRecords(stocksRecords, record)
-    addFluxRecords(fluxRecords, record)
-  })
-
-  stocksWriter.writeRecords(stocksRecords) // returns a promise
+function writeFiles (stocksWriter, stocksRecords, fluxWriter, fluxRecords) {
+  return stocksWriter.writeRecords(stocksRecords)
     .then(() => {
-      console.log('...stocks done')
+      return fluxWriter.writeRecords(fluxRecords)
+        .then(() => {
+          console.log('batch complete')
+        })
+        .catch((e) => {
+          console.log('Error writing flux records')
+          console.log(e)
+        })
     })
     .catch((e) => {
       console.log('Error writing stocks records')
       console.log(e)
     })
-  fluxWriter.writeRecords(fluxRecords)
+}
+
+async function exportData (stocksWriter, fluxWriter, communes, startIdx) {
+  const batchSize = 200
+  const stocksRecords = []
+  const fluxRecords = []
+
+  communes.slice(startIdx, startIdx + batchSize).forEach((commune) => {
+    const record = createRecordForCommune(commune)
+    addStocksRecords(stocksRecords, record)
+    addFluxRecords(fluxRecords, record)
+  })
+
+  return writeFiles(stocksWriter, stocksRecords, fluxWriter, fluxRecords)
     .then(() => {
-      console.log('...flux done')
+      startIdx += batchSize
+      if (startIdx < communes.length) {
+        return exportData(stocksWriter, fluxWriter, communes, startIdx)
+      }
     })
     .catch((e) => {
-      console.log('Error writing flux records')
+      console.log('Error writing files around', startIdx)
       console.log(e)
     })
+}
+
+async function main () {
+  await resetFiles()
+
+  const stocksWriter = createCsvWriter({
+    path: '../data/dataByCommune/stocks.csv',
+    header: STOCKS_HEADERS,
+    append: true
+  })
+  const fluxWriter = createCsvWriter({
+    path: '../data/dataByCommune/flux.csv',
+    header: FLUX_HEADERS,
+    append: true
+  })
+
+  const testCommunes = communes.slice(0, 1000)
+  await exportData(stocksWriter, fluxWriter, testCommunes, 0)
 }
 
 main()
