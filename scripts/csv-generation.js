@@ -33,16 +33,23 @@ const STOCKS_HEADERS = [
   ...COMMUNE_HEADERS,
   { id: 'gt1', title: 'occupation_du_sol_1' },
   { id: 'gt2', title: 'occupation_du_sol_2' },
+  { id: 'otherStockType', title: 'autre_stock' },
   { id: 'area', title: 'surface_ha' },
   { id: 'haies', title: 'lineaire_haies_km' },
-  { id: 'reservoir', title: 'reservoir' },
+  { id: 'groundDensity', title: 'sol_stock_de_reference_tC_ha-1' },
+  { id: 'groundStock', title: 'sol_stock_tC' },
+  { id: 'liveBiomassDensity', title: 'biomasse_vivante_stock_de_reference_tC_ha-1' },
+  { id: 'haiesDensity', title: 'biomasse_vivante_stock_de_reference_tC_km-1' },
+  { id: 'liveBiomassStock', title: 'biomasse_vivante_stock_tC' },
+  { id: 'deadBiomassDensity', title: 'biomasse_morte_stock_de_reference_tC_ha-1' },
+  { id: 'deadBiomassStock', title: 'biomasse_morte_stock_tC' },
+  { id: 'forestLitterDensity', title: 'litiere_stock_de_reference_tC_ha-1' },
+  { id: 'forestLitterStock', title: 'litiere_stock_tC' },
   { id: 'usage', title: 'usage_produits_bois' },
   { id: 'approche', title: 'approche_calculation_produits_bois' },
   { id: 'harvest', title: 'recolte_locale_m3_an-1' },
   { id: 'harvestRatio', title: 'ratio_recolte_France' },
   { id: 'populationRatio', title: 'ratio_population_France' },
-  { id: 'density', title: 'stock_de_reference_tC_ha-1' },
-  { id: 'haiesDensity', title: 'stock_de_reference_tC_km-1' },
   { id: 'stock', title: 'stock_tC' }
 ]
 
@@ -116,25 +123,24 @@ function addStocksRecords (records, record) {
     const stock = stocks[groundType]
     if (!stock) return
     RESERVOIRS.forEach((reservoir) => {
-      const reservoirRecord = copyObject(groundRecord)
       const densityKey = `${reservoir}Density`
       if (!Object.hasOwn(stock, densityKey)) return
-      reservoirRecord.reservoir = RESERVOIR_TRANSLATION[reservoir]
-      reservoirRecord.density = stock[densityKey]
-      reservoirRecord.stock = stock[`${reservoir}Stock`]
-      records.push(reservoirRecord)
+      const recordKeyPrefix = reservoir === 'biomass' ? 'liveBiomass' : reservoir
+      groundRecord[`${recordKeyPrefix}Density`] = stock[densityKey]
+      groundRecord[`${recordKeyPrefix}Stock`] = stock[`${reservoir}Stock`]
     })
+    groundRecord.stock = stock.totalStock
+    records.push(groundRecord)
   })
   // haies
   const hedgerowsStock = stocks.haies
   Object.entries(hedgerowsStock.byGroundType).forEach(([gt, km]) => {
     const hedgerowsRecord = copyObject(record)
     hedgerowsRecord.gt1 = gt
-    hedgerowsRecord.gt2 = 'haies'
+    hedgerowsRecord.otherStockType = 'haies'
     hedgerowsRecord.haies = km
-    hedgerowsRecord.reservoir = RESERVOIR_TRANSLATION.biomass
-    hedgerowsRecord.density = hedgerowsStock.biomassDensity
-    hedgerowsRecord.stock = hedgerowsRecord.haies * hedgerowsRecord.density
+    hedgerowsRecord.haiesDensity = hedgerowsStock.biomassDensity
+    hedgerowsRecord.liveBiomassStock = hedgerowsRecord.haies * hedgerowsRecord.haiesDensity
     records.push(hedgerowsRecord)
   })
   // wood products
@@ -142,7 +148,7 @@ function addStocksRecords (records, record) {
   const woodHarvestStock = stocks['produits bois']
   usages.forEach((usage) => {
     const woodRecord = copyObject(record)
-    woodRecord.reservoir = 'produits bois'
+    woodRecord.otherStockType = 'produits bois'
     woodRecord.usage = usage.toUpperCase()
     woodRecord.approche = 'production'
     woodRecord.harvest = woodHarvestStock[`${usage}LocalHarvestTotal`]
@@ -153,7 +159,7 @@ function addStocksRecords (records, record) {
   const woodConsumptionStock = getStocks([record], { woodCalculation: 'consommation' })['produits bois']
   usages.forEach((usage) => {
     const woodRecord = copyObject(record)
-    woodRecord.reservoir = 'produits bois'
+    woodRecord.otherStockType = 'produits bois'
     woodRecord.usage = usage.toUpperCase()
     woodRecord.approche = 'consommmation'
     woodRecord.populationRatio = woodConsumptionStock.portionPopulation
@@ -273,7 +279,7 @@ async function main () {
     append: true
   })
 
-  const testCommunes = communes.slice(0, 1000)
+  const testCommunes = communes.slice(0, 1)
   await exportData(stocksWriter, fluxWriter, testCommunes, 0)
 }
 
