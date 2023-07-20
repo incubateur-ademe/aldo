@@ -422,7 +422,9 @@ async function main () {
     })
   })
 
-  await exportData(stocksWriters, fluxWriters, communes, 0)
+  await exportData(stocksWriters, fluxWriters, communes, 0).then(() => {
+    console.log('All done!')
+  })
 }
 
 main()
