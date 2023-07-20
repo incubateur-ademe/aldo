@@ -417,7 +417,7 @@ async function main () {
   //   })
   // })
 
-  await exportData(stocksWriters, fluxWriters, communes.slice(0, 400), 0).then(() => {
+  await exportData(stocksWriters, fluxWriters, communes, 0).then(() => {
     console.log('All done!')
   })
 }
