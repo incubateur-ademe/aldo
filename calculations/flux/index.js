@@ -252,7 +252,6 @@ function fluxSummary (allFluxes, options) {
 }
 
 function forestBiomassGrowthSummary (allFlux, options) {
-  // aggregate forest biomass data which is by commune, not EPCI
   const forestBiomassSummaryByType = []
   const forestSubtypes = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
   for (const subtype of forestSubtypes) {

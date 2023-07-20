@@ -6,3 +6,4 @@
 /data/dataByCommune/*.csv.json
 .env
 .~lock.*
+/scripts/export
