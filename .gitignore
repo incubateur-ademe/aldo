@@ -7,3 +7,4 @@
 .env
 .~lock.*
 /scripts/export
+/scripts/export-new
