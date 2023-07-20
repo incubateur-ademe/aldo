@@ -64,7 +64,6 @@ const FLUX_HEADERS = [
   { id: 'otherFluxType', title: 'autre_flux' },
   { id: 'gt1', title: 'occupation_du_sol_1' },
   { id: 'gt2', title: 'occupation_du_sol_2' },
-  { id: 'forestArea', title: 'surface_ha' },
   // the reference values
   { id: 'groundUnitFlux', title: 'sol_flux_unitaire_tCO2e_ha-1_an-1' },
   { id: 'groundFlux', title: 'sol_flux_tCO2e_an-1' },
@@ -74,6 +73,9 @@ const FLUX_HEADERS = [
   { id: 'forestLitterFlux', title: 'litiere_flux_tCO2e_an-1' },
   { id: 'n20Flux', title: 'sol_et_litiere_flux_tCO2e_an-1' },
 
+  { id: 'forestArea', title: 'surface_ha' },
+  { id: 'ignLocalisationLevel', title: 'niveau_localisation_ign' },
+  { id: 'ignLocalisationCode', title: 'code_localisation_ign' },
   { id: 'growth', title: 'accroissement_biologique_unitaire_m3_BFT_ha-1_an-1' },
   { id: 'mortality', title: 'mortalite_biologique_unitaire_m3_BFT_ha-1_an-1' },
   { id: 'timberExtraction', title: 'prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1' },
