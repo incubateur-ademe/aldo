@@ -178,6 +178,7 @@ function addStocksRecords (records, record) {
     woodRecord.approche = 'production'
     woodRecord.harvest = woodHarvestStock[`${usage}LocalHarvestTotal`]
     woodRecord.harvestRatio = woodHarvestStock[`${usage}Portion`]
+    if (record.insee === '34201') console.log(woodHarvestStock)
     woodRecord.stock = woodHarvestStock[`${usage}Stock`]
     records.push(woodRecord)
     recordCountForCommune++
@@ -189,7 +190,9 @@ function addStocksRecords (records, record) {
     woodRecord.usage = usage.toUpperCase()
     woodRecord.approche = 'consommmation'
     woodRecord.populationRatio = woodConsumptionStock.portionPopulation
-    woodRecord.stock = woodHarvestStock[`${usage}Stock`]
+    // TODO: for some reason the per-department consommation are not the same as in the main file 
+    if (record.insee === '34201') console.log(woodConsumptionStock)
+    woodRecord.stock = woodConsumptionStock[`${usage}Stock`]
     records.push(woodRecord)
     recordCountForCommune++
   })
@@ -306,10 +309,10 @@ function resetFiles () {
       header: FLUX_HEADERS
     })
   })
-  return writeFiles(stocksWriters, [], fluxWriters, [])
+  return writeFiles(stocksWriters, [], fluxWriters, [], -1)
 }
 
-function writeFiles (stocksWriters, stocksRecords, fluxWriters, fluxRecords) {
+function writeFiles (stocksWriters, stocksRecords, fluxWriters, fluxRecords, idx) {
   const promises = []
   function catchError (type, loc) {
     return (e) => {
@@ -354,12 +357,15 @@ function writeFiles (stocksWriters, stocksRecords, fluxWriters, fluxRecords) {
   }
 
   return Promise.all(promises).then(() => {
-    console.log('batch complete')
+    console.log('batch complete for start idx', idx)
+  }).catch((e) => {
+    console.log('batch error for idx', idx)
+    console.log(e)
   })
 }
 
 async function exportData (stocksWriters, fluxWriters, communes, startIdx) {
-  const batchSize = 200
+  const batchSize = 100
   const stocksRecords = []
   const fluxRecords = []
 
@@ -369,7 +375,7 @@ async function exportData (stocksWriters, fluxWriters, communes, startIdx) {
     addFluxRecords(fluxRecords, record)
   })
 
-  return writeFiles(stocksWriters, stocksRecords, fluxWriters, fluxRecords)
+  return writeFiles(stocksWriters, stocksRecords, fluxWriters, fluxRecords, startIdx)
     .then(() => {
       startIdx += batchSize
       if (startIdx < communes.length) {
@@ -422,7 +428,7 @@ async function main () {
     })
   })
 
-  await exportData(stocksWriters, fluxWriters, communes, 0).then(() => {
+  await exportData(stocksWriters, fluxWriters, communes.slice(0, 10), 0).then(() => {
     console.log('All done!')
   })
 }
