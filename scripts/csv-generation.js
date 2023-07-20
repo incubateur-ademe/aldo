@@ -131,6 +131,9 @@ function createRecordForCommune (commune) {
 }
 
 function addStocksRecords (records, record) {
+  const expectedRecordCount = 25
+  // 25 = 14 child types + 7 haies + 4 prod bois
+  let recordCountForCommune = 0
   // the stocks linked to areas
   const stocks = getStocks([record])
   Object.entries(record.clc18).forEach(([groundType, area]) => {
@@ -149,6 +152,7 @@ function addStocksRecords (records, record) {
     })
     groundRecord.stock = stock.totalStock
     records.push(groundRecord)
+    recordCountForCommune++
   })
   // haies
   const hedgerowsStock = stocks.haies
@@ -160,6 +164,7 @@ function addStocksRecords (records, record) {
     hedgerowsRecord.haiesDensity = hedgerowsStock.biomassDensity
     hedgerowsRecord.liveBiomassStock = hedgerowsRecord.haies * hedgerowsRecord.haiesDensity
     records.push(hedgerowsRecord)
+    recordCountForCommune++
   })
   // wood products
   const usages = ['bo', 'bi']
@@ -173,6 +178,7 @@ function addStocksRecords (records, record) {
     woodRecord.harvestRatio = woodHarvestStock[`${usage}Portion`]
     woodRecord.stock = woodHarvestStock[`${usage}Stock`]
     records.push(woodRecord)
+    recordCountForCommune++
   })
   const woodConsumptionStock = getStocks([record], { woodCalculation: 'consommation' })['produits bois']
   usages.forEach((usage) => {
@@ -183,7 +189,11 @@ function addStocksRecords (records, record) {
     woodRecord.populationRatio = woodConsumptionStock.portionPopulation
     woodRecord.stock = woodHarvestStock[`${usage}Stock`]
     records.push(woodRecord)
+    recordCountForCommune++
   })
+  if (recordCountForCommune !== expectedRecordCount) {
+    console.log('Commune insee', record.insee, 'has', recordCountForCommune, 'stocks records')
+  }
 }
 
 function addFluxRecords (records, record) {
@@ -258,7 +268,7 @@ function addFluxRecords (records, record) {
     recordCountForCommune += 1
   })
   if (recordCountForCommune !== expectedRecordCount) {
-    console.log('Commune insee', record.insee, 'has', recordCountForCommune, 'records')
+    console.log('Commune insee', record.insee, 'has', recordCountForCommune, 'flux records')
   }
 }
 
@@ -275,21 +285,19 @@ function resetFiles () {
 }
 
 function writeFiles (stocksWriter, stocksRecords, fluxWriter, fluxRecords) {
-  return stocksWriter.writeRecords(stocksRecords)
-    .then(() => {
-      return fluxWriter.writeRecords(fluxRecords)
-        .then(() => {
-          console.log('batch complete')
-        })
-        .catch((e) => {
-          console.log('Error writing flux records')
-          console.log(e)
-        })
-    })
+  const stocksPromise = stocksWriter.writeRecords(stocksRecords)
     .catch((e) => {
       console.log('Error writing stocks records')
       console.log(e)
     })
+  const fluxPromise = fluxWriter.writeRecords(fluxRecords)
+    .catch((e) => {
+      console.log('Error writing flux records')
+      console.log(e)
+    })
+  return Promise.all([stocksPromise, fluxPromise]).then(() => {
+    console.log('batch complete')
+  })
 }
 
 async function exportData (stocksWriter, fluxWriter, communes, startIdx) {
