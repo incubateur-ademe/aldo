@@ -10,7 +10,7 @@ const { getForestAreaData } = require('../data/stocks')
 const { getIgnLocalisation } = require('../data/shared')
 const createCsvWriter = require('csv-writer').createObjectCsvWriter
 const DEPARTMENTS = require('./departments.json')
-// const REGIONS = require('regions.json')
+const REGIONS = require('./regions.json')
 
 function copyObject (obj) {
   return JSON.parse(JSON.stringify(obj))
@@ -296,14 +296,24 @@ function resetFiles () {
       header: FLUX_HEADERS
     })
   })
+  REGIONS.forEach((r) => {
+    stocksWriters[`r_${r}`] = createCsvWriter({
+      path: `./export/stocks-region/stocks-region-${r}.csv`,
+      header: STOCKS_HEADERS
+    })
+    fluxWriters[`r_${r}`] = createCsvWriter({
+      path: `./export/flux-region/flux-region-${r}.csv`,
+      header: FLUX_HEADERS
+    })
+  })
   return writeFiles(stocksWriters, [], fluxWriters, [])
 }
 
 function writeFiles (stocksWriters, stocksRecords, fluxWriters, fluxRecords) {
   const promises = []
-  function catchError (type, dep) {
+  function catchError (type, loc) {
     return (e) => {
-      console.log('Error writing ', type, ' records for dep', dep)
+      console.log('Error writing ', type, ' records for location code', loc)
       console.log(e)
     }
   }
@@ -312,14 +322,36 @@ function writeFiles (stocksWriters, stocksRecords, fluxWriters, fluxRecords) {
 
   DEPARTMENTS.forEach((dep) => {
     const departmentStocks = stocksRecords.filter((r) => r.departement === dep)
-    const stocksPromise = stocksWriters[dep].writeRecords(departmentStocks)
-      .catch(catchError('stock', dep))
+    if (!departmentStocks[0]) return
+    const regionCode = departmentStocks[0].region
+    // write department and region files
+    const stocksPromise = stocksWriters[`d_${dep}`].writeRecords(departmentStocks)
+      .catch(catchError('stock department', dep))
     promises.push(stocksPromise)
+    const regionStocksPromise = stocksWriters[`r_${regionCode}`].writeRecords(departmentStocks)
+      .catch(catchError('stock region', regionCode))
+    promises.push(regionStocksPromise)
+
     const departmentFlux = fluxRecords.filter((r) => r.departement === dep)
-    const fluxPromise = fluxWriters[dep].writeRecords(departmentFlux)
-      .catch(catchError('flux', dep))
+    const fluxPromise = fluxWriters[`d_${dep}`].writeRecords(departmentFlux)
+      .catch(catchError('flux department', dep))
     promises.push(fluxPromise)
+    const regionFluxPromise = fluxWriters[`r_${regionCode}`].writeRecords(departmentFlux)
+      .catch(catchError('flux region', regionCode))
+    promises.push(regionFluxPromise)
   })
+
+  // need to allow for initialising region files
+  if (!stocksRecords.length) {
+    REGIONS.forEach((r) => {
+      const regionStocksPromise = stocksWriters[`r_${r}`].writeRecords([])
+        .catch(catchError('stock', r))
+      promises.push(regionStocksPromise)
+      const regionFluxPromise = fluxWriters[`r_${r}`].writeRecords([])
+        .catch(catchError('flux', r))
+      promises.push(regionFluxPromise)
+    })
+  }
 
   return Promise.all(promises).then(() => {
     console.log('batch complete')
@@ -366,19 +398,31 @@ async function main () {
     append: true
   })
   DEPARTMENTS.forEach((d) => {
-    stocksWriters[d] = createCsvWriter({
+    stocksWriters[`d_${d}`] = createCsvWriter({
       path: `./export/stocks-departement/stocks-departement-${d}.csv`,
       header: STOCKS_HEADERS,
       append: true
     })
-    fluxWriters[d] = createCsvWriter({
+    fluxWriters[`d_${d}`] = createCsvWriter({
       path: `./export/flux-departement/flux-departement-${d}.csv`,
       header: FLUX_HEADERS,
       append: true
     })
   })
+  REGIONS.forEach((r) => {
+    stocksWriters[`r_${r}`] = createCsvWriter({
+      path: `./export/stocks-region/stocks-region-${r}.csv`,
+      header: STOCKS_HEADERS,
+      append: true
+    })
+    fluxWriters[`r_${r}`] = createCsvWriter({
+      path: `./export/flux-region/flux-region-${r}.csv`,
+      header: FLUX_HEADERS,
+      append: true
+    })
+  })
 
-  const testCommunes = communes.slice(0, 400)
+  const testCommunes = communes.slice(0, 10)
   await exportData(stocksWriters, fluxWriters, testCommunes, 0)
 }
 
