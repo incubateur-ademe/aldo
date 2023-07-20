@@ -55,28 +55,37 @@ const STOCKS_HEADERS = [
 
 const FLUX_HEADERS = [
   ...COMMUNE_HEADERS,
-  { id: 'gas', title: 'gaz' },
-  { id: 'reservoir', title: 'reservoir' },
-  { id: 'category', title: 'usage_produits_bois' },
-  { id: 'approche', title: 'approche_calculation_produits_bois' },
-  { id: 'localHarvest', title: 'recolte_locale_m3_an-1' },
-  { id: 'harvestRatio', title: 'ratio_recolte_France' },
-  { id: 'populationRatio', title: 'ratio_population_France' },
+  // are the levels actually interesting?
   { id: 'fromLevel1', title: 'occupation_du_sol_initiale_1' },
   { id: 'from', title: 'occupation_du_sol_initiale_2' },
   { id: 'toLevel1', title: 'occupation_du_sol_finale_1' },
   { id: 'to', title: 'occupation_du_sol_finale_2' },
   { id: 'area', title: 'surface_moyenne_convertie_ha_an-1' },
+  { id: 'otherFluxType', title: 'autre_flux' },
   { id: 'gt1', title: 'occupation_du_sol_1' },
   { id: 'gt2', title: 'occupation_du_sol_2' },
   { id: 'forestArea', title: 'surface_ha' },
-  { id: 'bioGrowth', title: 'accroissement_biologique_unitaire_m3_BFT_ha-1_an-1' },
-  { id: 'bioMortality', title: 'mortalite_biologique_unitaire_m3_BFT_ha-1_an-1' },
-  { id: 'bioRemoval', title: 'prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1' },
-  { id: 'bioRemoval', title: 'prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1' },
-  { id: 'bioTotal', title: 'bilan_total_unitaire_m3_BFT_ha-1_an-1' },
+  // the reference values
+  { id: 'groundUnitFlux', title: 'sol_flux_unitaire_tCO2e_ha-1_an-1' },
+  { id: 'groundFlux', title: 'sol_flux_tCO2e_an-1' },
+  { id: 'biomassUnitFlux', title: 'biomasse_vivante_flux_unitaire_tCO2e_ha-1_an-1' },
+  { id: 'biomassFlux', title: 'biomasse_vivante_flux_tCO2e_an-1' },
+  { id: 'forestLitterUnitFlux', title: 'litiere_flux_unitaire_tCO2e_ha-1_an-1' },
+  { id: 'forestLitterFlux', title: 'litiere_flux_tCO2e_an-1' },
+  { id: 'n20Flux', title: 'sol_et_litiere_flux_tCO2e_an-1' },
+
+  { id: 'growth', title: 'accroissement_biologique_unitaire_m3_BFT_ha-1_an-1' },
+  { id: 'mortality', title: 'mortalite_biologique_unitaire_m3_BFT_ha-1_an-1' },
+  { id: 'timberExtraction', title: 'prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1' },
+  { id: 'fluxMeterCubed', title: 'bilan_total_unitaire_m3_BFT_ha-1_an-1' },
   { id: 'conversionFactor', title: 'facteur_de_conversion_tC_m3_BFT-1' },
-  { id: 'annualFluxEquivalent', title: 'flux_unitaire_tCO2e_ha-1_an-1' },
+  { id: 'bioAnnualFluxEquivalent', title: 'accroissement_biologique_flux_unitaire_tCO2e_ha-1_an-1' },
+  // wood product columns
+  { id: 'category', title: 'usage_produits_bois' },
+  { id: 'approche', title: 'approche_calculation_produits_bois' },
+  { id: 'localHarvest', title: 'recolte_locale_m3_an-1' },
+  { id: 'harvestRatio', title: 'ratio_recolte_France' },
+  { id: 'populationRatio', title: 'ratio_population_France' },
   { id: 'co2e', title: 'flux_tCO2e_an-1' }
 ]
 
@@ -89,6 +98,13 @@ const RESERVOIR_TRANSLATION = {
 }
 
 const RESERVOIRS = Object.keys(RESERVOIR_TRANSLATION)
+
+const RESERVOIR_TO_KEY = {
+  sol: 'ground',
+  biomasse: 'biomass',
+  litière: 'forestLitter',
+  'sol et litière': 'n20'
+}
 
 const GROUND_TYPE_2_TO_1 = {}
 GroundTypes.forEach((gt) => {
@@ -170,45 +186,78 @@ function addStocksRecords (records, record) {
 
 function addFluxRecords (records, record) {
   const fluxes = getAnnualFluxes([record])
+  // want to regroup fluxes into one record per ground change - ie. putting all reservoirs
+  // in the same record. To speed things up a bit here is a lookup
+  const fluxLookup = {}
+  const biomassGrowthRecords = []
+  const woodRecords = []
+  // fluxLookup[from_to] = { from, to, area, groundFluxUnit, groundFlux, liveBiomassFluxUnit...}
   fluxes.allFlux.forEach((f) => {
-    const fluxRecord = copyObject(record)
-    Object.assign(fluxRecord, f)
-    if (fluxRecord.from) {
-      fluxRecord.fromLevel1 = GROUND_TYPE_2_TO_1[fluxRecord.from]
-      fluxRecord.toLevel1 = GROUND_TYPE_2_TO_1[fluxRecord.to]
-    } else if (fluxRecord.to === 'produits bois') {
-      fluxRecord.reservoir = 'produits bois'
-      fluxRecord.to = undefined
-      fluxRecord.approche = 'production'
-      fluxRecord.harvestRatio = fluxRecord.localPortion
-      fluxRecord.category = fluxRecord.category.toUpperCase()
-    } else {
+    if (f.to === 'produits bois') {
+      const woodRecord = copyObject(record)
+      Object.assign(woodRecord, f)
+      woodRecord.otherFluxType = 'produits bois'
+      woodRecord.to = undefined
+      woodRecord.approche = 'production'
+      woodRecord.harvestRatio = woodRecord.localPortion
+      woodRecord.category = woodRecord.category.toUpperCase()
+      woodRecords.push(woodRecord)
+    } else if (!f.from) {
       // biomass flux in forests is based on today's area and not an area change
       // reformat this data to clarify this
-      fluxRecord.gt2 = fluxRecord.to
-      fluxRecord.gt1 = GROUND_TYPE_2_TO_1[fluxRecord.to]
-      fluxRecord.to = undefined
-      fluxRecord.forestArea = fluxRecord.area
-      fluxRecord.area = undefined
+      const biomassGrowthRecord = copyObject(record)
+      Object.assign(biomassGrowthRecord, f)
+      biomassGrowthRecord.gt2 = biomassGrowthRecord.to
+      biomassGrowthRecord.gt1 = GROUND_TYPE_2_TO_1[biomassGrowthRecord.to]
+      biomassGrowthRecord.to = undefined
+      biomassGrowthRecord.forestArea = biomassGrowthRecord.area
+      biomassGrowthRecord.area = undefined
+      biomassGrowthRecord.bioAnnualFluxEquivalent = f.annualFluxEquivalent
+      biomassGrowthRecords.push(biomassGrowthRecord)
+    } else {
+      // the standard case - an emission/sequestration due to a change in ground type
+      const fluxLookupKey = `${f.from}_${f.to}`
+      if (!fluxLookup[fluxLookupKey]) {
+        fluxLookup[fluxLookupKey] = copyObject(record)
+        Object.assign(fluxLookup[fluxLookupKey], f)
+        fluxLookup[fluxLookupKey].fromLevel1 = GROUND_TYPE_2_TO_1[f.from]
+        fluxLookup[fluxLookupKey].toLevel1 = GROUND_TYPE_2_TO_1[f.to]
+      } else {
+        fluxLookup[fluxLookupKey].co2e += f.co2e
+      }
+      const prefix = RESERVOIR_TO_KEY[f.reservoir]
+      fluxLookup[fluxLookupKey][`${prefix}UnitFlux`] = f.annualFluxEquivalent * (f.yearsForFlux || 1)
+      fluxLookup[fluxLookupKey][`${prefix}Flux`] = f.co2e
     }
-    if (fluxRecord.reservoir === 'biomasse') {
-      fluxRecord.reservoir = 'biomasse vivante'
-    }
-    records.push(fluxRecord)
   })
+  const groundChangeRecords = Object.values(fluxLookup)
+  records.push(...groundChangeRecords)
+  records.push(...biomassGrowthRecords)
+  records.push(...woodRecords)
+  const expectedRecordCount = 178
+  // 178 =
+  // 10 (non-forest types) * 13 (all types except self)
+  // + 4 (forest types) * 10 (non-forest ground types)
+  // + 4 biomass growth
+  // + 4 wood recrods
+  let recordCountForCommune = groundChangeRecords.length + biomassGrowthRecords.length + woodRecords.length
   const woodConsumptionFluxes = getAnnualFluxes([record], { woodCalculation: 'consommation' })
     .allFlux
     .filter((f) => f.to === 'produits bois')
   woodConsumptionFluxes.forEach((f) => {
     const woodRecord = copyObject(record)
     Object.assign(woodRecord, f)
-    woodRecord.reservoir = 'produits bois'
+    woodRecord.otherFluxType = 'produits bois'
     woodRecord.to = undefined
     woodRecord.approche = 'consommmation'
     woodRecord.populationRatio = woodRecord.localPortion
     woodRecord.category = woodRecord.category.toUpperCase()
     records.push(woodRecord)
+    recordCountForCommune += 1
   })
+  if (recordCountForCommune !== expectedRecordCount) {
+    console.log('Commune insee', record.insee, 'has', recordCountForCommune, 'records')
+  }
 }
 
 function resetFiles () {
@@ -279,7 +328,7 @@ async function main () {
     append: true
   })
 
-  const testCommunes = communes.slice(0, 1)
+  const testCommunes = communes.slice(0, 10)
   await exportData(stocksWriter, fluxWriter, testCommunes, 0)
 }
 
