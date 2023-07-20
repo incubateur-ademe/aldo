@@ -422,8 +422,7 @@ async function main () {
     })
   })
 
-  const testCommunes = communes.slice(0, 10)
-  await exportData(stocksWriters, fluxWriters, testCommunes, 0)
+  await exportData(stocksWriters, fluxWriters, communes, 0)
 }
 
 main()
