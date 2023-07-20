@@ -9,12 +9,8 @@ const { getAnnualFluxes } = require('../calculations/flux')
 const { getForestAreaData } = require('../data/stocks')
 const { getIgnLocalisation } = require('../data/shared')
 const createCsvWriter = require('csv-writer').createObjectCsvWriter
-const DEPARTMENTS = require('./departments.json')
-const REGIONS = require('./regions.json')
-
-function copyObject (obj) {
-  return JSON.parse(JSON.stringify(obj))
-}
+// const DEPARTMENTS = require('./departments.json')
+// const REGIONS = require('./regions.json')
 
 const GROUND_TYPE_2_TO_1 = {}
 GroundTypes.forEach((gt) => {
@@ -39,9 +35,12 @@ const COMMUNE_HEADERS = [
 ]
 
 // sort out stocks headers
-const STOCKS_HEADERS = []
-
-STOCKS_HEADERS.push(...COMMUNE_HEADERS)
+const STOCKS_HEADERS = [
+  ...COMMUNE_HEADERS,
+  // put population ratio after population
+  { id: 'populationRatio', title: 'ratio_population_France' },
+  { id: 'stock', title: 'stock_tC' }
+]
 
 const simpleStockIds = [
   'cultures',
@@ -136,57 +135,36 @@ WOOD_USAGES.forEach((usage) => {
   ])
 })
 
-STOCKS_HEADERS.push({ id: 'populationRatio', title: 'ratio_population_France' })
-
-STOCKS_HEADERS.push({ id: 'stock', title: 'stock_tC' })
-
 const FLUX_HEADERS = [
   ...COMMUNE_HEADERS,
-  // are the levels actually interesting?
-  { id: 'fromLevel1', title: 'occupation_du_sol_initiale_1' },
-  { id: 'from', title: 'occupation_du_sol_initiale_2' },
-  { id: 'toLevel1', title: 'occupation_du_sol_finale_1' },
-  { id: 'to', title: 'occupation_du_sol_finale_2' },
-  { id: 'area', title: 'surface_moyenne_convertie_ha_an-1' },
-  { id: 'otherFluxType', title: 'autre_flux' },
-  { id: 'gt1', title: 'occupation_du_sol_1' },
-  { id: 'gt2', title: 'occupation_du_sol_2' },
-  // the reference values
-  { id: 'groundUnitFlux', title: 'sol_flux_unitaire_tCO2e_ha-1_an-1' },
-  { id: 'groundFlux', title: 'sol_flux_tCO2e_an-1' },
-  { id: 'biomassUnitFlux', title: 'biomasse_vivante_flux_unitaire_tCO2e_ha-1_an-1' },
-  { id: 'biomassFlux', title: 'biomasse_vivante_flux_tCO2e_an-1' },
-  { id: 'forestLitterUnitFlux', title: 'litiere_flux_unitaire_tCO2e_ha-1_an-1' },
-  { id: 'forestLitterFlux', title: 'litiere_flux_tCO2e_an-1' },
-  { id: 'n20Flux', title: 'sol_et_litiere_flux_tCO2e_an-1' },
-
-  { id: 'forestArea', title: 'surface_ha' },
-  { id: 'ignLocalisationLevel', title: 'niveau_localisation_ign' },
-  { id: 'ignLocalisationCode', title: 'code_localisation_ign' },
-  { id: 'growth', title: 'accroissement_biologique_unitaire_m3_BFT_ha-1_an-1' },
-  { id: 'mortality', title: 'mortalite_biologique_unitaire_m3_BFT_ha-1_an-1' },
-  { id: 'timberExtraction', title: 'prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1' },
-  { id: 'fluxMeterCubed', title: 'bilan_total_unitaire_m3_BFT_ha-1_an-1' },
-  { id: 'conversionFactor', title: 'facteur_de_conversion_tC_m3_BFT-1' },
-  { id: 'bioAnnualFluxEquivalent', title: 'accroissement_biologique_flux_unitaire_tCO2e_ha-1_an-1' },
-  // wood product columns
-  { id: 'category', title: 'usage_produits_bois' },
-  { id: 'approche', title: 'approche_calculation_produits_bois' },
-  { id: 'localHarvest', title: 'recolte_locale_m3_an-1' },
-  { id: 'harvestRatio', title: 'ratio_recolte_France' },
-  { id: 'populationRatio', title: 'ratio_population_France' },
   { id: 'co2e', title: 'flux_tCO2e_an-1' }
 ]
 
-const RESERVOIR_TRANSLATION = {
-  ground: 'sol',
-  biomass: 'biomasse vivante',
-  liveBiomass: 'biomasse vivante',
-  deadBiomass: 'biomasse morte',
-  forestLitter: 'litière'
-}
+const ALL_TYPES = simpleStockIds.concat(forestStockIds)
 
-const RESERVOIRS = Object.keys(RESERVOIR_TRANSLATION)
+ALL_TYPES.forEach((fromGt) => {
+  ALL_TYPES.forEach((toGt) => {
+    if (fromGt === toGt) return
+    FLUX_HEADERS.push({
+      id: `${fromGt}_to_${toGt}_area`,
+      title: `${fromGt}_vers_${toGt}_surface_convertie_ha_an-1`
+    })
+    FLUX_HEADERS.push({
+      id: `${fromGt}_to_${toGt}_groundFlux`,
+      title: `${fromGt}_vers_${toGt}_sol_flux_unitaire_tCO2e_ha-1_an-1`
+    })
+    FLUX_HEADERS.push({
+      id: `${fromGt}_to_${toGt}_biomassFlux`,
+      title: `${fromGt}_vers_${toGt}_biomasse_flux_unitaire_tCO2e_ha-1_an-1`
+    })
+    if (fromGt.startsWith('forêt') || toGt.startsWith('forêt')) {
+      FLUX_HEADERS.push({
+        id: `${fromGt}_to_${toGt}_forestLitterFlux`,
+        title: `${fromGt}_vers_${toGt}_litiere_flux_unitaire_tCO2e_ha-1_an-1`
+      })
+    }
+  })
+})
 
 const RESERVOIR_TO_KEY = {
   sol: 'ground',
@@ -194,6 +172,19 @@ const RESERVOIR_TO_KEY = {
   litière: 'forestLitter',
   'sol et litière': 'n20'
 }
+
+// biomass growth
+forestStockIds.forEach((gt) => {
+  FLUX_HEADERS.push(...[
+    { id: `${gt}_forestArea`, title: `${gt}_surface_ha` },
+    { id: `${gt}_growth`, title: `${gt}_accroissement_biologique_unitaire_m3_BFT_ha-1_an-1` },
+    { id: `${gt}_mortality`, title: `${gt}_mortalite_biologique_unitaire_m3_BFT_ha-1_an-1` },
+    { id: `${gt}_timberExtraction`, title: `${gt}_prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1` },
+    { id: `${gt}_fluxMeterCubed`, title: `${gt}_bilan_total_unitaire_m3_BFT_ha-1_an-1` },
+    { id: `${gt}_conversionFactor`, title: `${gt}_facteur_de_conversion_tC_m3_BFT-1` },
+    { id: `${gt}_annualFluxEquivalent`, title: `${gt}_accroissement_biologique_flux_unitaire_tCO2e_ha-1_an-1` },
+  ])
+})
 
 function createRecordForCommune (commune) {
   const record = communeData[commune.insee]
@@ -249,79 +240,34 @@ function addStocksRecords (records, record) {
 
 function addFluxRecords (records, record) {
   const fluxes = getAnnualFluxes([record])
-  // want to regroup fluxes into one record per ground change - ie. putting all reservoirs
-  // in the same record. To speed things up a bit here is a lookup
-  const fluxLookup = {}
-  const biomassGrowthRecords = []
-  const woodRecords = []
-  // fluxLookup[from_to] = { from, to, area, groundFluxUnit, groundFlux, liveBiomassFluxUnit...}
   fluxes.allFlux.forEach((f) => {
     if (f.to === 'produits bois') {
-      const woodRecord = copyObject(record)
-      Object.assign(woodRecord, f)
-      woodRecord.otherFluxType = 'produits bois'
-      woodRecord.to = undefined
-      woodRecord.approche = 'production'
-      woodRecord.harvestRatio = woodRecord.localPortion
-      woodRecord.category = woodRecord.category.toUpperCase()
-      woodRecords.push(woodRecord)
-    } else if (!f.from) {
-      // biomass flux in forests is based on today's area and not an area change
-      // reformat this data to clarify this
-      const biomassGrowthRecord = copyObject(record)
-      Object.assign(biomassGrowthRecord, f)
-      biomassGrowthRecord.gt2 = biomassGrowthRecord.to
-      biomassGrowthRecord.gt1 = GROUND_TYPE_2_TO_1[biomassGrowthRecord.to]
-      biomassGrowthRecord.to = undefined
-      biomassGrowthRecord.forestArea = biomassGrowthRecord.area
-      biomassGrowthRecord.area = undefined
-      biomassGrowthRecord.bioAnnualFluxEquivalent = f.annualFluxEquivalent
-      biomassGrowthRecords.push(biomassGrowthRecord)
-    } else {
+      // NB: wood products data isn't different from stocks, so not including
+      // it in this file to reduce file size.
+    } else if (f.from) {
       // the standard case - an emission/sequestration due to a change in ground type
-      const fluxLookupKey = `${f.from}_${f.to}`
-      if (!fluxLookup[fluxLookupKey]) {
-        fluxLookup[fluxLookupKey] = copyObject(record)
-        Object.assign(fluxLookup[fluxLookupKey], f)
-        fluxLookup[fluxLookupKey].fromLevel1 = GROUND_TYPE_2_TO_1[f.from]
-        fluxLookup[fluxLookupKey].toLevel1 = GROUND_TYPE_2_TO_1[f.to]
-      } else {
-        fluxLookup[fluxLookupKey].co2e += f.co2e
-      }
+      if (f.reservoir === 'sol et litière') return // n2O emissions don't have a reference value
+      const fluxLookupKey = `${f.from}_to_${f.to}`
       const prefix = RESERVOIR_TO_KEY[f.reservoir]
-      fluxLookup[fluxLookupKey][`${prefix}UnitFlux`] = f.annualFluxEquivalent * (f.yearsForFlux || 1)
-      fluxLookup[fluxLookupKey][`${prefix}Flux`] = f.co2e
+      record[`${fluxLookupKey}_area`] = f.area
+      record[`${fluxLookupKey}_${prefix}Flux`] = f.annualFluxEquivalent * (f.yearsForFlux || 1)
     }
+    // when !f.from this is biomass growth which is treated after
   })
-  const groundChangeRecords = Object.values(fluxLookup)
-  records.push(...groundChangeRecords)
-  records.push(...biomassGrowthRecords)
-  records.push(...woodRecords)
-  const expectedRecordCount = 178
-  // 178 =
-  // 10 (non-forest types) * 13 (all types except self)
-  // + 4 (forest types) * 10 (non-forest ground types)
-  // + 4 biomass growth
-  // + 4 wood recrods
-  let recordCountForCommune = groundChangeRecords.length + biomassGrowthRecords.length + woodRecords.length
-  const woodConsumptionFluxes = getAnnualFluxes([record], { woodCalculation: 'consommation' })
-    .allFlux
-    .filter((f) => f.to === 'produits bois')
-  woodConsumptionFluxes.forEach((f) => {
-    const woodRecord = copyObject(record)
-    Object.assign(woodRecord, f)
-    woodRecord.otherFluxType = 'produits bois'
-    woodRecord.to = undefined
-    woodRecord.approche = 'consommmation'
-    woodRecord.populationRatio = woodRecord.localPortion
-    woodRecord.category = woodRecord.category.toUpperCase()
-    records.push(woodRecord)
-    recordCountForCommune += 1
+  // NB: there are communes which have more than one IGN localisation
+  // so this data is an aggregation
+  fluxes.biomassSummary.forEach((summary) => {
+    const gt = summary.to
+    record[`${gt}_forestArea`] = summary.area
+    record[`${gt}_growth`] = summary.growth
+    record[`${gt}_mortality`] = summary.mortality
+    record[`${gt}_timberExtraction`] = summary.timberExtraction
+    record[`${gt}_fluxMeterCubed`] = summary.fluxMeterCubed
+    record[`${gt}_conversionFactor`] = summary.conversionFactor
+    record[`${gt}_annualFluxEquivalent`] = summary.annualFluxEquivalent
   })
-  const commonCounts = [expectedRecordCount, 182, 186]
-  if (!commonCounts.includes(recordCountForCommune)) {
-    console.log('Commune insee', record.insee, 'has', recordCountForCommune, 'flux records')
-  }
+  record.co2e = fluxes.total
+  records.push(record)
 }
 
 function resetFiles () {
@@ -471,7 +417,7 @@ async function main () {
   //   })
   // })
 
-  await exportData(stocksWriters, fluxWriters, communes.slice(0, 10), 0).then(() => {
+  await exportData(stocksWriters, fluxWriters, communes.slice(0, 400), 0).then(() => {
     console.log('All done!')
   })
 }
