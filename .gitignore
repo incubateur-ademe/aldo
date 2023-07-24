@@ -8,3 +8,4 @@
 .~lock.*
 /scripts/export
 /scripts/export-new
+/scripts/flux
