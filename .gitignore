@@ -9,3 +9,5 @@
 /scripts/export
 /scripts/export-new
 /scripts/flux
+/scripts/export-par-commune
+/scripts/*.zip
