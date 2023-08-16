@@ -51,6 +51,7 @@ function parseOptionsFromQuery (query) {
 }
 
 async function getLocationDetail (req, res) {
+  // TODO: remove option for single epci and single commune
   if (req.params.epci) {
     const epci = getEpci(req.params.epci, true)
     if (epci) return { epci }

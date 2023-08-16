@@ -6,3 +6,7 @@
 /data/dataByCommune/*.csv.json
 .env
 .~lock.*
+/scripts/*/*.csv
+/scripts/*/*/*.csv
+/scripts/*.zip
+/scripts/*/*.zip

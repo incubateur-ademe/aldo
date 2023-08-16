@@ -54,7 +54,7 @@ function completeData (communes) {
     if (arrondissements) {
       // TODO: reassess if EPCI is requried if move biomass region to here too
       arrondissements = arrondissements.map((aInsee) => {
-        return { insee: aInsee, zpc: commune.zpc, epci: commune.epci, region: commune.region }
+        return { insee: aInsee, zpc: commune.zpc, epci: commune.epci, region: commune.region, departement: commune.departement }
       })
       arrondissementsToAdd = arrondissementsToAdd.concat(arrondissements)
     }
