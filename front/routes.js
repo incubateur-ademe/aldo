@@ -7,6 +7,7 @@ const { epciList, communeList } = require(path.join(rootFolder, './data'))
 const sendinblue = require(path.join(rootFolder, './sendinblue'))
 const { territoryHandler } = require('./handlers/territory')
 const { excelExportHandler } = require('./handlers/excelExport')
+const { dbPromise } = require('../db/conn')
 
 router.get('/', async (req, res) => {
   res.render('landing', {
@@ -14,6 +15,16 @@ router.get('/', async (req, res) => {
     communes: communeList(),
     isHomepage: true
   })
+})
+
+router.get('/dbtest', async (req, res) => {
+  const db = await dbPromise
+  const collection = await db.collection('zpc')
+  const results = await collection.find({ _id: '01002' })
+    .limit(1)
+    .toArray()
+
+  res.send(results).status(200)
 })
 
 async function groupingHandler (req, res) {
