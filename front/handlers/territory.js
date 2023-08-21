@@ -15,8 +15,7 @@ async function territoryHandler (req, res) {
   if (!location) {
     const epcis = await epciList()
     const communes = communeList()
-    res.status(404)
-    res.render('404-epci', {
+    res.status(404).render('404-epci', {
       epcis,
       communes,
       attemptedSearch: req.params.epci
