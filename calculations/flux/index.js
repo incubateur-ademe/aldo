@@ -5,7 +5,7 @@ const {
 const { GroundTypes } = require('../constants')
 const { getFluxWoodProducts } = require('./woodProducts')
 const { getFluxAgriculturalPractices } = require('./agriculturalPractices')
-const { getBiomassCarbonDensity, getForestBiomassCarbonDensities } = require('../../data/stocks')
+const { getBiomassCarbonDensity, getForestBiomassCarbonDensities, getForestAreaData } = require('../../data/stocks')
 
 function convertCToCo2e (valueC) {
   return valueC * 44 / 12
@@ -355,8 +355,9 @@ function deforestationFlux (location, options) {
   const excludeIds = ['haies', 'produits bois']
   const childGroundTypes = GroundTypes
     .filter((gt) => !gt.children && !excludeIds.includes(gt.stocksId))
+  const areaData = getForestAreaData(location)
   for (const from of forestSubtypes) {
-    const forestBiomassDensities = getForestBiomassCarbonDensities(location, from)
+    const forestBiomassDensities = getForestBiomassCarbonDensities(location, from, areaData)
     const initialBiomassDensity = forestBiomassDensities.live + forestBiomassDensities.dead
 
     for (const toGt of childGroundTypes) {
