@@ -355,6 +355,9 @@ function deforestationFlux (location, options) {
   const childGroundTypes = GroundTypes
     .filter((gt) => !gt.children && !excludeIds.includes(gt.stocksId))
   for (const from of forestSubtypes) {
+    const forestBiomassDensities = getForestBiomassCarbonDensities(location, from)
+    const initialBiomassDensity = forestBiomassDensities.live + forestBiomassDensities.dead
+
     for (const toGt of childGroundTypes) {
       const to = toGt.stocksId
       if (from === to) {
@@ -365,8 +368,6 @@ function deforestationFlux (location, options) {
         continue
       }
 
-      const forestBiomassDensities = getForestBiomassCarbonDensities(location, from)
-      const initialBiomassDensity = forestBiomassDensities.live + forestBiomassDensities.dead
       const annualFlux = getBiomassCarbonDensity(location, to) - initialBiomassDensity
 
       const annualFluxEquivalent = convertCToCo2e(annualFlux)
