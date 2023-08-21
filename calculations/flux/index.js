@@ -125,8 +125,9 @@ function getNitrousOxideEmissions (allFluxes) {
   // assumes that all litter fluxes will be accompanied by a ground flux
   // also assumes that all communes will only have one ground x litter pair
   const groundFluxes = allFluxes.filter(flux => flux.reservoir === 'sol')
+  const litterFluxes = allFluxes.filter(flux => flux.reservoir === 'litière')
   groundFluxes.forEach((groundFlux) => {
-    const litterFlux = allFluxes.find(flux => flux.reservoir === 'litière' && flux.from === groundFlux.from && flux.to === groundFlux.to && flux.commune === groundFlux.commune) || {}
+    const litterFlux = litterFluxes.find(flux => flux.from === groundFlux.from && flux.to === groundFlux.to && flux.commune === groundFlux.commune) || {}
     const groundFluxValue = groundFlux.value || 0
     const litterFluxValue = litterFlux.value || 0
     if (groundFluxValue + litterFluxValue < 0) {
