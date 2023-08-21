@@ -35,6 +35,7 @@ function getAnnualFluxes (communes, options) {
     fluxes = replaceWithOverride(fluxes, areas, from, to, 'litière')
   })
 
+  fluxes = fluxes.filter((f) => !!f.co2e)
   fluxes.push(...getNitrousOxideEmissions(fluxes))
   // TODO: aggregations for display
   //  - produits bois details
