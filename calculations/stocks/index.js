@@ -323,6 +323,7 @@ function aggregateStocks (stocksForLocations) {
     'biStock',
     'boStock'
   ]
+  const meanFallbacks = {} // if there is no area, want to fall back to mean not weighted avg
   const areaWeightedKeys = [
     'groundDensity',
     'biomassDensity',
@@ -346,16 +347,18 @@ function aggregateStocks (stocksForLocations) {
   stocksForLocations.forEach((stocksForLocation) => {
     Object.entries(stocksForLocation).forEach(([groundType, valuesForType]) => {
       if (!aggregatedStocks[groundType]) aggregatedStocks[groundType] = {}
+      if (!meanFallbacks[groundType]) meanFallbacks[groundType] = {}
       Object.entries(valuesForType).forEach(([key, value]) => {
         if (!aggregatedStocks[groundType][key]) {
           aggregatedStocks[groundType][key] = 0
         }
+        if (!meanFallbacks[groundType][key]) {
+          meanFallbacks[groundType][key] = 0
+        }
         if (sumKeys.includes(key)) aggregatedStocks[groundType][key] += value
         else if (areaWeightedKeys.includes(key)) {
-          // fall back to 1 here and dividing by location count below
-          // so that if no area for ground type, user still has chance to enter their data
-          const area = stocksForLocation[groundType].area || 1
-          aggregatedStocks[groundType][key] += (value * area)
+          aggregatedStocks[groundType][key] += value * stocksForLocation[groundType].area
+          meanFallbacks[groundType][key] += value
         }
         if (constantKeys.includes(key)) {
           aggregatedStocks[groundType][key] = value || aggregatedStocks[groundType][key]
@@ -365,8 +368,13 @@ function aggregateStocks (stocksForLocations) {
   })
   Object.keys(aggregatedStocks).forEach((groundType) => {
     areaWeightedKeys.forEach((key) => {
-      if (!aggregatedStocks[groundType][key]) return
-      aggregatedStocks[groundType][key] /= (aggregatedStocks[groundType].area || stocksForLocations.length)
+      if (!aggregatedStocks[groundType][key] && !meanFallbacks[groundType][key]) return
+      const area = aggregatedStocks[groundType].area
+      if (area) {
+        aggregatedStocks[groundType][key] /= area
+      } else {
+        aggregatedStocks[groundType][key] = meanFallbacks[groundType][key] / stocksForLocations.length
+      }
     })
     aggregatedStocks[groundType].originalArea = aggregatedStocks[groundType].area
   })
