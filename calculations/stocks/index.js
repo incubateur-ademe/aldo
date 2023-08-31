@@ -302,7 +302,6 @@ function getStocksForLocation (location, options) {
 }
 
 function aggregateStocks (stocksForLocations) {
-  // TODO: area overrides should happen at this level
   const aggregatedStocks = {}
   const sumKeys = [
     'area',
@@ -479,6 +478,7 @@ function calculateStocks (stock) {
       stock[`${key}Stock`] = density * area
     }
   })
+  stock.totalReservoirStock = stock.totalStock
 }
 
 function sumAllBiomassStock (stock) {
