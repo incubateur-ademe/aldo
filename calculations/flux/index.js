@@ -248,8 +248,10 @@ function fluxSummary (allFluxes, options) {
   // update change flag for forests based on if the area used in biomass growth
   // calculations is defined by the user.
   const biomassGrowthAreaModified = biomassSummary.some((subtype) => subtype.areaModified)
-  summary.forêts.areaModified = summary.forêts.areaModified || biomassGrowthAreaModified
-  summary.forêts.hasModifications = summary.forêts.hasModifications || biomassGrowthAreaModified
+  if (summary.forêts) {
+    summary.forêts.areaModified = summary.forêts.areaModified || biomassGrowthAreaModified
+    summary.forêts.hasModifications = summary.forêts.hasModifications || biomassGrowthAreaModified
+  }
   return { summary, biomassSummary, fluxCo2eByGroundType, woodSummary, total }
 }
 
