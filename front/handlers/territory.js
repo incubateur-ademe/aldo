@@ -15,8 +15,7 @@ async function territoryHandler (req, res) {
   if (!location) {
     const epcis = await epciList()
     const communes = communeList()
-    res.status(404)
-    res.render('404-epci', {
+    res.status(404).render('404-epci', {
       epcis,
       communes,
       attemptedSearch: req.params.epci
@@ -80,7 +79,7 @@ async function territoryHandler (req, res) {
     location,
     communes,
     epcis: location.epcis,
-    userWarnings: userWarnings(location, options),
+    userWarnings: userWarnings(location, communes, options),
     groundTypes: getSortedGroundTypes(stocks),
     allGroundTypes: GroundTypes,
     // these are the types that can be modified to customise the stocks calculations
@@ -446,16 +445,15 @@ function pieChart (title, labels, values) {
   }
 }
 
-// TODO: pass communes to this function as well
-function userWarnings (location, options) {
+function userWarnings (location, allCommunes, options) {
   const warnings = []
-  const allCommunes = getCommunes(location)
-  let requestedCommunesCount = (location.epci?.communes.length || 0) + (!!location.commune && 1) + (location.communes?.length || 0)
-  location.epcis?.forEach(epci => {
-    requestedCommunesCount += epci.communes.length
-  })
-  if (requestedCommunesCount > allCommunes.length) {
-    warnings.push('communesDeduplicated')
+  if (location.epcis && location.communes) {
+    const epciCodes = location.epcis.map((epci) => epci.code)
+    location.communes.forEach((commune) => {
+      if (!warnings.length && epciCodes.includes(commune.epci)) {
+        warnings.push('communesDeduplicated')
+      }
+    })
   }
   const selectedEpcis = location.epci || location.epcis?.length
   if (allCommunes.length < 10 && !selectedEpcis) {

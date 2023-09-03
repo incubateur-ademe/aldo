@@ -6,8 +6,7 @@
 /data/dataByCommune/*.csv.json
 .env
 .~lock.*
-/scripts/export
-/scripts/export-new
-/scripts/flux
-/scripts/export-par-commune
+/scripts/*/*.csv
+/scripts/*/*/*.csv
 /scripts/*.zip
+/scripts/*/*.zip

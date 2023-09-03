@@ -33,7 +33,7 @@
           <th scope="row" style="font-weight: normal;"><%= fromDetail.name %></th>
           <% for( const to of fluxIds ) { %>
             <td>
-              <% if (from !== to) { %>
+              <% if (from !== to && !(from.startsWith('for_') && to.startsWith('for_'))) { %>
                 <% const toDetail = allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to) %>
                 <% let thisFlux = fluxAreas[fromDetail.stocksId][toDetail.stocksId] %>
                 <input

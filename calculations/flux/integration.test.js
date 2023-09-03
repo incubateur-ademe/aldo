@@ -5,11 +5,11 @@ const { getCommunes } = require('../../data/communes')
 describe('Flux module integration tests', () => {
   const communes = getCommunes({ epci: getEpci('200007177', true) })
   test('returns expected number of entries for cultures ground changes', () => {
+    // only return fluxes != 0
     const allFlux = getAnnualFluxes(communes).allFlux
     const culturesFlux = allFlux.filter(f => f.to === 'cultures')
     const cGround = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'sol')
-    // 13 flux values * 12 communes in this EPCI = 156
-    expect(cGround.length).toBe(156)
+    expect(cGround.length).toBe(5)
   })
 
   // data-dependent tests
@@ -43,7 +43,7 @@ describe('Flux module integration tests', () => {
     expect(summary.vignes.totalSequestration).toBeCloseTo(17, 0)
     // the following value is wrong in the spreadsheet, so my calculations break.
     summary = getAnnualFluxes(getCommunes({ epci: getEpci('200040798', true) })).summary
-    expect(summary.vignes.totalSequestration).toBeCloseTo(0, 0)
+    expect(summary.vignes).toBeUndefined()
   })
 
   test('returns correct total for zones humides', () => {
@@ -65,7 +65,7 @@ describe('Flux module integration tests', () => {
     }
     flux = getAnnualFluxes(getCommunes({ epci }), { areaChanges })
     summary = flux.summary
-    // prairies to cultures results in an emission, so when reduced to 0 the sequestration value is larger
-    expect(summary.cultures.totalSequestration).toBeGreaterThan(originalFlux)
+    // there are no other changes to cultures, so the summary is undefined
+    expect(summary.cultures).toBeUndefined()
   })
 })

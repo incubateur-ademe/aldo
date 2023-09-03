@@ -147,8 +147,8 @@ function getCarbonDataForCommuneAndComposition (communeData, carbonData, forestS
   }
 }
 
-function getForestBiomassCarbonDensities (location, forestSubtype) {
-  const areaDataByCommune = getForestAreaData(location)
+function getForestBiomassCarbonDensities (location, forestSubtype, areaDataByCommune) {
+  areaDataByCommune = areaDataByCommune || getForestAreaData(location)
   if (!areaDataByCommune.length) {
     return { live: 0, dead: 0 }
   }

@@ -19,12 +19,12 @@ router.get('/', async (req, res) => {
 async function groupingHandler (req, res) {
   if (req.query.epcis && !req.query.communes) {
     if (req.query.epcis.length === 1) {
-      res.redirect('/epci/' + req.query.epcis[0])
+      return res.redirect('/epci/' + req.query.epcis[0])
     }
   }
   if (req.query.communes && !req.query.epcis) {
     if (req.query.communes.length === 1) {
-      res.redirect('/commune/' + req.query.communes[0])
+      return res.redirect('/commune/' + req.query.communes[0])
     }
   }
   return territoryHandler(req, res)
@@ -103,8 +103,7 @@ router.get('/sitemap.txt', (req, res) => {
 
 router.get('*', async (req, res) => {
   const epcis = await epciList()
-  res.status(404)
-  res.render('404', {
+  res.status(404).render('404', {
     epcis
   })
 })

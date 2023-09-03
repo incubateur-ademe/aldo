@@ -5,7 +5,7 @@ const {
 const { GroundTypes } = require('../constants')
 const { getFluxWoodProducts } = require('./woodProducts')
 const { getFluxAgriculturalPractices } = require('./agriculturalPractices')
-const { getBiomassCarbonDensity, getForestBiomassCarbonDensities } = require('../../data/stocks')
+const { getBiomassCarbonDensity, getForestBiomassCarbonDensities, getForestAreaData } = require('../../data/stocks')
 
 function convertCToCo2e (valueC) {
   return valueC * 44 / 12
@@ -35,6 +35,7 @@ function getAnnualFluxes (communes, options) {
     fluxes = replaceWithOverride(fluxes, areas, from, to, 'litière')
   })
 
+  fluxes = fluxes.filter((f) => !!f.co2e)
   fluxes.push(...getNitrousOxideEmissions(fluxes))
   // TODO: aggregations for display
   //  - produits bois details
@@ -125,8 +126,9 @@ function getNitrousOxideEmissions (allFluxes) {
   // assumes that all litter fluxes will be accompanied by a ground flux
   // also assumes that all communes will only have one ground x litter pair
   const groundFluxes = allFluxes.filter(flux => flux.reservoir === 'sol')
+  const litterFluxes = allFluxes.filter(flux => flux.reservoir === 'litière')
   groundFluxes.forEach((groundFlux) => {
-    const litterFlux = allFluxes.find(flux => flux.reservoir === 'litière' && flux.from === groundFlux.from && flux.to === groundFlux.to && flux.commune === groundFlux.commune) || {}
+    const litterFlux = litterFluxes.find(flux => flux.from === groundFlux.from && flux.to === groundFlux.to && flux.commune === groundFlux.commune) || {}
     const groundFluxValue = groundFlux.value || 0
     const litterFluxValue = litterFlux.value || 0
     if (groundFluxValue + litterFluxValue < 0) {
@@ -353,7 +355,11 @@ function deforestationFlux (location, options) {
   const excludeIds = ['haies', 'produits bois']
   const childGroundTypes = GroundTypes
     .filter((gt) => !gt.children && !excludeIds.includes(gt.stocksId))
+  const areaData = getForestAreaData(location)
   for (const from of forestSubtypes) {
+    const forestBiomassDensities = getForestBiomassCarbonDensities(location, from, areaData)
+    const initialBiomassDensity = forestBiomassDensities.live + forestBiomassDensities.dead
+
     for (const toGt of childGroundTypes) {
       const to = toGt.stocksId
       if (from === to) {
@@ -364,8 +370,6 @@ function deforestationFlux (location, options) {
         continue
       }
 
-      const forestBiomassDensities = getForestBiomassCarbonDensities(location, from)
-      const initialBiomassDensity = forestBiomassDensities.live + forestBiomassDensities.dead
       const annualFlux = getBiomassCarbonDensity(location, to) - initialBiomassDensity
 
       const annualFluxEquivalent = convertCToCo2e(annualFlux)
