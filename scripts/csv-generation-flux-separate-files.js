@@ -75,9 +75,15 @@ const ALL_TYPES = simpleStockIds.concat(forestStockIds)
 ALL_TYPES.forEach((fromGt) => {
   ALL_TYPES.forEach((toGt) => {
     if (fromGt === toGt) return
+    // we don't have data for changes between forest types
+    if (fromGt.startsWith('forêt') && toGt.startsWith('forêt')) return
     AREA_HEADERS.push({
       id: `${fromGt}_to_${toGt}_area`,
-      title: `${fromGt}_vers_${toGt}`
+      title: `${fromGt}_vers_${toGt}_surface_ha_an-1`
+    })
+    AREA_HEADERS.push({
+      id: `${fromGt}_to_${toGt}_totalSequestration`,
+      title: `${fromGt}_vers_${toGt}_tCO2e_an-1`
     })
     VALUE_HEADERS.push({
       id: `${fromGt}_to_${toGt}_groundFlux`,
@@ -159,6 +165,17 @@ function addFluxRecords (records, record) {
     record[`${gt}_conversionFactor`] = summary.conversionFactor
     record[`${gt}_annualFluxEquivalent`] = summary.annualFluxEquivalent
   })
+  for (const fromGt of ALL_TYPES) {
+    const fromCo2e = fluxes.fluxCo2eByGroundType[fromGt]
+    if (fromCo2e) {
+      for (const toGt of ALL_TYPES) {
+        if (fromGt !== toGt) {
+          const fluxLookupKey = `${fromGt}_to_${toGt}`
+          record[`${fluxLookupKey}_totalSequestration`] = fromCo2e[toGt]
+        }
+      }
+    }
+  }
   record.co2e = fluxes.total
   records.push(record)
 }
