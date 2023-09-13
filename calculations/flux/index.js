@@ -12,7 +12,9 @@ function convertCToCo2e (valueC) {
 }
 
 function convertN2oToCo2e (valueC) {
-  return valueC * 298
+  // source pour 273 :
+  // https://docs.datagir.ademe.fr/documentation-aldo/introduction/sources#emissions-de-n2o
+  return valueC * 273
 }
 
 function convertN2O (flux) {
