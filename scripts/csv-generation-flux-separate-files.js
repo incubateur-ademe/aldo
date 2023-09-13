@@ -118,7 +118,8 @@ forestStockIds.forEach((gt) => {
     { id: `${gt}_timberExtraction`, title: `${gt}_prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1` },
     { id: `${gt}_fluxMeterCubed`, title: `${gt}_bilan_total_unitaire_m3_BFT_ha-1_an-1` },
     { id: `${gt}_conversionFactor`, title: `${gt}_facteur_de_conversion_tC_m3_BFT-1` },
-    { id: `${gt}_annualFluxEquivalent`, title: `${gt}_accroissement_biologique_flux_unitaire_tCO2e_ha-1_an-1` }
+    { id: `${gt}_annualFluxEquivalent`, title: `${gt}_accroissement_biologique_flux_unitaire_tCO2e_ha-1_an-1` },
+    { id: `${gt}_co2e`, title: `${gt}_accroissement_biologique_flux_tCO2e_an-1` }
   ])
 })
 
@@ -164,6 +165,7 @@ function addFluxRecords (records, record) {
     record[`${gt}_fluxMeterCubed`] = summary.fluxMeterCubed
     record[`${gt}_conversionFactor`] = summary.conversionFactor
     record[`${gt}_annualFluxEquivalent`] = summary.annualFluxEquivalent
+    record[`${gt}_co2e`] = summary.co2e
   })
   for (const fromGt of ALL_TYPES) {
     const fromCo2e = fluxes.fluxCo2eByGroundType[fromGt]
