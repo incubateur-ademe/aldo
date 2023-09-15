@@ -5,12 +5,9 @@ const communeData = require('../data/dataByCommune/communes.json')
 const REGION_TO_INTER_REGION = require('../data/dataByCommune/region-to-inter-region.json')
 const { GroundTypes } = require('../calculations/constants')
 const { getStocks } = require('../calculations/stocks')
-const { getAnnualFluxes } = require('../calculations/flux')
 const { getForestAreaData } = require('../data/stocks')
 const { getIgnLocalisation } = require('../data/shared')
 const createCsvWriter = require('csv-writer').createObjectCsvWriter
-// const DEPARTMENTS = require('./departments.json')
-// const REGIONS = require('./regions.json')
 
 const GROUND_TYPE_2_TO_1 = {}
 GroundTypes.forEach((gt) => {
@@ -68,6 +65,10 @@ simpleStockIds.forEach((id) => {
     {
       id: `${id}_biomassDensity`,
       title: `${id}_biomasse_stock_de_reference_tC_ha-1`
+    },
+    {
+      id: `${id}_totalStock`,
+      title: `${id}_stock_total_tC`
     }
   ])
 })
@@ -99,6 +100,10 @@ forestStockIds.forEach((id) => {
     {
       id: `${id}_forestLitterDensity`,
       title: `${id}_litiere_stock_de_reference_tC_ha-1`
+    },
+    {
+      id: `${id}_totalStock`,
+      title: `${id}_stock_total_tC`
     }
   ])
 })
@@ -106,6 +111,10 @@ forestStockIds.forEach((id) => {
 STOCKS_HEADERS.push({
   id: 'hedgerows_biomassDensity',
   title: 'haies_biomasse_stock_de_reference_tC_ha-1'
+})
+STOCKS_HEADERS.push({
+  id: 'hedgerows_totalStock',
+  title: 'haies_stock_total_tC'
 })
 
 const PARENT_TYPES = [
@@ -135,57 +144,6 @@ WOOD_USAGES.forEach((usage) => {
   ])
 })
 
-const FLUX_HEADERS = [
-  ...COMMUNE_HEADERS,
-  { id: 'co2e', title: 'flux_tCO2e_an-1' }
-]
-
-const ALL_TYPES = simpleStockIds.concat(forestStockIds)
-
-ALL_TYPES.forEach((fromGt) => {
-  ALL_TYPES.forEach((toGt) => {
-    if (fromGt === toGt) return
-    FLUX_HEADERS.push({
-      id: `${fromGt}_to_${toGt}_area`,
-      title: `${fromGt}_vers_${toGt}_surface_convertie_ha_an-1`
-    })
-    FLUX_HEADERS.push({
-      id: `${fromGt}_to_${toGt}_groundFlux`,
-      title: `${fromGt}_vers_${toGt}_sol_flux_unitaire_tCO2e_ha-1_an-1`
-    })
-    FLUX_HEADERS.push({
-      id: `${fromGt}_to_${toGt}_biomassFlux`,
-      title: `${fromGt}_vers_${toGt}_biomasse_flux_unitaire_tCO2e_ha-1_an-1`
-    })
-    if (fromGt.startsWith('forêt') || toGt.startsWith('forêt')) {
-      FLUX_HEADERS.push({
-        id: `${fromGt}_to_${toGt}_forestLitterFlux`,
-        title: `${fromGt}_vers_${toGt}_litiere_flux_unitaire_tCO2e_ha-1_an-1`
-      })
-    }
-  })
-})
-
-const RESERVOIR_TO_KEY = {
-  sol: 'ground',
-  biomasse: 'biomass',
-  litière: 'forestLitter',
-  'sol et litière': 'n20'
-}
-
-// biomass growth
-forestStockIds.forEach((gt) => {
-  FLUX_HEADERS.push(...[
-    { id: `${gt}_forestArea`, title: `${gt}_surface_ha` },
-    { id: `${gt}_growth`, title: `${gt}_accroissement_biologique_unitaire_m3_BFT_ha-1_an-1` },
-    { id: `${gt}_mortality`, title: `${gt}_mortalite_biologique_unitaire_m3_BFT_ha-1_an-1` },
-    { id: `${gt}_timberExtraction`, title: `${gt}_prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1` },
-    { id: `${gt}_fluxMeterCubed`, title: `${gt}_bilan_total_unitaire_m3_BFT_ha-1_an-1` },
-    { id: `${gt}_conversionFactor`, title: `${gt}_facteur_de_conversion_tC_m3_BFT-1` },
-    { id: `${gt}_annualFluxEquivalent`, title: `${gt}_accroissement_biologique_flux_unitaire_tCO2e_ha-1_an-1` },
-  ])
-})
-
 function createRecordForCommune (commune) {
   const record = communeData[commune.insee]
   // fill in geographical data not in extended commune data
@@ -212,6 +170,7 @@ function addStocksRecords (records, record) {
     }
     record[`${groundType}_area`] = area
     record[`${groundType}_groundDensity`] = stock.groundDensity
+    record[`${groundType}_totalStock`] = stock.totalStock
     if (forestStockIds.includes(groundType)) {
       record[`${groundType}_liveBiomassDensity`] = stock.liveBiomassDensity
       record[`${groundType}_deadBiomassDensity`] = stock.deadBiomassDensity
@@ -223,6 +182,7 @@ function addStocksRecords (records, record) {
   // haies
   const hedgerowsStock = stocks.haies
   record.hedgerows_biomassDensity = hedgerowsStock.totalDensity
+  record.hedgerows_totalStock = hedgerowsStock.totalStock
   Object.entries(hedgerowsStock.byGroundType).forEach(([gt, km]) => {
     record[`${gt}_length`] = km
   })
@@ -238,73 +198,16 @@ function addStocksRecords (records, record) {
   records.push(record)
 }
 
-function addFluxRecords (records, record) {
-  const fluxes = getAnnualFluxes([record])
-  fluxes.allFlux.forEach((f) => {
-    if (f.to === 'produits bois') {
-      // NB: wood products data isn't different from stocks, so not including
-      // it in this file to reduce file size.
-    } else if (f.from) {
-      // the standard case - an emission/sequestration due to a change in ground type
-      if (f.reservoir === 'sol et litière') return // n2O emissions don't have a reference value
-      const fluxLookupKey = `${f.from}_to_${f.to}`
-      const prefix = RESERVOIR_TO_KEY[f.reservoir]
-      record[`${fluxLookupKey}_area`] = f.area
-      record[`${fluxLookupKey}_${prefix}Flux`] = f.annualFluxEquivalent * (f.yearsForFlux || 1)
-    }
-    // when !f.from this is biomass growth which is treated after
-  })
-  // NB: there are communes which have more than one IGN localisation
-  // so this data is an aggregation
-  fluxes.biomassSummary.forEach((summary) => {
-    const gt = summary.to
-    record[`${gt}_forestArea`] = summary.area
-    record[`${gt}_growth`] = summary.growth
-    record[`${gt}_mortality`] = summary.mortality
-    record[`${gt}_timberExtraction`] = summary.timberExtraction
-    record[`${gt}_fluxMeterCubed`] = summary.fluxMeterCubed
-    record[`${gt}_conversionFactor`] = summary.conversionFactor
-    record[`${gt}_annualFluxEquivalent`] = summary.annualFluxEquivalent
-  })
-  record.co2e = fluxes.total
-  records.push(record)
-}
-
 function resetFiles () {
   const stocksWriters = {}
   stocksWriters.france = createCsvWriter({
-    path: './export-new/stocks.csv',
+    path: './stocks/stocks.csv',
     header: STOCKS_HEADERS
   })
-  const fluxWriters = {}
-  fluxWriters.france = createCsvWriter({
-    path: './export-new/flux.csv',
-    header: FLUX_HEADERS
-  })
-  // DEPARTMENTS.forEach((d) => {
-  //   stocksWriters[d] = createCsvWriter({
-  //     path: `./export-new/stocks-departement/stocks-departement-${d}.csv`,
-  //     header: STOCKS_HEADERS
-  //   })
-  //   fluxWriters[d] = createCsvWriter({
-  //     path: `./export-new/flux-departement/flux-departement-${d}.csv`,
-  //     header: FLUX_HEADERS
-  //   })
-  // })
-  // REGIONS.forEach((r) => {
-  //   stocksWriters[`r_${r}`] = createCsvWriter({
-  //     path: `./export-new/stocks-region/stocks-region-${r}.csv`,
-  //     header: STOCKS_HEADERS
-  //   })
-  //   fluxWriters[`r_${r}`] = createCsvWriter({
-  //     path: `./export-new/flux-region/flux-region-${r}.csv`,
-  //     header: FLUX_HEADERS
-  //   })
-  // })
-  return writeFiles(stocksWriters, [], fluxWriters, [])
+  return writeFiles(stocksWriters, [])
 }
 
-function writeFiles (stocksWriters, stocksRecords, fluxWriters, fluxRecords) {
+function writeFiles (stocksWriters, stocksRecords) {
   const promises = []
   function catchError (type, loc) {
     return (e) => {
@@ -313,62 +216,26 @@ function writeFiles (stocksWriters, stocksRecords, fluxWriters, fluxRecords) {
     }
   }
   promises.push(stocksWriters.france.writeRecords(stocksRecords).catch(catchError('stock', 'france')))
-  promises.push(fluxWriters.france.writeRecords(fluxRecords).catch(catchError('flux', 'france')))
-
-  // DEPARTMENTS.forEach((dep) => {
-  //   const departmentStocks = stocksRecords.filter((r) => r.departement === dep)
-  //   if (!departmentStocks[0]) return
-  //   const regionCode = departmentStocks[0].region
-  //   // write department and region files
-  //   const stocksPromise = stocksWriters[`d_${dep}`].writeRecords(departmentStocks)
-  //     .catch(catchError('stock department', dep))
-  //   promises.push(stocksPromise)
-  //   const regionStocksPromise = stocksWriters[`r_${regionCode}`].writeRecords(departmentStocks)
-  //     .catch(catchError('stock region', regionCode))
-  //   promises.push(regionStocksPromise)
-
-  //   const departmentFlux = fluxRecords.filter((r) => r.departement === dep)
-  //   const fluxPromise = fluxWriters[`d_${dep}`].writeRecords(departmentFlux)
-  //     .catch(catchError('flux department', dep))
-  //   promises.push(fluxPromise)
-  //   const regionFluxPromise = fluxWriters[`r_${regionCode}`].writeRecords(departmentFlux)
-  //     .catch(catchError('flux region', regionCode))
-  //   promises.push(regionFluxPromise)
-  // })
-
-  // need to allow for initialising region files
-  // if (!stocksRecords.length) {
-  //   REGIONS.forEach((r) => {
-  //     const regionStocksPromise = stocksWriters[`r_${r}`].writeRecords([])
-  //       .catch(catchError('stock', r))
-  //     promises.push(regionStocksPromise)
-  //     const regionFluxPromise = fluxWriters[`r_${r}`].writeRecords([])
-  //       .catch(catchError('flux', r))
-  //     promises.push(regionFluxPromise)
-  //   })
-  // }
 
   return Promise.all(promises).then(() => {
     console.log('batch complete')
   })
 }
 
-async function exportData (stocksWriters, fluxWriters, communes, startIdx) {
+async function exportData (stocksWriters, communes, startIdx) {
   const batchSize = 100
   const stocksRecords = []
-  const fluxRecords = []
 
   communes.slice(startIdx, startIdx + batchSize).forEach((commune) => {
     const record = createRecordForCommune(commune)
     addStocksRecords(stocksRecords, record)
-    addFluxRecords(fluxRecords, record)
   })
 
-  return writeFiles(stocksWriters, stocksRecords, fluxWriters, fluxRecords)
+  return writeFiles(stocksWriters, stocksRecords)
     .then(() => {
       startIdx += batchSize
       if (startIdx < communes.length) {
-        return exportData(stocksWriters, fluxWriters, communes, startIdx)
+        return exportData(stocksWriters, communes, startIdx)
       }
     })
     .catch((e) => {
@@ -382,42 +249,12 @@ async function main () {
 
   const stocksWriters = {}
   stocksWriters.france = createCsvWriter({
-    path: './export-new/stocks.csv',
+    path: './stocks/stocks.csv',
     header: STOCKS_HEADERS,
     append: true
   })
-  const fluxWriters = {}
-  fluxWriters.france = createCsvWriter({
-    path: './export-new/flux.csv',
-    header: FLUX_HEADERS,
-    append: true
-  })
-  // DEPARTMENTS.forEach((d) => {
-  //   stocksWriters[`d_${d}`] = createCsvWriter({
-  //     path: `./export-new/stocks-departement/stocks-departement-${d}.csv`,
-  //     header: STOCKS_HEADERS,
-  //     append: true
-  //   })
-  //   fluxWriters[`d_${d}`] = createCsvWriter({
-  //     path: `./export-new/flux-departement/flux-departement-${d}.csv`,
-  //     header: FLUX_HEADERS,
-  //     append: true
-  //   })
-  // })
-  // REGIONS.forEach((r) => {
-  //   stocksWriters[`r_${r}`] = createCsvWriter({
-  //     path: `./export-new/stocks-region/stocks-region-${r}.csv`,
-  //     header: STOCKS_HEADERS,
-  //     append: true
-  //   })
-  //   fluxWriters[`r_${r}`] = createCsvWriter({
-  //     path: `./export-new/flux-region/flux-region-${r}.csv`,
-  //     header: FLUX_HEADERS,
-  //     append: true
-  //   })
-  // })
 
-  await exportData(stocksWriters, fluxWriters, communes, 0).then(() => {
+  await exportData(stocksWriters, communes, 0).then(() => {
     console.log('All done!')
   })
 }
