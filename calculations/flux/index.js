@@ -37,17 +37,22 @@ function getAnnualFluxes (communes, options) {
     fluxes = replaceWithOverride(fluxes, areas, from, to, 'litière')
   })
 
-  fluxes = fluxes.filter((f) => !!f.co2e)
-  fluxes.push(...getNitrousOxideEmissions(fluxes))
+  const fluxWithValue = fluxes.filter((f) => !!f.co2e)
+  const n20Emissions = getNitrousOxideEmissions(fluxWithValue)
+  fluxWithValue.push(...n20Emissions)
+  fluxes.push(...n20Emissions)
   // TODO: aggregations for display
   //  - produits bois details
 
-  fluxes.push(...getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas))
+  const agriculturalPractices = getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas)
+  fluxWithValue.push(...agriculturalPractices)
+  fluxes.push(...agriculturalPractices)
 
-  const { summary, biomassSummary, fluxCo2eByGroundType, woodSummary, total } = fluxSummary(fluxes, options)
+  const { summary, biomassSummary, fluxCo2eByGroundType, woodSummary, total } = fluxSummary(fluxWithValue, options)
 
   return {
     allFlux: fluxes,
+    fluxWithValue,
     summary,
     biomassSummary,
     areas,

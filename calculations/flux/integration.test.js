@@ -6,10 +6,16 @@ describe('Flux module integration tests', () => {
   const communes = getCommunes({ epci: getEpci('200007177', true) })
   test('returns expected number of entries for cultures ground changes', () => {
     // only return fluxes != 0
-    const allFlux = getAnnualFluxes(communes).allFlux
-    const culturesFlux = allFlux.filter(f => f.to === 'cultures')
-    const cGround = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'sol')
+    const fluxes = getAnnualFluxes(communes)
+    const fluxWithValue = fluxes.fluxWithValue
+    let culturesFlux = fluxWithValue.filter(f => f.to === 'cultures')
+    let cGround = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'sol')
     expect(cGround.length).toBe(5)
+    // 13 flux values * 12 communes in this EPCI = 156
+    const allFlux = fluxes.allFlux
+    culturesFlux = allFlux.filter(f => f.to === 'cultures')
+    cGround = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'sol')
+    expect(cGround.length).toBe(156)
   })
 
   // data-dependent tests
