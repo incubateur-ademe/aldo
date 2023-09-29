@@ -60,9 +60,15 @@ async function getLocationDetail (req, res) {
     if (commune) return { commune }
   } else if (req.query.communes || req.query.epcis) {
     const location = { communes: [], epcis: [] }
-    if (req.query.communes) location.communes = req.query.communes.map((c) => getCommune(c, true))
-    if (req.query.epcis) location.epcis = req.query.epcis.map((c) => getEpci(c, true))
-    return location
+    if (req.query.communes && Array.isArray(req.query.communes)) {
+      location.communes = req.query.communes.map((c) => getCommune(c, true))
+    }
+    if (req.query.epcis && Array.isArray(req.query.epcis)) {
+      location.epcis = req.query.epcis.map((c) => getEpci(c, true))
+    }
+    if (location.communes.length || location.epcis.length) {
+      return location
+    }
   }
 }
 
