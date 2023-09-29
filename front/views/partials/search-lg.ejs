@@ -1,20 +1,24 @@
 <div class="fr-container-fluid fr-my-6w">
   <form action="/regroupement" method="GET" class="fr-col-12 fr-col-md-8">
     <div role="search">
-      <label class="fr-label fr-mb-1w" for="location-search">
-        Choisir un ou plusieurs territoires
-      </label>
-      <ul id="locations" class="fr-tags-group">
-      </ul>
-      <div class="fr-grid-row">
-        <input class="fr-input fr-col-12 fr-col-md-6" placeholder="Taper le nom, SIREN, ou code INSEE..." type="search" id="location-search" list="location-names" autocomplete="off">
-        <button id="add-tag" class="fr-btn fr-btn--secondary fr-mx-1w fr-mt-1w fr-mt-md-0" title="Ajouter">
-          Ajouter
-        </button>
-        <!-- TODO: how to provide feedback if left locations empty? -->
-        <button class="fr-btn fr-mt-1w fr-mt-md-0" title="Rechercher">
-          Rechercher
-        </button>
+      <div id="default-search">
+        <label class="fr-label fr-mb-1w" for="location-search">
+          Choisir un ou plusieurs territoires
+        </label>
+        <ul id="locations" class="fr-tags-group">
+        </ul>
+        <div class="fr-grid-row">
+          <input class="fr-input fr-col-12 fr-col-md-6" placeholder="Taper le nom, SIREN, ou code INSEE..." type="search" id="location-search" list="location-names" autocomplete="off">
+          <button id="add-tag" class="fr-btn fr-btn--secondary fr-mx-1w fr-mt-1w fr-mt-md-0" title="Ajouter">
+            Ajouter
+          </button>
+          <button class="fr-btn fr-mt-1w fr-mt-md-0" title="Rechercher">
+            Rechercher
+          </button>
+        </div>
+        <p id="location-search-error" class="fr-error-text" style="display: none;">
+          Il faut choisir au moins un térritoire depuis les options données
+        </p>
       </div>
       <datalist id="location-names"></datalist>
     </div>
@@ -147,4 +151,12 @@
     $(`#${codeToId(event.target.value)}`).remove()
     event.target.parentNode.parentNode.removeChild(event.target.parentNode)
   }
+
+  $("form").on("submit", (event) => {
+    if ($('#locations')[0].children.length === 0) {
+      $("#default-search").addClass("fr-input-group fr-input-group--error")
+      $("#location-search-error").show()
+      event.preventDefault()
+    }
+  })
 </script>
