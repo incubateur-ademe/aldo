@@ -87,16 +87,16 @@ ALL_TYPES.forEach((fromGt) => {
     })
     VALUE_HEADERS.push({
       id: `${fromGt}_to_${toGt}_groundFlux`,
-      title: `${fromGt}_vers_${toGt}_sol` // _flux_unitaire_tCO2e_ha-1_an-1
+      title: `${fromGt}_vers_${toGt}_sol_tCO2e_ha-1`
     })
     VALUE_HEADERS.push({
       id: `${fromGt}_to_${toGt}_biomassFlux`,
-      title: `${fromGt}_vers_${toGt}_biomasse`
+      title: `${fromGt}_vers_${toGt}_biomasse_tCO2e_ha-1`
     })
     if (fromGt.startsWith('forêt') || toGt.startsWith('forêt')) {
       VALUE_HEADERS.push({
         id: `${fromGt}_to_${toGt}_forestLitterFlux`,
-        title: `${fromGt}_vers_${toGt}_litiere`
+        title: `${fromGt}_vers_${toGt}_litiere_tCO2e_ha-1`
       })
     }
   })
@@ -122,6 +122,15 @@ forestStockIds.forEach((gt) => {
     { id: `${gt}_co2e`, title: `${gt}_accroissement_biologique_flux_tCO2e_an-1` }
   ])
 })
+
+BIOMASS_GROWTH_HEADERS.push(...[
+  { id: 'bo_harvest_annualFluxEquivalent', title: 'bo_recolte_flux_tCO2e_an-1' },
+  { id: 'bi_harvest_annualFluxEquivalent', title: 'bi_recolte_flux_tCO2e_an-1' },
+  { id: 'total_harvest_annualFluxEquivalent', title: 'total_recolte_flux_tCO2e_an-1' },
+  { id: 'bo_population_annualFluxEquivalent', title: 'bo_consommation_flux_tCO2e_an-1' },
+  { id: 'bi_population_annualFluxEquivalent', title: 'bi_consommation_flux_tCO2e_an-1' },
+  { id: 'total_population_annualFluxEquivalent', title: 'total_consommation_flux_tCO2e_an-1' }
+])
 
 function createRecordForCommune (commune) {
   const record = communeData[commune.insee]
@@ -178,6 +187,16 @@ function addFluxRecords (records, record) {
       }
     }
   }
+
+  record.bo_harvest_annualFluxEquivalent = fluxes.woodSummary.bo.co2e
+  record.bi_harvest_annualFluxEquivalent = fluxes.woodSummary.bi.co2e
+  record.total_harvest_annualFluxEquivalent = fluxes.summary['produits bois']?.totalSequestration
+
+  const consumptionFluxes = getAnnualFluxes([record], { woodCalculation: 'consommation' })
+  record.bo_population_annualFluxEquivalent = consumptionFluxes.woodSummary.bo.co2e
+  record.bi_population_annualFluxEquivalent = consumptionFluxes.woodSummary.bi.co2e
+  record.total_population_annualFluxEquivalent = consumptionFluxes.summary['produits bois']?.totalSequestration
+
   record.co2e = fluxes.total
   records.push(record)
 }
