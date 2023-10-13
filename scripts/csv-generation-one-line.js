@@ -140,9 +140,24 @@ const WOOD_USAGES = ['bo', 'bi']
 WOOD_USAGES.forEach((usage) => {
   STOCKS_HEADERS.push(...[
     { id: `${usage}_harvest`, title: `${usage}_recolte_locale_m3_an-1` },
-    { id: `${usage}_harvestRatio`, title: `${usage}_ratio_recolte_France` }
+    { id: `${usage}_harvestRatio`, title: `${usage}_ratio_recolte_France` },
+    { id: `${usage}_harvestTotal`, title: `${usage}_recolte_total_tC` }
   ])
 })
+
+STOCKS_HEADERS.push(...[
+  { id: 'wood_harvestTotal', title: 'produit_bois_recolte_total_tC' }
+])
+
+WOOD_USAGES.forEach((usage) => {
+  STOCKS_HEADERS.push(...[
+    { id: `${usage}_populationTotal`, title: `${usage}_consommation_total_tC` }
+  ])
+})
+
+STOCKS_HEADERS.push(...[
+  { id: 'wood_populationTotal', title: 'produit_bois_consommation_total_tC' }
+])
 
 function createRecordForCommune (commune) {
   const record = communeData[commune.insee]
@@ -192,7 +207,11 @@ function addStocksRecords (records, record) {
   WOOD_USAGES.forEach((usage) => {
     record[`${usage}_harvest`] = woodHarvestStock[`${usage}LocalHarvestTotal`]
     record[`${usage}_harvestRatio`] = woodHarvestStock[`${usage}Portion`]
+    record[`${usage}_harvestTotal`] = woodHarvestStock[`${usage}Stock`]
+    record.wood_harvestTotal = woodHarvestStock.totalStock
     record.populationRatio = woodConsumptionStock.portionPopulation
+    record[`${usage}_populationTotal`] = woodConsumptionStock[`${usage}Stock`]
+    record.wood_populationTotal = woodConsumptionStock.totalStock
   })
   record.stock = stocks.total
   records.push(record)
