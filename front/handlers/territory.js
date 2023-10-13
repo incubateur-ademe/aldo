@@ -135,18 +135,16 @@ async function territoryHandler (req, res) {
 function formatFluxForDisplay (flux) {
   const fluxDetail = {}
   const agriculturalPracticeDetail = {}
-  flux.allFlux.forEach(f => {
-    if (f.value !== 0) {
-      if (f.practice) {
-        if (!agriculturalPracticeDetail[f.to]) {
-          agriculturalPracticeDetail[f.to] = []
-        }
-        agriculturalPracticeDetail[f.to].push(f)
-      } else {
-        if (!fluxDetail[f.to]) fluxDetail[f.to] = []
-        // biomass growth in forests is displayed elsewhere
-        if (f.growth === undefined) fluxDetail[f.to].push(f)
+  flux.fluxWithValue.forEach(f => {
+    if (f.practice) {
+      if (!agriculturalPracticeDetail[f.to]) {
+        agriculturalPracticeDetail[f.to] = []
       }
+      agriculturalPracticeDetail[f.to].push(f)
+    } else {
+      if (!fluxDetail[f.to]) fluxDetail[f.to] = []
+      // biomass growth in forests is displayed elsewhere
+      if (f.growth === undefined) fluxDetail[f.to].push(f)
     }
   })
   // order the details by initial occupation
@@ -338,7 +336,7 @@ function fluxCharts (flux) {
   const labels = keys.map(key => GroundTypes.find(k => k.stocksId === key)?.name)
   const reservoirLabels = ['Sol et litière', 'Biomasse'] // produits bois
   const reservoirData = [0, 0]
-  flux.allFlux.forEach(f => {
+  flux.fluxWithValue.forEach(f => {
     if (f.reservoir === 'sol' || f.reservoir === 'litière') {
       reservoirData[0] += Math.round(f.co2e)
     } else if (f.reservoir === 'biomasse') {

@@ -37,17 +37,22 @@ function getAnnualFluxes (communes, options) {
     fluxes = replaceWithOverride(fluxes, areas, from, to, 'litière')
   })
 
-  fluxes = fluxes.filter((f) => !!f.co2e)
-  fluxes.push(...getNitrousOxideEmissions(fluxes))
+  const fluxWithValue = fluxes.filter((f) => !!f.co2e)
+  const n20Emissions = getNitrousOxideEmissions(fluxWithValue)
+  fluxWithValue.push(...n20Emissions)
+  fluxes.push(...n20Emissions)
   // TODO: aggregations for display
   //  - produits bois details
 
-  fluxes.push(...getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas))
+  const agriculturalPractices = getFluxAgriculturalPractices(options?.agriculturalPracticesEstablishedAreas)
+  fluxWithValue.push(...agriculturalPractices)
+  fluxes.push(...agriculturalPractices)
 
-  const { summary, biomassSummary, fluxCo2eByGroundType, woodSummary, total } = fluxSummary(fluxes, options)
+  const { summary, biomassSummary, fluxCo2eByGroundType, woodSummary, total } = fluxSummary(fluxWithValue, options)
 
   return {
     allFlux: fluxes,
+    fluxWithValue,
     summary,
     biomassSummary,
     areas,
@@ -250,13 +255,14 @@ function fluxSummary (allFluxes, options) {
   // update change flag for forests based on if the area used in biomass growth
   // calculations is defined by the user.
   const biomassGrowthAreaModified = biomassSummary.some((subtype) => subtype.areaModified)
-  summary.forêts.areaModified = summary.forêts.areaModified || biomassGrowthAreaModified
-  summary.forêts.hasModifications = summary.forêts.hasModifications || biomassGrowthAreaModified
+  if (summary.forêts) {
+    summary.forêts.areaModified = summary.forêts.areaModified || biomassGrowthAreaModified
+    summary.forêts.hasModifications = summary.forêts.hasModifications || biomassGrowthAreaModified
+  }
   return { summary, biomassSummary, fluxCo2eByGroundType, woodSummary, total }
 }
 
 function forestBiomassGrowthSummary (allFlux, options) {
-  // aggregate forest biomass data which is by commune, not EPCI
   const forestBiomassSummaryByType = []
   const forestSubtypes = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
   for (const subtype of forestSubtypes) {

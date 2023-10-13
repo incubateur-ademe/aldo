@@ -369,9 +369,11 @@ function getForestBiomassFluxesByCommune (location) {
   const significantCarbonData = carbonData.filter((data) => data.surface_ic === 's')
   let areaDataByCommune = []
   if (location.epci) {
+    // TODO: this function is only called with a single commune, remove this if
     areaDataByCommune = areaData.filter(data => data.CODE_EPCI === location.epci.code)
   } else if (location.commune) {
     let code = location.commune.insee
+    // TODO: fix data to avoid this ugly 0 removal
     if (code.startsWith('0')) code = code.slice(1)
     areaDataByCommune = areaData.filter(data => data.INSEE_COM === code)
   }
