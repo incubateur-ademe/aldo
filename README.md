@@ -1,5 +1,14 @@
 # Fiche produit : Aldo
 
+## Open data
+
+Accèder aux jeux de données via le portail open data de l'ADEME.
+
+1. [stock de carbone](https://data.ademe.fr/datasets/aldo-stocks-de-carbone)
+2. [flux total et surfaces converties](https://data.ademe.fr/datasets/aldo-flux-total-et-surfaces-converties)
+3. [flux unitaire](https://data.ademe.fr/datasets/aldo-flux-unitaire)
+4. [flux annuels liés à l'accroissement net de la biomasse en forêts](https://data.ademe.fr/datasets/aldo-flux-annuels-lies-a-laccroissement-net-de-la-biomasse-en-forets)
+
 ## Le drame
 
 L'urgence de la lutte contre le réchauffement climatique n'est plus à présenter. La combustion de carburants fossiles est bien sûr la cause principale du réchauffement. Mais un autre sujet s'avère clef, et probablement moins médiatisé : l'évolution du stock de carbone dans les sols. 
