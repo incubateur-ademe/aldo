@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr" data-fr-scheme>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>
     <% if (locals.pageTitle) { %>
       <%= pageTitle %> | <%= appName %>
-    <% } else { %>
-      <%= appName %>
-    <% } %>
+          <% } else { %>
+            <%= appName %>
+              <% } %>
   </title>
   <meta name="theme-color" content="#000091">
   <link rel="stylesheet" href="/~/@gouvfr/dsfr/dist/dsfr/dsfr.min.css">
@@ -24,18 +25,19 @@
     /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
     _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
-    (function() {
-      var u="https://stats.data.gouv.fr/";
-      _paq.push(['setTrackerUrl', u+'piwik.php']);
-      _paq.push(['setSiteId', '247']);
-      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-      g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    (function () {
+      var u = "https://stats.beta.gouv.fr/";
+      _paq.push(['setTrackerUrl', u + 'matomo.php']);
+      _paq.push(['setSiteId', '87']);
+      var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+      g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
     })();
   </script>
   <!-- End Matomo Code -->
   <% if (locals.isHomepage) { %>
     <!-- Google search console -->
     <meta name="google-site-verification" content="yIDpEPAT3r_iuEvKFkQFsL0jOmAl692ObR62Z96UBMw" />
-  <% } %>
+    <% } %>
 </head>
+
 <body>
