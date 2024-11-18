@@ -102,7 +102,7 @@ Il s'agit selon l'avis du comité scientifique d'une limite de précision des do
 
 <summary>ALDO permet-il d'établir un suivi de la séquestration carbone d'année en année ?</summary>
 
-ALDO ne permet pas pour le moment de suivre l'évolution annuelle de la séquestration carbone. Plus de détails [ici](https://docs.datagir.ademe.fr/documentation-aldo/complements/perimetre-et-limites#dynamique-du-carbone-des-sols).
+ALDO ne permet pas pour le moment de suivre l'évolution annuelle de la séquestration carbone. Plus de détails [ici](https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/complements/perimetre-et-limites#dynamique-du-carbone-des-sols).
 
 Par exemple pour les données d'occupation du sol : la dernière campagne CORINE LAND COVER présente l'évolution entre 2012 et 2018. La prochaine campagne sera donc entre 2018 et 2024.
 
@@ -154,7 +154,7 @@ Non, ALDO ne doit pas être utilisé pour des démarches de compensation carbone
 
 <summary>ALDO est-il adaptable au contexte des forêts équatoriales ?</summary>
 
-Aujourd’hui, les données relatives aux forêts équatoriales sur des territoires à l'[internationa](https://docs.datagir.ademe.fr/documentation-aldo/complements/perimetre-et-limites#international)l ne sont pas disponibles dans l’outil ALDO. Une réflexion est en cours pour intégrer les territoires français d'[outre-mer.](https://docs.datagir.ademe.fr/documentation-aldo/complements/perimetre-et-limites#dom-com)
+Aujourd’hui, les données relatives aux forêts équatoriales sur des territoires à l'[internationa](https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/complements/perimetre-et-limites#international)l ne sont pas disponibles dans l’outil ALDO. Une réflexion est en cours pour intégrer les territoires français d'[outre-mer.](https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/complements/perimetre-et-limites#dom-com)
 
 </details>
 
@@ -192,7 +192,7 @@ Les données brutes de l'IFN sont téléchargeables [ici](https://inventaire-for
 
 Les lignes directrices du GIEC (2006 - vol 4 ) présentent les normes méthodologiques pour les approches production et consommation.
 
-Dans ALDO, comme expliqué [ici ](https://docs.datagir.ademe.fr/documentation-aldo/configuration/configuration-manuelle#hypothese-de-calcul-des-produits-bois): L’hypothèse "production" (récolte) est privilégiée pour garder le lien avec les forêts du territoire. En effet, les mécanismes de stockage de carbone dans les produits bois sont interconnectés avec les variations de stocks dans les forêts. Ces mécanismes doivent donc être évalués conjointement.&#x20;
+Dans ALDO, comme expliqué [ici ](https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/configuration/configuration-manuelle#hypothese-de-calcul-des-produits-bois): L’hypothèse "production" (récolte) est privilégiée pour garder le lien avec les forêts du territoire. En effet, les mécanismes de stockage de carbone dans les produits bois sont interconnectés avec les variations de stocks dans les forêts. Ces mécanismes doivent donc être évalués conjointement.&#x20;
 
 </details>
 
@@ -200,7 +200,7 @@ Dans ALDO, comme expliqué [ici ](https://docs.datagir.ademe.fr/documentation-al
 
 <summary>Comment sont calculés les stocks de carbone de références utilisés par l'outil ?</summary>
 
-Les sources sont consultables [ici.](https://docs.datagir.ademe.fr/documentation-aldo/introduction/sources#stocks-de-carbone-de-reference-tc-ha)
+Les sources sont consultables [ici.](https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/introduction/sources#stocks-de-carbone-de-reference-tc-ha)
 
 Dans ALDO, le jeu de données RMQS a été utilisé, soit 1 point de mesure dans chaque maille de 16km. Un traitement statistique a été fait par GIS SOL pour donner des valeurs par zone pédoclimatique et par occupation du sol. Ensuite, chaque EPCI se voit attribuer une ZPC majoritaire, ce qui permet de ventiler les résultats pour chaque EPCI selon les ZPC pour chaque occupation du sol.
 
@@ -242,7 +242,7 @@ Les stocks de référence des sols de prairie varient selon la zone pédoclimati
 
 <summary>Pourquoi le facteur de conversation ne donne pas une correspondance exacte entre volume et carbone ?</summary>
 
-Concernant les flux annuels liés à l'accroissement net de la biomasse en forêts, comme vous l'aurez peut-être constaté, le flux total unitaire (tCO2e/ha/an) n'est pas l'exact multiplication du bilan total unitaire (m3 BFT/ha/an) par le facteur de conversion (tC/m3 BFT) et le [ratio](https://docs.datagir.ademe.fr/documentation-aldo/faq/faq-aldo#pourquoi-les-stocks-de-carbone-sont-mesures-en-tc-et-les-flux-de-carbone-en-tco2e) de tCO2e/tC.
+Concernant les flux annuels liés à l'accroissement net de la biomasse en forêts, comme vous l'aurez peut-être constaté, le flux total unitaire (tCO2e/ha/an) n'est pas l'exact multiplication du bilan total unitaire (m3 BFT/ha/an) par le facteur de conversion (tC/m3 BFT) et le [ratio](https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/faq/faq-aldo#pourquoi-les-stocks-de-carbone-sont-mesures-en-tc-et-les-flux-de-carbone-en-tco2e) de tCO2e/tC.
 
 Dans l'exemple ci-dessous, pour les forêts mixtes, la multiplication des -0,40 m3 BFT/ha/an par 0,39 tC/m3 BFT et par 44/12 tCO2e/tC ne donne pas précisément -0,40 tCO2e/ha/an mais une valeur proche (-0,57 tCO2e/ha/an).
 
@@ -250,7 +250,7 @@ Dans l'exemple ci-dessous, pour les forêts mixtes, la multiplication des -0,40 
 
 Pourquoi ?
 
-L'ensemble des ces données proviennent de l'[inventaire forestier de l'IGN](https://docs.datagir.ademe.fr/documentation-aldo/introduction/sources#flux-de-carbone-de-la-biomasse-en-forets-par-accroissement-biologique-net).&#x20;
+L'ensemble des ces données proviennent de l'[inventaire forestier de l'IGN](https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/introduction/sources#flux-de-carbone-de-la-biomasse-en-forets-par-accroissement-biologique-net).&#x20;
 
 Le **facteur d'expansion** renseigné permet de passer du volume bois fort tige IFN au stock de carbone aérien et racinaire dans la biomasse ligneuse. Il est le ratio entre la valeur de carbone aérien et racinaire (tC) et le volume bois-fort tige (m3 BFT).
 

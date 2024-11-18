@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/datagir/aldo"
+    "url": "git+https://github.com/incubateur-ademe/aldo"
   },
   "author": "helen.root@beta.gouv.fr",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/datagir/aldo/issues"
+    "url": "https://github.com/incubateur-ademe/aldo/issues"
   },
-  "homepage": "https://github.com/datagir/aldo#readme",
+  "homepage": "https://github.com/incubateur-ademe/aldo#readme",
   "dependencies": {
     "@etalab/decoupage-administratif": "^0.9.0-0",
     "@gouvfr/dsfr": "<1.5.0",
