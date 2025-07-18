@@ -1,56 +1,70 @@
 <%- include('partials/header') -%>
-  <main role="main" id="contenu">
-    <div class="fr-container fr-mb-8w">
-      <%- include('partials/ariane', { items: [ { label: 'Accueil' , url: '/' }, { label: 'Mentions légales' }, ],}) -%>
+<main role="main" id="contenu">
+  <div class="fr-container fr-mb-8w">
+    <%- include('partials/ariane', { items: [ { label: 'Accueil' , url: '/' }, {
+    label: 'Mentions légales' }, ],}) -%>
 
-        <h1>Mentions légales</h1>
+    <h1>Mentions légales</h1>
 
-        <h2>Éditeur de la Plateforme</h2>
+    <h2>Éditeur de la Plateforme</h2>
 
-        <p>
-          La plateforme ALDO est éditée par <a href="https://www.ademe.fr/">l'ADEME</a>.
-        </p>
+    <p>
+      La plateforme ALDO est éditée par
+      <a href="https://www.ademe.fr/">l'ADEME</a>.
+    </p>
 
-        <p>
-          Siège social de l'ADEME :<br>
-          20, avenue du Grésillé<br>
-          BP 90406<br>
-          49004 Angers Cedex 01<br>
-          Tél. : 02 41 20 41 20
-        </p>
+    <p>
+      Siège social de l'ADEME :<br />
+      20, avenue du Grésillé<br />
+      BP 90406<br />
+      49004 Angers Cedex 01<br />
+      Tél. : 02 41 20 41 20
+    </p>
 
-        <h2>Directeur de la publication</h2>
+    <h2>Directeur de la publication</h2>
 
-        <p>Martin Régner - ADEME</p>
+    <p>Martin Régner - ADEME</p>
 
-        <h2>Hébergement de la Plateforme</h2>
-        <p>Ce site est hébergé en propre par <a href="https://scalingo.com/">Scalingo SAS</a></p>
-        <p>
-          Scalingo SAS 3<br>
-          place de Haguenau<br>
-          67000 Strasbourg<br>
-          France<br>
-          SIRET 80866548300018
-        </p>
+    <h2>Hébergement de la Plateforme</h2>
+    <p>
+      Ce site est hébergé par
+      <a href="https://koyeb.com/">Koyeb</a>
+    </p>
+    <p>
+      Koyeb<br />
+      9, Rue des longs près<br />
+      92100 Boulogne-Billancourt<br />
+      France<br />
+      SIREN 850 183 948
+    </p>
+    <p>
+      <a href="https://www.koyeb.com/docs/legal/data-processing-agreement">
+        https://www.koyeb.com/docs/legal/data-processing-agreement
+      </a>
+    </p>
 
-        <h2>Accessibilité</h2>
-        <p>Voir la page <a href="/accessibilite">Déclaration d'accessibilité</a>.</p>
+    <h2>Accessibilité</h2>
+    <p>
+      Voir la page <a href="/accessibilite">Déclaration d'accessibilité</a>.
+    </p>
 
-        <h3>En savoir plus</h3>
-        <p>Pour en savoir plus sur la politique d’accessibilité numérique de l’État :
-          <a href="http://references.modernisation.gouv.fr/accessibilite-numerique">
-            http://references.modernisation.gouv.fr/accessibilite-numerique
-          </a>
-        </p>
+    <h3>En savoir plus</h3>
+    <p>
+      Pour en savoir plus sur la politique d’accessibilité numérique de l’État :
+      <a href="http://references.modernisation.gouv.fr/accessibilite-numerique">
+        http://references.modernisation.gouv.fr/accessibilite-numerique
+      </a>
+    </p>
 
-        <h2>Sécurité</h2>
+    <h2>Sécurité</h2>
 
-        <p>
-          Le site est protégé par un certificat électronique, matérialisé pour la grande majorité des navigateurs par
-          un cadenas. Cette protection participe à la confidentialité des échanges. En aucun cas les services associés à
-          la plateforme ne seront à l’origine d’envoi de courriels pour demander la saisie d’informations personnelles.
-        </p>
-
-    </div>
-  </main>
-  <%- include('partials/footer') -%>
+    <p>
+      Le site est protégé par un certificat électronique, matérialisé pour la
+      grande majorité des navigateurs par un cadenas. Cette protection participe
+      à la confidentialité des échanges. En aucun cas les services associés à la
+      plateforme ne seront à l’origine d’envoi de courriels pour demander la
+      saisie d’informations personnelles.
+    </p>
+  </div>
+</main>
+<%- include('partials/footer') -%>
