@@ -52,6 +52,10 @@ router.get('/contact', (req, res) => {
 router.post('/contact', (req, res) => {
   const { name, email, subject, message } = req.body
   sendinblue({
+    sender: {
+      email: process.env.ALDO_EMAIL,
+      name: 'ALDO - formulaire de contact'
+    },
     to: [{
       email: process.env.ALDO_EMAIL
     }],
