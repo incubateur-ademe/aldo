@@ -51,18 +51,28 @@ router.get('/contact', (req, res) => {
 
 router.post('/contact', (req, res) => {
   const { name, email, subject, message } = req.body
+
+  // Format the message with sender information
+  const formattedMessage = `
+Nom: ${name}
+Email: ${email}
+Sujet: ${subject}
+
+Message:
+${message}
+`
+
   sendinblue({
     sender: {
       email: process.env.ALDO_EMAIL,
-      name: 'ALDO - formulaire de contact'
+      name: 'Contact ALDO'
     },
     to: [{
       email: process.env.ALDO_EMAIL
     }],
     replyTo: { email },
-    subject,
-    templateId: Number(process.env.SIB_CONTACT_TEMPLATE),
-    params: { NOM: name, email, subject, MESSAGE: message }
+    subject: `[Contact ALDO] ${subject}`,
+    textContent: formattedMessage
   }).then(() => {
     res.redirect('/contact?statut=succès')
   }).catch((error) => {
