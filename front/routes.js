@@ -64,7 +64,7 @@ ${message}
 
   sendinblue({
     sender: {
-      email: process.env.ALDO_EMAIL,
+      email: 'no-reply@territoiresentransitions.fr',
       name: 'Contact ALDO'
     },
     to: [{
