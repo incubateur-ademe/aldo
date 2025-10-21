@@ -96,7 +96,7 @@ D’un point de vue pratique, les flux totaux de ce réservoir sont ainsi calcul
 
 ### Approche :a: Collecte des variations de surfaces par changement d'occupation des sols par réservoir
 
-En suivant le même raisonnement que dans l'onglet [Stocks](../stocks/methode-generale.md#collecte-des-surfaces-par-occupation-du-sol-pour-chaque-typologie-ha), des bases de données surfaciques sont utilisées. Pour calculer les flux, il ne s'agit plus ici de connaître les surfaces fixes (2018) de chaque occupation du sol, mais de connaître les variations de surfaces entre chacune de ces typologies, entre deux millésimes.
+En suivant le même raisonnement que dans l'onglet [Stocks](../stocks/methode-generale.md#collecte-des-surfaces-par-occupation-du-sol-pour-chaque-typologie-ha), des bases de données surfaciques sont utilisées. Pour calculer les flux, il ne s'agit plus ici de connaître les surfaces fixes (2018, bientôt 2021) de chaque occupation du sol, mais de connaître les variations de surfaces entre chacune de ces typologies, entre deux millésimes.
 
 Les variations de surfaces associées à chaque changement d'affectation du sol sont renseignées à partir des données de bases de changement Corine Land Cover entre les millésimes 2012 et 2018. [Sources.](../introduction/sources.md#variations-de-surfaces-ha-an)
 
