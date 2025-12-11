@@ -28,11 +28,12 @@ function getCarbonDensity (commune, groundType) {
 
 function getArea (location, groundType) {
   if (!location.commune) { console.log('getArea in data/stocks called wrong', location); return }
-  const area = location.commune.clc18[groundType]
+  const area = location.commune.citepa2021[groundType]
   if (area >= 0) return area
   else {
-    // console.log('no area saved for', location.commune?.insee, groundType)
-    return getAreaFromData(location, groundType)
+    console.log('no area saved for', location.commune?.insee, groundType)
+    return null
+    // return getAreaFromData(location, groundType)
   }
 }
 
@@ -41,6 +42,9 @@ function getArea (location, groundType) {
 // so a mapping is used and the sum of ha of all matching CLC types is returned.
 // NB: in the lookup the type names for ground data and the more specific biomass data
 // are placed on the same level, so some CLC codes are used in two types.
+/**
+ * @deprecated use getAreaFromDataOptimized instead
+ */
 function getAreaFromData (location, groundType) {
   if (!location.commune) { console.log('getAreaFromData in data/stocks called wrong', location); return }
   if (groundType === 'haies') {
@@ -49,16 +53,44 @@ function getAreaFromData (location, groundType) {
     return getAreaForests(location.commune, groundType)
   }
   const typeDetails = GroundTypes.find((gt) => gt.stocksId === groundType)
-  const clcCodes = typeDetails?.clcCodes
-  if (!clcCodes) {
-    throw new Error(`No CLC code mapping found for ground type '${groundType}'`)
+  const citepaCodes = typeDetails?.citepaCodes
+  if (!citepaCodes) {
+    throw new Error(`No CITEPA code mapping found for ground type '${groundType}'`)
   }
-  const csvFilePath = './dataByCommune/clc18.csv'
+  const csvFilePath = './dataByCommune/citepa-surfaces-2021.csv'
   const areasByCommuneAndClcType = require(csvFilePath + '.json')
   let totalArea = 0
   areasByCommuneAndClcType
-    .filter((areaData) => location.commune.insee === areaData.insee && clcCodes.includes(areaData.code18))
-    .forEach((areaData) => { totalArea += +areaData.area })
+    .filter((areaData) => location.commune.insee === areaData.insee_com && citepaCodes.includes(areaData.usage_2021))
+    .forEach((areaData) => { totalArea += +areaData.surfaces_ha })
+  return totalArea
+}
+
+// Optimized getAreaFromData using pre-indexed data
+function getAreaFromDataOptimized ({ commune, groundType, forestAreaByCommuneMap, areasByCommuneMap }) {
+  if (!commune) { console.log('getAreaFromData in data/stocks called wrong', commune); return }
+  if (groundType === 'haies') {
+    return
+  } else if (groundType.startsWith('forêt ')) {
+    return getAreaForests(commune, groundType)
+  }
+  const typeDetails = GroundTypes.find((gt) => gt.stocksId === groundType)
+  const citepaCodes = typeDetails?.citepaCodes
+  if (!citepaCodes) {
+    throw new Error(`No CITEPA code mapping found for ground type '${groundType}'`)
+  }
+
+  // TODO: handle case where no CITEPA codes are found.
+  // This case should not happen, but we're still waiting for CITEPA answer regarding Aldo ground types mapping.
+  if (citepaCodes.length === 0) {
+    return 0
+  }
+
+  const areaDataForCommune = areasByCommuneMap.get(commune.insee) || []
+  const totalArea = areaDataForCommune
+    .filter((areaData) => citepaCodes.includes(areaData.usage_2021))
+    .reduce((totalArea, areaData) => totalArea + (+areaData.surfaces_ha), 0)
+
   return totalArea
 }
 
@@ -315,7 +347,7 @@ function getHedgerowsDataForCommunes (location) {
 module.exports = {
   getCarbonDensity,
   getArea,
-  getAreaFromData,
+  getAreaFromDataOptimized,
   getForestAreaData,
   getSignificantCarbonData,
   getCarbonDataForCommuneAndComposition,

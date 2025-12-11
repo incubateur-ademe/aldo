@@ -1,8 +1,9 @@
+const { buildCommuneMap } = require('../communes')
 const {
   getAnnualGroundCarbonFlux,
   getFluxReferenceValues,
   getAnnualSurfaceChange,
-  getAnnualSurfaceChangeFromData,
+  getAnnualSurfaceChangeFromDataOptimized,
   getForestLitterFlux
 } = require('../flux')
 
@@ -338,41 +339,46 @@ describe('The flux data module', () => {
     })
   })
 
-  const areaChangePath = '../dataByCommune/clc18-change.csv.json'
-  it('returns change in surface area for given ground types from data file divided by 6, the number of years between studies', () => {
+  const areaChangePath = '../dataByCommune/citepa-flux-2004-2014.csv.json'
+  it('returns change in surface area for given ground types from data file divided by 10, the number of years between studies (2004-2014)', () => {
     jest.doMock(areaChangePath, () => {
       return [
-        // from constants.json:
-        // prairies zones arborées = 323
-        // cultures = 211, 212...
+        // New Citepa format with ALDO codes directly
         {
-          commune: '01234',
-          code12: '323',
-          code18: '211',
-          area: '5'
+          insee_com: '01234',
+          siren_epci: '200007177',
+          usage_2004: 'P_a',
+          usage_2014: 'C',
+          surfaces_converties: '5,0'
         },
         {
-          commune: '01234',
-          code12: '323',
-          code18: '212',
-          area: '7'
+          insee_com: '01234',
+          siren_epci: '200007177',
+          usage_2004: 'P_a',
+          usage_2014: 'C',
+          surfaces_converties: '7,0'
         },
         {
-          commune: '01234',
-          code12: '323',
-          code18: '999', // uninteresting code for this change
-          area: '100'
+          insee_com: '01234',
+          siren_epci: '200007177',
+          usage_2004: 'P_a',
+          usage_2014: 'X_x', // uninteresting code for this change
+          surfaces_converties: '100,0'
         },
         {
-          commune: '09999', // uninteresting commune for this request
-          code12: '323',
-          code18: '211',
-          area: '100'
+          insee_com: '09999', // uninteresting commune for this request
+          siren_epci: '200007188',
+          usage_2004: 'P_a',
+          usage_2014: 'C',
+          surfaces_converties: '100,0'
         }
       ]
     })
-    expect(getAnnualSurfaceChangeFromData({ commune: { insee: '01234' } }, 'prairies zones arborées', 'cultures')).toBe(2)
-    expect(getAnnualSurfaceChangeFromData({ commune: { insee: '01234' } }, 'prairies zones arbustives', 'cultures')).toBe(0)
+
+    const citepaDataByCommuneMap = buildCommuneMap({ communesRawData: require(areaChangePath) })
+
+    expect(getAnnualSurfaceChangeFromDataOptimized({ commune: { insee: '01234' }, from: 'prairies zones arborées', to: 'cultures', citepaDataByCommuneMap })).toBe(1.2) // (5+7)/10 = 1.2
+    expect(getAnnualSurfaceChangeFromDataOptimized({ commune: { insee: '01234' }, from: 'prairies zones arbustives', to: 'cultures', citepaDataByCommuneMap })).toBe(0)
   })
 
   describe('sols artificiels area changes', () => {

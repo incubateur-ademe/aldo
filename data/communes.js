@@ -1,8 +1,8 @@
 const communesData = require('./dataByCommune/communes.json')
 const zpcByCommune = require('./dataByCommune/zpc.csv.json')
-const { getAnnualSurfaceChangeFromData } = require('./flux')
-const { getAreaFromData } = require('./stocks')
 const { GroundTypes } = require('../calculations/constants')
+const { getAreaFromDataOptimized } = require('./stocks')
+const { getAnnualSurfaceChangeFromDataOptimized } = require('./flux')
 
 function getCommunes (location) {
   // handle the location options
@@ -43,13 +43,30 @@ function addArrondissements (communes) {
   arrondissementsToAdd.forEach((a) => communes.push(a))
 }
 
+// Pre-index commune data for O(1) lookups instead of O(n) find()
+function buildCommuneMap ({ communesRawData }) {
+  return communesRawData.reduce((communesMap, item) => {
+    const insee = item.insee_com
+    const existing = communesMap.get(insee) || []
+    return communesMap.set(insee, [...existing, item])
+  }, new Map())
+}
+
 // adds data about:
 // - arrondissements
 // - ZPC
 function completeData (communes) {
+  const zpcByCommuneMap = new Map()
+  zpcByCommune.forEach((zpcData) => {
+    zpcByCommuneMap.set(zpcData.insee, zpcData.zpc)
+  })
+
+  const areasByCommuneMap = buildCommuneMap({ communesRawData: require('./dataByCommune/citepa-surfaces-2021.csv.json') })
+  const citepaDataByCommuneMap = buildCommuneMap({ communesRawData: require('./dataByCommune/citepa-flux-2004-2014.csv.json') })
+
   let arrondissementsToAdd = []
   communes.forEach((commune) => {
-    commune.zpc = zpcByCommune.find((zpcData) => zpcData.insee === commune.insee)?.zpc
+    commune.zpc = zpcByCommuneMap.get(commune.insee)
     let arrondissements = COMMUNES_WITH_ARRONDISSEMENTS[commune.insee]
     if (arrondissements) {
       // TODO: reassess if EPCI is requried if move biomass region to here too
@@ -63,20 +80,26 @@ function completeData (communes) {
   const excludeIds = ['haies', 'produits bois']
   const childGroundTypes = GroundTypes
     .filter((gt) => !gt.children && !excludeIds.includes(gt.stocksId))
-  allCommunes.forEach((commune) => {
+
+  // Progress indicator every 100 communes instead of every commune
+  const totalCommunes = allCommunes.length
+  allCommunes.forEach((commune, index) => {
+    if (index % 100 === 0) {
+      console.log(`Processing commune ${index + 1}/${totalCommunes} (${commune.insee})`)
+    }
     const changes = {}
-    const clc18 = {}
+    const citepa2021 = {}
     childGroundTypes.forEach((fromGt) => {
       changes[fromGt.stocksId] = {}
-      clc18[fromGt.stocksId] = getAreaFromData({ commune }, fromGt.stocksId)
+      citepa2021[fromGt.stocksId] = getAreaFromDataOptimized({ commune, groundType: fromGt.stocksId, areasByCommuneMap })
       childGroundTypes.forEach((toGt) => {
         if (fromGt.stocksId === toGt.stocksId) return
-        const area = getAnnualSurfaceChangeFromData({ commune }, fromGt.stocksId, toGt.stocksId)
+        const area = getAnnualSurfaceChangeFromDataOptimized({ commune, from: fromGt.stocksId, to: toGt.stocksId, citepaDataByCommuneMap })
         if (area) changes[fromGt.stocksId][toGt.stocksId] = area
       })
     })
     commune.changes = changes
-    commune.clc18 = clc18
+    commune.citepa2021 = citepa2021
   })
   return allCommunes
 }
@@ -109,5 +132,6 @@ const COMMUNES_WITH_ARRONDISSEMENTS = {
 
 module.exports = {
   getCommunes,
-  completeData
+  completeData,
+  buildCommuneMap
 }

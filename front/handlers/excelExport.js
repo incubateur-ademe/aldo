@@ -273,9 +273,9 @@ async function excelExportHandler (req, res) {
     })
     row++
 
-    // Changements d'occupation du sol annuel moyen (ha/an) du territoire entre 2012 et 2018 :
+    // Changements d'occupation du sol annuel moyen (ha/an) du territoire entre 2004 et 2014 :
     row++
-    ws.cell(row, startColumn).string('Changements d\'occupation du sol annuel moyen (ha/an) du territoire entre 2012 et 2018 :')
+    ws.cell(row, startColumn).string('Changements d\'occupation du sol annuel moyen (ha/an) du territoire entre 2004 et 2014 :')
     row++
     ws.cell(row, thirdColumn).string('Occupation de sol finale')
     row++
@@ -322,9 +322,9 @@ async function excelExportHandler (req, res) {
       row++
     })
 
-    // Flux de carbone annuel moyen (tCO2e/an) du territoire entre 2012 et 2018 :
+    // Flux de carbone annuel moyen (tCO2e/an) du territoire entre 2004 et 2014 :
     row++
-    ws.cell(row, startColumn).string('Flux de carbone annuel moyen (tCO2e/an) du territoire entre 2012 et 2018 :')
+    ws.cell(row, startColumn).string('Flux de carbone annuel moyen (tCO2e/an) du territoire entre 2004 et 2014 :')
     row++
     ws.cell(row, thirdColumn).string('Occupation de sol finale')
     row++
