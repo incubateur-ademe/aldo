@@ -78,7 +78,7 @@ function getAnnualGroundCarbonFlux (location, from, to) {
   if (dataValue) {
     return parseFloat(dataValue)
   } else {
-    console.log('ZPC does not have value for key', zpc, key, fromDetails, toDetails)
+    // console.log('ZPC does not have value for key', zpc, key, fromDetails, toDetails)
   }
 }
 
@@ -98,7 +98,7 @@ const REGION_TO_INTER_REGION = require('./dataByCommune/region-to-inter-region.j
 
 function getBiomassFlux (location, from, to) {
   if (!location.commune?.region) {
-    console.log('No region for commune', location)
+    // console.log('No region for commune', location)
     return 0
   }
   const csvFilePath = './dataByCommune/biomass-hors-forets.csv'
@@ -277,23 +277,36 @@ function getAnnualSurfaceChange (location, options, from, to) {
   return yearlyAreaChange
 }
 
+// Maps Citepa usage codes to ALDO stocksId
+// Based on the new Citepa format where codes are already in ALDO nomenclature
+// According to the brief, the Citepa data already corresponds to ALDO nomenclature
+function mapCitepaCodeToStocksId (citepaCode) {
+  if (!citepaCode) return null
+
+  const stockId = GroundTypes.find(groundType => groundType.citepaCodes?.includes(citepaCode))?.stocksId
+  return stockId || null
+}
+
 function getAnnualSurfaceChangeFromData (location, from, to) {
   if (!location.commune) { console.log('getAnnualSurfaceChangeFromData called with bad location', location); return 0 }
-  const fromClcCodes = GroundTypes.find(groundType => groundType.stocksId === from).clcCodes
-  const toClcCodes = GroundTypes.find(groundType => groundType.stocksId === to).clcCodes
-  if (!fromClcCodes || !toClcCodes) {
-    return 0
-  }
 
-  const csvFilePath = './dataByCommune/clc18-change.csv'
+  const csvFilePath = './dataByCommune/citepa-2004-2014.csv'
   const dataByCommune = require(csvFilePath + '.json')
-  const areaChangesForCommune = dataByCommune.filter(data => data.commune === location.commune.insee)
-  const changesForGroundTypes = areaChangesForCommune.filter((change) => {
-    return fromClcCodes.includes(change.code12) && toClcCodes.includes(change.code18)
-  })
-  const totalAreaChange = changesForGroundTypes.reduce((acc, change) => acc + Number(change.area), 0)
+  const areaChangesForCommune = dataByCommune.filter(data => data.insee_com === location.commune.insee)
 
-  const yearsBetweenStudies = 6
+  const changesForGroundTypes = areaChangesForCommune.filter((change) => {
+    const fromStocksId = mapCitepaCodeToStocksId(change.usage_2004)
+    const toStocksId = mapCitepaCodeToStocksId(change.usage_2014)
+    return fromStocksId === from && toStocksId === to
+  })
+
+  // Convert comma decimal separator to dot and parse as number
+  const totalAreaChange = changesForGroundTypes.reduce((acc, change) => {
+    const area = parseFloat(change.surfaces_converties.replace(',', '.'))
+    return acc + (isNaN(area) ? 0 : area)
+  }, 0)
+
+  const yearsBetweenStudies = 10 // Période 2004-2014 = 10 ans
   const yearlyAreaChange = totalAreaChange / yearsBetweenStudies
   return yearlyAreaChange
 }

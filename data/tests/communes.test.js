@@ -38,19 +38,21 @@ jest.mock('../dataByCommune/zpc.csv.json', () => {
   ]
 })
 
-jest.mock('../dataByCommune/clc18-change.csv.json', () => {
+jest.mock('../dataByCommune/citepa-2004-2014.csv.json', () => {
   return [
     {
-      commune: '01234',
-      code12: '221',
-      code18: '111',
-      area: '6'
+      insee_com: '01234',
+      siren_epci: '200007177',
+      usage_2004: 'C_vi',
+      usage_2014: 'A_i',
+      surfaces_converties: '6,0'
     },
     {
-      commune: '01234',
-      code12: '221',
-      code18: '211',
-      area: '12'
+      insee_com: '01234',
+      siren_epci: '200007177',
+      usage_2004: 'C_vi',
+      usage_2014: 'C',
+      surfaces_converties: '12,0'
     }
   ]
 })
@@ -107,8 +109,9 @@ describe('The commune fetching helper', () => {
       expect(communes.length).toBe(2)
       expect(communes[0].insee).toBe('01234')
       expect(communes[0].changes).toBeDefined()
-      expect(communes[0].changes.vignes['sols artificiels imperméabilisés']).toBe(1)
-      expect(communes[0].changes.vignes.cultures).toBe(2)
+      // With new format: 6.0 / 10 = 0.6, 12.0 / 10 = 1.2
+      expect(communes[0].changes.vignes['sols artificiels imperméabilisés']).toBe(0.6)
+      expect(communes[0].changes.vignes.cultures).toBe(1.2)
     })
   })
 })
