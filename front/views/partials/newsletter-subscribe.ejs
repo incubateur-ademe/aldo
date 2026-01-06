@@ -1,0 +1,170 @@
+<div id="newsletter-subscribe-encart" class="fr-callout fr-mb-4w" style="position: relative; display: none;">
+  <div class="fr-callout__content">
+    <button 
+      id="newsletter-close-btn" 
+      class="fr-link fr-link--close" 
+      title="Fermer"
+      aria-label="Fermer l'encart d'inscription"
+      type="button"
+      style="position: absolute; top: 1rem; right: 1rem;">
+      Fermer
+    </button>
+    <h3 class="fr-callout__title fr-mb-2w">
+      Inscrivez-vous pour recevoir les actualités ALDO dans votre boîte mail
+    </h3>
+    <p class="fr-callout__text fr-mb-2w">
+      Vous pouvez également rejoindre le <a href="<%= slackCommunityUrl %>" target="_blank" rel="noopener noreferrer">Slack</a> de la communauté utilisateur de l'outil.
+    </p>
+    <form id="newsletter-form" class="fr-mb-0">
+      <div class="fr-input-group">
+        <label class="fr-label" for="newsletter-email">
+          Adresse email
+        </label>
+        <input 
+          class="fr-input" 
+          type="email" 
+          id="newsletter-email" 
+          name="email" 
+          placeholder="votre.email@exemple.fr"
+          required>
+        <p id="newsletter-email-error" class="fr-error-text" style="display: none;">
+          Veuillez entrer une adresse email valide (format : @xx.yy)
+        </p>
+      </div>
+      <div class="fr-mt-2w">
+        <button type="submit" id="newsletter-submit-btn" class="fr-btn fr-btn--primary">
+          <span class="btn-text">S'inscrire</span>
+          <span class="btn-loader" style="display: none;">
+            <span class="loader-spinner"></span>
+            <span class="loader-text">Envoi...</span>
+          </span>
+        </button>
+      </div>
+    </form>
+    <div id="newsletter-success" class="fr-alert fr-alert--success fr-mt-2w" style="display: none;">
+      <p class="fr-alert__title">Merci pour votre inscription !</p>
+    </div>
+    <div id="newsletter-error" class="fr-alert fr-alert--error fr-mt-2w" style="display: none;">
+      <p class="fr-alert__title">Une erreur est survenue. Veuillez réessayer plus tard.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // Vérifier si l'encart a déjà été fermé (via localStorage)
+    const newsletterClosed = localStorage.getItem('newsletter-subscribe-closed');
+    if (newsletterClosed === 'true') {
+      return; // Ne pas afficher l'encart si déjà fermé
+    }
+
+    const encart = document.getElementById('newsletter-subscribe-encart');
+    encart.style.display = 'block';
+
+    // Gestion de la fermeture
+    const closeBtn = document.getElementById('newsletter-close-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        encart.style.display = 'none';
+        localStorage.setItem('newsletter-subscribe-closed', 'true');
+      });
+    }
+
+    // Validation email
+    function validateEmail(email) {
+      // Validation simple : doit contenir @ et se terminer par .xx ou .yy (domaine valide)
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+      return emailRegex.test(email);
+    }
+
+    // Gestion du formulaire
+    const form = document.getElementById('newsletter-form');
+    const emailInput = document.getElementById('newsletter-email');
+    const emailError = document.getElementById('newsletter-email-error');
+    const successAlert = document.getElementById('newsletter-success');
+    const errorAlert = document.getElementById('newsletter-error');
+    const submitBtn = document.getElementById('newsletter-submit-btn');
+    const btnText = submitBtn?.querySelector('.btn-text');
+    const btnLoader = submitBtn?.querySelector('.btn-loader');
+
+    // Fonction pour activer/désactiver le bouton
+    function setButtonLoading(loading) {
+      if (!submitBtn) return;
+      
+      if (loading) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('btn-loading');
+        if (btnText) btnText.style.display = 'none';
+        if (btnLoader) btnLoader.style.display = 'inline-flex';
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('btn-loading');
+        if (btnText) btnText.style.display = 'inline';
+        if (btnLoader) btnLoader.style.display = 'none';
+      }
+    }
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Masquer les messages précédents
+        emailError.style.display = 'none';
+        successAlert.style.display = 'none';
+        errorAlert.style.display = 'none';
+
+        const email = emailInput.value.trim();
+
+        // Validation
+        if (!validateEmail(email)) {
+          emailError.style.display = 'block';
+          emailInput.classList.add('fr-input--error');
+          return;
+        }
+
+        emailInput.classList.remove('fr-input--error');
+
+        // Désactiver le bouton et afficher le loader
+        setButtonLoading(true);
+
+        // Envoyer l'email au serveur
+        try {
+          const response = await fetch('/api/newsletter', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email })
+          });
+
+          if (response.ok) {
+            successAlert.style.display = 'block';
+            form.style.display = 'none';
+          } else {
+            errorAlert.style.display = 'block';
+            setButtonLoading(false); // Réactiver le bouton en cas d'erreur
+          }
+        } catch (error) {
+          console.error('Error submitting newsletter form:', error);
+          errorAlert.style.display = 'block';
+          setButtonLoading(false); // Réactiver le bouton en cas d'erreur
+        }
+      });
+    }
+
+    // Validation en temps réel
+    if (emailInput) {
+      emailInput.addEventListener('blur', () => {
+        const email = emailInput.value.trim();
+        if (email && !validateEmail(email)) {
+          emailError.style.display = 'block';
+          emailInput.classList.add('fr-input--error');
+        } else {
+          emailError.style.display = 'none';
+          emailInput.classList.remove('fr-input--error');
+        }
+      });
+    }
+  })();
+</script>
+

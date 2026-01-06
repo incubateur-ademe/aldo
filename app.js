@@ -11,6 +11,7 @@ const app = express()
 app.use(express.urlencoded({
   extended: true
 }))
+app.use(express.json())
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, './front/views'))
@@ -24,6 +25,7 @@ app.use(function (req, res, next) {
   res.locals.appDescription = appDescription
   res.locals.appRepo = appRepo
   res.locals.page = req.url
+  res.locals.slackCommunityUrl = process.env.SLACK_COMMUNITY_URL || '#'
   next()
 })
 

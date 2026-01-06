@@ -38,3 +38,35 @@ span.tofill::before {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
+
+/* Newsletter subscribe button loader */
+.btn-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loader-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinner-rotate 0.6s linear infinite;
+}
+
+.loader-text {
+  display: inline-block;
+}
+
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fr-btn.btn-loading {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
