@@ -122,8 +122,16 @@ async function territoryHandler (req, res) {
     sharingQueryStr,
     getTabUrl: (tabName, withQuery) => {
       let url = req.path
-      if (tabName) url = `/regroupement/${tabName}`
-      return url + withQuery ? sharingQueryStr : ''
+      if (tabName) {
+        if (singleLocation) {
+          const locationType = location.epci ? 'epci' : 'commune'
+          const locationCode = location.epci?.code || location.commune?.insee
+          url = `/${locationType}/${locationCode}/${tabName}`
+        } else {
+          url = `/regroupement/${tabName}`
+        }
+      }
+      return url + (withQuery ? sharingQueryStr : '')
     },
     beges: req.query.beges,
     perimetre: req.query.perimetre,
