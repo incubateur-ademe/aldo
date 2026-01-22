@@ -135,6 +135,9 @@ async function territoryHandler (req, res) {
 function formatFluxForDisplay (flux) {
   const fluxDetail = {}
   const agriculturalPracticeDetail = {}
+
+  // First, group flux entries by (to, from, reservoir, gas)
+  const groupedFlux = {}
   flux.allFlux.forEach(f => {
     if (f.value !== 0) {
       if (f.practice) {
@@ -143,12 +146,59 @@ function formatFluxForDisplay (flux) {
         }
         agriculturalPracticeDetail[f.to].push(f)
       } else {
-        if (!fluxDetail[f.to]) fluxDetail[f.to] = []
         // biomass growth in forests is displayed elsewhere
-        if (f.growth === undefined) fluxDetail[f.to].push(f)
+        if (f.growth === undefined) {
+          // Create a unique key for grouping by (to, from, reservoir, gas)
+          const groupKey = `${f.to}|${f.from}|${f.reservoir}|${f.gas}`
+          if (!groupedFlux[groupKey]) {
+            groupedFlux[groupKey] = []
+          }
+          groupedFlux[groupKey].push(f)
+        }
       }
     }
   })
+
+  // Aggregate grouped flux entries into single entries
+  Object.keys(groupedFlux).forEach((groupKey) => {
+    const fluxGroup = groupedFlux[groupKey]
+    const firstFlux = fluxGroup[0]
+    const to = firstFlux.to
+
+    if (!fluxDetail[to]) fluxDetail[to] = []
+
+    if (fluxGroup.length === 1) {
+      // No aggregation needed
+      fluxDetail[to].push(firstFlux)
+    } else {
+      // Aggregate the group
+      const aggregatedFlux = {
+        from: firstFlux.from,
+        to: firstFlux.to,
+        reservoir: firstFlux.reservoir,
+        gas: firstFlux.gas,
+        yearsForFlux: firstFlux.yearsForFlux,
+        // Sum the areas
+        area: fluxGroup.reduce((sum, f) => sum + (f.area || 0), 0),
+        // Sum the co2e values
+        co2e: fluxGroup.reduce((sum, f) => sum + (f.co2e || 0), 0),
+        // Track if any area was modified
+        areaModified: fluxGroup.some(f => f.areaModified)
+      }
+      // Calculate weighted average for annualFluxEquivalent using area as weight
+      const totalArea = aggregatedFlux.area
+      if (totalArea > 0) {
+        const weightedSum = fluxGroup.reduce((sum, f) => {
+          return sum + (f.annualFluxEquivalent || 0) * (f.area || 0)
+        }, 0)
+        aggregatedFlux.annualFluxEquivalent = weightedSum / totalArea
+      } else {
+        aggregatedFlux.annualFluxEquivalent = firstFlux.annualFluxEquivalent
+      }
+      fluxDetail[to].push(aggregatedFlux)
+    }
+  })
+
   // order the details by initial occupation
   Object.keys(fluxDetail).forEach((k) => {
     fluxDetail[k].sort((a, b) => {
