@@ -255,8 +255,11 @@ function charts (stocks) {
             },
             x: {
               title: {
-                text: 'Typologie d’occupation du sol',
+                text: 'Typologie d\'occupation du sol',
                 display: true
+              },
+              ticks: {
+                autoSkip: false
               }
             }
           },
@@ -309,10 +312,13 @@ function charts (stocks) {
             },
             x: {
               title: {
-                text: 'Typologie d’occupation du sol',
+                text: 'Typologie d\'occupation du sol',
                 display: true
               },
-              stacked: true
+              stacked: true,
+              ticks: {
+                autoSkip: false
+              }
             }
           },
           plugins: {

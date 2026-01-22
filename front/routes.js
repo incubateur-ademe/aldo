@@ -7,6 +7,7 @@ const { epciList, communeList } = require(path.join(rootFolder, './data'))
 const sendinblue = require(path.join(rootFolder, './sendinblue'))
 const { territoryHandler } = require('./handlers/territory')
 const { excelExportHandler } = require('./handlers/excelExport')
+const { newsletterHandler } = require('./handlers/newsletter')
 
 router.get('/', async (req, res) => {
   res.render('landing', {
@@ -85,6 +86,8 @@ ${message}
     res.redirect('/contact?statut=' + error.status)
   })
 })
+
+router.post('/api/newsletter', newsletterHandler)
 
 router.get('/accessibilite', (req, res) => {
   res.render('accessibilite', {
