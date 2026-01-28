@@ -69,8 +69,11 @@
   // handle URL here so that only relevant params are sent and we avoid URLs that get cut off
   // for being too long
   $('form#territory').submit((event) => {
-    let currentTab = $("button.fr-tabs__tab[aria-selected=true]")[0]
-    currentTab = currentTab?.id.endsWith("stocks") ? "stocks" : "flux"
+    let currentTabBtn = $("button.fr-tabs__tab[aria-selected=true]")[0]
+    // Extract tab name from button ID (format: "tabpanel-{tabName}")
+    let currentTab = currentTabBtn?.id.replace('tabpanel-', '') || 'stocks'
+    // Map "config" to "configuration" for URL consistency
+    if (currentTab === 'config') currentTab = 'configuration'
     const pathParts = window.location.pathname.split('/')
     const locationType = pathParts[1]
     const locationCode = pathParts[2]
