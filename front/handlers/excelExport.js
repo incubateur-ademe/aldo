@@ -222,7 +222,7 @@ async function excelExportHandler (req, res) {
     ws.cell(row, thirdColumn).string('Séquestration nette de dioxyde de carbone en TeqCO2')
     ws.cell(row, thirdColumn + 1).string('Année de référence')
     row++
-    const yearReference = 'Moyenne annuelle 2012-2018'
+    const yearReference = 'Moyenne annuelle'
     ws.cell(row, secondColumn).string('Forêt')
     ws.cell(row, thirdColumn).formula(`${forestFluxCell}`).style(integerStyle)
     ws.cell(row, thirdColumn + 1).string(yearReference).style(dataStyle)
@@ -258,9 +258,9 @@ async function excelExportHandler (req, res) {
     ws.cell(row, thirdColumn + 1).string(yearReference).style(blueItalics)
     row++
 
-    // Occupation du sol (ha) du territoire en 2018 :
+    // Occupation du sol (ha) du territoire en 2021 :
     row++
-    ws.cell(row, startColumn).string('Occupation du sol (ha) du territoire en 2018 :')
+    ws.cell(row, startColumn).string('Occupation du sol (ha) du territoire en 2021 :')
     row++
     const childGroundTypes = GroundTypes.filter((gt) => !gt.chilren)
     childGroundTypes.forEach((gt, idx) => {
