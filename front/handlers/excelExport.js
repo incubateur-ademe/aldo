@@ -117,11 +117,6 @@ async function excelExportHandler (req, res) {
       .style(dataStyle)
     ws.cell(row, thirdColumn).string(options.woodCalculation).style(dataStyle)
     row++
-    ws.cell(row, secondColumn)
-      .string('Hypothèses de répartition des surfaces entre sols artificiels (% sols imperméabilisés)')
-      .style(dataStyle)
-    ws.cell(row, thirdColumn).number(options.proportionSolsImpermeables * 100).style(integerStyle)
-    row++
     Object.entries(options.agriculturalPracticesEstablishedAreas).forEach(([practice, area]) => {
       const practiceInfo = AgriculturalPractices.find((ap) => ap.id === practice)
       if (practiceInfo.name) {

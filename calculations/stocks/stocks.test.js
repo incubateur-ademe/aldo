@@ -356,21 +356,16 @@ describe('The stocks calculation module', () => {
         expect(fixedImpermeableStocks[shrubbyKey].area).toEqual(unmodifiedStocks[shrubbyKey].area)
       })
 
-      it('is the product of the proportion and the total when there are not many trees', () => {
+      it('uses actual Citepa values when available (A_i, A_h, A_a)', () => {
         const stocks = getStocks([{ insee: 'no trees' }])
-        // proportion defaults to 0.8, or 80%. 80% of 25 is 20.
-        expect(stocks[impermeableKey].area).toEqual(20)
+        // Mock returns 25 for impermeable, 25 for shrubby, 0 for trees
+        expect(stocks[impermeableKey].area).toEqual(25)
       })
 
-      it('is the product of the proportion and the total when there are not many trees, and the proportion can be customised', () => {
-        const stocks = getStocks([{ insee: 'no trees' }], { proportionSolsImpermeables: 0.5 })
-        expect(stocks[impermeableKey].area).toEqual(12.5)
-      })
-
-      it('is the area without trees minus the area with trees if there are >= 0.2 * area trees', () => {
-        // with the trees area mocked at 50 we trigger this condition
+      it('aggregates impermeable area across communes', () => {
         const stocks = getStocks(communes)
-        expect(stocks[impermeableKey].area).toEqual(0)
+        // Mock returns 25 per commune for impermeable, 25 for shrubby, 25 for trees
+        expect(stocks[impermeableKey].area).toEqual(50)
       })
     })
 
@@ -386,29 +381,17 @@ describe('The stocks calculation module', () => {
         expect(stocks[treeKey].area).toEqual(unmodifiedStocks[treeKey].area)
       })
 
-      it('is the green portion of the total area minus the area with trees if there are not many trees', () => {
+      it('uses actual Citepa shrubby (A_h) value when available', () => {
         const stocks = getStocks([{ insee: 'few trees' }])
-        // areaWithoutTrees = 25 (from mocked getArea fn)
-        // areaWithTrees = 5
-        // 5 < 0.2 * (areaWithoutTrees + areaWithTrees)
-        // 5 < 0.2 * 30 === TRUE
-        // areaImpermeable = 0.8 * 30 = 24
-        // threshold for condition : areaWithTrees < 0.2 * (areaImpermeable + areaWithTrees)
-        // 5 < 0.2 * 29 === TRUE
-        // 0.2 (default green portion) * (areaWithoutTrees + areaWithTrees) - areaWithTrees
-        // 0.2 * 30 - 5
-        expect(stocks[shrubbyKey].area).toBeCloseTo(1, 0)
+        // Mock returns 25 for shrubby
+        expect(stocks[shrubbyKey].area).toEqual(25)
       })
 
-      // TODO: green portion is customised relative to impermeable portion set by user
-
-      it('is zero if there are proportionally a lot of trees', () => {
-        // with the trees area mocked at 50 we trigger this condition
+      it('aggregates shrubby area across communes', () => {
         const stocks = getStocks(communes)
-        expect(stocks[shrubbyKey].area).toEqual(0)
+        expect(stocks[shrubbyKey].area).toEqual(50)
       })
     })
-    // TODO: test to override to override proportionSolsImpermeables (NB the hardcoded 0.2 in the code which is a bug)
   })
 
   describe('data aggregations', () => {
@@ -457,11 +440,10 @@ describe('The stocks calculation module', () => {
         // dead biomass stock per ground subtype = 50 * 5
 
         // 7 * 50 * 3 = 1050 stock for 7 standard sources
-        // 50 * 4 * (4 + 5) = 200 * 9 = 1800 for forest live and dead inc
-        // 50 * 3 = 150 for the only sols art that has area with the mocked data
-        // 0 for prod bois
+        // 50 * 4 * (4 + 5) = 1800 for forest live and dead
+        // 3 * 50 * 3 = 450 for sols art (all three types have area with Citepa data)
         // 600 for haies
-        const expectedBiomassStockTotal = 3600
+        const expectedBiomassStockTotal = 3900
         const total = stocks.total
         const expectedPercentage = expectedBiomassStockTotal / total * 100
         expect(percentageByReservoir['Biomasse sur pied']).toBeCloseTo(expectedPercentage, 1)
