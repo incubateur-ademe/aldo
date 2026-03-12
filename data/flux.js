@@ -78,7 +78,7 @@ function getAnnualGroundCarbonFlux (location, from, to) {
   if (dataValue) {
     return parseFloat(dataValue)
   } else {
-    console.log('ZPC does not have value for key', zpc, key, fromDetails, toDetails)
+    // console.log('ZPC does not have value for key', zpc, key, fromDetails, toDetails)
   }
 }
 
@@ -98,7 +98,7 @@ const REGION_TO_INTER_REGION = require('./dataByCommune/region-to-inter-region.j
 
 function getBiomassFlux (location, from, to) {
   if (!location.commune?.region) {
-    console.log('No region for commune', location)
+    // console.log('No region for commune', location)
     return 0
   }
   const csvFilePath = './dataByCommune/biomass-hors-forets.csv'
@@ -277,68 +277,47 @@ function getAnnualSurfaceChange (location, options, from, to) {
   return yearlyAreaChange
 }
 
-function getAnnualSurfaceChangeFromData (location, from, to) {
-  if (!location.commune) { console.log('getAnnualSurfaceChangeFromData called with bad location', location); return 0 }
-  const fromClcCodes = GroundTypes.find(groundType => groundType.stocksId === from).clcCodes
-  const toClcCodes = GroundTypes.find(groundType => groundType.stocksId === to).clcCodes
-  if (!fromClcCodes || !toClcCodes) {
-    return 0
-  }
+// Maps Citepa usage codes to ALDO stocksId
+// Based on the new Citepa format where codes are already in ALDO nomenclature
+// According to the brief, the Citepa data already corresponds to ALDO nomenclature
+// Prefer leaf types (no children) over parent types when a code matches both
+function mapCitepaCodeToStocksId (citepaCode) {
+  if (!citepaCode) return null
 
-  const csvFilePath = './dataByCommune/clc18-change.csv'
-  const dataByCommune = require(csvFilePath + '.json')
-  const areaChangesForCommune = dataByCommune.filter(data => data.commune === location.commune.insee)
+  const matches = GroundTypes.filter(groundType => groundType.citepaCodes?.includes(citepaCode))
+  const leafMatch = matches.find(gt => !gt.children)
+  return (leafMatch || matches[0])?.stocksId || null
+}
+
+// Optimized getAnnualSurfaceChangeFromData using pre-indexed data
+function getAnnualSurfaceChangeFromDataOptimized ({ commune, from, to, citepaDataByCommuneMap }) {
+  const areaChangesForCommune = citepaDataByCommuneMap.get(commune.insee) || []
   const changesForGroundTypes = areaChangesForCommune.filter((change) => {
-    return fromClcCodes.includes(change.code12) && toClcCodes.includes(change.code18)
+    const fromStocksId = mapCitepaCodeToStocksId(change.usage_2004)
+    const toStocksId = mapCitepaCodeToStocksId(change.usage_2014)
+    return fromStocksId === from && toStocksId === to
   })
-  const totalAreaChange = changesForGroundTypes.reduce((acc, change) => acc + Number(change.area), 0)
-
-  const yearsBetweenStudies = 6
+  const totalAreaChange = changesForGroundTypes.reduce((acc, change) => {
+    const area = parseFloat(change.surfaces_converties)
+    return acc + (isNaN(area) ? 0 : area)
+  }, 0)
+  const yearsBetweenStudies = 10 // Période 2004-2014 = 10 ans
   const yearlyAreaChange = totalAreaChange / yearsBetweenStudies
   return yearlyAreaChange
 }
 
-function getSolsArtificielsException (location, options, from, to, clcAnnualChange) {
-  const estimatedPortionImpermeable = options.proportionSolsImpermeables || 0.8
-  const estimatedPortionGreen = 1 - estimatedPortionImpermeable
+// Business rules for sols artificiels transitions. Citepa data provides A_i, A_h, A_a
+// separately, so we use direct values and only apply these rules.
+function getSolsArtificielsException (location, options, from, to, yearlyAreaChange) {
   if (to === 'sols artificiels imperméabilisés') {
-    if (from === 'sols artificiels arbustifs') {
-      return 0
-    }
-    const changeSolsArbores = getAnnualSurfaceChange(location, options, from, 'sols artificiels arborés et buissonants')
-    const changeArboresAndImpermeables = clcAnnualChange + changeSolsArbores
-    if (changeSolsArbores < estimatedPortionGreen * changeArboresAndImpermeables) {
-      return changeArboresAndImpermeables * estimatedPortionImpermeable
-    } else {
-      return clcAnnualChange
-    }
+    if (from === 'sols artificiels arbustifs') return 0
   } else if (to === 'sols artificiels arbustifs') {
-    if (from === 'sols artificiels imperméabilisés') {
-      return 0
-    }
-    if (from.startsWith('forêt ')) {
-      const changeSolsArbores = 0
-      if (changeSolsArbores < clcAnnualChange * estimatedPortionGreen) {
-        return clcAnnualChange * estimatedPortionGreen
-      } else {
-        return 0
-      }
-    }
-    const changeSolsArbores = getAnnualSurfaceChange(location, options, from, 'sols artificiels arborés et buissonants')
-    // NB: the CLC codes for impermeable and arbustifs are the same, hence the variable name
-    const changeArboresAndImpermeables = clcAnnualChange + changeSolsArbores
-    if (changeSolsArbores < estimatedPortionGreen * changeArboresAndImpermeables) {
-      return changeArboresAndImpermeables * estimatedPortionGreen - changeSolsArbores
-    } else {
-      return 0
-    }
+    if (from === 'sols artificiels imperméabilisés') return 0
   } else if (to === 'sols artificiels arborés et buissonants') {
     const none = ['sols artificiels arbustifs', 'prairies zones arborées', 'prairies zones arbustives', 'vergers', 'vignes', 'zones humides']
-    if (none.indexOf(from) > -1) {
-      return 0
-    }
+    if (none.indexOf(from) > -1) return 0
   }
-  // arborés uses CLC change area
+  // Use direct Citepa value (return undefined to fall through)
 }
 
 // source: CITEPA 2016-2019. In tCO2/an
@@ -450,7 +429,7 @@ module.exports = {
   getFluxReferenceValues,
   getForestLitterFlux,
   getAnnualSurfaceChange,
-  getAnnualSurfaceChangeFromData,
+  getAnnualSurfaceChangeFromDataOptimized,
   getFranceFluxWoodProducts,
   getForestBiomassFluxesByCommune,
   cToCo2e

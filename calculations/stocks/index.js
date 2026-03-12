@@ -91,49 +91,15 @@ function aggregateStocksForParent (subStocks, parent) {
 }
 
 function getAreasSolsArtificiels (location, options) {
-  // there are three different types of arificial ground to consider:
-  // * impermeable
-  // * with trees
-  // * with other greenery (shrubbery, grass etc)
+  // Citepa 2021 provides A_i (imperméabilisés), A_h (enherbés/arbustifs), A_a (arborés) as separate values.
   const impermeableKey = 'sols artificiels imperméabilisés'
   const shrubbyKey = 'sols artificiels arbustifs'
   const treeKey = 'sols artificiels arborés et buissonants'
 
-  // start by estimating the area taken by each
-  const areaWithoutTrees = getArea(location, impermeableKey, {})
-  let areaWithTrees = options.areas[treeKey]
-  if (isNaN(areaWithTrees)) {
-    areaWithTrees = getArea(location, treeKey, {})
-  }
-  const totalArea = areaWithoutTrees + areaWithTrees
+  const areaImpermeable = options.areas?.[impermeableKey] ?? getArea(location, impermeableKey, {}) ?? 0
+  const areaShrubby = options.areas?.[shrubbyKey] ?? getArea(location, shrubbyKey, {}) ?? 0
+  const areaWithTrees = options.areas?.[treeKey] ?? getArea(location, treeKey, {}) ?? 0
 
-  // TODO: ask are there sources to cite for these estimates?
-  const estimatedPortionImpermeable = options.proportionSolsImpermeables || 0.8
-  const estimatedPortionGreen = 1 - estimatedPortionImpermeable
-
-  let areaImpermeable = options.areas[impermeableKey]
-  // TODO: replace hardcoded 0.2 in this function with estimatedPortionGreen + write test
-  if (isNaN(areaImpermeable)) {
-    // TODO: ask why proportion of areaWithTrees in both cases is important
-    if (areaWithTrees < 0.2 * totalArea) {
-      areaImpermeable = estimatedPortionImpermeable * totalArea
-    } else {
-      // TODO: ask why subtracting areaWithTrees here
-      areaImpermeable = areaWithoutTrees - areaWithTrees
-    }
-  }
-
-  let areaShrubby = options.areas[shrubbyKey]
-  if (isNaN(areaShrubby)) {
-    if (areaWithTrees < 0.2 * (areaImpermeable + areaWithTrees)) {
-      // TODO: can use totalArea instead of sum
-      areaShrubby = estimatedPortionGreen * (areaWithoutTrees + areaWithTrees) - areaWithTrees
-    } else {
-      areaShrubby = 0
-    }
-  }
-
-  // TODO: what is this 'area' key doing?
   const areas = { area: areaImpermeable + areaShrubby + areaWithTrees }
   areas[impermeableKey] = areaImpermeable
   areas[shrubbyKey] = areaShrubby
@@ -218,8 +184,7 @@ options: {
   areas: {
     <groundTypeKey>: in ha
   },
-  woodCalculation: 'recolte' or 'consommation',
-  proportionSolsImpermeables: 0 - 1
+  woodCalculation: 'recolte' or 'consommation'
 }
 */
 function getStocks (communes, options) {
@@ -434,7 +399,6 @@ function densityByChildType (stocks) {
   areas: {},
   areaChanges: {},
   woodCalculation: 'récolte',
-  proportionSolsImpermeables: '0.80',
   agriculturalPracticesEstablishedAreas: {},
   fluxHaveModifications: false,
   stocksHaveModifications: false
