@@ -162,6 +162,9 @@
     <% } %>
     <p class="fr-text--sm fr-mt-1w"><a href="https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/flux/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">En savoir plus sur les méthodes de calculs</a></p>
   </div>
+  <% if (forestComparison?.hasForestData) { %>
+  <%- include('fluxCalculations/ign-comparison', { forestComparison }) -%>
+  <% } %>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
@@ -179,4 +182,9 @@
   const fluxGrountCtx = document.getElementById('fluxChart-groundType');
   const fluxGroundChartData = JSON.parse(`<%- fluxCharts.groundType.data %>`);
   new Chart(fluxGrountCtx, fluxGroundChartData);
+  <% if (forestComparison?.hasForestData) { %>
+  const forestComparisonCtx = document.getElementById('forestComparisonChart');
+  const forestComparisonData = JSON.parse(`<%- forestComparisonChartConfig %>`);
+  new Chart(forestComparisonCtx, forestComparisonData);
+  <% } %>
 </script>

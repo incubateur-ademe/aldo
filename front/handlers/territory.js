@@ -6,6 +6,7 @@ const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux')
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
 const { parseOptionsFromQuery, getLocationDetail } = require('./shared')
 const { getCommunes } = require(path.join(rootFolder, './data/communes'))
+const { getForestBiomassComparisonByCommune } = require(path.join(rootFolder, './data/flux'))
 
 async function territoryHandler (req, res) {
   const location = await getLocationDetail(req, res)
@@ -38,6 +39,59 @@ async function territoryHandler (req, res) {
   } catch (error) {
     console.log('Error getting flux for location', location, error)
     return res.render('error', { pageTitle: 'Erreur' })
+  }
+
+  let forestComparison = { hasForestData: false }
+  try {
+    forestComparison = getForestBiomassComparisonByCommune(location)
+  } catch (e) {
+    console.error('Error computing forest comparison:', e)
+  }
+
+  let forestComparisonChartConfig = null
+  if (forestComparison.hasForestData) {
+    forestComparisonChartConfig = JSON.stringify({
+      type: 'bar',
+      data: {
+        labels: ['Accroissement', 'Mortalité', 'Prélèvement', 'Bilan Net'],
+        datasets: [
+          {
+            label: '2016-2020',
+            data: [
+              round2(forestComparison.data2022.accroissement),
+              round2(forestComparison.data2022.mortalite),
+              round2(forestComparison.data2022.prelevement),
+              round2(forestComparison.data2022.bilan)
+            ],
+            backgroundColor: 'rgba(0, 100, 70, 0.7)'
+          },
+          {
+            label: '2020-2024',
+            data: [
+              round2(forestComparison.data2026.accroissement),
+              round2(forestComparison.data2026.mortalite),
+              round2(forestComparison.data2026.prelevement),
+              round2(forestComparison.data2026.bilan)
+            ],
+            backgroundColor: 'rgba(0, 180, 120, 0.7)'
+          }
+        ]
+      },
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: 'Comparaison du bilan forestier en tCO2e/ha/an (Biomasse)'
+          },
+          datalabels: { display: false }
+        },
+        scales: {
+          y: {
+            title: { display: true, text: 'tCO2e/ha/an' }
+          }
+        }
+      }
+    })
   }
 
   const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
@@ -110,6 +164,8 @@ async function territoryHandler (req, res) {
     allFlux: flux.allFlux,
     sortedFluxKeys: getSortedFluxKeys(flux),
     fluxCharts: fluxCharts(flux),
+    forestComparison,
+    forestComparisonChartConfig,
     fluxDetail,
     fluxIds: GroundTypes.filter(gt => gt.altFluxId || gt.fluxId).map(gt => gt.altFluxId || gt.fluxId),
     woodFluxSummary: flux.woodSummary,
@@ -549,6 +605,10 @@ function userWarnings (location, allCommunes, options) {
     warnings.push('forestAreasChanged')
   }
   return warnings
+}
+
+function round2 (n) {
+  return Math.round(n * 100) / 100
 }
 
 module.exports = {
