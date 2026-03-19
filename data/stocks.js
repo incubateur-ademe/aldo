@@ -118,7 +118,7 @@ function getAreaForests (commune, forestType) {
 }
 
 function getSignificantCarbonData () {
-  const csvFilePath = './dataByEpci/bilan-carbone-foret-par-localisation.csv'
+  const csvFilePath = './dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv'
   const carbonData = require(csvFilePath + '.json')
   // there is data will null values because it isn't statistically significant at that
   // level. Remove these lines because they are not used.

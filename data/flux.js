@@ -340,7 +340,7 @@ function getFranceFluxWoodProducts () {
 function getForestBiomassFluxesByCommune (location) {
   let csvFilePath = './dataByCommune/surface-foret.csv'
   const areaData = require(csvFilePath + '.json')
-  csvFilePath = './dataByEpci/bilan-carbone-foret-par-localisation.csv'
+  csvFilePath = './dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv'
   const carbonData = require(csvFilePath + '.json')
   const localisationLevels = ['groupeser', 'greco', 'rad13', 'bassin_populicole']
   // there is data with null values because it isn't statistically significant at that

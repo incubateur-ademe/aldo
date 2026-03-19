@@ -33,14 +33,14 @@ describe('Flux module integration tests', () => {
 
   test('returns all relevant carbon emissions for cultures', () => {
     const summary = getAnnualFluxes(communes).summary
-    expect(summary.cultures.totalCarbonSequestration).toBeCloseTo(-3322.17, 1)
+    expect(summary.cultures.totalCarbonSequestration).toBeCloseTo(-3334.4, 1)
   })
 
   test('returns correct total for vergers and vignes', () => {
     let summary = getAnnualFluxes(communes).summary
     expect(summary.vergers.totalSequestration).toBeCloseTo(158.34, 0)
     summary = getAnnualFluxes(getCommunes({ epci: getEpci('200015162', true) })).summary
-    expect(summary.vignes.totalSequestration).toBeCloseTo(-1963.45, 0)
+    expect(summary.vignes.totalSequestration).toBeCloseTo(-1994.21, 0)
     // the following value is wrong in the spreadsheet, so my calculations break.
     summary = getAnnualFluxes(getCommunes({ epci: getEpci('200040798', true) })).summary
     expect(summary.vignes).toBeUndefined()
@@ -48,9 +48,9 @@ describe('Flux module integration tests', () => {
 
   test('returns correct total for zones humides', () => {
     let summary = getAnnualFluxes(getCommunes({ epci: getEpci('200042992', true) })).summary
-    expect(summary['zones humides'].totalSequestration).toBeCloseTo(2978.86, 0)
+    expect(summary['zones humides'].totalSequestration).toBeCloseTo(2973.28, 0)
     summary = getAnnualFluxes(getCommunes({ epci: getEpci('200055887', true) })).summary
-    expect(summary['zones humides'].totalSequestration).toBeCloseTo(538.58, 0)
+    expect(summary['zones humides'].totalSequestration).toBeCloseTo(546.24, 0)
   })
 
   test('option to set an area changed to 0', () => {

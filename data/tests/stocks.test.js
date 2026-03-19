@@ -178,7 +178,7 @@ describe('The stocks data module', () => {
   })
 
   it('returns the significant carbon data', () => {
-    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
+    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json', () => {
       return [
         {
           surface_ic: 's'
@@ -353,7 +353,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
+    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json', () => {
       return [
         {
           surface_ic: 's',
@@ -390,7 +390,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
+    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json', () => {
       return [
         {
           surface_ic: 's',
@@ -427,7 +427,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
+    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json', () => {
       return [
         {
           surface_ic: 's',
