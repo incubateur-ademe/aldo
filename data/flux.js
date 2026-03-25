@@ -424,6 +424,150 @@ function getForestBiomassFluxesByCommune (location) {
   return fluxes
 }
 
+// Retourne une comparaison agrégée des flux de carbone forestiers entre
+// les deux campagnes IGN (2022 = 2016-2020, 2026 = 2020-2024).
+// Les valeurs sont en tCO2e/ha/an, agrégées par moyenne pondérée sur les surfaces du territoire.
+function getForestBiomassComparisonByCommune (location) {
+  // Regroupements non supportés
+  if (!location.commune && !location.epci) {
+    return { hasForestData: false }
+  }
+
+  const areaData = require('./dataByCommune/surface-foret.csv.json')
+  const carbonData2022 = require('./dataByEpci/bilan-carbone-foret-par-localisation.IGN-2022.csv.json')
+  const carbonData2026 = require('./dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json')
+
+  const localisationLevels = ['groupeser', 'greco', 'rad13', 'bassin_populicole']
+
+  // Pré-filtrage sur données statistiquement significatives (identique à l'existant)
+  const significantData2022 = carbonData2022.filter(d => d.surface_ic === 's')
+  const significantData2026 = carbonData2026.filter(d => d.surface_ic === 's')
+
+  // Filtrer les lignes du territoire
+  let areaDataByCommune = []
+  if (location.epci) {
+    areaDataByCommune = areaData.filter(d => d.CODE_EPCI === location.epci.code)
+  } else if (location.commune) {
+    let code = location.commune.insee
+    if (code.startsWith('0')) code = code.slice(1)
+    areaDataByCommune = areaData.filter(d => d.INSEE_COM === code)
+  }
+
+  // Vérifier qu'il y a de la forêt dans le territoire
+  const totalForestArea = areaDataByCommune.reduce((sum, d) => {
+    return sum + (+d.SUR_FEUILLUS || 0) + (+d.SUR_RESINEUX || 0) + (+d.SUR_MIXTES || 0) + (+d.SUR_PEUPLERAIES || 0)
+  }, 0)
+  if (totalForestArea === 0) {
+    return { hasForestData: false }
+  }
+
+  const compositions = [
+    { subtype: 'Feuillu',    surfaceCol: 'SUR_FEUILLUS' },
+    { subtype: 'Conifere',   surfaceCol: 'SUR_RESINEUX' },
+    { subtype: 'Mixte',      surfaceCol: 'SUR_MIXTES' },
+    { subtype: 'Peupleraie', surfaceCol: 'SUR_PEUPLERAIES' }
+  ]
+
+  const carbonColumns = {
+    accroissement: 'production_carbone_(tC∙ha-1∙an-1)',
+    mortalite: 'mortalite_carbone_(tC∙ha-1∙an-1)',
+    prelevement: 'prelevement_carbone_(tC∙ha-1∙an-1)',
+    bilan: 'bilan_carbone_(tC∙ha-1∙an-1)'
+  }
+
+  // Accumulateurs pour la moyenne pondérée
+  const acc2022 = { accroissement: 0, mortalite: 0, prelevement: 0, bilan: 0 }
+  const acc2026 = { accroissement: 0, mortalite: 0, prelevement: 0, bilan: 0 }
+  // totalWeight = Σ surfaces (all compositions) → dénominateur de la moyenne pondérée
+  // surfacePerSubtype = surfaces par composition → pour identifier la composition dominante
+  // (totalWeight === sum of surfacePerSubtype values)
+  let totalWeight = 0
+
+  // Pour le code de localisation affiché : composition dominante par surface TOTALE sur tout le territoire.
+  // On accumule surface par composition, et on garde le code de la commune qui contribue le plus
+  // à chaque composition (pour les EPCIs multi-communes où le code peut varier par commune).
+  const surfacePerSubtype = {}     // { Feuillu: totalHa, Conifere: totalHa, ... }
+  const maxSurfacePerSubtype = {}  // { Feuillu: maxHaInOneCommune, ... } — pour trouver le code dominant
+  const code2022PerSubtype = {}    // code de la commune qui contribue le plus de ha pour ce subtype
+  const code2026PerSubtype = {}
+
+  let hasWarning = false
+
+  // Helper : résoudre la localisation dans un dataset pour une commune et une composition
+  function resolveLocalisation (communeData, subtype, significantData) {
+    const compositionData = significantData.filter(d => d.composition === subtype)
+    for (const level of localisationLevels) {
+      const { localisationCode, localisationLevel } = getIgnLocalisation(communeData, level, subtype)
+      const row = compositionData.find(d => d.code_localisation === localisationCode)
+      if (row) return { localisationCode, localisationLevel, row }
+    }
+    // Fallback France
+    const row = compositionData.find(d => d.code_localisation === 'France')
+    if (!row) {
+      throw new Error(
+        `Carbon data could not be retrieved for commune ${communeData.INSEE_COM} and subtype ${subtype}`
+      )
+    }
+    return { localisationCode: 'France', localisationLevel: 'France', row }
+  }
+
+  areaDataByCommune.forEach(communeData => {
+    compositions.forEach(({ subtype, surfaceCol }) => {
+      const surface = +communeData[surfaceCol] || 0
+      if (surface === 0) return // Exclure les compositions sans surface
+
+      const res2022 = resolveLocalisation(communeData, subtype, significantData2022)
+      const res2026 = resolveLocalisation(communeData, subtype, significantData2026)
+
+      // Warning si les localisations diffèrent entre les deux datasets
+      if (res2022.localisationCode !== res2026.localisationCode ||
+          res2022.localisationLevel !== res2026.localisationLevel) {
+        hasWarning = true
+      }
+
+      // Accumulation pondérée
+      Object.keys(carbonColumns).forEach(fluxKey => {
+        const col = carbonColumns[fluxKey]
+        acc2022[fluxKey] += (+res2022.row[col] || 0) * surface
+        acc2026[fluxKey] += (+res2026.row[col] || 0) * surface
+      })
+      totalWeight += surface
+
+      // Accumulation surface par composition (pour trouver la composition dominante après la boucle)
+      surfacePerSubtype[subtype] = (surfacePerSubtype[subtype] || 0) + surface
+      // Codes : on retient ceux de la commune qui contribue le plus de ha pour ce subtype
+      if (surface > (maxSurfacePerSubtype[subtype] || 0)) {
+        maxSurfacePerSubtype[subtype] = surface
+        code2022PerSubtype[subtype] = res2022.localisationCode
+        code2026PerSubtype[subtype] = res2026.localisationCode
+      }
+    })
+  })
+
+  // Composition dominante = celle avec la plus grande surface totale sur tout le territoire
+  const dominantSubtype = Object.entries(surfacePerSubtype)
+    .sort(([, a], [, b]) => b - a)[0][0]
+  const dominantCode2022 = code2022PerSubtype[dominantSubtype]
+  const dominantCode2026 = code2026PerSubtype[dominantSubtype]
+
+  // Moyenne pondérée + conversion tC → tCO2e
+  const data2022 = {}
+  const data2026 = {}
+  Object.keys(carbonColumns).forEach(fluxKey => {
+    data2022[fluxKey] = cToCo2e(acc2022[fluxKey] / totalWeight)
+    data2026[fluxKey] = cToCo2e(acc2026[fluxKey] / totalWeight)
+  })
+
+  return {
+    data2022,
+    data2026,
+    localisationCode2022: dominantCode2022,
+    localisationCode2026: dominantCode2026,
+    hasWarning,
+    hasForestData: true
+  }
+}
+
 module.exports = {
   getAnnualGroundCarbonFlux,
   getFluxReferenceValues,
@@ -432,5 +576,6 @@ module.exports = {
   getAnnualSurfaceChangeFromDataOptimized,
   getFranceFluxWoodProducts,
   getForestBiomassFluxesByCommune,
+  getForestBiomassComparisonByCommune,
   cToCo2e
 }
