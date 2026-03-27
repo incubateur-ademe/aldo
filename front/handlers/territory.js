@@ -345,8 +345,8 @@ function charts (stocks) {
     groundAndLitter: pieChart('Répartition du stock de carbone par occupation du sol dans les réservoirs Sols & Litières', stocksPercentageLabels, groundAndLitterStocksValues),
     biomass: pieChart('Répartition du stock de carbone par occupation du sol dans le réservoir Biomasse', stocksPercentageLabels, biomassStocksValues),
     density: {
-      title: 'Stocks de référence par unité de surface et par occupation du sol',
-      note: 'Les stocks de référence pour les sols sont issus de données du Réseau de Mesures de la Qualité de Sols (RMQS) du GIS-SOL entre 2001 et 2011 et calculés par occupation du sol et par grande région pédoclimatique. La zone pédoclimatique majoritaire est affectée à l\'EPCI conformément aux travaux du CITEPA. Les stocks de référence à l\'ha dans la biomasse de forêt sont issus de l\'inventaire forestier de l\'IGN entre 2011 et 2020 et calculés par typologie de forêt et par grande région écologique.',
+      title: 'Stocks total de carbone par occupation du sol, tous réservoirs confondus',
+      note: 'Tous les réservoirs de carbone sont inclus (sol, biomasse, litière) à l\'exception des produits bois. Les stocks de référence pour les sols sont issus de données du Réseau de Mesures de la Qualité de Sols (RMQS) du GIS-SOL entre 2001 et 2011 et calculés par occupation du sol et par grande région pédoclimatique. La zone pédoclimatique majoritaire est affectée à l\'EPCI conformément aux travaux du CITEPA. Les stocks de référence à l\'ha dans la biomasse de forêt sont issus de l\'inventaire forestier de l\'IGN entre 2011 et 2020 et calculés par typologie de forêt et par grande région écologique.',
       data: JSON.stringify({
         type: 'bar',
         data: {
@@ -385,64 +385,6 @@ function charts (stocks) {
         }
       })
     },
-    groundTypeStacked: {
-      title: 'Ventilation du stock carbone par occupation du sol (tous réservoirs inclus)',
-      data: JSON.stringify({
-        type: 'bar',
-        data: {
-          labels: stocksPercentageLabels,
-          datasets: [
-            {
-              label: 'Sol',
-              data: groundValues,
-              backgroundColor: Colours.tournesol['950'],
-              borderColor: Colours.tournesol.main,
-              borderWidth: 2
-            },
-            {
-              label: 'Biomasse',
-              data: biomassValues,
-              backgroundColor: Colours.emeraude['950'],
-              borderColor: Colours.emeraude.main,
-              borderWidth: 2
-            },
-            {
-              label: 'Litière',
-              data: forestLitterValues,
-              backgroundColor: Colours.opera['950'],
-              borderColor: Colours.opera.main,
-              borderWidth: 2
-            }
-          ]
-        },
-        options: {
-          scales: {
-            y: {
-              title: {
-                text: 'Stocks de carbone (ktCO2e)',
-                display: true
-              },
-              stacked: true
-            },
-            x: {
-              title: {
-                text: 'Typologie d\'occupation du sol',
-                display: true
-              },
-              stacked: true,
-              ticks: {
-                autoSkip: false
-              }
-            }
-          },
-          plugins: {
-            legend: {
-              display: false
-            }
-          }
-        }
-      })
-    }
   }
 }
 
