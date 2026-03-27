@@ -60,6 +60,67 @@ const CARBON_DATA_2026 = [
     'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' }
 ]
 
+// Fixtures pour le cas rad13 PDL + Mixte :
+// groupeser cohérent entre les deux datasets (pas de divergence à ce niveau),
+// mais rad13 PDL/Mixte a surface_ic 'n.s' en 2022 et 's' en 2026.
+// Reproduit le cas Nantes Métropole (communes en PDL avec forêt Mixte).
+const AREA_DATA_PDL = [
+  {
+    INSEE_COM: '44001',
+    CODE_EPCI: 'E002',
+    code_groupeser: 'X1',
+    code_greco: 'A',
+    code_rad13: 'PDL',
+    code_bassin_populicole: '',
+    SUR_FEUILLUS: '0',
+    SUR_RESINEUX: '0',
+    SUR_MIXTES: '100',
+    SUR_PEUPLERAIES: '0'
+  }
+]
+
+const CARBON_DATA_2022_PDL = [
+  { code_localisation: 'X1', composition: 'Mixte', surface_ic: 's',
+    'production_carbone_(tC∙ha-1∙an-1)': '2.0', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.5',
+    'prelevement_carbone_(tC∙ha-1∙an-1)': '1.0', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.5' },
+  { code_localisation: 'PDL', composition: 'Mixte', surface_ic: 'n.s',
+    'production_carbone_(tC∙ha-1∙an-1)': '1.5', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.4',
+    'prelevement_carbone_(tC∙ha-1∙an-1)': '0.8', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' },
+  { code_localisation: 'France', composition: 'Feuillu', surface_ic: 's',
+    'production_carbone_(tC∙ha-1∙an-1)': '1.0', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2',
+    'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' },
+  { code_localisation: 'France', composition: 'Conifere', surface_ic: 's',
+    'production_carbone_(tC∙ha-1∙an-1)': '1.0', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2',
+    'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' },
+  { code_localisation: 'France', composition: 'Mixte', surface_ic: 's',
+    'production_carbone_(tC∙ha-1∙an-1)': '1.0', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2',
+    'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' },
+  { code_localisation: 'France', composition: 'Peupleraie', surface_ic: 's',
+    'production_carbone_(tC∙ha-1∙an-1)': '1.0', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2',
+    'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' }
+]
+
+const CARBON_DATA_2026_PDL = [
+  { code_localisation: 'X1', composition: 'Mixte', surface_ic: 's',
+    'production_carbone_(tC∙ha-1∙an-1)': '2.2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.6',
+    'prelevement_carbone_(tC∙ha-1∙an-1)': '1.1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.5' },
+  { code_localisation: 'PDL', composition: 'Mixte', surface_ic: 's',
+    'production_carbone_(tC∙ha-1∙an-1)': '1.8', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.5',
+    'prelevement_carbone_(tC∙ha-1∙an-1)': '0.9', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.4' },
+  { code_localisation: 'France', composition: 'Feuillu', surface_ic: 's',
+    'production_carbone_(tC∙ha-1∙an-1)': '1.0', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2',
+    'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' },
+  { code_localisation: 'France', composition: 'Conifere', surface_ic: 's',
+    'production_carbone_(tC∙ha-1∙an-1)': '1.0', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2',
+    'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' },
+  { code_localisation: 'France', composition: 'Mixte', surface_ic: 's',
+    'production_carbone_(tC∙ha-1∙an-1)': '1.0', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2',
+    'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' },
+  { code_localisation: 'France', composition: 'Peupleraie', surface_ic: 's',
+    'production_carbone_(tC∙ha-1∙an-1)': '1.0', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2',
+    'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' }
+]
+
 // Dataset 2026 avec localisation différente pour déclencher le warning
 const CARBON_DATA_2026_DIFFERENT_LOCA = [
   // Pas de A1 pour Conifere → cascade va fallback vers France
@@ -159,6 +220,24 @@ describe('getForestBiomassComparisonByCommune', () => {
       expect(epciResult.hasForestData).toBe(true)
       // Feuillu: 100ha × 2.0 + Conifere: 200ha × 3.0 = 800 / 300 = 2.667 tC/ha/an → ×44/12
       expect(epciResult.data2022.accroissement).toBeCloseTo(2.667 * 44 / 12, 1)
+    })
+  })
+
+  describe('warning : divergence surface_ic sur rad13 PDL + Mixte (cas Nantes Métropole)', () => {
+    let fnPDL
+
+    beforeAll(() => {
+      jest.resetModules()
+      jest.doMock('./dataByCommune/surface-foret.csv.json', () => AREA_DATA_PDL)
+      jest.doMock('./dataByEpci/bilan-carbone-foret-par-localisation.IGN-2022.csv.json', () => CARBON_DATA_2022_PDL)
+      jest.doMock('./dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json', () => CARBON_DATA_2026_PDL)
+      fnPDL = require('./flux').getForestBiomassComparisonByCommune
+    })
+
+    it('hasWarning true quand rad13 PDL/Mixte est n.s en 2022 et s en 2026, même si groupeser est cohérent', () => {
+      const result = fnPDL({ commune: { insee: '44001' } })
+      expect(result.hasForestData).toBe(true)
+      expect(result.hasWarning).toBe(true)
     })
   })
 

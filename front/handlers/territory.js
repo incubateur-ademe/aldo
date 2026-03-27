@@ -59,8 +59,8 @@ async function territoryHandler (req, res) {
             label: '2016-2020',
             data: [
               round2(forestComparison.data2022.accroissement),
-              round2(forestComparison.data2022.mortalite),
-              round2(forestComparison.data2022.prelevement),
+              round2(-Math.abs(forestComparison.data2022.mortalite)),
+              round2(-Math.abs(forestComparison.data2022.prelevement)),
               round2(forestComparison.data2022.bilan)
             ],
             backgroundColor: 'rgba(0, 100, 70, 0.7)'
@@ -69,8 +69,8 @@ async function territoryHandler (req, res) {
             label: '2020-2024',
             data: [
               round2(forestComparison.data2026.accroissement),
-              round2(forestComparison.data2026.mortalite),
-              round2(forestComparison.data2026.prelevement),
+              round2(-Math.abs(forestComparison.data2026.mortalite)),
+              round2(-Math.abs(forestComparison.data2026.prelevement)),
               round2(forestComparison.data2026.bilan)
             ],
             backgroundColor: 'rgba(0, 180, 120, 0.7)'
