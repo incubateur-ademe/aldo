@@ -384,7 +384,7 @@ function charts (stocks) {
           }
         }
       })
-    },
+    }
   }
 }
 
@@ -399,14 +399,15 @@ function fluxCharts (flux) {
   })
   const labels = keys.map(key => GroundTypes.find(k => k.stocksId === key)?.name)
   const reservoirLabels = ['Sol et litière', 'Biomasse'] // produits bois
-  const reservoirData = [0, 0]
+  const reservoirRaw = [0, 0]
   flux.allFlux.forEach(f => {
     if (f.reservoir === 'sol' || f.reservoir === 'litière') {
-      reservoirData[0] += Math.round(f.co2e)
+      reservoirRaw[0] += f.co2e
     } else if (f.reservoir === 'biomasse') {
-      reservoirData[1] += Math.round(f.co2e)
+      reservoirRaw[1] += f.co2e
     }
   })
+  const reservoirData = reservoirRaw.map(Math.round)
   return {
     reservoir: {
       title: 'Flux de carbone (tCO2e/an) par réservoir, toutes occupations du sol confondues',
@@ -445,7 +446,7 @@ function fluxCharts (flux) {
     groundType: {
       title:
         'Flux de carbone (tCO2e/an) par occupation du sol, tous réservoirs confondus',
-      note: 'Les flux de référence pour les changements d’occupation des sols sont issus de données du Réseau de Mesures de la Qualité des Sols (RMQS) du GIS-SOL entre 2001 et 2011 et calculés par occupation du sol et par grande région pédoclimatique. La zone pédoclimatique majoritaire est affectée à l\'EPCI conformément aux travaux du CITEPA. Les flux de référence à l’ha dans la biomasse de forêt sont issus de l’inventaire forestier de l’IGN entre 2011 et 2020 et calculés par typologie de forêt et par grande région écologique. Les flux de référence pour les pratiques agricoles stockantes sont des valeurs moyennes nationales (travaux INRAE 2013).',
+      note: 'Les flux de référence pour les changements d\'occupation des sols sont issus de données du Réseau de Mesures de la Qualité des Sols (RMQS) du GIS-SOL entre 2001 et 2011 et calculés par occupation du sol et par grande région pédoclimatique. La zone pédoclimatique majoritaire est affectée à l\'EPCI conformément aux travaux du CITEPA. Les flux de référence par hectare dans la biomasse des forêts sont issus des campagnes de mesures de 2020 à 2024 de l\'Inventaire Forestier National (IFN) de l\'IGN et calculés par typologie de forêt et par sylvoecoregions. Les flux de référence pour les pratiques agricoles stockantes sont des valeurs moyennes nationales (travaux INRAE 2013).',
       data: JSON.stringify({
         type: 'bar',
         data: {
