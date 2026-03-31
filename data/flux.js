@@ -511,6 +511,25 @@ function getForestBiomassComparisonByCommune (location) {
     return { localisationCode: 'France', localisationLevel: 'France', row }
   }
 
+  // Helper : détecte si la significativité (surface_ic) diffère entre les deux datasets
+  // pour une commune et une composition donnée.
+  // Vérifie tous les niveaux de localisation en utilisant les codes bruts de la commune
+  // (sans passer par getIgnLocalisation qui peut convertir certains codes comme PDL→A).
+  function hasSignificanceDifference (communeData, subtype) {
+    const comp2022 = carbonData2022.filter(d => d.composition === subtype)
+    const comp2026 = carbonData2026.filter(d => d.composition === subtype)
+    for (const level of localisationLevels) {
+      const rawCode = communeData[`code_${level}`]
+      if (!rawCode) continue
+      const row2022 = comp2022.find(d => d.code_localisation === rawCode)
+      const row2026 = comp2026.find(d => d.code_localisation === rawCode)
+      if ((row2022 || row2026) && (row2022?.surface_ic === 's') !== (row2026?.surface_ic === 's')) {
+        return true
+      }
+    }
+    return false
+  }
+
   areaDataByCommune.forEach(communeData => {
     compositions.forEach(({ subtype, surfaceCol }) => {
       const surface = +communeData[surfaceCol] || 0
@@ -519,10 +538,9 @@ function getForestBiomassComparisonByCommune (location) {
       const res2022 = resolveLocalisation(communeData, subtype, significantData2022)
       const res2026 = resolveLocalisation(communeData, subtype, significantData2026)
 
-      // Warning si les localisations diffèrent entre les deux datasets
-      if (res2022.localisationCode !== res2026.localisationCode ||
-          res2022.localisationLevel !== res2026.localisationLevel) {
-        hasWarning = true
+      // Warning si la significativité diffère entre les deux datasets pour cette commune × composition
+      if (!hasWarning) {
+        hasWarning = hasSignificanceDifference(communeData, subtype)
       }
 
       // Accumulation pondérée
