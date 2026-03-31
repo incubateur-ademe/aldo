@@ -401,7 +401,7 @@ function fluxCharts (flux) {
   const reservoirLabels = ['Sol et litière', 'Biomasse'] // produits bois
   const reservoirRaw = [0, 0]
   flux.allFlux.forEach(f => {
-    if (f.reservoir === 'sol' || f.reservoir === 'litière') {
+    if (f.reservoir === 'sol' || f.reservoir === 'litière' || f.reservoir === 'sol et litière') {
       reservoirRaw[0] += f.co2e
     } else if (f.reservoir === 'biomasse') {
       reservoirRaw[1] += f.co2e
