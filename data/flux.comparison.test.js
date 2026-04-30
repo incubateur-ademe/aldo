@@ -79,6 +79,87 @@ const AREA_DATA_PDL = [
   }
 ]
 
+const AREA_DATA_PDL_COMMUNE_BELOW_THRESHOLD = [
+  {
+    INSEE_COM: '44001',
+    CODE_EPCI: 'E002',
+    code_groupeser: 'X1',
+    code_greco: 'A',
+    code_rad13: 'PDL',
+    code_bassin_populicole: '',
+    SUR_FEUILLUS: '96',
+    SUR_RESINEUX: '0',
+    SUR_MIXTES: '4',
+    SUR_PEUPLERAIES: '0'
+  }
+]
+
+const AREA_DATA_EPCI_AGGREGATE_THRESHOLD = [
+  {
+    INSEE_COM: '55001',
+    CODE_EPCI: 'E003',
+    code_groupeser: 'X1',
+    code_greco: 'A',
+    code_rad13: 'PDL',
+    code_bassin_populicole: '',
+    SUR_FEUILLUS: '96',
+    SUR_RESINEUX: '0',
+    SUR_MIXTES: '4',
+    SUR_PEUPLERAIES: '0'
+  },
+  {
+    INSEE_COM: '55002',
+    CODE_EPCI: 'E003',
+    code_groupeser: 'X1',
+    code_greco: 'A',
+    code_rad13: 'PDL',
+    code_bassin_populicole: '',
+    SUR_FEUILLUS: '92',
+    SUR_RESINEUX: '0',
+    SUR_MIXTES: '8',
+    SUR_PEUPLERAIES: '0'
+  }
+]
+
+const AREA_DATA_MULTI_ROWS_SAME_SUBTYPE = [
+  {
+    INSEE_COM: '18279',
+    CODE_EPCI: 'E004',
+    code_groupeser: 'B6',
+    code_greco: 'B',
+    code_rad13: 'CVL',
+    code_bassin_populicole: 'Nord-Ouest',
+    SUR_FEUILLUS: '117.5',
+    SUR_RESINEUX: '7.1',
+    SUR_MIXTES: '33.4',
+    SUR_PEUPLERAIES: '14.1'
+  },
+  {
+    INSEE_COM: '18279',
+    CODE_EPCI: 'E004',
+    code_groupeser: 'B9',
+    code_greco: 'B',
+    code_rad13: 'CVL',
+    code_bassin_populicole: 'Nord-Ouest',
+    SUR_FEUILLUS: '195',
+    SUR_RESINEUX: '0',
+    SUR_MIXTES: '16.5',
+    SUR_PEUPLERAIES: '25.7'
+  },
+  {
+    INSEE_COM: '18279',
+    CODE_EPCI: 'E004',
+    code_groupeser: 'B7',
+    code_greco: 'B',
+    code_rad13: 'CVL',
+    code_bassin_populicole: 'Nord-Ouest',
+    SUR_FEUILLUS: '2038.2',
+    SUR_RESINEUX: '288.1',
+    SUR_MIXTES: '245.3',
+    SUR_PEUPLERAIES: '11.3'
+  }
+]
+
 const CARBON_DATA_2022_PDL = [
   { code_localisation: 'X1', composition: 'Mixte', surface_ic: 's',
     'production_carbone_(tC∙ha-1∙an-1)': '2.0', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.5',
@@ -119,6 +200,30 @@ const CARBON_DATA_2026_PDL = [
   { code_localisation: 'France', composition: 'Peupleraie', surface_ic: 's',
     'production_carbone_(tC∙ha-1∙an-1)': '1.0', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2',
     'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' }
+]
+
+const CARBON_DATA_2022_MULTI_ROWS = [
+  { code_localisation: 'B6', composition: 'Feuillu', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' },
+  { code_localisation: 'B6', composition: 'Conifere', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' },
+  { code_localisation: 'B6', composition: 'Mixte', surface_ic: 'n.s', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' },
+  { code_localisation: 'B6', composition: 'Peupleraie', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' },
+  { code_localisation: 'B7', composition: 'Feuillu', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' },
+  { code_localisation: 'B7', composition: 'Conifere', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' },
+  { code_localisation: 'B7', composition: 'Mixte', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' },
+  { code_localisation: 'B7', composition: 'Peupleraie', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' },
+  { code_localisation: 'B9', composition: 'Feuillu', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' },
+  { code_localisation: 'B9', composition: 'Conifere', surface_ic: 'n.s', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' },
+  { code_localisation: 'B9', composition: 'Mixte', surface_ic: 'n.s', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' },
+  { code_localisation: 'B9', composition: 'Peupleraie', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' },
+  { code_localisation: 'France', composition: 'Feuillu', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '1', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2', 'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' },
+  { code_localisation: 'France', composition: 'Conifere', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '1', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2', 'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' },
+  { code_localisation: 'France', composition: 'Mixte', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '1', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2', 'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' },
+  { code_localisation: 'France', composition: 'Peupleraie', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '1', 'mortalite_carbone_(tC∙ha-1∙an-1)': '0.2', 'prelevement_carbone_(tC∙ha-1∙an-1)': '0.5', 'bilan_carbone_(tC∙ha-1∙an-1)': '0.3' }
+]
+
+const CARBON_DATA_2026_MULTI_ROWS = [
+  ...CARBON_DATA_2022_MULTI_ROWS.filter((row) => !(row.code_localisation === 'B6' && row.composition === 'Mixte')),
+  { code_localisation: 'B6', composition: 'Mixte', surface_ic: 's', 'production_carbone_(tC∙ha-1∙an-1)': '2', 'mortalite_carbone_(tC∙ha-1∙an-1)': '1', 'prelevement_carbone_(tC∙ha-1∙an-1)': '1', 'bilan_carbone_(tC∙ha-1∙an-1)': '0' }
 ]
 
 // Dataset 2026 avec localisation différente pour déclencher le warning
@@ -241,6 +346,46 @@ describe('getForestBiomassComparisonByCommune', () => {
     })
   })
 
+  describe('warning : seuil de surface concernée à 5%', () => {
+    let fnPDLBelowThreshold
+
+    beforeAll(() => {
+      jest.resetModules()
+      jest.doMock('./dataByCommune/surface-foret.csv.json', () => AREA_DATA_PDL_COMMUNE_BELOW_THRESHOLD)
+      jest.doMock('./dataByEpci/bilan-carbone-foret-par-localisation.IGN-2022.csv.json', () => CARBON_DATA_2022_PDL)
+      jest.doMock('./dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json', () => CARBON_DATA_2026_PDL)
+      fnPDLBelowThreshold = require('./flux').getForestBiomassComparisonByCommune
+    })
+
+    it('hasWarning false quand la surface concernée est < 5% de la surface forestière totale', () => {
+      const result = fnPDLBelowThreshold({ commune: { insee: '44001' } })
+      expect(result.hasForestData).toBe(true)
+      expect(result.hasWarning).toBe(false)
+    })
+  })
+
+  describe('warning EPCI : seuil agrégé de surface concernée à 5%', () => {
+    let fnEpciThreshold
+
+    beforeAll(() => {
+      jest.resetModules()
+      jest.doMock('./dataByCommune/surface-foret.csv.json', () => AREA_DATA_EPCI_AGGREGATE_THRESHOLD)
+      jest.doMock('./dataByEpci/bilan-carbone-foret-par-localisation.IGN-2022.csv.json', () => CARBON_DATA_2022_PDL)
+      jest.doMock('./dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json', () => CARBON_DATA_2026_PDL)
+      fnEpciThreshold = require('./flux').getForestBiomassComparisonByCommune
+    })
+
+    it('hasWarning false pour une commune à 4% mais true pour son EPCI à 6%', () => {
+      const communeResult = fnEpciThreshold({ commune: { insee: '55001' } })
+      expect(communeResult.hasForestData).toBe(true)
+      expect(communeResult.hasWarning).toBe(false)
+
+      const epciResult = fnEpciThreshold({ epci: { code: 'E003' } })
+      expect(epciResult.hasForestData).toBe(true)
+      expect(epciResult.hasWarning).toBe(true)
+    })
+  })
+
   describe('warning : localisations différentes entre datasets', () => {
     let fnWithDifferentLoca
 
@@ -260,6 +405,24 @@ describe('getForestBiomassComparisonByCommune', () => {
     // branches simultanément. Un test code-only suffit à valider les deux.
     it('hasWarning true quand 2026 résout à un code différent de 2022 pour au moins une composition', () => {
       const result = fnWithDifferentLoca({ commune: { insee: '12345' } })
+      expect(result.hasWarning).toBe(true)
+    })
+  })
+
+  describe('warning : commune multi-lignes, surface affectée au niveau composition', () => {
+    let fnMultiRows
+
+    beforeAll(() => {
+      jest.resetModules()
+      jest.doMock('./dataByCommune/surface-foret.csv.json', () => AREA_DATA_MULTI_ROWS_SAME_SUBTYPE)
+      jest.doMock('./dataByEpci/bilan-carbone-foret-par-localisation.IGN-2022.csv.json', () => CARBON_DATA_2022_MULTI_ROWS)
+      jest.doMock('./dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json', () => CARBON_DATA_2026_MULTI_ROWS)
+      fnMultiRows = require('./flux').getForestBiomassComparisonByCommune
+    })
+
+    it('hasWarning true quand une seule localisation diverge mais que la composition dépasse 5% du total', () => {
+      const result = fnMultiRows({ commune: { insee: '18279' } })
+      expect(result.hasForestData).toBe(true)
       expect(result.hasWarning).toBe(true)
     })
   })

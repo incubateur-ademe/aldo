@@ -428,6 +428,7 @@ function getForestBiomassFluxesByCommune (location) {
 // les deux campagnes IGN (2022 = 2016-2020, 2026 = 2020-2024).
 // Les valeurs sont en tCO2e/ha/an, agrégées par moyenne pondérée sur les surfaces du territoire.
 function getForestBiomassComparisonByCommune (location) {
+  const WARNING_SURFACE_RATIO_THRESHOLD = 0.05
   // Regroupements non supportés
   if (!location.commune && !location.epci) {
     return { hasForestData: false }
@@ -491,7 +492,7 @@ function getForestBiomassComparisonByCommune (location) {
   const code2022PerSubtype = {}    // code de la commune qui contribue le plus de ha pour ce subtype
   const code2026PerSubtype = {}
 
-  let hasWarning = false
+  const isSubtypeAffected = {} // { Feuillu: true/false, ... }
 
   // Helper : résoudre la localisation dans un dataset pour une commune et une composition
   function resolveLocalisation (communeData, subtype, significantData) {
@@ -538,9 +539,8 @@ function getForestBiomassComparisonByCommune (location) {
       const res2022 = resolveLocalisation(communeData, subtype, significantData2022)
       const res2026 = resolveLocalisation(communeData, subtype, significantData2026)
 
-      // Warning si la significativité diffère entre les deux datasets pour cette commune × composition
-      if (!hasWarning) {
-        hasWarning = hasSignificanceDifference(communeData, subtype)
+      if (hasSignificanceDifference(communeData, subtype)) {
+        isSubtypeAffected[subtype] = true
       }
 
       // Accumulation pondérée
@@ -561,6 +561,14 @@ function getForestBiomassComparisonByCommune (location) {
       }
     })
   })
+
+  const totalAffectedForestArea = Object.entries(surfacePerSubtype).reduce((sum, [subtype, surface]) => {
+    return sum + (isSubtypeAffected[subtype] ? surface : 0)
+  }, 0)
+
+  const hasWarning =
+    totalForestArea > 0 &&
+    (totalAffectedForestArea / totalForestArea) >= WARNING_SURFACE_RATIO_THRESHOLD
 
   // Composition dominante = celle avec la plus grande surface totale sur tout le territoire
   const dominantSubtype = Object.entries(surfacePerSubtype)
