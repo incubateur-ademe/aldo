@@ -57,7 +57,7 @@ function getAreaFromData (location, groundType) {
   if (!citepaCodes) {
     throw new Error(`No CITEPA code mapping found for ground type '${groundType}'`)
   }
-  const csvFilePath = './dataByCommune/citepa-surfaces-2021.csv'
+  const csvFilePath = './dataByCommune/citepa-surfaces-2023.csv'
   const areasByCommuneAndClcType = require(csvFilePath + '.json')
   let totalArea = 0
   areasByCommuneAndClcType

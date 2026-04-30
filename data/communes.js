@@ -61,7 +61,7 @@ function completeData (communes) {
     zpcByCommuneMap.set(zpcData.insee, zpcData.zpc)
   })
 
-  const areasByCommuneMap = buildCommuneMap({ communesRawData: require('./dataByCommune/citepa-surfaces-2021.csv.json') })
+  const areasByCommuneMap = buildCommuneMap({ communesRawData: require('./dataByCommune/citepa-surfaces-2023.csv.json') })
   const citepaDataByCommuneMap = buildCommuneMap({ communesRawData: require('./dataByCommune/citepa-flux-2004-2014.csv.json') })
 
   let arrondissementsToAdd = []

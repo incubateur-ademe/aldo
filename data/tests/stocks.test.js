@@ -33,7 +33,7 @@ describe('The stocks data module', () => {
     expect(getCarbonDensity({ insee: '01234', zpc: '1_1' }, 'cultures')).toBe(50)
   })
 
-  const areaPath = '../dataByCommune/citepa-surfaces-2021.csv.json'
+  const areaPath = '../dataByCommune/citepa-surfaces-2023.csv.json'
   it('returns area in hectares (ha) for ground type "cultures" and a commune', () => {
     jest.doMock(areaPath, () => {
       return [
