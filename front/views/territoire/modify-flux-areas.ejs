@@ -1,20 +1,20 @@
-<div class="fr-col-12 fr-pr-md-1w fr-table fr-mt-8w">
+<div class="fr-col-12 fr-pr-md-1w fr-mt-8w">
+  <h2>Changement d'occupation des sols (ha/an)</h2>
+  <p class="fr-mt-2w" style="font-weight: normal;">
+    Les surfaces de changement d’occupation des sols sont issues de l’inventaire Citepa, édition 2025, et couvrent la période 2013-2023.
+    La comparaison de l’occupation des sols entre ces deux dates permet d’estimer les surfaces moyennes annuelles de changement d’occupation entre catégories (ha/an).
+    Cette période de référence a été retenue car elle offre des données complètes sur l’ensemble des catégories d’usage et une durée de 10 ans,
+    jugée suffisamment longue pour rendre compte de dynamiques de long terme représentatives de l’évolution d’un territoire.
+  </p>
+  <p class="fr-mt-2w" style="font-weight: normal;">
+    L’année considérée dans le diagnostic des flux de changement d’occupation des sols correspond ainsi à une année théorique moyenne calculée sur la période 2013-2023.
+  </p>
+  <p class="fr-mt-2w" style="font-weight: normal;">
+    Vous pouvez les mettre à jour ci-dessous si vous avez des données locales plus précises ou plus récentes.
+  </p>
+</div>
+<div class="fr-col-12 fr-pr-md-1w fr-table flux-compact-table">
   <table>
-    <caption>
-      <h2>Changement d'occupation des sols (ha/an)</h2>
-      <p class="fr-mt-2w" style="font-weight: normal;">
-        Les surfaces de changement d’occupation des sols sont issues de l’inventaire Citepa, édition 2025, et couvrent la période 2013-2023.
-        La comparaison de l’occupation des sols entre ces deux dates permet d’estimer les surfaces moyennes annuelles de changement d’occupation entre catégories (ha/an).
-        Cette période de référence a été retenue car elle offre des données complètes sur l’ensemble des catégories d’usage et une durée de 10 ans,
-        jugée suffisamment longue pour rendre compte de dynamiques de long terme représentatives de l’évolution d’un territoire.
-      </p>
-      <p class="fr-mt-2w" style="font-weight: normal;">
-        L’année considérée dans le diagnostic des flux de changement d’occupation des sols correspond ainsi à une année théorique moyenne calculée sur la période 2013-2023.
-      </p>
-      <p class="fr-mt-2w" style="font-weight: normal;">
-        Vous pouvez les mettre à jour ci-dessous si vous avez des données locales plus précises ou plus récentes.
-      </p>
-    </caption>
     <thead>
       <tr>
         <td></td>
@@ -40,7 +40,7 @@
                 <% const toDetail = allGroundTypes.find(gt => gt.altFluxId === to || gt.fluxId === to) %>
                 <% let thisFlux = fluxAreas[fromDetail.stocksId][toDetail.stocksId] %>
                 <input
-                  class="fr-input fr-text--lg"
+                  class="fr-input flux-compact-input"
                   type="number"
                   step="0.1"
                   min="0"
@@ -56,6 +56,8 @@
       <% } %>
     </tbody>
   </table>
+</div>
+<div class="fr-col-12 fr-pr-md-1w fr-mt-8w">
   <button class="fr-btn fr-mt-2w" type="submit">
     Mettre à jour les calculs
   </button>
