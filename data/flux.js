@@ -301,7 +301,7 @@ function getAnnualSurfaceChangeFromDataOptimized ({ commune, from, to, citepaDat
     const area = parseFloat(change.surfaces_converties)
     return acc + (isNaN(area) ? 0 : area)
   }, 0)
-  const yearsBetweenStudies = 10 // Période 2004-2014 = 10 ans
+  const yearsBetweenStudies = 10 // Période 2013-2023 = 10 ans
   const yearlyAreaChange = totalAreaChange / yearsBetweenStudies
   return yearlyAreaChange
 }

@@ -339,7 +339,7 @@ describe('The flux data module', () => {
     })
   })
 
-  it('returns change in surface area for given ground types from data file divided by 10, the number of years between studies (2004-2014)', () => {
+  it('returns change in surface area for given ground types from data file divided by 10, the number of years between studies (2013-2023)', () => {
     const mockCitepaData = [
       { insee_com: '01234', siren_epci: '200007177', usage_2013: 'P_a', usage_2023: 'C', surfaces_converties: '5,0' },
       { insee_com: '01234', siren_epci: '200007177', usage_2013: 'P_a', usage_2023: 'C', surfaces_converties: '7,0' },
