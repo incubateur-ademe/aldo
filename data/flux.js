@@ -293,8 +293,8 @@ function mapCitepaCodeToStocksId (citepaCode) {
 function getAnnualSurfaceChangeFromDataOptimized ({ commune, from, to, citepaDataByCommuneMap }) {
   const areaChangesForCommune = citepaDataByCommuneMap.get(commune.insee) || []
   const changesForGroundTypes = areaChangesForCommune.filter((change) => {
-    const fromStocksId = mapCitepaCodeToStocksId(change.usage_2004)
-    const toStocksId = mapCitepaCodeToStocksId(change.usage_2014)
+    const fromStocksId = mapCitepaCodeToStocksId(change.usage_2013)
+    const toStocksId = mapCitepaCodeToStocksId(change.usage_2023)
     return fromStocksId === from && toStocksId === to
   })
   const totalAreaChange = changesForGroundTypes.reduce((acc, change) => {
