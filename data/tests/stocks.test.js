@@ -447,17 +447,17 @@ describe('The stocks data module', () => {
   })
 
   it('returns area of forest subtype (as ha) given a commune', () => {
-    jest.doMock('../dataByCommune/surface-foret.csv.json', () => {
+    jest.doMock(areaPath, () => {
       return [
         {
-          INSEE_COM: '1234',
-          CODE_EPCI: '249500513',
-          SUR_PEUPLERAIES: '30'
+          insee_com: '01234',
+          usage_2021: 'F_p',
+          surfaces_ha: '30'
         },
         {
-          INSEE_COM: '00001',
-          CODE_EPCI: '249500513',
-          SUR_PEUPLERAIES: '20'
+          insee_com: '00001',
+          usage_2021: 'F_p',
+          surfaces_ha: '20'
         }
       ]
     })
