@@ -88,8 +88,12 @@ function buildHeaders () {
     headers.push(`${ft}_prelevements_de_bois_unitaire_m3_BFT_ha-1_an-1`)
     headers.push(`${ft}_bilan_total_unitaire_m3_BFT_ha-1_an-1`)
     headers.push(`${ft}_facteur_de_conversion_tC_m3_BFT-1`)
-    headers.push(`${ft}_accroissement_biologique_flux_unitaire_tCO2e_ha-1_an-1`)
-    headers.push(`${ft}_accroissement_biologique_flux_tCO2e_an-1`)
+    if (ft === 'forêt peupleraie') {
+      headers.push(`${ft}_aflux_total_unitaire_tCO2e_ha-1_an-1`)
+    } else {
+      headers.push(`${ft}_flux_total_unitaire_tCO2e_ha-1_an-1`)
+    }
+    headers.push(`${ft}_flux_tCO2e_an-1`)
   })
   headers.push('bo_recolte_flux_tCO2e_an-1')
   headers.push('bi_recolte_flux_tCO2e_an-1')
