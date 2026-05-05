@@ -4,33 +4,135 @@
 
     <%- include('partials/newsletter-subscribe') -%>
 
-    <div class="fr-callout fr-my-4w">
-      <h3 class="fr-callout__title">📢 Actualité : Version Mélèze 2026</h3>
-      <p class="fr-callout__text fr-mb-2w">
-        Nous tenions à vous informer d'un léger décalage dans le déploiement de la nouvelle version d'ALDO, initialement prévue pour la fin mars.
-      </p>
-      <p class="fr-callout__text fr-mb-2w">
-        <strong>Pourquoi ce délai ?</strong><br>
-        Lors de nos phases finales de contrôle, nous avons identifié des besoins de recalage technique, notamment sur les données de surface de défrichement et l'harmonisation des données du produit OCS GE. Ce temps supplémentaire nous permet de corriger les anomalies détectées. Le travail de correction et d'intégration est en cours. Nous prévoyons une mise en ligne d'ici mi-mai.
-      </p>
-      <p class="fr-callout__text fr-mb-2w">
-        Nous vous tiendrons informés lors de la publication de cette nouvelle version de l'outil ALDO.
-      </p>
-      <p class="fr-callout__text fr-mb-2w">
-        Merci de votre patience et de votre confiance !<br>
-      </p>
-      <p class="fr-callout__text fr-mb-2w">
-        <strong>L'équipe Projet ALDO</strong>
-      </p>
-    </div>
-
     <div class="fr-py-6w">
       <h1>Calculer le stock et les flux de carbone sur votre territoire</h1>
 
       <%- include('partials/search-lg') -%>
     </div>
 
-    <h2>ALDO : qu'est-ce que c'est ?</h2>
+    <h2>Actualités : Version MÉLÈZE d’avril 2026</h2>
+    <p><strong>Mise à jour majeure des données et fonctionnalités</strong></p>
+    <ul>
+      <li>
+        <strong>Actualisation des données sources :</strong> Les données du CITEPA permettent d’affiner les calculs de stocks
+        et de flux de carbone en s’appuyant sur les derniers inventaires nationaux disponibles.
+      </li>
+      <li>
+        <strong>Nouvelles données IFN :</strong> L’intégration des dernières données de l’Inventaire Forestier National (IFN)
+        permet une prise en compte plus récente (2020-2024) de l’état des forêts et de leur capacité de stockage actuelle.
+      </li>
+      <li>
+        <strong>Données ADEME à jour :</strong> Les bases de données de l’ADEME ont été synchronisées avec le site
+        <a href="https://data.ademe.fr/datasets?q=aldo" target="_blank" rel="noopener noreferrer">data.ademe</a>.
+      </li>
+      <li>
+        <strong>Résolution de bugs et ergonomie :</strong> Résolution des problèmes de communes introuvables.
+        Correction de l’affichage des métadonnées pour une meilleure lisibilité.
+        Optimisation du regroupement de lignes dans les tableaux de résultats.
+      </li>
+      <li>
+        <strong>Communication :</strong> Un nouveau module d’inscription à la newsletter est désormais disponible
+        en haut de la page pour ne rien manquer des prochaines évolutions d’ALDO.
+      </li>
+    </ul>
+
+    <section class="fr-accordion fr-mt-2w">
+      <p class="fr-accordion__title">
+        <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-version-history">
+          Historique
+        </button>
+      </p>
+      <div class="fr-collapse" id="accordion-version-history">
+        <h3>Version CHANTERELLE de juin 2023</h3>
+        <p>Les données présentées ici sont :</p>
+        <ul>
+          <li>
+            Pour les données surfaciques : mise à jour de l’échelle de visualisation des résultats
+            (l’échelle communale en plus de l’échelle intercommunale) pour l’ensemble des bases de données (sols, forêts, haies)
+            <a href="https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/complements/perimetre-et-limites#echelle-de-visualisation-des-resultats" target="_blank" rel="noopener">
+              documentation
+            </a>
+          </li>
+          <li>
+            Pour les données surfaciques et carbones des haies : nouvelle bases de données haies utilisées
+            (<a href="https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/introduction/sources#donnees-surfaciques-pour-loccupation-du-sol-haies" target="_blank" rel="noopener">
+              actualisation des bases de données
+            </a>)
+          </li>
+          <li>
+            Pour les données carbones : les bases de données (stocks et flux de référence à l’hectare) sont recalculées
+            et exprimées à l’échelle communale
+          </li>
+          <li>
+            Nouvelles fonctionnalités : la base intégrale ALDO est disponible au téléchargement
+          </li>
+        </ul>
+        <h3>Version HETRE d’avril 2023</h3>
+        <p>Les données présentées ici sont :</p>
+        <ul>
+          <li>Pour les données surfaciques : les mêmes que dans l’ancienne version de ALDO (version EXCEL de 2021)</li>
+          <li>Pour les données carbone des sols et de la biomasse hors forêt : inchangé</li>
+          <li>
+            Pour les données carbone de la biomasse en forêt et des produits-bois :
+            <a href="https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/introduction/sources" target="_blank" rel="noopener">
+              actualisation des bases de données</a>
+          </li>
+          <li>Un correctif apporté sur la version HETRE de novembre 2022 concernant le calcul des flux engendrés par le réservoir biomasse lors d’une perte de surface forestière (i.e déboisement)</li>
+        </ul>
+      </div>
+    </section>
+
+
+    <h2 class="fr-mt-8w">Webinaire : Présentation de la version MÉLÈZE d’ALDO au Sommet Virtuel du Climat</h2>
+    <p>
+      Le 27 janvier 2026, la version Mélèze de l’outil ALDO a été présentée lors du Sommet Virtuel du Climat.
+      Simple d’utilisation et open-source, ALDO fournit aux collectivités une première estimation de l’état des stocks et flux de carbone de leur territoire.
+    </p>
+    <p>
+      Cette mise à jour majeure intègre notamment les nouvelles données CITEPA et IFN (2020-2024), des améliorations ergonomiques
+      et un module d’inscription à la newsletter.
+    </p>
+    <p>
+      <a href="https://www.youtube.com/live/A4naCQJ02nI" target="_blank" rel="noopener">
+        Accédez au replay
+      </a>
+    </p>
+
+    <section class="fr-accordion fr-mt-2w">
+      <p class="fr-accordion__title">
+        <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-webinars">
+          Historique
+        </button>
+      </p>
+      <div class="fr-collapse" id="accordion-webinars">
+        <h3>Webinaire : Une nouvelle version ALDO pour évaluer le carbone des sols et forêts de votre territoire !</h3>
+        <p>Mercredi 28 juin 2023</p>
+        <p>
+          La version Chanterelle de l’outil ALDO, développé par l’ADEME et animé par l’ABC et l’APCC, a été présenté
+          pour la première fois lors d’un atelier du Sommet Virtuel du Climat. Cette version comprend entre autres
+          une mise à jour des bases de données et la possibilité d’avoir des résultats à l’échelle communale.
+        </p>
+        <p>
+          <a href="https://www.youtube.com/watch?v=53j5ybckvIw" target="_blank" rel="noopener">
+            Accédez au replay
+          </a>
+        </p>
+        <h3>Webinaire : Comprendre les changements apportés avec la digitalisation de l’outil ALDO</h3>
+        <p>Mardi 7 février 2023</p>
+        <p>
+          Ce webinaire sera l’occasion de vous présenter les nouvelles améliorations de l’outil ALDO liées à sa digitalisation
+          et de vous faire une démonstration en live de son utilisation. L’outil évolue vers un format web pour faciliter
+          et diffuser encore plus largement l’accès à ces résultats qui s’inscrivent pleinement dans la transition bas carbone du pays.
+        </p>
+        <p>
+          <a href="https://www.youtube.com/watch?v=AmSl6Bi5U-Q" target="_blank" rel="noopener">
+            Accédez au replay
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <h2 class="fr-mt-8w">ALDO : qu'est-ce que c'est ?</h2>
     <p>L'outil ALDO est un outil ADEME. Simple d’utilisation, open-source et accessible en ligne, il est disponible gratuitement et sans téléchargement.</p>
     <p>
       Les sols et les végétaux stockent une grande quantité de carbone. A l’échelle globale, ces réservoirs de carbone stockent, dans la la matière organique des sols,
@@ -54,92 +156,6 @@
         En savoir plus sur l'outil ALDO
       </a>
     </p>
-
-    <h2 class="fr-mt-8w">Actualités : Version CHANTERELLE de juin 2023</h2>
-    <p>Les données présentées ici sont :</p>
-    <ul>
-      <li>
-        Pour les données surfaciques : mise à jour de l’échelle de visualisation des résultats
-        (l’échelle communale en plus de l’échelle intercommunale) pour l’ensemble des bases de données (sols, forêts, haies)
-        <a href="https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/complements/perimetre-et-limites#echelle-de-visualisation-des-resultats" target="_blank" rel="noopener">
-          documentation
-        </a>
-      </li>
-      <li>
-        Pour les données surfaciques et carbones des haies : nouvelle bases de données haies utilisées
-        (<a href="https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/introduction/sources#donnees-surfaciques-pour-loccupation-du-sol-haies" target="_blank" rel="noopener">
-          actualisation des bases de données
-        </a>)
-      </li>
-      <li>
-        Pour les données carbones : les bases de données (stocks et flux de référence à l'hectare) sont recalculées
-        et exprimées à l'échelle communale
-      </li>
-      <li>
-        Nouvelles fonctionnalités : la base intégrale ALDO est disponible au téléchargement
-        (en cours de développement)
-      </li>
-    </ul>
-
-    <section class="fr-accordion fr-mt-2w">
-      <p class="fr-accordion__title">
-        <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-version-history">
-          Historique
-        </button>
-      </p>
-      <div class="fr-collapse" id="accordion-version-history">
-        <h3>Version HETRE d'avril 2023</h3>
-        <p>Les données présentées ici sont :</p>
-        <ul>
-          <li>Pour les données surfaciques : les mêmes que dans l'ancienne version de ALDO (version EXCEL de 2021)</li>
-          <li>Pour les données carbone des sols et de la biomasse hors forêt : inchangé</li>
-          <li>
-            Pour les données carbone de la biomasse en forêt et des produits-bois :
-            <a href="https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/introduction/sources" target="_blank" rel="noopener">
-              actualisation des bases de données</a>
-          </li>
-          <li>Un correctif apporté sur la version HETRE de novembre 2022 concernant le calcul des flux engendrés par le réservoir biomasse lors d'une perte de surface forestière (i.e déboisement)</li>
-        </ul>
-      </div>
-    </section>
-
-
-    <h2 class="fr-mt-8w">Webinaire : Une nouvelle version ALDO pour évaluer le carbone des sols et forêts de votre territoire !</h2>
-    <p>
-      Le 28 juin 2023, la version Chanterelle de l’outil ALDO, développé par l’ADEME et animé par l’ABC et l’APCC, a été présenté pour la première fois lors d’un atelier du Sommet Virtuel du Climat.
-      Simple d'utilisation et open-source, ALDO fournit aux collectivités une première estimation de l'état des stocks et flux de carbone de leur territoire.
-    </p>
-    <p>
-      La nouvelle version d'ALDO – Chanterelle – comprend entre autres une mise à jour des bases de données et la possibilité d'avoir des résultats à l'échelle communale.
-      Cette version est disponible depuis début juillet pour tous les utilisateurs.
-    </p>
-    <p>
-      <a href="https://www.youtube.com/watch?v=53j5ybckvIw" target="_blank" rel="noopener">
-        Accédez au replay
-      </a>
-    </p>
-
-    <section class="fr-accordion fr-mt-2w">
-      <p class="fr-accordion__title">
-        <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-webinars">
-          Historique
-        </button>
-      </p>
-      <div class="fr-collapse" id="accordion-webinars">
-        <h3>Webinaire : Comprendre les changements apportés avec la digitalisation de l'outil ALDO</h3>
-        <p>Mardi 7 février 2023</p>
-        <p>
-          Ce webinaire sera l’occasion de vous présenter les nouvelles améliorations de l’outil ALDO liées à sa digitalisation
-          et de vous faire une démonstration en live de son utilisation. L'outil évolue vers un format web pour faciliter
-          et diffuser encore plus largement l’accès à ces résultats qui s'inscrivent pleinement dans la transition bas carbone du pays.
-        </p>
-        <p>
-          <a href="https://www.youtube.com/watch?v=AmSl6Bi5U-Q" target="_blank" rel="noopener">
-            Accédez au replay
-          </a>
-        </p>
-      </div>
-    </section>
   </div>
 </main>
 <%- include('partials/footer') -%>

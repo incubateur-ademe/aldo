@@ -1,6 +1,7 @@
 <div>
   <h2>Flux de carbone</h2>
-  <p class="fr-text--sm fr-mb-1w">Bases de changement CLC 2012 2018 & Inventaire forestier IGN 2012 2016</p>
+  <p class="fr-text--sm fr-mb-1w">Les flux sont indiqués ici en positif pour la séquestration, en négatif pour les émissions.</p>
+  <p class="fr-text--sm fr-mb-1w">Les surfaces de changement d'occupation de terres sont issues de l’inventaire SECTEN édition de 2026 du Citepa et correspondent à la période 2013-2023. Les flux en forêts sont issus des campagnes de mesures de 2020 à 2024 de l'Inventaire Forestier National (IFN) de l'IGN.</p>
   <%- include('../partials/calculation-warning') -%>
   <div class="fr-col-12 fr-col-lg-8 fr-pb-2w">
     <ul class="fr-accordions-group" data-fr-js-accordions-group="true">
@@ -120,11 +121,6 @@
               Les flux annuels liés aux changements d'occupation du sol vers <%= groundType.name.toLowerCase() %> sont séparés par sous-typologie.
             </p>
             <% } %>
-            <% if (groundType.stocksId === 'sols artificiels') { %>
-              <button class="fr-btn fr-btn--sm fr-btn--secondary to-config fr-mb-2w" type="button">
-                Modifier la répartition des sols artificialisés
-              </button>
-            <% } %>
             <% for (const child of groundType.children) { %>
             <% if(hasData(child)) { %>
             <% const childName = allGroundTypes.find((g) => g.stocksId === child).name.toLowerCase() %>
@@ -162,6 +158,9 @@
     <% } %>
     <p class="fr-text--sm fr-mt-1w"><a href="https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/flux/occupation-du-sol-et-foret" target="_blank" rel="noopener noreferrer">En savoir plus sur les méthodes de calculs</a></p>
   </div>
+  <% if (forestComparison?.hasForestData) { %>
+  <%- include('fluxCalculations/ign-comparison', { forestComparison }) -%>
+  <% } %>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
@@ -179,4 +178,9 @@
   const fluxGrountCtx = document.getElementById('fluxChart-groundType');
   const fluxGroundChartData = JSON.parse(`<%- fluxCharts.groundType.data %>`);
   new Chart(fluxGrountCtx, fluxGroundChartData);
+  <% if (forestComparison?.hasForestData) { %>
+  const forestComparisonCtx = document.getElementById('forestComparisonChart');
+  const forestComparisonData = JSON.parse(`<%- forestComparisonChartConfig %>`);
+  new Chart(forestComparisonCtx, forestComparisonData);
+  <% } %>
 </script>

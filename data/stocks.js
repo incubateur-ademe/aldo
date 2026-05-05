@@ -28,11 +28,11 @@ function getCarbonDensity (commune, groundType) {
 
 function getArea (location, groundType) {
   if (!location.commune) { console.log('getArea in data/stocks called wrong', location); return }
-  const area = location.commune.clc18[groundType]
+  const area = location.commune.citepa2021[groundType]
   if (area >= 0) return area
   else {
-    // console.log('no area saved for', location.commune?.insee, groundType)
-    return getAreaFromData(location, groundType)
+    console.log('no area saved for', location.commune?.insee, groundType)
+    return null
   }
 }
 
@@ -41,52 +41,33 @@ function getArea (location, groundType) {
 // so a mapping is used and the sum of ha of all matching CLC types is returned.
 // NB: in the lookup the type names for ground data and the more specific biomass data
 // are placed on the same level, so some CLC codes are used in two types.
-function getAreaFromData (location, groundType) {
-  if (!location.commune) { console.log('getAreaFromData in data/stocks called wrong', location); return }
+function getAreaFromDataOptimized ({ commune, groundType, forestAreaByCommuneMap, areasByCommuneMap }) {
+  if (!commune) { console.log('getAreaFromData in data/stocks called wrong', commune); return }
   if (groundType === 'haies') {
     return
-  } else if (groundType.startsWith('forêt ')) {
-    return getAreaForests(location.commune, groundType)
   }
   const typeDetails = GroundTypes.find((gt) => gt.stocksId === groundType)
-  const clcCodes = typeDetails?.clcCodes
-  if (!clcCodes) {
-    throw new Error(`No CLC code mapping found for ground type '${groundType}'`)
+  const citepaCodes = typeDetails?.citepaCodes
+  if (!citepaCodes) {
+    throw new Error(`No CITEPA code mapping found for ground type '${groundType}'`)
   }
-  const csvFilePath = './dataByCommune/clc18.csv'
-  const areasByCommuneAndClcType = require(csvFilePath + '.json')
-  let totalArea = 0
-  areasByCommuneAndClcType
-    .filter((areaData) => location.commune.insee === areaData.insee && clcCodes.includes(areaData.code18))
-    .forEach((areaData) => { totalArea += +areaData.area })
+
+  // TODO: handle case where no CITEPA codes are found.
+  // This case should not happen, but we're still waiting for CITEPA answer regarding Aldo ground types mapping.
+  if (citepaCodes.length === 0) {
+    return 0
+  }
+
+  const areaDataForCommune = areasByCommuneMap.get(commune.insee) || []
+  const totalArea = areaDataForCommune
+    .filter((areaData) => citepaCodes.includes(areaData.usage_2021))
+    .reduce((totalArea, areaData) => totalArea + (+areaData.surfaces_ha), 0)
+
   return totalArea
 }
 
-// using IGN, not CLC, data for forests because it is more accurate
-// side effect being that the sum of the areas could be different to the
-// recorded size of the EPCI.
-function getAreaForests (commune, forestType) {
-  const csvFilePath = './dataByCommune/surface-foret.csv'
-  const areaData = require(csvFilePath + '.json')
-  let areaDataByCommune = []
-  let code = commune.insee
-  if (code.startsWith('0')) code = code.slice(1)
-  areaDataByCommune = areaData.filter(data => data.INSEE_COM === code)
-  let sum = 0
-  const areaCompositionColumnName = {
-    'forêt feuillu': 'SUR_FEUILLUS',
-    'forêt conifere': 'SUR_RESINEUX',
-    'forêt mixte': 'SUR_MIXTES',
-    'forêt peupleraie': 'SUR_PEUPLERAIES'
-  }[forestType]
-  areaDataByCommune.forEach((communeData) => {
-    sum += +communeData[areaCompositionColumnName]
-  })
-  return sum
-}
-
 function getSignificantCarbonData () {
-  const csvFilePath = './dataByEpci/bilan-carbone-foret-par-localisation.csv'
+  const csvFilePath = './dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv'
   const carbonData = require(csvFilePath + '.json')
   // there is data will null values because it isn't statistically significant at that
   // level. Remove these lines because they are not used.
@@ -315,7 +296,7 @@ function getHedgerowsDataForCommunes (location) {
 module.exports = {
   getCarbonDensity,
   getArea,
-  getAreaFromData,
+  getAreaFromDataOptimized,
   getForestAreaData,
   getSignificantCarbonData,
   getCarbonDataForCommuneAndComposition,

@@ -5,13 +5,15 @@ module.exports = {
       name: 'Cultures',
       color: 'terre',
       fluxId: 'cult',
-      clcCodes: ['211', '212', '213', '241', '242', '243', '244']
+      clcCodes: ['211', '212', '213', '241', '242', '243', '244'],
+      citepaCodes: ['C', 'C_t']
     },
     {
       stocksId: 'prairies',
       name: 'Prairies',
       color: 'tournesol',
       clcCodes: ['231', '321', '322', '323'],
+      citepaCodes: ['P_m', 'P_h', 'P_a'],
       children: ['prairies zones arbustives', 'prairies zones herbacées', 'prairies zones arborées']
     },
     {
@@ -22,7 +24,8 @@ module.exports = {
       fluxId: 'prai',
       altFluxId: 'prai_arbo',
       color: 'tournesol',
-      clcCodes: ['323']
+      clcCodes: ['323'],
+      citepaCodes: ['P_a']
     },
     {
       stocksId: 'prairies zones herbacées',
@@ -32,7 +35,8 @@ module.exports = {
       fluxId: 'prai',
       altFluxId: 'prai_herb',
       color: 'tournesol',
-      clcCodes: ['231', '321']
+      clcCodes: ['231', '321'],
+      citepaCodes: ['P_h']
     },
     {
       stocksId: 'prairies zones arbustives',
@@ -42,35 +46,40 @@ module.exports = {
       fluxId: 'prai',
       altFluxId: 'prai_arbu',
       color: 'tournesol',
-      clcCodes: ['322']
+      clcCodes: ['322'],
+      citepaCodes: ['P_m']
     },
     {
       stocksId: 'zones humides',
       name: 'Zones humides',
       color: 'cumulus',
       fluxId: 'zh',
-      clcCodes: ['411', '412', '421', '422', '423', '511', '512', '521', '522', '523']
+      clcCodes: ['411', '412', '421', '422', '423', '511', '512', '521', '522', '523'],
+      citepaCodes: ['H_a', 'H_n']
     },
     {
       stocksId: 'vergers',
       name: 'Vergers',
       color: 'glycine',
       fluxId: 'verg',
-      clcCodes: ['222', '223']
+      clcCodes: ['222', '223'],
+      citepaCodes: ['C_ve']
     },
     {
       stocksId: 'vignes',
       name: 'Vignes',
       color: 'tuile',
       fluxId: 'vign',
-      clcCodes: ['221']
+      clcCodes: ['221'],
+      citepaCodes: ['C_vi']
     },
     {
       stocksId: 'sols artificiels',
       name: 'Sols artificiels',
       color: 'gris',
       children: ['sols artificiels imperméabilisés', 'sols artificiels arbustifs', 'sols artificiels arborés et buissonants'],
-      clcCodes: ['111', '112', '121', '122', '123', '124', '131', '132', '133', '141', '142']
+      clcCodes: ['111', '112', '121', '122', '123', '124', '131', '132', '133', '141', '142'],
+      citepaCodes: ['A_i', 'A_h', 'A_a']
     },
     {
       stocksId: 'sols artificiels arbustifs',
@@ -81,7 +90,8 @@ module.exports = {
       fluxId: 'art_enh',
       // clcCodes for this and imperméabilisés the same because the area for flux
       // goes through further calculations before being used to calculate flux
-      clcCodes: ['111', '112', '121', '122', '123', '124', '131', '132', '133', '142']
+      clcCodes: ['111', '112', '121', '122', '123', '124', '131', '132', '133', '142'],
+      citepaCodes: ['A_h']
     },
     {
       stocksId: 'sols artificiels imperméabilisés',
@@ -90,7 +100,8 @@ module.exports = {
       parentType: 'sols artificiels',
       color: 'gris',
       fluxId: 'art_imp',
-      clcCodes: ['111', '112', '121', '122', '123', '124', '131', '132', '133', '142']
+      clcCodes: ['111', '112', '121', '122', '123', '124', '131', '132', '133', '142'],
+      citepaCodes: ['A_i']
     },
     {
       stocksId: 'sols artificiels arborés et buissonants',
@@ -99,13 +110,15 @@ module.exports = {
       parentType: 'sols artificiels',
       color: 'gris',
       fluxId: 'art_arb',
-      clcCodes: ['141']
+      clcCodes: ['141'],
+      citepaCodes: ['A_a']
     },
     {
       stocksId: 'forêts',
       name: 'Forêts',
       color: 'bourgeon',
       clcCodes: ['311', '312', '313', '324'],
+      citepaCodes: ['F_m', 'F_f', 'F_c', 'F_p'],
       children: ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
     },
     {
@@ -116,7 +129,8 @@ module.exports = {
       color: 'bourgeon',
       fluxId: 'for',
       altFluxId: 'for_mix',
-      clcCodes: ['313', '324']
+      clcCodes: ['313', '324'],
+      citepaCodes: ['F_m']
     },
     {
       stocksId: 'forêt feuillu',
@@ -126,7 +140,8 @@ module.exports = {
       color: 'bourgeon',
       fluxId: 'for',
       altFluxId: 'for_feu',
-      clcCodes: ['311']
+      clcCodes: ['311'],
+      citepaCodes: ['F_f']
     },
     {
       stocksId: 'forêt conifere',
@@ -136,7 +151,8 @@ module.exports = {
       color: 'bourgeon',
       fluxId: 'for',
       altFluxId: 'for_con',
-      clcCodes: ['312']
+      clcCodes: ['312'],
+      citepaCodes: ['F_c']
     },
     {
       stocksId: 'forêt peupleraie',
@@ -145,7 +161,8 @@ module.exports = {
       parentType: 'forêts',
       fluxId: 'for',
       altFluxId: 'for_peu',
-      color: 'bourgeon'
+      color: 'bourgeon',
+      citepaCodes: ['F_p']
     },
     {
       stocksId: 'produits bois',

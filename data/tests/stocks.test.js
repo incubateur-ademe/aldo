@@ -1,3 +1,4 @@
+const { buildCommuneMap } = require('../communes')
 const {
   getCarbonDensity,
   getAreaFromData,
@@ -10,7 +11,8 @@ const {
   // getAnnualWoodProductsHarvest,
   // getAnnualFranceWoodProductsHarvest,
   getForestLitterCarbonDensity,
-  getHedgerowsDataForCommunes
+  getHedgerowsDataForCommunes,
+  getAreaFromDataOptimized
 } = require('../stocks')
 
 describe('The stocks data module', () => {
@@ -31,97 +33,81 @@ describe('The stocks data module', () => {
     expect(getCarbonDensity({ insee: '01234', zpc: '1_1' }, 'cultures')).toBe(50)
   })
 
-  const areaPath = '../dataByCommune/clc18.csv.json'
+  const areaPath = '../dataByCommune/citepa-surfaces-2023.csv.json'
   it('returns area in hectares (ha) for ground type "cultures" and a commune', () => {
     jest.doMock(areaPath, () => {
       return [
         {
-          insee: '01234',
-          code18: '211',
-          area: '10'
+          insee_com: '01234',
+          usage_2021: 'C',
+          surfaces_ha: '10'
         },
         {
-          insee: '01234',
-          code18: '213',
-          area: '10'
-        },
-        {
-          insee: '01234',
-          code18: '241',
-          area: '10'
-        },
-        {
-          insee: '01234',
-          code18: '242',
-          area: '10'
-        },
-        {
-          insee: '01234',
-          code18: '243',
-          area: '10'
-        },
-        {
-          insee: '01234',
-          code18: '244',
-          area: '10'
+          insee_com: '01234',
+          usage_2021: 'C_t',
+          surfaces_ha: '10'
         },
         // the following should be ignored
         {
-          insee: '01234',
-          code18: '999',
-          area: '99'
+          insee_com: '01234',
+          usage_2021: 'X_x',
+          surfaces_ha: '99'
         },
         {
-          insee: '9999',
-          code18: '244',
-          area: '99'
+          insee_com: '9999',
+          usage_2021: 'C',
+          surfaces_ha: '99'
         }
       ]
     })
-    expect(getAreaFromData({ commune: { insee: '01234' } }, 'cultures')).toBe(60)
+
+    const areasByCommuneMap = buildCommuneMap({ communesRawData: require(areaPath) })
+    expect(getAreaFromDataOptimized({ commune: { insee: '01234' }, groundType: 'cultures', areasByCommuneMap })).toBe(20)
   })
 
   it('returns area in hectares (ha) for ground type "prairies zones herbacées" and a commune', () => {
     jest.doMock(areaPath, () => {
       return [
         {
-          insee: '01234',
-          code18: '231',
-          area: '10'
+          insee_com: '01234',
+          usage_2021: 'P_h',
+          surfaces_ha: '10'
         },
         {
-          insee: '01234',
-          code18: '321',
-          area: '5'
+          insee_com: '01234',
+          usage_2021: 'P_h',
+          surfaces_ha: '5'
         },
         // to be ignored
         {
-          insee: '01235',
-          code18: '323',
-          area: '99'
+          insee_com: '01235',
+          usage_2021: '323',
+          surfaces_ha: '99'
         }
       ]
     })
-    expect(getAreaFromData({ commune: { insee: '01234' } }, 'prairies zones herbacées')).toBe(15)
+    const areasByCommuneMap = buildCommuneMap({ communesRawData: require(areaPath) })
+    expect(getAreaFromDataOptimized({ commune: { insee: '01234' }, groundType: 'prairies zones herbacées', areasByCommuneMap })).toBe(15)
   })
 
   it('throws useful error when attempting to get area for ground type without type to CLC type mapping', () => {
     jest.doMock(areaPath, () => {
       return [
         {
-          insee: '01234',
-          code18: '231',
-          area: '10'
+          insee_com: '01234',
+          usage_2021: 'P_h',
+          surfaces_ha: '10'
         }
       ]
     })
+    const areasByCommuneMap = buildCommuneMap({ communesRawData: require(areaPath) })
     let error
     try {
-      getAreaFromData({ commune: { insee: '01234' } }, 'lake')
+      getAreaFromDataOptimized({ commune: { insee: '01234' }, groundType: 'lake', areasByCommuneMap })
     } catch (e) {
       error = e
     }
-    expect(error.message).toBe("No CLC code mapping found for ground type 'lake'")
+    expect(error.message).toBe("No CITEPA code mapping found for ground type 'lake'")
   })
 
   it('returns biomass carbon density (as tC/ha) given valid ground type and EPCI SIREN', () => {
@@ -192,7 +178,7 @@ describe('The stocks data module', () => {
   })
 
   it('returns the significant carbon data', () => {
-    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
+    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json', () => {
       return [
         {
           surface_ic: 's'
@@ -367,7 +353,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
+    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json', () => {
       return [
         {
           surface_ic: 's',
@@ -404,7 +390,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
+    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json', () => {
       return [
         {
           surface_ic: 's',
@@ -441,7 +427,7 @@ describe('The stocks data module', () => {
         }
       ]
     })
-    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.csv.json', () => {
+    jest.doMock('../dataByEpci/bilan-carbone-foret-par-localisation.IGN-2026.csv.json', () => {
       return [
         {
           surface_ic: 's',
@@ -461,25 +447,28 @@ describe('The stocks data module', () => {
   })
 
   it('returns area of forest subtype (as ha) given a commune', () => {
-    jest.doMock('../dataByCommune/surface-foret.csv.json', () => {
+    jest.doMock(areaPath, () => {
       return [
         {
-          INSEE_COM: '1234',
-          CODE_EPCI: '249500513',
-          SUR_PEUPLERAIES: '30'
+          insee_com: '01234',
+          usage_2021: 'F_p',
+          surfaces_ha: '30'
         },
         {
-          INSEE_COM: '00001',
-          CODE_EPCI: '249500513',
-          SUR_PEUPLERAIES: '20'
+          insee_com: '00001',
+          usage_2021: 'F_p',
+          surfaces_ha: '20'
         }
       ]
     })
-    expect(getAreaFromData({ commune: { insee: '01234' } }, 'forêt peupleraie')).toBe(30)
+
+    const areasByCommuneMap = buildCommuneMap({ communesRawData: require(areaPath) })
+    expect(getAreaFromDataOptimized({ commune: { insee: '01234' }, groundType: 'forêt peupleraie', areasByCommuneMap })).toBe(30)
   })
 
   it('handles hedgerows area differently', () => {
-    expect(getAreaFromData({ commune: { insee: '01234' } }, 'haies')).toBe(undefined)
+    const areasByCommuneMap = buildCommuneMap({ communesRawData: require(areaPath) })
+    expect(getAreaFromDataOptimized({ commune: { insee: '01234' }, groundType: 'haies', areasByCommuneMap })).toBe(undefined)
   })
 
   describe('hedgerows', () => {

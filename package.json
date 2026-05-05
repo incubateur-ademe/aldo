@@ -11,6 +11,14 @@
     "csvtojson": "sh csvtojson.sh",
     "dev": "nodemon server.js",
     "start": "npm run csvtojson && node server.js",
+    "generate-flux1": "node scripts/generate-flux1-csv.js",
+    "generate-flux1-epci": "node scripts/generate-flux1-epci-csv.js",
+    "generate-flux2": "node scripts/generate-flux2-csv.js",
+    "generate-flux2-epci": "node scripts/generate-flux2-epci-csv.js",
+    "generate-flux3": "node scripts/generate-flux3-csv.js",
+    "generate-flux3-epci": "node scripts/generate-flux3-epci-csv.js",
+    "generate-stocks": "node scripts/generate-stocks-csv.js",
+    "generate-stocks-epci": "node scripts/generate-stocks-epci-csv.js",
     "test": "jest"
   },
   "repository": {

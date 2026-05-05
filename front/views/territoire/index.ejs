@@ -4,37 +4,48 @@
     <%- include('../partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: singleLocation?.nom || 'Regroupement', }, ], }) -%>
     <%- include('./warnings') -%>
     <%- include('./introduction') -%>
-    <form method="GET" class="fr-tabs fr-mt-4w" id="territory">
-      <ul class="fr-tabs__list" role="tablist" aria-label="Données du territoire">
-        <li role="presentation">
-          <button type="button" id="tabpanel-stocks" class="fr-tabs__tab" tabindex="0" role="tab" aria-selected="<%=tab === 'stocks'%>" aria-controls="tabpanel-stocks-panel" data-fr-js-tab-button="true">Stocks</button>
-        </li>
-        <li role="presentation">
-          <button type="button" id="tabpanel-flux" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="<%=tab === 'flux'%>" aria-controls="tabpanel-flux-panel" data-fr-js-tab-button="true">Flux</button>
-        </li>
-        <li role="presentation">
-          <button type="button" id="tabpanel-agricultural-practices" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="false" aria-controls="tabpanel-agricultural-practices-panel" data-fr-js-tab-button="true">
-            Pratiques agricoles
-          </button>
-        </li>
-        <li role="presentation">
-          <button type="button" id="tabpanel-config" class="fr-tabs__tab" tabindex="-1" role="tab" aria-selected="<%=tab === 'configuration'%>" aria-controls="tabpanel-config-panel" data-fr-js-tab-button="true">Configuration</button>
-        </li>
-      </ul>
-      <div id="tabpanel-stocks-panel" class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-stocks" tabindex="0">
-        <%- include('./stocks') -%>
-        <%- include('./modify-stocks-areas') -%>
-      </div>
-      <div id="tabpanel-flux-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-flux" tabindex="0">
-        <%- include('./flux') -%>
-        <%- include('./modify-flux-areas') -%>
-        <%- include('./flux-grid') -%>
-      </div>
-      <div id="tabpanel-agricultural-practices-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-agricultural-practices" tabindex="0">
-        <%- include('./agricultural-practices') -%>
-      </div>
-      <div id="tabpanel-config-panel" class="fr-tabs__panel" role="tabpanel" data-fr-js-tab-panel="true" aria-labelledby="tabpanel-config" tabindex="0">
-        <%- include('./shared-configuration') -%>
+    <form method="GET" class="fr-mt-4w" id="territory">
+      <nav class="fr-nav territory-nav" role="navigation" aria-label="Navigation des sections du territoire">
+        <ul class="fr-nav__list">
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="<%= getTabUrl('stocks') %>" <%= tab === 'stocks' ? 'aria-current="page"' : '' %>>
+              Stocks
+            </a>
+          </li>
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="<%= getTabUrl('flux') %>" <%= tab === 'flux' ? 'aria-current="page"' : '' %>>
+              Flux
+            </a>
+          </li>
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="<%= getTabUrl('agricultural-practices') %>" <%= tab === 'agricultural-practices' ? 'aria-current="page"' : '' %>>
+              Pratiques agricoles
+            </a>
+          </li>
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="<%= getTabUrl('configuration') %>" <%= tab === 'configuration' ? 'aria-current="page"' : '' %>>
+              Configuration
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="fr-mt-3w">
+        <section class="territory-section" data-tab="stocks" <%= tab !== 'stocks' ? 'hidden' : '' %>>
+          <%- include('./stocks') -%>
+          <%- include('./modify-stocks-areas') -%>
+        </section>
+        <section class="territory-section" data-tab="flux" <%= tab !== 'flux' ? 'hidden' : '' %>>
+          <%- include('./flux') -%>
+          <%- include('./modify-flux-areas') -%>
+          <%- include('./flux-grid') -%>
+        </section>
+        <section class="territory-section" data-tab="agricultural-practices" <%= tab !== 'agricultural-practices' ? 'hidden' : '' %>>
+          <%- include('./agricultural-practices') -%>
+        </section>
+        <section class="territory-section" data-tab="configuration" <%= tab !== 'configuration' ? 'hidden' : '' %>>
+          <%- include('./shared-configuration') -%>
+        </section>
       </div>
     </form>
   </div>
@@ -57,32 +68,64 @@
     queryParams.set(event.target.name, event.target.value)
   })
 
-  function changeTab(tab) {
-    $(`#tabpanel-${tab}`).click()
-    document.getElementById(`tabpanel-${tab}`).scrollIntoView({ behavior: 'smooth' })
-  }
-
-  $('button.to-stocks').click(() => changeTab('stocks'))
-  $('button.to-flux').click(() => changeTab('flux'))
-  $('button.to-config').click(() => changeTab('config'))
-
-  // handle URL here so that only relevant params are sent and we avoid URLs that get cut off
-  // for being too long
-  $('form#territory').submit((event) => {
-    let currentTabBtn = $("button.fr-tabs__tab[aria-selected=true]")[0]
-    // Extract tab name from button ID (format: "tabpanel-{tabName}")
-    let currentTab = currentTabBtn?.id.replace('tabpanel-', '') || 'stocks'
-    // Map "config" to "configuration" for URL consistency
-    if (currentTab === 'config') currentTab = 'configuration'
+  function getTabUrl(tabName) {
     const pathParts = window.location.pathname.split('/')
     const locationType = pathParts[1]
     const locationCode = pathParts[2]
     if (locationType === 'regroupement') {
-      window.location.href = `/regroupement/${currentTab}?${queryParams.toString()}`
-    } else {
-      window.location.href = `/${locationType}/${locationCode}/${currentTab}?${queryParams.toString()}`
+      return `/regroupement/${tabName}`
     }
+    return `/${locationType}/${locationCode}/${tabName}`
+  }
+
+  function switchTerritoryTab(tabName, shouldPushState = true) {
+    $('.territory-section').each((_, section) => {
+      section.hidden = section.dataset.tab !== tabName
+    })
+    $('.territory-nav .fr-nav__link').each((_, link) => {
+      if (link.getAttribute('data-tab') === tabName) {
+        link.setAttribute('aria-current', 'page')
+      } else {
+        link.removeAttribute('aria-current')
+      }
+    })
+    if (shouldPushState) {
+      const nextUrl = `${getTabUrl(tabName)}?${queryParams.toString()}`
+      window.history.pushState({}, '', nextUrl)
+    }
+  }
+
+  $('.territory-nav .fr-nav__link').each((_, link) => {
+    link.setAttribute('data-tab', link.getAttribute('href').split('/').pop())
+  })
+  $('.territory-nav .fr-nav__link').click((event) => {
     event.preventDefault()
+    const tabName = event.currentTarget.getAttribute('data-tab')
+    switchTerritoryTab(tabName)
+  })
+
+  $('button.to-stocks').click(() => {
+    switchTerritoryTab('stocks')
+  })
+  $('button.to-flux').click(() => {
+    switchTerritoryTab('flux')
+  })
+  $('button.to-config').click(() => {
+    switchTerritoryTab('configuration')
+  })
+
+  // handle URL here so that only relevant params are sent and we avoid URLs that get cut off
+  // for being too long
+  $('form#territory').submit((event) => {
+    const currentTab = $('.territory-nav .fr-nav__link[aria-current="page"]').attr('data-tab') || 'stocks'
+    window.location.href = `${getTabUrl(currentTab)}?${queryParams.toString()}`
+    event.preventDefault()
+  })
+
+  window.addEventListener('popstate', () => {
+    const pathParts = window.location.pathname.split('/')
+    const tabName = pathParts[pathParts.length - 1] || 'stocks'
+    switchTerritoryTab(tabName, false)
   })
 </script>
 <%- include('../partials/footer') -%>

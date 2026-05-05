@@ -1,0 +1,28 @@
+<section class="fr-mt-4w">
+  <h3>Informations complémentaires sur l'évolution du bilan GES en forêt</h3>
+  <p class="fr-text--sm fr-mb-1w">
+    Ce graphique compare les flux de carbone forestiers entre les campagnes de mesure 2016-2020 et 2020-2024
+    de l'Inventaire Forestier National (IFN). Cette comparaison du bilan forestier entre deux périodes renseigne
+    sur la tendance à la hausse ou la baisse du puits de carbone en forêts sur votre territoire.
+  </p>
+  <p class="fr-text--sm fr-mb-2w">
+    Cette comparaison est réalisée à titre indicative, seuls les flux estimés sur la période 2020-2024
+    sont comptabilisés dans le bilan UTCATF de la collectivité. Les flux des campagnes 2016-2020 servent
+    uniquement de point de comparaison pour illustrer la tendance.
+  </p>
+  <% if (forestComparison.hasWarning) { %>
+  <div class="fr-alert fr-alert--warning fr-mb-2w">
+    <p>
+      Attention&nbsp;: pour ce territoire, le niveau de significativité statistique diffère entre
+      les deux campagnes IGN pour certaines compositions forestières. Les données 2016-2020 et
+      2020-2024 peuvent être radicalement différentes et la comparaison doit être interprétée
+      avec précaution.
+    </p>
+  </div>
+  <% } %>
+  <div class="fr-col-12 fr-col-lg-8">
+    <div class="chart-wrapper">
+      <canvas id="forestComparisonChart"></canvas>
+    </div>
+  </div>
+</section>

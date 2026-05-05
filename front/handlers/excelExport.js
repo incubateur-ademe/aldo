@@ -117,11 +117,6 @@ async function excelExportHandler (req, res) {
       .style(dataStyle)
     ws.cell(row, thirdColumn).string(options.woodCalculation).style(dataStyle)
     row++
-    ws.cell(row, secondColumn)
-      .string('Hypothèses de répartition des surfaces entre sols artificiels (% sols imperméabilisés)')
-      .style(dataStyle)
-    ws.cell(row, thirdColumn).number(options.proportionSolsImpermeables * 100).style(integerStyle)
-    row++
     Object.entries(options.agriculturalPracticesEstablishedAreas).forEach(([practice, area]) => {
       const practiceInfo = AgriculturalPractices.find((ap) => ap.id === practice)
       if (practiceInfo.name) {
@@ -222,7 +217,7 @@ async function excelExportHandler (req, res) {
     ws.cell(row, thirdColumn).string('Séquestration nette de dioxyde de carbone en TeqCO2')
     ws.cell(row, thirdColumn + 1).string('Année de référence')
     row++
-    const yearReference = 'Moyenne annuelle 2012-2018'
+    const yearReference = 'Moyenne annuelle'
     ws.cell(row, secondColumn).string('Forêt')
     ws.cell(row, thirdColumn).formula(`${forestFluxCell}`).style(integerStyle)
     ws.cell(row, thirdColumn + 1).string(yearReference).style(dataStyle)
@@ -258,9 +253,9 @@ async function excelExportHandler (req, res) {
     ws.cell(row, thirdColumn + 1).string(yearReference).style(blueItalics)
     row++
 
-    // Occupation du sol (ha) du territoire en 2018 :
+    // Occupation du sol (ha) du territoire en 2021 :
     row++
-    ws.cell(row, startColumn).string('Occupation du sol (ha) du territoire en 2018 :')
+    ws.cell(row, startColumn).string('Occupation du sol (ha) du territoire en 2021 :')
     row++
     const childGroundTypes = GroundTypes.filter((gt) => !gt.chilren)
     childGroundTypes.forEach((gt, idx) => {
@@ -273,9 +268,9 @@ async function excelExportHandler (req, res) {
     })
     row++
 
-    // Changements d'occupation du sol annuel moyen (ha/an) du territoire entre 2012 et 2018 :
+    // Changements d'occupation du sol annuel moyen (ha/an) du territoire entre 2013 et 2023 :
     row++
-    ws.cell(row, startColumn).string('Changements d\'occupation du sol annuel moyen (ha/an) du territoire entre 2012 et 2018 :')
+    ws.cell(row, startColumn).string('Changements d\'occupation du sol annuel moyen (ha/an) du territoire entre 2013 et 2023 :')
     row++
     ws.cell(row, thirdColumn).string('Occupation de sol finale')
     row++
@@ -322,9 +317,9 @@ async function excelExportHandler (req, res) {
       row++
     })
 
-    // Flux de carbone annuel moyen (tCO2e/an) du territoire entre 2012 et 2018 :
+    // Flux de carbone annuel moyen (tCO2e/an) du territoire entre 2013 et 2023 :
     row++
-    ws.cell(row, startColumn).string('Flux de carbone annuel moyen (tCO2e/an) du territoire entre 2012 et 2018 :')
+    ws.cell(row, startColumn).string('Flux de carbone annuel moyen (tCO2e/an) du territoire entre 2013 et 2023 :')
     row++
     ws.cell(row, thirdColumn).string('Occupation de sol finale')
     row++

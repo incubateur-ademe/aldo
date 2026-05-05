@@ -1,8 +1,9 @@
+const { buildCommuneMap } = require('../communes')
 const {
   getAnnualGroundCarbonFlux,
   getFluxReferenceValues,
   getAnnualSurfaceChange,
-  getAnnualSurfaceChangeFromData,
+  getAnnualSurfaceChangeFromDataOptimized,
   getForestLitterFlux
 } = require('../flux')
 
@@ -338,41 +339,17 @@ describe('The flux data module', () => {
     })
   })
 
-  const areaChangePath = '../dataByCommune/clc18-change.csv.json'
-  it('returns change in surface area for given ground types from data file divided by 6, the number of years between studies', () => {
-    jest.doMock(areaChangePath, () => {
-      return [
-        // from constants.json:
-        // prairies zones arborées = 323
-        // cultures = 211, 212...
-        {
-          commune: '01234',
-          code12: '323',
-          code18: '211',
-          area: '5'
-        },
-        {
-          commune: '01234',
-          code12: '323',
-          code18: '212',
-          area: '7'
-        },
-        {
-          commune: '01234',
-          code12: '323',
-          code18: '999', // uninteresting code for this change
-          area: '100'
-        },
-        {
-          commune: '09999', // uninteresting commune for this request
-          code12: '323',
-          code18: '211',
-          area: '100'
-        }
-      ]
-    })
-    expect(getAnnualSurfaceChangeFromData({ commune: { insee: '01234' } }, 'prairies zones arborées', 'cultures')).toBe(2)
-    expect(getAnnualSurfaceChangeFromData({ commune: { insee: '01234' } }, 'prairies zones arbustives', 'cultures')).toBe(0)
+  it('returns change in surface area for given ground types from data file divided by 10, the number of years between studies (2013-2023)', () => {
+    const mockCitepaData = [
+      { insee_com: '01234', siren_epci: '200007177', usage_2013: 'P_a', usage_2023: 'C', surfaces_converties: '5,0' },
+      { insee_com: '01234', siren_epci: '200007177', usage_2013: 'P_a', usage_2023: 'C', surfaces_converties: '7,0' },
+      { insee_com: '01234', siren_epci: '200007177', usage_2013: 'P_a', usage_2023: 'X_x', surfaces_converties: '100,0' },
+      { insee_com: '09999', siren_epci: '200007188', usage_2013: 'P_a', usage_2023: 'C', surfaces_converties: '100,0' }
+    ]
+    const citepaDataByCommuneMap = buildCommuneMap({ communesRawData: mockCitepaData })
+
+    expect(getAnnualSurfaceChangeFromDataOptimized({ commune: { insee: '01234' }, from: 'prairies zones arborées', to: 'cultures', citepaDataByCommuneMap })).toBe(1.2) // (5+7)/10 = 1.2
+    expect(getAnnualSurfaceChangeFromDataOptimized({ commune: { insee: '01234' }, from: 'prairies zones arbustives', to: 'cultures', citepaDataByCommuneMap })).toBe(0)
   })
 
   describe('sols artificiels area changes', () => {
@@ -410,7 +387,7 @@ describe('The flux data module', () => {
         expect(fromCultures).toBe(50)
       })
 
-      it('returns yearly CLC change data when, for the same initial occupation, there is a large change to sols art with trees, with custom portion', () => {
+      it('returns direct Citepa value for imperméabilisés when data provides A_i separately', () => {
         const from = 'cultures'
         const communeLocationWithChanges = {
           commune: {
@@ -419,46 +396,12 @@ describe('The flux data module', () => {
               cultures: {
                 'sols artificiels imperméabilisés': 50,
                 'sols artificiels arborés et buissonants': 100
-              }
-            }
-          }
-        }
-        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, { proportionSolsImpermeables: 0.34 }, from, 'sols artificiels imperméabilisés')
-        expect(fromCultures).toBe(50)
-      })
-
-      it('returns the impermeable portion of the sum of changes to impermeable and to sols art with trees, with custom portion', () => {
-        const from = 'cultures'
-        const communeLocationWithChanges = {
-          commune: {
-            insee: '01234',
-            changes: {
-              cultures: {
-                'sols artificiels imperméabilisés': 50,
-                'sols artificiels arborés et buissonants': 100
-              }
-            }
-          }
-        }
-        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, { proportionSolsImpermeables: 0.33 }, from, 'sols artificiels imperméabilisés')
-        expect(fromCultures).toBe(49.5)
-      })
-
-      it('returns the impermeable portion of the sum of changes to impermeable and to sols art with trees', () => {
-        const from = 'cultures'
-        const communeLocationWithChanges = {
-          commune: {
-            insee: '01234',
-            changes: {
-              cultures: {
-                'sols artificiels imperméabilisés': 50,
-                'sols artificiels arborés et buissonants': 10
               }
             }
           }
         }
         const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, {}, from, 'sols artificiels imperméabilisés')
-        expect(fromCultures).toBe(48)
+        expect(fromCultures).toBe(50)
       })
     })
     // TODO: test if doubling up on changes to shrubby and impermeable since they use the same CLC codes
@@ -476,12 +419,12 @@ describe('The flux data module', () => {
             }
           }
         }
-        const toShrubby = getAnnualSurfaceChange(communeLocationWithChanges, 'sols artificiels imperméabilisés', 'sols artificiels arbustifs')
+        const toShrubby = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'sols artificiels imperméabilisés', 'sols artificiels arbustifs')
         expect(toShrubby).toBe(0)
       })
       // TODO: what about if has data overrides?
 
-      it('for forest subtypes, if the change to sols art trees is smaller than the green portion of remaining sols art, return the green portion of remaining sols art', () => {
+      it('returns direct Citepa value for arbustifs when data provides A_h separately', () => {
         const from = 'forêt mixte'
         const communeLocationWithChanges = {
           commune: {
@@ -489,38 +432,14 @@ describe('The flux data module', () => {
             changes: {
               'forêt mixte': {
                 'sols artificiels arborés et buissonants': 1,
-                // these two share CLC codes so will always have the same value
                 'sols artificiels imperméabilisés': 50,
                 'sols artificiels arbustifs': 50
               }
             }
           }
         }
-        // proportion green = 0.2; change sols art = 50
-        // => threshold = 0.2 * 50 = 10
         const fromForestMixed = getAnnualSurfaceChange(communeLocationWithChanges, {}, from, 'sols artificiels arbustifs')
-        expect(fromForestMixed).toBeCloseTo(10, 0)
-      })
-
-      it('for forest subtypes, if the change to sols art trees is smaller than the green portion of remaining sols art, return the green portion of remaining sols art, with custom portion', () => {
-        const from = 'forêt mixte'
-        const communeLocationWithChanges = {
-          commune: {
-            insee: '01234',
-            changes: {
-              'forêt mixte': {
-                'sols artificiels arborés et buissonants': 1,
-                // these two share CLC codes so will always have the same value
-                'sols artificiels imperméabilisés': 50,
-                'sols artificiels arbustifs': 50
-              }
-            }
-          }
-        }
-        // proportion green = 0.4; change sols art = 50
-        // => threshold = 0.4 * 50 = 20
-        const fromForestMixed = getAnnualSurfaceChange(communeLocationWithChanges, { proportionSolsImpermeables: 0.6 }, from, 'sols artificiels arbustifs')
-        expect(fromForestMixed).toBeCloseTo(20, 0)
+        expect(fromForestMixed).toBe(50)
       })
 
       // TODO: in the code, changeSolsArbores is set as 0, meaning this test cannot pass
@@ -544,7 +463,7 @@ describe('The flux data module', () => {
       //   expect(fromForestMixed).toBe(0)
       // })
 
-      it('if the change to sols art trees is smaller than the green portion of the total change to sols art, return the green portion of the total change to sols art, minus the tree change', () => {
+      it('returns direct Citepa value for arbustifs when data provides A_h separately', () => {
         const from = 'cultures'
         const communeLocationWithChanges = {
           commune: {
@@ -552,38 +471,14 @@ describe('The flux data module', () => {
             changes: {
               cultures: {
                 'sols artificiels arborés et buissonants': 1,
-                // these two share CLC codes so will always have the same value
                 'sols artificiels imperméabilisés': 50,
                 'sols artificiels arbustifs': 50
               }
             }
           }
         }
-        // proportion green = 0.4; change sols art = 50
-        // => threshold = 0.2 * 50 = 10 (10 - 1)
         const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, {}, from, 'sols artificiels arbustifs')
-        expect(fromCultures).toBeCloseTo(9, 0)
-      })
-
-      it('if the change to sols art trees is smaller than the green portion of the total change to sols art, return the green portion of the total change to sols art, minus the tree change, with custom proportion', () => {
-        const from = 'cultures'
-        const communeLocationWithChanges = {
-          commune: {
-            insee: '01234',
-            changes: {
-              cultures: {
-                'sols artificiels arborés et buissonants': 1,
-                // these two share CLC codes so will always have the same value
-                'sols artificiels imperméabilisés': 50,
-                'sols artificiels arbustifs': 50
-              }
-            }
-          }
-        }
-        // proportion green = 0.4; change sols art = 50
-        // => threshold = 0.4 * 50 = 20 (20 - 1)
-        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, { proportionSolsImpermeables: 0.6 }, from, 'sols artificiels arbustifs')
-        expect(fromCultures).toBeCloseTo(19, 0)
+        expect(fromCultures).toBe(50)
       })
     })
 

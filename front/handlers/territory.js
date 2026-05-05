@@ -6,6 +6,7 @@ const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux')
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
 const { parseOptionsFromQuery, getLocationDetail } = require('./shared')
 const { getCommunes } = require(path.join(rootFolder, './data/communes'))
+const { getForestBiomassComparisonByCommune } = require(path.join(rootFolder, './data/flux'))
 
 async function territoryHandler (req, res) {
   const location = await getLocationDetail(req, res)
@@ -38,6 +39,59 @@ async function territoryHandler (req, res) {
   } catch (error) {
     console.log('Error getting flux for location', location, error)
     return res.render('error', { pageTitle: 'Erreur' })
+  }
+
+  let forestComparison = { hasForestData: false }
+  try {
+    forestComparison = getForestBiomassComparisonByCommune(location)
+  } catch (e) {
+    console.error('Error computing forest comparison:', e)
+  }
+
+  let forestComparisonChartConfig = null
+  if (forestComparison.hasForestData) {
+    forestComparisonChartConfig = JSON.stringify({
+      type: 'bar',
+      data: {
+        labels: ['Accroissement', 'Mortalité', 'Prélèvement', 'Bilan Net'],
+        datasets: [
+          {
+            label: '2016-2020',
+            data: [
+              round2(forestComparison.data2022.accroissement),
+              round2(-Math.abs(forestComparison.data2022.mortalite)),
+              round2(-Math.abs(forestComparison.data2022.prelevement)),
+              round2(forestComparison.data2022.bilan)
+            ],
+            backgroundColor: 'rgba(0, 100, 70, 0.7)'
+          },
+          {
+            label: '2020-2024',
+            data: [
+              round2(forestComparison.data2026.accroissement),
+              round2(-Math.abs(forestComparison.data2026.mortalite)),
+              round2(-Math.abs(forestComparison.data2026.prelevement)),
+              round2(forestComparison.data2026.bilan)
+            ],
+            backgroundColor: 'rgba(0, 180, 120, 0.7)'
+          }
+        ]
+      },
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: 'Comparaison du bilan forestier en tCO2e/ha/an (Biomasse)'
+          },
+          datalabels: { display: false }
+        },
+        scales: {
+          y: {
+            title: { display: true, text: 'tCO2e/ha/an' }
+          }
+        }
+      }
+    })
   }
 
   const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
@@ -110,6 +164,8 @@ async function territoryHandler (req, res) {
     allFlux: flux.allFlux,
     sortedFluxKeys: getSortedFluxKeys(flux),
     fluxCharts: fluxCharts(flux),
+    forestComparison,
+    forestComparisonChartConfig,
     fluxDetail,
     fluxIds: GroundTypes.filter(gt => gt.altFluxId || gt.fluxId).map(gt => gt.altFluxId || gt.fluxId),
     woodFluxSummary: flux.woodSummary,
@@ -289,8 +345,8 @@ function charts (stocks) {
     groundAndLitter: pieChart('Répartition du stock de carbone par occupation du sol dans les réservoirs Sols & Litières', stocksPercentageLabels, groundAndLitterStocksValues),
     biomass: pieChart('Répartition du stock de carbone par occupation du sol dans le réservoir Biomasse', stocksPercentageLabels, biomassStocksValues),
     density: {
-      title: 'Stocks de référence par unité de surface et par occupation du sol',
-      note: 'Les stocks de référence pour les sols sont issus de données du Réseau de Mesures de la Qualité de Sols (RMQS) du GIS-SOL entre 2001 et 2011 et calculés par occupation du sol et par grande région pédoclimatique. La zone pédoclimatique majoritaire est affectée à l\'EPCI conformément aux travaux du CITEPA. Les stocks de référence à l\'ha dans la biomasse de forêt sont issus de l\'inventaire forestier de l\'IGN entre 2011 et 2020 et calculés par typologie de forêt et par grande région écologique.',
+      title: 'Stocks total de carbone par occupation du sol, tous réservoirs confondus',
+      note: 'Tous les réservoirs de carbone sont inclus (sol, biomasse, litière) à l\'exception des produits bois. Les stocks de référence pour les sols sont issus de données du Réseau de Mesures de la Qualité de Sols (RMQS) du GIS-SOL entre 2001 et 2011 et calculés par occupation du sol et par grande région pédoclimatique. La zone pédoclimatique majoritaire est affectée à l\'EPCI conformément aux travaux du CITEPA. Les stocks de référence à l\'ha pour la biomasse en forêt sont issus de l\'inventaire forestier de l\'IGN (campagnes de mesures de 2020 à 2024) et calculés par typologie de forêt et par grande région écologique.',
       data: JSON.stringify({
         type: 'bar',
         data: {
@@ -328,64 +384,6 @@ function charts (stocks) {
           }
         }
       })
-    },
-    groundTypeStacked: {
-      title: 'Ventilation du stock carbone par occupation du sol (tous réservoirs inclus)',
-      data: JSON.stringify({
-        type: 'bar',
-        data: {
-          labels: stocksPercentageLabels,
-          datasets: [
-            {
-              label: 'Sol',
-              data: groundValues,
-              backgroundColor: Colours.tournesol['950'],
-              borderColor: Colours.tournesol.main,
-              borderWidth: 2
-            },
-            {
-              label: 'Biomasse',
-              data: biomassValues,
-              backgroundColor: Colours.emeraude['950'],
-              borderColor: Colours.emeraude.main,
-              borderWidth: 2
-            },
-            {
-              label: 'Litière',
-              data: forestLitterValues,
-              backgroundColor: Colours.opera['950'],
-              borderColor: Colours.opera.main,
-              borderWidth: 2
-            }
-          ]
-        },
-        options: {
-          scales: {
-            y: {
-              title: {
-                text: 'Stocks de carbone (ktCO2e)',
-                display: true
-              },
-              stacked: true
-            },
-            x: {
-              title: {
-                text: 'Typologie d\'occupation du sol',
-                display: true
-              },
-              stacked: true,
-              ticks: {
-                autoSkip: false
-              }
-            }
-          },
-          plugins: {
-            legend: {
-              display: false
-            }
-          }
-        }
-      })
     }
   }
 }
@@ -401,14 +399,15 @@ function fluxCharts (flux) {
   })
   const labels = keys.map(key => GroundTypes.find(k => k.stocksId === key)?.name)
   const reservoirLabels = ['Sol et litière', 'Biomasse'] // produits bois
-  const reservoirData = [0, 0]
+  const reservoirRaw = [0, 0]
   flux.allFlux.forEach(f => {
-    if (f.reservoir === 'sol' || f.reservoir === 'litière') {
-      reservoirData[0] += Math.round(f.co2e)
+    if (f.reservoir === 'sol' || f.reservoir === 'litière' || f.reservoir === 'sol et litière') {
+      reservoirRaw[0] += f.co2e
     } else if (f.reservoir === 'biomasse') {
-      reservoirData[1] += Math.round(f.co2e)
+      reservoirRaw[1] += f.co2e
     }
   })
+  const reservoirData = reservoirRaw.map(Math.round)
   return {
     reservoir: {
       title: 'Flux de carbone (tCO2e/an) par réservoir, toutes occupations du sol confondues',
@@ -447,7 +446,7 @@ function fluxCharts (flux) {
     groundType: {
       title:
         'Flux de carbone (tCO2e/an) par occupation du sol, tous réservoirs confondus',
-      note: 'Les flux de référence pour les changements d’occupation des sols sont issus de données du Réseau de Mesures de la Qualité des Sols (RMQS) du GIS-SOL entre 2001 et 2011 et calculés par occupation du sol et par grande région pédoclimatique. La zone pédoclimatique majoritaire est affectée à l\'EPCI conformément aux travaux du CITEPA. Les flux de référence à l’ha dans la biomasse de forêt sont issus de l’inventaire forestier de l’IGN entre 2011 et 2020 et calculés par typologie de forêt et par grande région écologique. Les flux de référence pour les pratiques agricoles stockantes sont des valeurs moyennes nationales (travaux INRAE 2013).',
+      note: 'Les flux de référence pour les changements d\'occupation des sols sont issus de données du Réseau de Mesures de la Qualité des Sols (RMQS) du GIS-SOL entre 2001 et 2011 et calculés par occupation du sol et par grande région pédoclimatique. La zone pédoclimatique majoritaire est affectée à l\'EPCI conformément aux travaux du CITEPA. Les flux de référence par hectare dans la biomasse des forêts sont issus des campagnes de mesures de 2020 à 2024 de l\'Inventaire Forestier National (IFN) de l\'IGN et calculés par typologie de forêt et par sylvoecoregions. Les flux de référence pour les pratiques agricoles stockantes sont des valeurs moyennes nationales (travaux INRAE 2013).',
       data: JSON.stringify({
         type: 'bar',
         data: {
@@ -549,6 +548,10 @@ function userWarnings (location, allCommunes, options) {
     warnings.push('forestAreasChanged')
   }
   return warnings
+}
+
+function round2 (n) {
+  return Math.round(n * 100) / 100
 }
 
 module.exports = {

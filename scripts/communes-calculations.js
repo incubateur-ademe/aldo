@@ -9,6 +9,12 @@ const communes = require('../data/dataByCommune/communes_17122018.csv.json')
 const epcis = require('../data/dataByEpci/epci.csv.json')
 const { completeData } = require('../data/communes')
 
+// Pre-index epcis by code for O(1) lookups instead of O(n) find()
+const epciMap = new Map()
+epcis.forEach((epci) => {
+  epciMap.set(epci.code, epci.nom)
+})
+
 const extendedCommunes = completeData(communes)
 const communeDict = {}
 const epciDict = {}
@@ -17,7 +23,7 @@ extendedCommunes.forEach((commune) => {
   communeDict[commune.insee] = commune
   if (commune.epci) {
     if (!epciDict[commune.epci]) {
-      const nom = epcis.find((epci) => epci.code === commune.epci)?.nom
+      const nom = epciMap.get(commune.epci)
       epciDict[commune.epci] = {
         code: commune.epci,
         nom,
