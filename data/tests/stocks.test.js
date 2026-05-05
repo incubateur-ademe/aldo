@@ -33,7 +33,7 @@ describe('The stocks data module', () => {
     expect(getCarbonDensity({ insee: '01234', zpc: '1_1' }, 'cultures')).toBe(50)
   })
 
-  const areaPath = '../dataByCommune/citepa-surfaces-2021.csv.json'
+  const areaPath = '../dataByCommune/citepa-surfaces-2023.csv.json'
   it('returns area in hectares (ha) for ground type "cultures" and a commune', () => {
     jest.doMock(areaPath, () => {
       return [
@@ -447,17 +447,17 @@ describe('The stocks data module', () => {
   })
 
   it('returns area of forest subtype (as ha) given a commune', () => {
-    jest.doMock('../dataByCommune/surface-foret.csv.json', () => {
+    jest.doMock(areaPath, () => {
       return [
         {
-          INSEE_COM: '1234',
-          CODE_EPCI: '249500513',
-          SUR_PEUPLERAIES: '30'
+          insee_com: '01234',
+          usage_2021: 'F_p',
+          surfaces_ha: '30'
         },
         {
-          INSEE_COM: '00001',
-          CODE_EPCI: '249500513',
-          SUR_PEUPLERAIES: '20'
+          insee_com: '00001',
+          usage_2021: 'F_p',
+          surfaces_ha: '20'
         }
       ]
     })

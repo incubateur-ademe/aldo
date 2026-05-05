@@ -339,12 +339,12 @@ describe('The flux data module', () => {
     })
   })
 
-  it('returns change in surface area for given ground types from data file divided by 10, the number of years between studies (2004-2014)', () => {
+  it('returns change in surface area for given ground types from data file divided by 10, the number of years between studies (2013-2023)', () => {
     const mockCitepaData = [
-      { insee_com: '01234', siren_epci: '200007177', usage_2004: 'P_a', usage_2014: 'C', surfaces_converties: '5,0' },
-      { insee_com: '01234', siren_epci: '200007177', usage_2004: 'P_a', usage_2014: 'C', surfaces_converties: '7,0' },
-      { insee_com: '01234', siren_epci: '200007177', usage_2004: 'P_a', usage_2014: 'X_x', surfaces_converties: '100,0' },
-      { insee_com: '09999', siren_epci: '200007188', usage_2004: 'P_a', usage_2014: 'C', surfaces_converties: '100,0' }
+      { insee_com: '01234', siren_epci: '200007177', usage_2013: 'P_a', usage_2023: 'C', surfaces_converties: '5,0' },
+      { insee_com: '01234', siren_epci: '200007177', usage_2013: 'P_a', usage_2023: 'C', surfaces_converties: '7,0' },
+      { insee_com: '01234', siren_epci: '200007177', usage_2013: 'P_a', usage_2023: 'X_x', surfaces_converties: '100,0' },
+      { insee_com: '09999', siren_epci: '200007188', usage_2013: 'P_a', usage_2023: 'C', surfaces_converties: '100,0' }
     ]
     const citepaDataByCommuneMap = buildCommuneMap({ communesRawData: mockCitepaData })
 

@@ -38,20 +38,20 @@ jest.mock('../dataByCommune/zpc.csv.json', () => {
   ]
 })
 
-jest.mock('../dataByCommune/citepa-flux-2004-2014.csv.json', () => {
+jest.mock('../dataByCommune/citepa-flux-2013-2023.csv.json', () => {
   return [
     {
       insee_com: '01234',
       siren_epci: '200007177',
-      usage_2004: 'C_vi',
-      usage_2014: 'A_i',
+      usage_2013: 'C_vi',
+      usage_2023: 'A_i',
       surfaces_converties: '6,0'
     },
     {
       insee_com: '01234',
       siren_epci: '200007177',
-      usage_2004: 'C_vi',
-      usage_2014: 'C',
+      usage_2013: 'C_vi',
+      usage_2023: 'C',
       surfaces_converties: '12,0'
     }
   ]

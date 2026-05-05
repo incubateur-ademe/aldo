@@ -33,7 +33,6 @@ function getArea (location, groundType) {
   else {
     console.log('no area saved for', location.commune?.insee, groundType)
     return null
-    // return getAreaFromData(location, groundType)
   }
 }
 
@@ -42,37 +41,10 @@ function getArea (location, groundType) {
 // so a mapping is used and the sum of ha of all matching CLC types is returned.
 // NB: in the lookup the type names for ground data and the more specific biomass data
 // are placed on the same level, so some CLC codes are used in two types.
-/**
- * @deprecated use getAreaFromDataOptimized instead
- */
-function getAreaFromData (location, groundType) {
-  if (!location.commune) { console.log('getAreaFromData in data/stocks called wrong', location); return }
-  if (groundType === 'haies') {
-    return
-  } else if (groundType.startsWith('forêt ')) {
-    return getAreaForests(location.commune, groundType)
-  }
-  const typeDetails = GroundTypes.find((gt) => gt.stocksId === groundType)
-  const citepaCodes = typeDetails?.citepaCodes
-  if (!citepaCodes) {
-    throw new Error(`No CITEPA code mapping found for ground type '${groundType}'`)
-  }
-  const csvFilePath = './dataByCommune/citepa-surfaces-2021.csv'
-  const areasByCommuneAndClcType = require(csvFilePath + '.json')
-  let totalArea = 0
-  areasByCommuneAndClcType
-    .filter((areaData) => location.commune.insee === areaData.insee_com && citepaCodes.includes(areaData.usage_2021))
-    .forEach((areaData) => { totalArea += +areaData.surfaces_ha })
-  return totalArea
-}
-
-// Optimized getAreaFromData using pre-indexed data
 function getAreaFromDataOptimized ({ commune, groundType, forestAreaByCommuneMap, areasByCommuneMap }) {
   if (!commune) { console.log('getAreaFromData in data/stocks called wrong', commune); return }
   if (groundType === 'haies') {
     return
-  } else if (groundType.startsWith('forêt ')) {
-    return getAreaForests(commune, groundType)
   }
   const typeDetails = GroundTypes.find((gt) => gt.stocksId === groundType)
   const citepaCodes = typeDetails?.citepaCodes
@@ -92,29 +64,6 @@ function getAreaFromDataOptimized ({ commune, groundType, forestAreaByCommuneMap
     .reduce((totalArea, areaData) => totalArea + (+areaData.surfaces_ha), 0)
 
   return totalArea
-}
-
-// using IGN, not CLC, data for forests because it is more accurate
-// side effect being that the sum of the areas could be different to the
-// recorded size of the EPCI.
-function getAreaForests (commune, forestType) {
-  const csvFilePath = './dataByCommune/surface-foret.csv'
-  const areaData = require(csvFilePath + '.json')
-  let areaDataByCommune = []
-  let code = commune.insee
-  if (code.startsWith('0')) code = code.slice(1)
-  areaDataByCommune = areaData.filter(data => data.INSEE_COM === code)
-  let sum = 0
-  const areaCompositionColumnName = {
-    'forêt feuillu': 'SUR_FEUILLUS',
-    'forêt conifere': 'SUR_RESINEUX',
-    'forêt mixte': 'SUR_MIXTES',
-    'forêt peupleraie': 'SUR_PEUPLERAIES'
-  }[forestType]
-  areaDataByCommune.forEach((communeData) => {
-    sum += +communeData[areaCompositionColumnName]
-  })
-  return sum
 }
 
 function getSignificantCarbonData () {

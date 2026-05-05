@@ -346,7 +346,7 @@ function charts (stocks) {
     biomass: pieChart('Répartition du stock de carbone par occupation du sol dans le réservoir Biomasse', stocksPercentageLabels, biomassStocksValues),
     density: {
       title: 'Stocks total de carbone par occupation du sol, tous réservoirs confondus',
-      note: 'Tous les réservoirs de carbone sont inclus (sol, biomasse, litière) à l\'exception des produits bois. Les stocks de référence pour les sols sont issus de données du Réseau de Mesures de la Qualité de Sols (RMQS) du GIS-SOL entre 2001 et 2011 et calculés par occupation du sol et par grande région pédoclimatique. La zone pédoclimatique majoritaire est affectée à l\'EPCI conformément aux travaux du CITEPA. Les stocks de référence à l\'ha dans la biomasse de forêt sont issus de l\'inventaire forestier de l\'IGN entre 2011 et 2020 et calculés par typologie de forêt et par grande région écologique.',
+      note: 'Tous les réservoirs de carbone sont inclus (sol, biomasse, litière) à l\'exception des produits bois. Les stocks de référence pour les sols sont issus de données du Réseau de Mesures de la Qualité de Sols (RMQS) du GIS-SOL entre 2001 et 2011 et calculés par occupation du sol et par grande région pédoclimatique. La zone pédoclimatique majoritaire est affectée à l\'EPCI conformément aux travaux du CITEPA. Les stocks de référence à l\'ha pour la biomasse en forêt sont issus de l\'inventaire forestier de l\'IGN (campagnes de mesures de 2020 à 2024) et calculés par typologie de forêt et par grande région écologique.',
       data: JSON.stringify({
         type: 'bar',
         data: {

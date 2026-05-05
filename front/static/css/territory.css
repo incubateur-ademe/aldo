@@ -72,3 +72,68 @@ th.flux-surface-col {
 .chart-wrapper {
   max-width: 70%;
 }
+
+/* Keep the two matrix tables in the flux tab readable without horizontal scrolling. */
+.flux-compact-table table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.flux-compact-table th,
+.flux-compact-table td {
+  padding-inline: 0.3rem;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.flux-compact-table th.flux-surface-col {
+  min-width: 5.5rem;
+}
+
+.flux-compact-table th[scope="row"] {
+  min-width: 7rem;
+}
+
+.flux-compact-input {
+  padding-inline: 0.3rem;
+}
+
+.flux-compact-table thead th {
+  font-size: 0.8rem;
+}
+
+/* Section navigation styled as a compact segmented menu. */
+.territory-nav .fr-nav__list {
+  gap: 0.5rem;
+  border-bottom: 1px solid #d6d6d6;
+}
+
+.territory-nav .fr-nav__link {
+  min-height: 2.5rem;
+  padding: 0.6rem 0.9rem 0.75rem;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: inset 0 -3px 0 transparent;
+  color: #3a3a3a;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.territory-nav .fr-nav__link[aria-current="page"] {
+  background-color: #f5f5fe;
+  box-shadow: inset 0 -3px 0 #000091;
+  color: #000091;
+  font-weight: 700;
+}
+
+@media (min-width: 62rem) {
+  .flux-compact-table {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100vw - 3rem);
+    max-width: none;
+    margin-left: 0;
+  }
+}
