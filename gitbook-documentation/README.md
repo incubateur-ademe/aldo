@@ -8,7 +8,7 @@ description: >-
 
 <figure><img src=".gitbook/assets/Logo ALDO-2022 (1).png" alt=""><figcaption></figcaption></figure>
 
-Les sols et les végétaux stockent une grande quantité de carbone. A l’échelle globale, ces réservoirs de carbone stockent, dans la la matière organique des sols, la litière et la biomasse vivante ou morte (y compris les produits matériaux issus de la biomasse), 3 à 4 fois plus de carbone que l’atmosphère !
+Les sols et les végétaux stockent une grande quantité de carbone. A l’échelle globale, ces réservoirs de carbone stockent dans la la matière organique des sols, la litière et la biomasse vivante ou morte (y compris les produits matériaux issus de la biomasse), 3 à 4 fois plus de carbone que l’atmosphère !
 
 Toute variation négative ou positive de ces stocks, même relativement faible, peut influer sur les concentrations de gaz à effet de serre dans l’atmosphère (en jouant un rôle de source ou de puits de carbone). Une réduction des stocks génère une source de carbone (émission de carbone vers l'atmosphère) et à l'inverse une augmentation des stocks génère un puits de carbone (séquestration nette de CO2)<mark style="color:green;">.</mark> **La séquestration nette de CO2** est donc un flux net positif de l’atmosphère vers ces réservoirs qui se traduit au final par une diminution du CO2 atmosphérique.
 
@@ -50,10 +50,8 @@ D’un point de vue méthodologique, l’estimation des flux de carbone entre le
 
 #### Autres ressources :
 
-* Atelier Sommet Virtuel du Climat (juin 2023 version CHANTERELLE) <mark style="color:red;">⏯</mark> [Un nouvel outil ALDO pour évaluer le carbone des sols et forêts de votre territoire !](https://www.youtube.com/watch?v=53j5ybckvIw)
-* Webinaire (février 2023 version HETRE) <mark style="color:red;">⏯</mark> [ Comprendre les changements apportés avec la digitalisation de l'outil ALDO ](https://www.youtube.com/watch?v=AmSl6Bi5U-Q)
-* Tutoriel pratique d'[utilisation de la version ALDO en ligne](https://www.youtube.com/watch?v=UYFCyIcvWN4) <mark style="color:red;">⏯</mark>&#x20;
-* Webinaire (juin 2021) <mark style="color:red;">⏯</mark> [<mark style="color:blue;">Comment mieux connaître la séquestration carbone de votre territoire avec l’outil ALDO ?</mark>](https://abc-transitionbascarbone.fr/replayfaq-comment-mieux-connaitre-la-sequestration-carbone-de-votre-territoire-avec-loutil-aldo/)
-* [<mark style="color:blue;">MOOC ADEME</mark>](https://www.fun-mooc.fr/fr/cours/stocker-du-carbone-dans-les-ecosysteme/) présentant les enjeux de la séquestration carbone dans les sols et les arbres, de la santé des sols mais aussi des pratiques dites “séquestrantes”. **(session n°3 : novembre 2023)**
+* Sommet Virtuel du Climat (janvier 2026) <mark style="color:red;">⏯</mark> [ALDO : un outil au service des territoires, pour stocker du carbone !](https://www.youtube.com/watch?v=53j5ybckvIw)
+* Tutoriel pratique d'[utilisation de ALDO en ligne](https://www.youtube.com/watch?v=UYFCyIcvWN4) <mark style="color:red;">⏯</mark>&#x20;
+* [<mark style="color:blue;">MOOC ADEME</mark>](https://www.fun-mooc.fr/fr/cours/stocker-du-carbone-dans-les-ecosysteme/) présentant les enjeux de la séquestration carbone dans les sols et les arbres, de la santé des sols mais aussi des pratiques dites “stockantes”.
 
 <figure><img src=".gitbook/assets/Logo ALDO-2022 (1).png" alt=""><figcaption></figcaption></figure>
