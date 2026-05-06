@@ -1,6 +1,6 @@
 # 🪴 Spécificités - Haies
 
-Les **haies** n'existent pas dans la nomenclature Corine Land Cover. La résolution de CLC ne permet pas, en général, de détecter la présence de haies et de bocages.&#x20;
+Les **haies** n'existent pas dans la nomenclature CITEPA. &#x20;
 
 :new: Depuis la version CHANTERELLE 2023, les haies ne sont plus une typologie à part entière. Les haies sont définies comme un **réservoir** biomasse (au même titre que la biomasse forestière). La valeur de ce stock est donc affectée à la typologie d'occupation du sol sur laquelle la haie est implantée.
 
