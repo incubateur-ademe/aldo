@@ -4,7 +4,7 @@ description: Flux de carbone du territoire (tCO2eq/an)
 
 # 📊 Méthode générale
 
-En préambule, consultez la définition d'un [flux](broken-reference) de carbone.
+En préambule, consultez la définition d'un [flux](/broken/pages/UPj9ly0Mz7vzCiQ7MyT9) de carbone.
 
 **La rubrique présente ici la méthode générale utilisée dans l'outil ALDO, étape par étape.** Des spécificités sont relatives à certaines typologies dans des rubriques dédiées :&#x20;
 
@@ -96,11 +96,11 @@ D’un point de vue pratique, les flux totaux de ce réservoir sont ainsi calcul
 
 ### Approche :a: Collecte des variations de surfaces par changement d'occupation des sols par réservoir
 
-En suivant le même raisonnement que dans l'onglet [Stocks](../stocks/methode-generale.md#collecte-des-surfaces-par-occupation-du-sol-pour-chaque-typologie-ha), des bases de données surfaciques sont utilisées. Pour calculer les flux, il ne s'agit plus ici de connaître les surfaces fixes (2018) de chaque occupation du sol, mais de connaître les variations de surfaces entre chacune de ces typologies, entre deux millésimes.
+En suivant le même raisonnement que dans l'onglet [Stocks](../stocks/methode-generale.md#collecte-des-surfaces-par-occupation-du-sol-pour-chaque-typologie-ha), des bases de données surfaciques sont utilisées. Pour calculer les flux, il ne s'agit plus ici de connaître les surfaces fixes (2021) de chaque occupation du sol, mais de connaître les variations de surfaces entre chacune de ces typologies, entre deux millésimes.
 
-Les variations de surfaces associées à chaque changement d'affectation du sol sont renseignées à partir des données de bases de changement Corine Land Cover entre les millésimes 2012 et 2018. [Sources.](../introduction/sources.md#variations-de-surfaces-ha-an)
+Les variations de surfaces associées à chaque changement d'affectation du sol sont renseignées à partir des données de bases de changement CITEPA seon une méthode spatialement explicite. [Sources.](../introduction/sources.md#variations-de-surfaces-ha-an)
 
-Les variations (ha) entre 2012 et 2018 sont divisées par 6 ans pour calculer la surface moyenne annuelle de changement (ha/an). L’année concernée par le diagnostic des flux des changements d’occupation des sols correspond donc à une année théorique moyenne des 6 dernières années.
+Les variations (ha) entre 2004 et 2014 sont divisées par 10 ans pour calculer la surface moyenne annuelle de changement (ha/an). L’année concernée par le diagnostic des flux des changements d’occupation des sols correspond donc à une année théorique moyenne des 10 années représentatives.
 
 Les typologies [d'occupation du sol](../introduction/definitions.md#occupation-du-sol-et-changement-doccupation-du-sol) de niveau 1 et 2 sont renseignées.
 
@@ -110,7 +110,7 @@ Si des informations plus précises sont accessibles (bases de données locales/r
 Cas particulier :
 
 * Les **haies** : il n'existe pas de données sur l'évolution du linéaire de haie en France - plus de détails dans la [méthode spécifique](../stocks/specificites-haies.md).
-* Les **forêts** : il n'existe qu'un seul millésime de la BD Forêt® de l'IGN. Pour obtenir des données de variations de surfaces forestières, les millésimes Corine Land Cover sont utilisés (comme pour les autres typologies d'occupation du sol). - plus de détails dans les [sources](../introduction/sources.md#donnees-surfaciques-pour-loccupation-du-sol-forets).
+* Les **forêts** : il n'existe qu'un seul millésime de la BD Forêt® de l'IGN. Pour obtenir des données de variations de surfaces forestières, les données CITEPA sont utilisés (comme pour les autres typologies d'occupation du sol). - plus de détails dans les [sources](../introduction/sources.md#donnees-surfaciques-pour-loccupation-du-sol-forets).
 * Les **produits bois** ne sont pas quantifiés à partir de surfaces d'occupation du sol - plus de détails dans la [méthode spécifique](../stocks/specificites-produits-bois.md).
 {% endhint %}
 

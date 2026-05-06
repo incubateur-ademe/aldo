@@ -4,7 +4,7 @@
 
 * [🌱 ALDO : Qu'est-ce que c'est ?](README.md)
 * [🔠 Définitions](introduction/definitions.md)
-* [®️ Sources](introduction/sources.md)
+* [®️ ®️ Sources](introduction/sources.md)
 
 ## Compléments
 

@@ -16,7 +16,7 @@ La nomenclature de niveau 2 définie plusieurs typologies d'[occupation du sol](
 * Sols artificialisés enherbés et arbustifs
 * Sols artificialisés arborés
 
-Pour les **sols artificialisés** il est possible de définir un taux minimum de végétalisation. Par défaut, il est considéré que 80% des sols artificiels sont imperméabilisés et qu'à minima 20 % sont enherbés, arbustifs ou arborés. C'est à dire qu'avec cette hypothèse :
+Pour les **sols artificialisés** il est possible de définir un taux minimum de végétalisation. Par défaut, il est considéré que 80% des sols artificiels sont imperméabilisés et qu'à minima 20 % sont enherbés, arbustifs ou arborés. C'est à dire qu'avec cette hypothèse :&#x20;
 
 * Si Corine Land Cover détecte **plus** de 20% de sols artificiels enherbés, arbustifs ou arborés, ALDO retiendra les surfaces Corine Land Cover.
 * Si Corine Land Cover détecte **moins** de 20% de sols artificiels enherbés, arbustifs ou arborés, ALDO recalculera ces surfaces pour qu'elles soient arbitrairement égales au taux de 20%.
@@ -32,11 +32,11 @@ En outre, chaque territoire pourra modifier ces proportions selon ses caractéri
 * L'approche **Production** visant à estimer la part de bois produits et récoltés sur le territoire
 * L'approche **Consommation** visant à estimer la part de produits bois consommés sur le territoire
 
-Pour comprendre ces deux approches, consultez la rubrique dédiée aux stocks [specificites-produits-bois.md](../stocks/specificites-produits-bois.md "mention") ou aux flux [specificites-produits-bois.md](../flux/specificites-produits-bois.md "mention")
+Pour comprendre ces deux approches, consultez la rubrique dédiée aux stocks [specificites-produits-bois.md](../stocks/specificites-produits-bois.md "mention") ou aux flux [specificites-produits-bois.md](../flux/specificites-produits-bois.md "mention")&#x20;
 
-L’hypothèse "production" (récolte) est privilégiée pour garder le lien avec les forêts du territoire. En effet, les mécanismes de stockage de carbone dans les produits bois sont interconnectés avec les variations de stocks dans les forêts. Ces mécanismes doivent donc être évalués conjointement.
+L’hypothèse "production" (récolte) est privilégiée pour garder le lien avec les forêts du territoire. En effet, les mécanismes de stockage de carbone dans les produits bois sont interconnectés avec les variations de stocks dans les forêts. Ces mécanismes doivent donc être évalués conjointement.&#x20;
 
-L’utilisateur a néanmoins le choix de passer en mode « consommation » s’il le souhaite mais il faut garder à l’esprit que l’outil ne permet d’évaluer le potentiel de séquestration additionnelle dans les produits bois liée à une augmentation de la consommation du bois dans le territoire. L’augmentation de la consommation de bois dans un territoire peut avoir une influence sur le stockage de carbone dans les forêts d’un autre territoire.
+L’utilisateur a néanmoins le choix de passer en mode « consommation » s’il le souhaite mais il faut garder à l’esprit que l’outil ne permet d’évaluer le potentiel de séquestration additionnelle dans les produits bois liée à une augmentation de la consommation du bois dans le territoire. L’augmentation de la consommation de bois dans un territoire peut avoir une influence sur le stockage de carbone dans les forêts d’un autre territoire.&#x20;
 
 Enfin, les résultats de ces deux approches (production/consommation) ne peuvent pas être additionnés pour éviter des problèmes de double compte.
 
@@ -48,10 +48,10 @@ Cette valeur peut être comparée à la dynamique actuelle de flux de séquestra
 
 ## **Mises à jour des surfaces d'occupation du sol**
 
-Si vous disposez de données locales (sur l'occupation du sol ou sur les changements d'occupation du sol) plus précises ou plus récentes, il est recommandé d'affiner le diagnostic. Quelques informations spécifiques et précautions concernant cette option :
+Si vous disposez de données locales (sur l'occupation du sol ou sur les changements d'occupation du sol) plus précises ou plus récentes, il est recommandé d'affiner le diagnostic. Quelques informations spécifiques et précautions concernant cette option :&#x20;
 
-* La matrice "Changement d'occupation des sols (ha/an)" se remplit et se lit dans le sens occupation du sol initiale & occupation du sol finale.
+* La matrice "Changement d'occupation des sols (ha/an)" se remplit et se lit dans le sens occupation du sol initiale-occupation du sol finale.
 * En général, si une autre base de données d'occupation du sol est utilisée, la nomenclature peut différer. Il faut alors réaffecter les typologies selon la nomenclature ALDO. Vous pouvez vous aider du descriptif des typologies d'[occupation du sol](../introduction/definitions.md#occupation-du-sol-et-changement-doccupation-du-sol). Il n'y a toutefois pas de correspondance exacte.
-* Concernant l'année de référence : si vous souhaitez mettre à jour seulement quelques typologies d'occupation du sol, il faut que ce soit cohérent avec les autres surfaces (2023 pour les surfaces d'occupation des sols, une année moyenne entre 2013 et 2023 pour les surfaces de changements d'occupation des sols).
+* Concernant l'année de référence : si vous souhaitez mettre à jour seulement quelques typologies d'occupation du sol, il faut que ce soit cohérent avec les autres surfaces (2018 pour les surfaces d'occupation des sols, une année moyenne entre 2012 et 2018 pour les surfaces de changements d'occupation des sols).
 * Concernant l'année de référence : si vous souhaitez mettre à jour toutes les surfaces avec une BDD locale dans son intégralité : vous pouvez choisir l'année que vous voulez si plus récente. Veillez à faire correspondre le périmètre de votre territoire s'il a évolué depuis : [#agregation-de-communes](configuration-manuelle.md#agregation-de-communes "mention")
 * Si une seule surface est modifiée, vérifiez la pertinence/cohérence pour que le total des surfaces soit approximativement celui du périmètre étudié.

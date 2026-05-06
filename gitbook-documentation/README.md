@@ -36,9 +36,9 @@ L'outil ALDO propose des ordres de grandeurs sur les stocks et flux de carbone d
 
 Pour aider les territoires à intégrer les stocks et flux de carbone dans leur diagnostic, l’outil « ALDO » en ligne :globe\_with\_meridians: propose :
 
-* Un onglet [Broken link](broken-reference "mention") :arrow\_forward: L’état des stocks de carbone organique des sols, de la biomasse et des produits bois en fonction de l’aménagement de son territoire (occupation du sol) ;
-* Un onglet [Broken link](broken-reference "mention") :arrow\_forward: La dynamique actuelle de stockage ou de déstockage liée aux changement d’occupation des sols, aux forêts et aux produits bois (en tenant compte du niveau actuel des prélèvements de biomasse) ;
-* Un onglet [Broken link](broken-reference "mention") :arrow\_forward: Les potentiels de séquestration nette de CO2 liés à diverses pratiques agricoles pouvant être mises en place sur le territoire.
+* Un onglet [Broken link](/broken/pages/uCDNDGbSvwWr1ahjAXwS "mention") :arrow\_forward: L’état des stocks de carbone organique des sols, de la biomasse et des produits bois en fonction de l’aménagement de son territoire (occupation du sol) ;
+* Un onglet [Broken link](/broken/pages/UPj9ly0Mz7vzCiQ7MyT9 "mention") :arrow\_forward: La dynamique actuelle de stockage ou de déstockage liée aux changement d’occupation des sols, aux forêts et aux produits bois (en tenant compte du niveau actuel des prélèvements de biomasse) ;
+* Un onglet [Broken link](/broken/pages/eRjChtyTGfFgI71E23pk "mention") :arrow\_forward: Les potentiels de séquestration nette de CO2 liés à diverses pratiques agricoles pouvant être mises en place sur le territoire.
 
 
 
