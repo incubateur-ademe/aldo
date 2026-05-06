@@ -25,6 +25,6 @@ La déclinaison web de l'outil ALDO (préalablement en format Tableur) a été r
 
 L'actualisation des bases de données agrégées dans ALDO (voir [sources](../introduction/sources.md)) provient de :
 
-* Mélanie Juillard, Colas Robert et Pier-Alban Orain (CITEPA)
+* Mélanie Juillard, Quentin Bédrune, Colas Robert et Pier-Alban Orain (CITEPA)
 * Mathieu Dassot (IGN)
 * Valentin Bellassen et Abdoul Diallo (INRAE)
