@@ -96,22 +96,6 @@ Ces données sont obtenues par inter-régions. Elles sont utilisées pour les ty
 
 </details>
 
-<details>
-
-<summary>Stocks de carbone de la biomasse des forêts</summary>
-
-Les stocks de référence à l’hectare de la biomasse en forêt sont issus de l’inventaire forestier de l’IGN mené entre 2016 et 2020 et calculés par typologie de forêt et par sylvo- écorégion et grande région écologique.
-
-Les données **de biomasse sur pied (vivante) et de bois mort** sont obtenues, à l'hectare, par composition (feuillu, conifère, mixte, peupleraie). Ces données sont exprimées par groupement de sylvo- écorégion (SER) lorsque les données sont statistiquement significatives, ou, dans le cas contraire, par Grande Région Ecologique (GRECO).
-
-Les SER sont des subdivisions des GRECO, comme le montre les cartographies ci-dessous.
-
-[Réservoir](definitions.md#reservoirs) ALDO -> Biomasse
-
-[Occupation du sol](definitions.md#typologies-doccupation-du-sol) -> Forêts
-
-</details>
-
 <div><figure><img src="../.gitbook/assets/carte_GRECO2.gif" alt=""><figcaption><p>GRECO, Source : Inventaire Forestier, IGN</p></figcaption></figure> <figure><img src="../.gitbook/assets/inventaire_ser.png" alt=""><figcaption><p>SER, Source : Inventaire Forestier, IGN</p></figcaption></figure></div>
 
 <details>
@@ -200,24 +184,6 @@ Si le changement d'occupation du sol aboutit à une perte de surface forestière
 
 </details>
 
-<details>
-
-<summary>Flux de carbone de la biomasse en forêts, par accroissement biologique net</summary>
-
-Des flux de carbone ont lieux dans les forêts, même à surface constante : il est ici question du bilan calculé en soustrayant à l’accroissement biologique des forêts, la mortalité et les prélèvements de bois.
-
-Ces flux de carbone de la biomasse vivante (aérienne et racinaire) sont issus de l'inventaire forestier de l'IGN, [décrit ci-dessus.](sources.md#stocks-de-carbone-de-la-biomasse-des-forets)
-
-Les récentes campagnes de mesures, menées entre 2020 et 2024 permettent d'obtenir des flux de référence de la biomasse en forêts à partir du bilan entre **les données d’accroissement biologique, de mortalité et de prélèvement.**
-
-Comme pour les stocks, ces données sont obtenues, à l'hectare, par composition (feuillu, conifère, mixte, peupleraie) et sont calculées par groupement de sylvo- écorégion (SER) lorsque les données sont statistiquement significatives, ou, dans le cas contraire, par Grande Région Ecologique (GRECO).
-
-[Réservoir](definitions.md#reservoirs) ALDO -> Biomasse
-
-[Occupation du sol](definitions.md#typologies-doccupation-du-sol) -> Forêts
-
-</details>
-
 ## Produits bois : stocks et flux
 
 <details>
@@ -245,16 +211,6 @@ Les données obtenues sont l'estimation des **stocks** dans les produits bois BO
 Comme pour les [Stocks de carbone français dans les produits bois](sources.md#stocks-de-carbone-francais-dans-les-produits-bois), ces données proviennent de l'inventaire national d'émissions de GES réalisé par le CITEPA. L'édition utilisée est l'inventaire publié au printemps 2021 (couvrant la période 1990-2019).
 
 Les données obtenues sont l'estimation des **flux** dans les produits bois BO (sciages) et BI (panneaux, papiers) sur le territoire de France Métropolitaine, exprimés en tCO2e (moyenne 2016-2019)
-
-</details>
-
-<details>
-
-<summary>Prélèvements et récolte de bois en forêts</summary>
-
-Comme décrit [ci-dessus](sources.md#flux-de-carbone-de-la-biomasse-en-forets-par-accroissement-net), l'inventaire forestier de l'IGN, par des campagnes de mesures, menées entre 2016 et 2020, fournit des données d’accroissement biologique, de mortalité **et de prélèvement.**
-
-Ces données sont exprimées ici à l'hectare. Elles permettent d'estimer une récolte théorique locale en suivant [la méthode détaillée ici.](../stocks/specificites-produits-bois.md#estimation-theorique-des-quantites-de-produits-bois-recoltees-par-categorie-bo-bi-du-territoire-et-d)
 
 </details>
 
