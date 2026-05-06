@@ -10,9 +10,6 @@ Cela permet également de s'affranchir des éventuelles modifications de [#maill
 
 ## **Hypothèses de répartition des surfaces des sols artificialisés**
 
-* les données d’occupation des sols statiques sur l'année de référence 2023),
-* les données de changement d’occupation des sols sur la période 2013 - 2023.
-
 La nomenclature de niveau 2 définie plusieurs typologies d'[occupation du sol](../introduction/definitions.md#occupation-du-sol-et-changement-doccupation-du-sol) pour les sols artificialisés :
 
 * Sols artificialisés imperméabilisés
