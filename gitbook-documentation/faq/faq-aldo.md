@@ -12,7 +12,7 @@ description: La FAQ est issue des questions utilisateurs reçues.
 
 Par convention les stocks de carbone dans les sols et biomasse sont en tC.
 
-Les flux d'émissions ou de séquestration sont exprimés en équivalent CO2 : tCO2eq.&#x20;
+Les flux d'émissions ou de séquestration sont exprimés en équivalent CO2 : tCO2eq.
 
 **1tCO2 = 44/12 tC.**
 
@@ -26,7 +26,7 @@ Pour plus de détails, se référer [aux définitions des stocks et des flux.](.
 
 La valeur du flux n'est pas supérieur à proprement parlé, il faut regarder l'unité.
 
-Tant que le carbone est dans le sol, il s’agit physiquement de molécule de carbone ( C ). Quand le carbone se retrouve dans l’atmosphère (ici via le changement d’occupation du sol que vous mentionnez), il s’agit de dioxyde de carbone (CO2), il y a donc un rapport \*44/12 entre les 2. Ainsi, un flux généré par un changement d'affectation des sols se calcul comme suit : Flux (en tC/ha) = (Stock initial - Stock final) \* 44/12.
+Tant que le carbone est dans le sol, il s’agit physiquement de molécule de carbone (C). Quand le carbone se retrouve dans l’atmosphère (ici via le changement d’occupation du sol que vous mentionnez), il s’agit de dioxyde de carbone (CO2), il y a donc un rapport \*44/12 entre les 2. Ainsi, un flux généré par un changement d'affectation des sols se calcul comme suit : Flux (en tC/ha) = (Stock initial - Stock final) \* 44/12.
 
 Pour plus de détails, se référer [aux définitions des stocks et des flux.](../introduction/definitions.md#flux-de-carbone)
 
@@ -166,6 +166,14 @@ Pour des projets de séquestration de carbone il faut se référer aux outils et
 
 </details>
 
+<details>
+
+<summary>Pourquoi les données CITEPA sont plus anciennes que les données CLC (2004-2014 au lieu de 2012-2018) ?</summary>
+
+Le CITEPA réalise la concaténation de plusieurs produits. Ainsi, selon une méthode spatialement explicite, la période 2004-2014 pour les matrices de surfaces de changements est la période la plus valide statistiquement. En comparaison, pour les données "statique", nous pouvons intégré des données récentes (datant de 2021 actuellement dans l'outil ALDO) mais pour les « comparaisons » il faut deux millésimes. Sachant que les données territoriales ne sont pas analysées sur la même période il y a des millésimes sur des périodes très variés pour des territoires différents. Ainsi, la période 2004-2014 est valide pour interpréter des résultats actuels, les données sur l'utilisation des terres et les changements d'affectation des terres et des forêts étant des changements sur le long terme.
+
+</details>
+
 ***
 
 ## Documentation
@@ -192,7 +200,7 @@ Les données brutes de l'IFN sont téléchargeables [ici](https://inventaire-for
 
 Les lignes directrices du GIEC (2006 - vol 4 ) présentent les normes méthodologiques pour les approches production et consommation.
 
-Dans ALDO, comme expliqué [ici ](https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/configuration/configuration-manuelle#hypothese-de-calcul-des-produits-bois): L’hypothèse "production" (récolte) est privilégiée pour garder le lien avec les forêts du territoire. En effet, les mécanismes de stockage de carbone dans les produits bois sont interconnectés avec les variations de stocks dans les forêts. Ces mécanismes doivent donc être évalués conjointement.&#x20;
+Dans ALDO, comme expliqué [ici ](https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/configuration/configuration-manuelle#hypothese-de-calcul-des-produits-bois): L’hypothèse "production" (récolte) est privilégiée pour garder le lien avec les forêts du territoire. En effet, les mécanismes de stockage de carbone dans les produits bois sont interconnectés avec les variations de stocks dans les forêts. Ces mécanismes doivent donc être évalués conjointement.
 
 </details>
 
@@ -226,7 +234,7 @@ Entre les versions EXCEL (2021), et digitales (HETRE 2022 et CHANTERELLE 2023), 
 
 <summary>Quelle est l'année à indiquer avec les données affichées dans l'outil ALDO ?</summary>
 
-L'année est bien précisée : exemple onglet flux : Bases de changement CLC 2012 2018 & Inventaire forestier IGN 2012 2016. Pour les résultats rétrospectifs, attention toutefois : ALDO ne doit pas être utilisé pour tracer des tendances, il s'agit d'un résultat ponctuel : certaines données sources sont actualisées (forêts), d'autres ne l'ont jamais été (haies, sols, par exemple).
+L'année est bien précisée : exemple onglet flux : Bases de changement CITEPA 2004-2014 & Inventaire forestier IGN 2012-2016. Pour les résultats rétrospectifs, attention toutefois : ALDO ne doit pas être utilisé pour tracer des tendances, il s'agit d'un résultat ponctuel : certaines données sources sont actualisées (forêts), d'autres ne l'ont jamais été (haies, sols, par exemple).
 
 </details>
 
@@ -250,7 +258,7 @@ Dans l'exemple ci-dessous, pour les forêts mixtes, la multiplication des -0,40 
 
 Pourquoi ?
 
-L'ensemble des ces données proviennent de l'[inventaire forestier de l'IGN](https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/introduction/sources#flux-de-carbone-de-la-biomasse-en-forets-par-accroissement-biologique-net).&#x20;
+L'ensemble des ces données proviennent de l'[inventaire forestier de l'IGN](https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/introduction/sources#flux-de-carbone-de-la-biomasse-en-forets-par-accroissement-biologique-net).
 
 Le **facteur d'expansion** renseigné permet de passer du volume bois fort tige IFN au stock de carbone aérien et racinaire dans la biomasse ligneuse. Il est le ratio entre la valeur de carbone aérien et racinaire (tC) et le volume bois-fort tige (m3 BFT).
 
@@ -272,7 +280,7 @@ Une réflexion est en cours pour faire converger avec le travail du CITEPA sur l
 
 <summary>Si un type de sol présente un petit stock de carbone et qu'on ne le retrouve pas du tout dans les flux de CO2e, comment interpréter cette information ? Le stock est stable et la partie émission et séquestration s'équilibre sur l'année ?</summary>
 
-Un stock (même faible) sera à l'équilibre si pas de changement d'usage ni de gestion depuis plusieurs années, c'est-à-dire un flux nul. Les changements d'occupation sont évalués dans ALDO par la comparaison des données CORINE LAND COVER 2012 et 2018 (prochain millésime 2024), ils peuvent être affinés par des données locales de type mode d'occupation des sols des agences d'urbanisme.
+Un stock (même faible) sera à l'équilibre si pas de changement d'usage ni de gestion depuis plusieurs années, c'est-à-dire un flux nul. Les changements d'occupation sont évalués dans ALDO par la comparaison des données CITEPA 2004-2014, ils peuvent être affinés par des données locales de type mode d'occupation des sols des agences d'urbanisme.
 
 </details>
 
@@ -298,7 +306,7 @@ Oui, une incertitude existe sur les données d'ALDO, mais cette marge d'erreur e
 
 <summary>Quelle est l'ampleur de l'incertitude sur la période de conversion du stock, quand il y a changement d'occupation ?</summary>
 
-La durée de 20 ans appliquée est la durée par défaut préconisée par les lignes directrices du GIEC. Dans les faits, les mesures de terrain montrent que cette valeur peut être bien différente en particulier pour les sols, certains modèles prennent en compte d'autres valeurs (ex. 30 ans). Pour le calcul de l'inventaire, ce qui compte reste le flux de transition d'un stock à un autre. Nos méthodes sur l'estimation de ces flux liés aux conversions ont aussi évolué (voir prochain rapport Ominea du CITEPA à paraître)
+La durée de 20 ans appliquée est la durée par défaut préconisée par les lignes directrices du GIEC. Dans les faits, les mesures de terrain montrent que cette valeur peut être bien différente en particulier pour les sols, certains modèles prennent en compte d'autres valeurs (ex. 30 ans). Pour le calcul de l'inventaire, ce qui compte reste le flux de transition d'un stock à un autre. Nos méthodes sur l'estimation de ces flux liés aux conversions ont aussi évolué (voir [rapport Ominea du CITEPA](https://www.citepa.org/donnees-air-climat/methodologie-de-linventaire-ominea/))
 
 </details>
 
