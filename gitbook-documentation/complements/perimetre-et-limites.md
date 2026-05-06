@@ -6,11 +6,9 @@
 
 <summary>Maillage administratif</summary>
 
-:new: La version actuelle CHANTERELLE propose depuis juin 2023 une visualisation des résultats à l'échelle communale et EPCI. L'agrégation de plusieur territoires est possible via l'outil en ligne, elle est même recommandée lors d'une estimation au niveau communal.
+:new: La version actuelle d'ALDO propose depuis juin 2023 une visualisation des résultats à l'échelle communale et EPCI. L'agrégation de plusieurs territoires est possible via l'outil en ligne, elle est même recommandée lors d'une estimation au niveau communal.
 
-L'agrégation des différentes données disponibles dans ALDO se fait à l'échelon communal, selon le millésime communal officiel de décembre 2018.
-
-Ce millésime **2018** coïncide donc avec les deux bases de données les plus conséquentes utilisées dans l'outil ALDO : Corine Land Cover **2018** pour les surfaces d'occupation du sol (et les changements d'occupation du sol), et la BD Forêt® V2 - **2018** de l'IGN (pour les surfaces forestières) - Consultez les [sources.md](../introduction/sources.md "mention"). Il n'existe pas de versions plus récentes pour ces BDD.
+L’agrégation des différentes données disponibles dans ALDO se fait à l’échelon communal, selon le millésime communal officiel de décembre 2018, utilisé de manière cohérente avec la précédente version d’ALDO (CHANTERELLE). Ce maillage administratif a été conservé dans la version actuelle afin d’assurer la continuité méthodologique avec la version précédente et de limiter les ajustements techniques associés à un changement de référentiel. Ce référentiel a vocation à être révisé dans les prochaines versions, afin d’intégrer les évolutions récentes du périmètre des communes.
 
 Si vous ne trouvez pas le nom/SIREN d'un territoire, plusieurs raisons possibles : &#x20;
 
@@ -43,7 +41,8 @@ _Vous avez sélectionné des territoires qui n'appartiennent pas tous au même t
 
 <summary>DOM-COM</summary>
 
-En l’état actuel, l’outil n’inclue pas dans son périmètre les territoires d’outre-mer. Pour les territoires des DOM-COM, il est recommandé de réaliser le diagnostic avec des données locales.
+En l’état actuel, l’outil ne couvre pas les territoires ultramarins. Pour les DROM et les COM, il est recommandé de réaliser le diagnostic à partir de données locales adaptées aux spécificités territoriales.\
+L’intégration de ces territoires est prévue dans le cadre du programme de mise à jour actuellement en cours, avec une échéance prévue à l’horizon 2027-2028.
 
 </details>
 
@@ -51,7 +50,7 @@ En l’état actuel, l’outil n’inclue pas dans son périmètre les territoir
 
 <summary><strong>International</strong></summary>
 
-L'outil ALDO et les données qui sont proposées ne sont pas adaptées à un usage en dehors du territoire de la France métropolitaine. Comme le montre [les cartes](../introduction/sources.md) des zones pédologiques, des zones climatiques et des sylvo-écorégions, les types de sol et de biomasse ne sont adaptés qu'à un contexte locale.
+L'outil ALDO et les données qui sont proposées ne sont pas adaptées à un usage en dehors du territoire de la France hexagonale. Comme le montre [les cartes](../introduction/sources.md) des zones pédologiques, des zones climatiques et des sylvo-écorégions, les types de sol et de biomasse ne sont adaptés qu'à un contexte local.
 
 </details>
 

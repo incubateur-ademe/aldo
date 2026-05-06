@@ -75,9 +75,11 @@ L'outil ALDO propose dans le menu déroulant associé aux Haies le détail d'imp
 
 <summary>Données de changement d'occupation du sol</summary>
 
-Corine Land Cover (CLC), [décrit ci-dessus](sources.md#donnees-surfaciques-par-occupation-du-sol), fournit également l'inventaire des changement d'occupation du sol entre deux millésimes.
+Le modulè multi source de suivi des terres du Citepa, [décrit ci-dessus](sources.md#donnees-surfaciques-par-occupation-du-sol), permet également d'extraire des données sur les changement d'occupation du sol entre deux dates.
 
-ALDO propose les données surfaciques des changements d'occupation du sol issus de Corine Land Cover, observés entre 2012 et 2018. Les autres millésimes ne sont pas consultables car ils nécessiteraient de prendre en compte [la dynamique du carbone dans les sols.](../complements/perimetre-et-limites.md#dynamique-du-carbone-des-sols)
+ALDO propose les données surfaciques des changements d'occupation du sol, observées entre 2013 et 2023. Ce choix permet de conserver une période de 10 ans suffisamment large pour prendre en compte plusieurs produits de changement d’usage, notemment les nouvelles données de OCS GE (2018-2023).
+
+Cette période de 10 ans a été retenue car elle est permet de prendre en compte plusieurs produits de changement d’usage, notamment les nouvelles données de OCS GE (2018-2023). Cette période est aussi jugée suffisamment longue pour rendre compte de dynamiques de long terme représentatives de l’évolution d’un territoire.
 
 Il est possible de remplacer cet inventaire par des données plus fines de bases de données locales ou régionales, en suivant les recommandations de l'onglet [configuration](../configuration/configuration-manuelle.md#mises-a-jour-des-surfaces-doccupation-du-sol).
 
@@ -154,11 +156,11 @@ Ces données sont utilisées comme une moyenne nationale. Seules les typologies 
 
 <summary>Stocks de carbone de la biomasse, hors forêts et haies</summary>
 
-Les stocks de référence pour la biomasse (hors forêts, hors haies) sont issues d'une revue de la littérature :&#x20;
+Les stocks de référence à l’hectare de la biomasse en forêt sont issus des campagnes de mesure de 2020 à 2024 de l’inventaire forestier national de l’IGN et calculés par typologie de forêt et par sylvo- écorégion et grande région écologique.
 
-* IFN/FCBA/SOLAGRO – Biomasse forestière, populicole et bocagère disponible pour l'énergie à l'horizon 2020, Novembre 2009
+Les données de biomasse sur pied (vivante) et de bois mort sont obtenues, à l'hectare, par composition (feuillu, conifère, mixte, peupleraie). Ces données sont exprimées par groupement de sylvo- écorégion (SER) lorsque les données sont statistiquement significatives, ou, dans le cas contraire, par Grande Région Ecologique (GRECO).
 
-Ces données sont obtenues par inter-régions. Elles sont utilisées pour les typologies de biomasse hors haies et forêts à savoir : vignes, vergers, prairies arbustives, prairies arborées, sols artificiels arbustifs, sols artificiels arborés.
+Les SER sont des subdivisions des GRECO, comme le montre les cartographies ci-dessous.
 
 [Réservoir](definitions.md#reservoirs) ALDO -> **Biomasse**
 
