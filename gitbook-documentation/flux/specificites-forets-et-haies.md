@@ -20,9 +20,9 @@ Lorsque la surface forestière augmente, par changement d'occupation du sol **(b
 
 [Réservoir](../introduction/definitions.md#reservoirs) ALDO -> Biomasse
 
-#### Accroissement net des végétaux
+#### Accroissement des végétaux
 
-Si la surface augmente ou reste constante, des flux de carbone ont lieux dans les forêts, générés par l’accroissement biologique des forêts, auquel on retranche la mortalité des végétaux et les prélèvements de bois. Il s'agit de quantifier l'augmentation nette de la biomasse vivante (aérienne et racinaire). [Sources.](../introduction/sources.md#flux-de-carbone-de-la-biomasse-en-forets-par-accroissement-net)
+Si la surface augmente ou reste constante, des flux de carbone ont lieux dans les forêts, générés par l’accroissement biologique des forêts, auquel on retranche la mortalité des végétaux et les prélèvements de bois. Il s'agit de quantifier les flux de carbone dans la biomasse vivante (aérienne et racinaire). [Sources.](../introduction/sources.md#flux-de-carbone-de-la-biomasse-en-forets-par-accroissement-net)
 
 [Réservoir](../introduction/definitions.md#reservoirs) ALDO -> Biomasse
 

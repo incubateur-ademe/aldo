@@ -102,11 +102,7 @@ Il s'agit selon l'avis du comité scientifique d'une limite de précision des do
 
 <summary>ALDO permet-il d'établir un suivi de la séquestration carbone d'année en année ?</summary>
 
-ALDO ne permet pas pour le moment de suivre l'évolution annuelle de la séquestration carbone. Plus de détails [ici](https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/complements/perimetre-et-limites#dynamique-du-carbone-des-sols).
-
-Par exemple pour les données d'occupation du sol : la dernière campagne CORINE LAND COVER présente l'évolution entre 2012 et 2018. La prochaine campagne sera donc entre 2018 et 2024.
-
-A noter que l'inventaire CITEPA, une nouvelle base de données, remplacera en 2024 celles utilisées actuellement dans ALDO (et qui ne sont pas actualisées chaque année). L'inventaire CITEPA sera annualisé et tiendra donc compte de la dynamique carbone dans les sols.
+ALDO ne permet pas pour le moment de suivre l'évolution annuelle de la séquestration carbone. Les résultats présentés illustrent le bilan des flux de carbone pour une seule année théorique située autour de 2023.
 
 </details>
 
@@ -160,7 +156,7 @@ Aujourd’hui, les données relatives aux forêts équatoriales sur des territoi
 
 <details>
 
-<summary>Quel outil faut-il utiliser pour faire des évaluation au niveau local si ALDO n'est pas pertinent pour cette échelle?</summary>
+<summary>Quel outil faut-il utiliser pour faire des évaluation à un niveau projet ou local, inférieur à celui de l'EPCI ou des communes, si ALDO n'est pas pertinent pour cette échelle?</summary>
 
 Pour des projets de séquestration de carbone il faut se référer aux outils et méthodes sectorielles type Label Bas Carbone (méthodes forestières et agricoles), pour évaluer le gain de stockage d'un projet par rapport à un scénario de référence.
 
@@ -174,7 +170,9 @@ Pour des projets de séquestration de carbone il faut se référer aux outils et
 
 <summary>Dans quels documents peut-on trouver des données locales plus précises sur les surfaces ?</summary>
 
-Les agences d'urbanisme peuvent publier des données d'occupation des sols mises à jour régulièrement (exemple : MOS de l'institut Paris Région). L'Observatoire de l'artificialisation des sols (CEREMA) peut affiner les surfaces mais spécifiquement sur l'artificialisation donc ne couvrant pas l'intégralité de chaque territoire. On trouve également des démarches en cours sur l'occupation des sols à grande échelle (OCS GE), et l'intégration des enquêtes TERUTI.
+Les agences d'urbanisme peuvent publier des données d'occupation des sols mises à jour régulièrement (exemple : MOS de l'institut Paris Région). L'Observatoire de l'artificialisation des sols (CEREMA) peut affiner les surfaces mais spécifiquement sur l'artificialisation donc ne couvrant pas l'intégralité de chaque territoire.&#x20;
+
+En 2026, la source de données qui couvre l'ensemble du territoire de France hexagonale, avec une méthodologie constante et comparable, et sur des années récentes postérieures à l'année 2000, sont les cartes d'occupation des sols à grande échelle (OCS GE) de l'IGN.
 
 </details>
 
@@ -214,11 +212,16 @@ Dans ALDO, le jeu de données RMQS a été utilisé, soit 1 point de mesure dans
 
 <summary>Lorsque la valeur d'un coefficient évolue d'une version d'ALDO à une autre, comment savoir si l'évolution est due à une variation intrinsèque du coefficient ou si c'est due à une évolution méthodologique ?</summary>
 
-Entre les versions EXCEL (2021), et digitales (HETRE 2022 et CHANTERELLE 2023), si des évolutions du coefficient constatées (on parle donc des données carbone à l'hectare) :
+Entre les versions EXCEL (2021), et digitales (HETRE 2022 et CHANTERELLE 2023), si des évolutions du coefficient unitaire (données carbone à l'hectare) sont constatées sur :
 
-* du sol, ce sera une évolution méthodologique (les coefficients par zone pédoclimatique par occupation du sol restent les mêmes, simplement lors du passage de l'échelle EPCI à commune, les communes pourront avoir une ZPC différente de l'EPCI)
-* des haies, ce sera une évolution méthodologique aussi (la source change pour utiliser l'étude IGN 2022)
-* de la forêt, il s'agira majoritairement d'une évolution du coefficient (actualisation de l'inventaire forestier IGN). Il pourra également y avoir des cas où comme le sol, la commune ne sera pas majoritairement dans la même zone sylvicole que l'EPCI, mais ça sera très rare. Attention toutefois : ALDO ne doit pas être utilisé pour tracer des tendances, il s'agit d'une résultat ponctuel : certaines données sont actualisées (forêts), d'autres ne l'ont jamais été (haies, sols, par exemple).
+* les sols, ce sera une évolution méthodologique (les coefficients par zone pédoclimatique par occupation du sol restent les mêmes, simplement lors du passage de l'échelle EPCI à commune, les communes pourront avoir une ZPC différente de l'EPCI)
+* les haies, ce sera une évolution méthodologique aussi (la source change pour utiliser l'étude IGN 2022)
+* la biomasse en forêt, il s'agira majoritairement d'une évolution du coefficient (actualisation de l'inventaire forestier IGN). Il pourra également y avoir des cas où comme le sol, la commune ne sera pas majoritairement dans la même zone sylvicole que l'EPCI, mais ça sera très rare. Attention toutefois : ALDO ne doit pas être utilisé pour tracer des tendances, il s'agit d'une résultat ponctuel : certaines données sont actualisées (forêts), d'autres ne l'ont jamais été (haies, sols, par exemple).
+
+Entre la version CHANTERELLE de 2023 et la version actuelle MELEZE de 2026 les données sont différentes uniquement en raison :
+
+* de l'évolution des données de surface d'occupation des sols et de changement d'occupation des sols, précédemment basées sur CORINE LAND COVER et dorénavant basées sur les données du modèle multi source du CITEPA sur la période récente 2013-2023.
+* de la mise à jour des données d'accroissement, de mortalité et de prélèvement du bilan forestier, précédemment basées sur les campagnes de mesure 2016-2020 et dorénavant basées sur les campagnes 2020-2024. Un graphique de comparaison est présenté dans l'onglet "FLUX" de ALDO permettant d'identifier la tendance à la baisse ou à la hausse des flux de carbone en forêt.
 
 </details>
 
@@ -226,13 +229,13 @@ Entre les versions EXCEL (2021), et digitales (HETRE 2022 et CHANTERELLE 2023), 
 
 <summary>Quelle est l'année à indiquer avec les données affichées dans l'outil ALDO ?</summary>
 
-L'année est bien précisée : exemple onglet flux : Bases de changement CLC 2012 2018 & Inventaire forestier IGN 2012 2016. Pour les résultats rétrospectifs, attention toutefois : ALDO ne doit pas être utilisé pour tracer des tendances, il s'agit d'un résultat ponctuel : certaines données sources sont actualisées (forêts), d'autres ne l'ont jamais été (haies, sols, par exemple).
+Bases de données de changement d'usage des terres du Citepa entre 2013 et 2023 et Inventaire forestier IGN 2020-2024. Pour les résultats rétrospectifs, attention toutefois : ALDO ne doit pas être utilisé pour tracer des tendances, il s'agit d'un résultat ponctuel : certaines données sources sont actualisées (forêts), d'autres ne l'ont jamais été (haies, sols, par exemple).
 
 </details>
 
 <details>
 
-<summary>Pourquoi les stocks de référence varient-ils selon le territoire? (par exemple les prairies herbacées) ?</summary>
+<summary>Pourquoi les stocks de référence varient ils selon le territoire? (par exemple les prairies herbacées) ?</summary>
 
 Les stocks de référence des sols de prairie varient selon la zone pédoclimatique : le type de sol et le climat influencent la capacité du sol à stocker de la matière organique. Les valeurs de référence issues du RMQS sont définies par zone pédoclimatique et par occupation du sol.
 
@@ -264,7 +267,7 @@ Cependant, ce ratio bilan carbone/bilan volume doit donner des valeurs proches.
 
 <summary>Les données d’observatoire sont souvent divergentes avec les données issues d’ALDO, est-il prévu de faire converger les méthodes ?</summary>
 
-Une réflexion est en cours pour faire converger avec le travail du CITEPA sur le maillage plus fin et plus actualisé sur les changements d'occupation des sols.
+Une réflexion est en cours pour faire converger les données présentées dans ADLO avec le travail du CITEPA sur l'inventaire national des GES pour la France. La version MELEZE de 2026 est un premier pas vers cet objectif via l'intégration des données de surface. Des travaux sont en cours avec l'objectif de faire correspondre les résultats de Aldo avec le total national rapporté par la France auprès de la CCNUCC.
 
 </details>
 
@@ -272,7 +275,7 @@ Une réflexion est en cours pour faire converger avec le travail du CITEPA sur l
 
 <summary>Si un type de sol présente un petit stock de carbone et qu'on ne le retrouve pas du tout dans les flux de CO2e, comment interpréter cette information ? Le stock est stable et la partie émission et séquestration s'équilibre sur l'année ?</summary>
 
-Un stock (même faible) sera à l'équilibre si pas de changement d'usage ni de gestion depuis plusieurs années, c'est-à-dire un flux nul. Les changements d'occupation sont évalués dans ALDO par la comparaison des données CORINE LAND COVER 2012 et 2018 (prochain millésime 2024), ils peuvent être affinés par des données locales de type mode d'occupation des sols des agences d'urbanisme.
+Un stock (même faible) sera à l'équilibre si pas de changement d'usage ni de gestion depuis plusieurs années, c'est-à-dire un flux nul. Les changements d'occupation sont évalués dans ALDO par la comparaison des données d'occupation des sols CITEPA entre 2013 et 2023, ils peuvent être affinés par des données locales.
 
 </details>
 
@@ -298,7 +301,7 @@ Oui, une incertitude existe sur les données d'ALDO, mais cette marge d'erreur e
 
 <summary>Quelle est l'ampleur de l'incertitude sur la période de conversion du stock, quand il y a changement d'occupation ?</summary>
 
-La durée de 20 ans appliquée est la durée par défaut préconisée par les lignes directrices du GIEC. Dans les faits, les mesures de terrain montrent que cette valeur peut être bien différente en particulier pour les sols, certains modèles prennent en compte d'autres valeurs (ex. 30 ans). Pour le calcul de l'inventaire, ce qui compte reste le flux de transition d'un stock à un autre. Nos méthodes sur l'estimation de ces flux liés aux conversions ont aussi évolué (voir prochain rapport Ominea du CITEPA à paraître)
+La durée de 20 ans appliquée est la durée par défaut préconisée par les lignes directrices du GIEC. Dans les faits, les mesures de terrain montrent que cette valeur peut être bien différente en particulier pour les sols, certains modèles prennent en compte d'autres valeurs (ex. 30 ans). Pour le calcul de l'inventaire, ce qui compte reste le flux de transition d'un stock à un autre. Les méthodes sur l'estimation de ces flux liés aux conversions sont en phase avec la version 2026 du rapport Ominea du CITEPA.
 
 </details>
 
@@ -306,7 +309,7 @@ La durée de 20 ans appliquée est la durée par défaut préconisée par les li
 
 <summary>Les produits du bois sont perçus comme pouvant séquestrer du C. Pourtant ils se décomposent selon le type de produit et sa longévité. Pourquoi attribuer à ce réservoir une capacité de séquestration?</summary>
 
-Il ne s'agit pas d'une "séquestration" physique mais d'un différentiel entre les nouveaux produits bois entrant chaque année (faisant grandir le stock en place du carbone stocké temporairement dans les produits bois) et les produits en fin de vie cette année - ceci étant basé sur une estimation de la cinétique de fin de vie, conformément aux lignes directrices du GIEC pour les inventaires nationaux.
+Il ne s'agit pas d'une "séquestration" physique mais d'un différentiel entre les nouveaux produits bois entrant chaque année (faisant grandir le stock en place du carbone stocké temporairement dans les produits bois) et les produits en fin de vie cette année - ceci étant basé sur une estimation de la cinétique de fin de vie, conformément aux lignes directrices du GIEC pour les inventaires nationaux. Un stockage dans le compartiment produit bois est donc rapporté lorsque les entrées de l'année sont supérieures aux sorties.
 
 </details>
 
@@ -336,7 +339,9 @@ Comme les autres stocks des autres catégories, les stocks des zones humides pro
 
 <summary>Pourquoi les flux carbone au niveau des zones humides sont-ils considérés comme nuls ?</summary>
 
-Les stocks de carbone de zones humides sont élevés. Ils peuvent être à l'équilibre (flux nul) ou non (émission en cas d'artificialisation par exemple). Nous n'avons pas de références de stocks de carbone permettant de distinguer la diversité des zones humides, ni l'évolution tendancielle sans changement de surface et d'usage. Le cas échéant ces flux tendanciels sont faibles comparés à ceux engendrés par les changements d'occupation des sols. Conformément aux conventions des inventaires nous considérons qu'à l'échelle de quelques années il n'y a pas de flux pour une zone humide à surface équivalente et sans changement.
+Les stocks de carbone de zones humides sont en réalité élevés et représente des stocks à protéger. Ils peuvent être à l'équilibre (flux nul) ou non (émission en cas d'artificialisation ou de drainage par exemple, séquestration dans de rares cas de protection avancée).&#x20;
+
+Dans ALDO, pour des enjeux de compréhention et de simplification de l'outil ALDO, les flux lés à l'évolution des modes de gestion sur les zones humides et les sols organiques au sens large ne sont pas en compte dans les calculs. Le cas échéant, ces flux tendanciels sont faibles comparés à ceux engendrés par les changements d'occupation des sols. Cet aspect de la méthode pourrait être amélioré à l'avenir.&#x20;
 
 </details>
 

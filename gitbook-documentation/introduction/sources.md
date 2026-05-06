@@ -26,29 +26,27 @@ Le fichier _IGN ADMIN EXPRESS® 17122018_ est disponible au téléchargement pou
 
 <summary>Données surfaciques par occupation du sol</summary>
 
-Corine Land Cover (CLC) est un inventaire biophysique de l’occupation des sols et de son évolution selon une nomenclature en 44 postes. Cet inventaire est produit par interprétation visuelle d'images satellite. CLC permet de cartographier des unités homogènes d’occupation des sols d’une surface minimale de 25 ha. Les millésimes 1990, 2000, 2006, 2012 et 2018 ont été réalisés.
+ALDO s’appuie sur les données du Citepa, produites dans le cadre de l’inventaire national des émissions et absorptions de gaz à effet de serre. Depuis l’édition 2023 de l’inventaire, le Citepa utilise une approche dite **spatialement explicite**, conforme aux exigences européennes, pour reconstituer l’évolution de l’utilisation des terres sur l’ensemble du territoire depuis 1990.
 
-ALDO propose les données surfaciques issues de Corine Land Cover, 2018.
+Cette approche repose sur un **modèle multi-source** qui combine plusieurs bases de données cartographiques nationales et européennes, parmi lesquelles notamment **Corine Land Cover, Urban Atlas, OCS GE, la BD Forêt, le RPG, la BD TOPO et la BD TOPAGE**. Ces différentes sources sont croisées afin d’attribuer à chaque maille du territoire une catégorie d’usage du sol et d’identifier les changements intervenus au cours du temps.
 
+Le territoire est découpé en **une grille régulière de mailles de 50 m × 50 m (soit 0,25 ha).** Pour chaque maille, le modèle reconstitue une série temporelle annuelle d’usage des terres, puis estime les changements entre grandes catégories d’occupation du sol (terres cultivées, prairies, forêts, zones artificialisées, zones humides et autres terres), selon une nomenclature fine de 72 catégories compatible avec les lignes directrices du GIEC.
+
+Les données produites par le modèle Citepa font aussi l’objet de comparaisons avec des sources externes à des fins de validation. Ainsi, les surfaces forestières estimées sont cohérentes avec les données de l’inventaire forestier national de l’IGN. De même, les dynamiques d’artificialisation estimées sont cohérentes avec les statistiques du portail national de l’artificialisation des sols (suivi de la consommation d’espaces à partir des fichiers fonciers) ainsi qu’avec les références produites par le Cerema sur la consommation d’espaces naturels, agricoles et forestiers (ENAF).\
+​
+
+Dans le cadre de l'Outil ALDO, les données mobilisées correspondent donc aux résultats du **modèle multi source du Citepa pour le suivi des terres**, aggrégés selon une nomenclature simplifiée afin de représenter de manière cohérente les dynamiques d’occupation du sol et de changement d’usage à l’échelle du territoire étudié. Les données de surfaces d'occupation du sol de référence mobilisées dans Aldo **correspondent à l'année 2023 de l'édition 2026 de l'inventaire SECTEN**.
+
+\
+Pour aller plus loin sur la compréhension du modèle de suivi des terres développé par le Citepa, se rendre à la section "UTCATF" du [rapport OMINEA](https://www.citepa.org/donnees-air-climat/methodologie-de-linventaire-ominea/).
+
+\
 Plusieurs compléments importants :
 
-* Il est possible de remplacer cet inventaire de l'occupation du sol par des données plus fines de bases de données locales ou régionales, dans l'onglet [configuration](../configuration/configuration-manuelle.md#mises-a-jour-des-surfaces-doccupation-du-sol).
-* Corine Land Cover est utilisée pour les surfaces de chaque typologie d'occupation du sol utilisée dans ALDO, sauf pour les Forêts et Haies. Voir ci-dessous.
-* L'affectation entre la nomenclature ALDO et les typologies de Corine Land Cover est expliqué [ici](definitions.md#typologies-doccupation-du-sol). La répartition des sous-catégories de sols artificiels est propre à ALDO et est expliqué [ici.](../configuration/configuration-manuelle.md#hypotheses-de-repartition-des-surfaces-des-sols-artificialises)
-
-</details>
-
-<details>
-
-<summary>Données surfaciques pour l'occupation du sol "Forêts"</summary>
-
-La BD Forêt® de l'IGN (Institut national de l'information géographique et forestière) est un référentiel géographique forestier nomenclature nationale de 32 postes. Cet inventaire est réalisé par photo-interprétation d’images en infrarouge couleurs de la BD ORTHO®. Elle attribue à chaque plage cartographiée de plus de 0,5 ha un type de formation végétale.&#x20;
-
-Il y a donc un gain de précision important par rapport aux données surfaciques des forêts de Corine Land Cover.
-
-ALDO propose les données surfaciques issues de la BD Forêt® V2, 2018. Les surfaces sont exprimées par composition selon le type de peuplement (feuillus, mixtes, conifères ou peupleraies)
-
-Il est possible de remplacer cet inventaire de l'occupation du sol par des données plus fines de bases de données locales ou régionales, dans l'onglet [configuration](../configuration/configuration-manuelle.md#mises-a-jour-des-surfaces-doccupation-du-sol).
+* Il est possible de remplacer cet inventaire de l'occupation du sol par des données plus fines issues de bases de données locales ou régionales, dans la section configuration.
+* Un travail spécifique est réalisé pour les Haies. Voir ci-dessous.
+* Le détail sur la nomenclature ALDO est décrit [ici](definitions.md#typologies-doccupation-du-sol).
+* La répartition des sous-catégories de sols artificiels est propre à ALDO et est expliqué [ici](../configuration/configuration-manuelle.md#hypotheses-de-repartition-des-surfaces-des-sols-artificialises).
 
 </details>
 
@@ -383,7 +381,7 @@ Ces pratique sont expliquées plus en détails dans [la rubrique dédiée.](../p
 
 Les données de sortie d'ALDO sont fournies en export sur [data.ademe.fr](https://data.ademe.fr/datasets?q=ALDO)
 
-Cette base de données "stocks" présente pour chacune des communes métropolitaines françaises (millésime 2018) :
+Cette base de données "stocks" présente pour chacune des communes métropolitaines et EPCI de France hexagonale (millésime 2018) :
 
 * Les surfaces d'occupation du sol (ha) selon la nomenclature ALDO
 * Les stocks de référence unitaires (tC/ha) pour chaque typologie d'occupation du sol
@@ -397,10 +395,10 @@ Cette base de données "stocks" présente pour chacune des communes métropolita
 
 Les données de sortie d'ALDO sont fournies en export sur [data.ademe.fr](https://data.ademe.fr/datasets?q=ALDO)
 
-Cette base de données "flux" est divisée en 3 fichiers distincts pour des raisons de poids. Elle présente pour chacune des communes métropolitaines françaises (millésime 2018) :
+Cette base de données "flux" est divisée en 3 fichiers distincts pour des raisons de poids. Elle présente pour chacune des communes et EPCI de France hexagonale (millésime 2018) :
 
-* flux1\_changements-surfaces : Les variations de surfaces d'occupation du sol (ha/an) selon la nomenclature ALDO, et les flux totaux (tCO2e/an) correspondants en multipliant ces variations (ha/an) avec les flux unitaires (fichier flux2).
-* flux2\_unitaire-changements-surfaces : Les flux de référence unitaires (tCO2e/ha) pour chaque changement d'occupation du sol. Ils sont des delta entre le stock unitaire (tC/ha) des occupations initiales et finales (en tenant compte de la durée d'application de ces flux et de la conversion de tC en tCO2e)
+* flux1\_changements-surfaces : Les variations de surfaces d'occupation du sol (ha/an) selon la nomenclature ALDO, et les flux (tCO2e/an) associés aux changement d'occupation des sols. Ce fichier n'intègre pas les flux estimés sur les sols sans changement d'occupation, par exemple les flux du bilan forestier.
+* flux2\_unitaire-changements-surfaces : Les flux de référence unitaires (tCO2e/ha) pour chaque changement d'occupation du sol. Ils sont calculés comme la différence entre le stock unitaire (tC/ha) des occupations initiales et finales (en tenant compte de la durée d'application de ces flux et de la conversion de tC en tCO2e).
 * flux3\_accroissement-biomasse - produits bois: Les valeurs de surfaces (ha), de flux de référence unitaires (tCO2e/ha/an) et de flux totaux (tCO2e/an) pour chaque occupation du sol forestière (et pour chaque commune). Ainsi que les flux annuels de produits bois (bois d'œuvre et bois d'industrie) en tCO2e/an.
 
 Important : la valeur de flux total de chaque commune est contenue dans flux1 (colonne M). Il s'agit de la somme des flux liés au changement de surfaces (flux1 et flux2) et des flux liés à l'accroissement de la biomasse (flux3) et aux produits bois (flux 3).

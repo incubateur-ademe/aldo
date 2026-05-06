@@ -49,15 +49,11 @@ Aussi, après un changement d'affectation des sols, les sols ne (dé)stockent pa
 
 ![Arrouays et al. 2002](<../.gitbook/assets/Picture 1.png>)
 
-Pour les changements générant l'atteinte rapide d'un équilibre, par exemple l'artificialisation des sols, la suppression de biomasse, ... le flux unitaire annuel est considéré instantané (1 an) et appliqué l'année du changement d'occupation du sol et correspond à la différence entre le stock état final et le stock état initial.
+Pour les changements générant l'atteinte rapide d'un équilibre, par exemple l'artificialisation des sols via le défrichement d'une forêt, la suppression des stocks de carbone dans l'ensemble des réservoir de carbone se traduit par un flux unitaire annuel considéré instantané (1 an) et appliqué l'année du changement d'occupation du sol. Ce dernier correspond à la différence entre le stock final et le stock initialement présent.
 
-Pour les changements dont la cinétique est plus lente, tel que les conversions de sols de culture, prairie, forêt (graphique ci-dessus), l'accroissement de biomasse, ... un traitement ADEME a été effectué pour considérer la variation de stock concernée par les 20 dernières années. Le flux unitaire annuel (tCO2e/ha/an) est appliqué et étalé sur 20 ans. Les flux associés à des changements d'occupation des sols récents (<20 ans) ne permettent pas dans ce cas d'atteindre l'équilibre du stock de référence de l'état final. Ce facteur permet de tenir compte des flux de carbone des terres ayant été converties les 20 dernières années mais qui continuent à émettre/séquestrer du carbone.
+Pour les changements dont la cinétique est plus lente, tel que les conversions de sols de culture, prairie, forêt (graphique ci-dessus), ou encore l'accroissement de biomasse, un traitement est effectué pour considérer la variation de stock sur une période de 20 années. Le flux unitaire annuel (tCO2e/ha/an) est donc appliqué et étalé sur 20 ans. Les flux associés à des changements d'occupation des sols récents (<20 ans) ne permettent pas dans ce cas d'atteindre l'équilibre du stock de référence de l'état final. Ce facteur permet de tenir compte des flux de carbone des terres ayant été converties les 20 dernières années mais qui continuent à émettre/séquestrer du carbone.
 
-
-
-Ces flux de référence unitaires associés à chaque changement d'occupation considéré, sont multipliés par les variations de surfaces associées, voir section :two:.
-
-
+Ces flux de référence unitaires associés à chaque changement d'occupation, sont multipliés par les variations de surfaces associées, voir section :two:.
 
 ### Approche :b:
 
@@ -96,11 +92,11 @@ D’un point de vue pratique, les flux totaux de ce réservoir sont ainsi calcul
 
 ### Approche :a: Collecte des variations de surfaces par changement d'occupation des sols par réservoir
 
-En suivant le même raisonnement que dans l'onglet [Stocks](../stocks/methode-generale.md#collecte-des-surfaces-par-occupation-du-sol-pour-chaque-typologie-ha), des bases de données surfaciques sont utilisées. Pour calculer les flux, il ne s'agit plus ici de connaître les surfaces fixes (2021) de chaque occupation du sol, mais de connaître les variations de surfaces entre chacune de ces typologies, entre deux millésimes.
+En suivant le même raisonnement que dans l'onglet [Stocks](../stocks/methode-generale.md#collecte-des-surfaces-par-occupation-du-sol-pour-chaque-typologie-ha), des bases de données surfaciques sont utilisées. Pour calculer les flux, il ne s'agit plus ici de connaître les surfaces fixes (2023) de chaque occupation du sol, mais de connaître les variations de surfaces entre chacune de ces typologies, entre deux millésimes.
 
-Les variations de surfaces associées à chaque changement d'affectation du sol sont renseignées à partir des données de bases de changement CITEPA seon une méthode spatialement explicite. [Sources.](../introduction/sources.md#variations-de-surfaces-ha-an)
+Les variations de surfaces associées à chaque changement d'affectation du sol sont renseignées à partir des données issues du modèle du Citepa sur la période 2013-2023. [Sources.](../introduction/sources.md#variations-de-surfaces-ha-an)
 
-Les variations (ha) entre 2004 et 2014 sont divisées par 10 ans pour calculer la surface moyenne annuelle de changement (ha/an). L’année concernée par le diagnostic des flux des changements d’occupation des sols correspond donc à une année théorique moyenne des 10 années représentatives.
+Les variations (ha) entre 2013 et 2023 sont divisées par 10 ans pour calculer la surface moyenne annuelle de changement (ha/an). L’année concernée par le diagnostic des flux liées aux changements d’occupation des sols correspond donc à une année théorique moyenne des 10 années représentatives.
 
 Les typologies [d'occupation du sol](../introduction/definitions.md#occupation-du-sol-et-changement-doccupation-du-sol) de niveau 1 et 2 sont renseignées.
 
@@ -109,14 +105,13 @@ Si des informations plus précises sont accessibles (bases de données locales/r
 {% hint style="info" %}
 Cas particulier :
 
-* Les **haies** : il n'existe pas de données sur l'évolution du linéaire de haie en France - plus de détails dans la [méthode spécifique](../stocks/specificites-haies.md).
-* Les **forêts** : il n'existe qu'un seul millésime de la BD Forêt® de l'IGN. Pour obtenir des données de variations de surfaces forestières, les données CITEPA sont utilisés (comme pour les autres typologies d'occupation du sol). - plus de détails dans les [sources](../introduction/sources.md#donnees-surfaciques-pour-loccupation-du-sol-forets).
+* Les **haies** : il n'existe pas de données homogènes sur l'ensemble du territoire de France hexagonale sur l'évolution du linéaire de haie en France - plus de détails dans la [méthode spécifique](../stocks/specificites-haies.md).
 * Les **produits bois** ne sont pas quantifiés à partir de surfaces d'occupation du sol - plus de détails dans la [méthode spécifique](../stocks/specificites-produits-bois.md).
 {% endhint %}
 
 ### Approche :b: Collecte des surfaces par composition forestière
 
-Concernant le réservoir biomasse en forêt, les données surfaciques de l’occupation forêt par composition (feuillus/mixtes/conifères/peupleraies) sont issues de la BD Forêt® de l'IGN. Il s'agit donc des mêmes surfaces que dans l'onglet [Stocks](../stocks/methode-generale.md#collecte-des-surfaces-par-occupation-du-sol-pour-chaque-typologie-ha)
+Concernant le réservoir biomasse en forêt, les données surfaciques de l’occupation forêt par composition (feuillus/mixtes/conifères/peupleraies) sont issues du modèle Citepa qui est lui même majoritairement basé sur les données de la BD Forêt® de l'IGN pour les terres forestières. Il s'agit donc des mêmes surfaces que dans l'onglet [Stocks](../stocks/methode-generale.md#collecte-des-surfaces-par-occupation-du-sol-pour-chaque-typologie-ha)
 
 Ces données sources sont utilisées pour connaître les dynamiques de croissance par composition forestière **sans changement d’occupation des sols** (augmentation en volume des forêts sur une surface fixe).
 
@@ -136,17 +131,17 @@ Les flux totaux de carbone par changement d'occupation du sol (approche :a:) et 
 * avec les variations de surfaces (ha an-1) associées à chaque changement d'occupation du sol - ou les surfaces (ha) d'occupation forestière correspondante (étape :two:). &#x20;
 
 {% hint style="success" %}
-Ces échanges entre l'**atmosphère** et les sols et végétaux se font sous la forme de dioxyde de carbone **atmosphérique** ou d'autres gaz à effet de serre.&#x20;
+Ces échanges entre l'**atmosphère** et les réservoirs de carbone terrestres (sols et végétaux) se font sous la forme de dioxyde de carbone **atmosphérique** ou d'autres gaz à effet de serre.&#x20;
 
-[Unités de mesure :](../introduction/definitions.md#unites-de-mesure) On multiplie par le facteur de 44/12 pour obtenir des **tCO2e∙an-1.**
+[Unités de mesure :](../introduction/definitions.md#unites-de-mesure) On multiplie par les flux de carbone par le facteur de 44/12 pour obtenir des flux de dioxyde de carbone en **tCO2e∙an-1.**
 {% endhint %}
 
 {% hint style="success" %}
-Par ailleurs, lorsque ces flux s'accompagnent d'une perte de carbone dans les sols et la litière, un flux de N2O y est associé en accord avec les lignes directrices de l'IPCC (2006). 1% de l'azote perdu lors du déstockage de matière organique l'est sous forme de N2O au niveau de la parcelle et 0,75% de l'azote lixivié l'est hors de la parcelle. On considère 30% de lixiviation et un ratio C/N dans la matière organique de 15.
+Par ailleurs, lorsque ces flux s'accompagnent d'une perte de carbone dans les sols et la litière, un flux de N2O y est associé en accord avec les lignes directrices de l'IPCC (2006). 1% de l'azote perdu lors du déstockage de matière organique l'est sous forme de N2O au niveau de la parcelle et 0,75% de l'azote lixivié l'est en dehors de la parcelle. On considère 30% de lixiviation et un ratio C/N dans la matière organique de 15.
 
 [Sources.](../introduction/sources.md#autres)
 
-[Unités de mesure :](../introduction/definitions.md#unites-de-mesure) Ces émissions sont également converties en **tCO2e∙an-1.**
+[Unités de mesure :](../introduction/definitions.md#unites-de-mesure) Ces émissions sont également converties en **tCO2e∙an-1** via l'application du Pouvoir de Réchauffement Global (PRG) du N2O.
 {% endhint %}
 
 

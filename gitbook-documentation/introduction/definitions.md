@@ -49,7 +49,7 @@ Certaines pratiques agricoles sont des leviers d'action d'accroissement des stoc
 
 Le **bois d’oeuvre (BO)**, issu de la tige des arbres, doit respecter certains critères de dimensions et de qualité pour être destiné au sciage et être utilisé sous forme de bois massif : charpentes, menuiseries, meubles, parquets… Le **bois d’industrie (BI)** provient de la tige des arbres de plus faible diamètre ou de qualité inférieure, des plus grosses branches d’une certaine rectitude et des produits connexes du sciage ou du recyclage. Il est utilisé sous forme fragmentée ou défibrée pour fabriquer de la pâte à papier et des panneaux de bois.
 
-Le BE **en substitution** de produits et énergie fossiles n'est pas pris en compte dans ALDO (voir [ci-dessous](definitions.md#effet-de-substitution)).
+Le **Bois Energie (BE)**, généralement utilisé en substitution de produits et énergie fossiles, n'est pas pris en compte dans ALDO (voir [ci-dessous](definitions.md#effet-de-substitution)).
 
 
 
@@ -62,8 +62,6 @@ Cette terminologie désigne les différents compartiments du sol et des végéta
 * la biomasse vivante (aérienne + racinaire) et morte
 * Les produits bois&#x20;
 
-![](<../.gitbook/assets/image (6).png>)
-
 
 
 ## **Occupation du sol et Changement d'Occupation du Sol**
@@ -74,7 +72,7 @@ La nomenclature utilisée est largement inspirée de celle définie par CORINE L
 
 <table><thead><tr><th width="169">Nomenclature niveau 1</th><th width="184">Nomenclature niveau 2</th><th>Descriptif</th></tr></thead><tbody><tr><td>Forêt</td><td>Forêt - mixte</td><td>Formations végétales composées de peuplements mixtes (feuillus et résineux mélangés)</td></tr><tr><td>Forêt</td><td>Forêt - feuillu</td><td>Formations végétales composées de peuplements majoritairement feuillus (> 75 %)</td></tr><tr><td>Forêt</td><td>Forêt - conifère</td><td>Formations végétales composées de peuplements majoritairement résineux (> 75 %)</td></tr><tr><td>Forêt</td><td>Forêt - peupleraie</td><td>Peupleraie</td></tr><tr><td>Zones humides</td><td>Zones humides</td><td>Ensemble des marais, tourbières, cours et voies d'eau.</td></tr><tr><td>Culture</td><td>Cultures</td><td>Ensemble des terres arables et de zones hétérogènes essentiellement agricoles</td></tr><tr><td>Prairie</td><td>Prairie - herbacée</td><td>Prairies et autres surfaces toujours en herbe à usage agricole, pelouses et pâturages naturels.</td></tr><tr><td>Prairie</td><td>Prairie - arbustive</td><td>Formations végétales basses et fermées (landes et broussailles).</td></tr><tr><td>Prairie</td><td>Prairie - arborée</td><td>Végétation sclérophylle et persistante, y compris maquis et garrigues.</td></tr><tr><td>Vergers</td><td>Vergers</td><td>Parcelles plantées d'arbres fruitiers, y compris les châtaigneraies, noiseraies et oliveraies.</td></tr><tr><td>Vignes</td><td>Vignes</td><td>Parcelles plantées de vignes.</td></tr><tr><td>Haies</td><td>Haies</td><td>Haies linéaires, arbres alignés et bosquets</td></tr><tr><td>Sols artificiels</td><td>Sols artificiels - Imperméabilisés</td><td>Espaces dont l'imperméabilisation couvre la quasi-totalité du sol : espaces urbains, zones industrielles, commerciales, réseau de transport, mines, décharges et chantiers.</td></tr><tr><td>Sols artificiels</td><td>Sols artificiels - Enherbés et arbustifs</td><td>Espaces urbains dont la végétalisation ou le sol nu couvre des surfaces non négligeables, comme des petits parcs et jardins</td></tr><tr><td>Sols artificiels</td><td>Sols artificiels - Arborés</td><td>Espaces verts urbains.</td></tr></tbody></table>
 
-La surface affectée dans ALDO est celle de Corine Land Cover pour chacune de ces typologies d'occupation du sol, sauf pour les forêts ([BD Forêts®](sources.md#donnees-surfaciques-pour-loccupation-du-sol-forets)) et les haies ([BD Haies®](sources.md#donnees-surfaciques-pour-loccupation-du-sol-haies)). De plus, la répartition des sous-catégories de sols artificiels est propre à ALDO. Plus d'informations dans la [rubrique dédiée.](sources.md)
+Les surfaces d'occupation et de changement d'occupation des sols utilisées dans ALDO correspondent aux surfaces mobilisée pour l'inventaire national des GES de la France (édition 2026 de l'inventaire SECTEN) réalisé par le Citepa à partir d'un modèle cartographique multi source entre autre basé sur les données de Corine Land Cover, Urban Atlas, Natura 2000, OCS\_GE, [BD Forêts®](sources.md#donnees-surfaciques-pour-loccupation-du-sol-forets), BD Carto, etc. Pour davantage d'information sur les méthodes de construction du modèle de suivi des terres du Ctepa, se référer au [rapport OMINEA](https://www.citepa.org/donnees-air-climat/methodologie-de-linventaire-ominea/) ainsi qu'a l'annexe "Suivi des terres" de la section UTCATF du rapport OMINEA. Enfin, un traitement spécifique est réalisé pour les haies à partir des données de la [BD Haies®](sources.md#donnees-surfaciques-pour-loccupation-du-sol-haies). Plus d'informations dans la [rubrique dédiée.](sources.md)
 
 ## Effet de substitution
 
@@ -88,7 +86,7 @@ La [reglementation.md](../complements/reglementation.md "mention") indique de te
 
 Il faut également rappeler que la quantification de l’impact GES d’une action se fait par comparaison du scénario avec action avec un scénario de référence contrefactuel (le scénario qui est le plus probable en l’absence de mise en œuvre de l’action)&#x20;
 
-\-> Voir la [Méthode ADEME](https://librairie.ademe.fr/changement-climatique-et-energie/4549-quantifier-l-impact-ges-d-une-action-de-reduction-des-emissions.html) de quantification de l’impact GES d’une action de réduction des émissions.
+-> Voir la [Méthode ADEME](https://librairie.ademe.fr/changement-climatique-et-energie/4549-quantifier-l-impact-ges-d-une-action-de-reduction-des-emissions.html) de quantification de l’impact GES d’une action de réduction des émissions.
 
 Ces deux processus (séquestration/substitution) sont à considérer conjointement dans l’élaboration des plans d’actions des PCAET, d’autant plus qu’ils ne sont pas indépendants. Ainsi, des niveaux élevés de séquestration peuvent traduire des niveaux faibles de prélèvements de la biomasse, et inversement. Une action de réduction des émissions d’origine fossile par substitution, ou destinée à favoriser le stockage dans les produits bois, peut avoir un effet sur la fonction de puits ou de réservoir de carbone des forêts. La prise en compte de ces interactions est cruciale lors de la définition et l’évaluation des plans d’actions.
 

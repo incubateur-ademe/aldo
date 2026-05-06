@@ -6,7 +6,7 @@ La rubrique présente ici la méthode utilisée dans l'outil ALDO, étape par é
 
 ## :one: Collecte des stocks de carbone par catégorie de produits bois à l'échelle de la France (tC)
 
-Pour le sciage (BO - bois d'œuvre) et les panneaux et papiers (BI - bois d'industrie), des stocks de carbone à l'échelle de la France sont collectés.
+Pour les sciages (BO - bois d'œuvre) et les panneaux et papiers (BI - bois d'industrie), des stocks de carbone à l'échelle de la France sont collectés.
 
 Ces stocks se traduisent par la quantité de carbone stockée (en tC) en France dans les produits bois en (moyenne 2016-2019) selon les estimations du CITEPA.
 
@@ -47,7 +47,7 @@ On obtient alors pour chaque territoire une estimation théorique de la récolte
 
 ## :three: Distribution du stock de carbone des produits bois français par territoire (tC)
 
-Il s'agit repartir le stock de carbone des produits bois français par territoire.
+Il s'agit ici de répartir le stock de carbone des produits bois français par territoire.
 
 Deux approches sont considérées. L'utilisateur doit en choisir une. Laquelle ? Consultez les [explications dédiées](../configuration/configuration-manuelle.md#hypothese-de-calcul-des-produits-bois). Par défaut, l'approche production est privilégiée.
 
