@@ -18,10 +18,10 @@ La nomenclature de niveau 2 définie plusieurs typologies d'[occupation du sol](
 
 Pour les **sols artificialisés** il est possible de définir un taux minimum de végétalisation. Par défaut, il est considéré que 80% des sols artificiels sont imperméabilisés et qu'à minima 20 % sont enherbés, arbustifs ou arborés. C'est à dire qu'avec cette hypothèse :&#x20;
 
-* Si Corine Land Cover détecte **plus** de 20% de sols artificiels enherbés, arbustifs ou arborés, ALDO retiendra les surfaces Corine Land Cover.
-* Si Corine Land Cover détecte **moins** de 20% de sols artificiels enherbés, arbustifs ou arborés, ALDO recalculera ces surfaces pour qu'elles soient arbitrairement égales au taux de 20%.
+* Si le CITEPA détecte **plus** de 20% de sols artificiels enherbés, arbustifs ou arborés, ALDO retiendra les surfaces CITEPA.
+* Si le CITEPA détecte **moins** de 20% de sols artificiels enherbés, arbustifs ou arborés, ALDO recalculera ces surfaces pour qu'elles soient arbitrairement égales au taux de 20%.
 
-Ce seuil minimum est envisagé pour palier à la résolution de Corine Land Cover (25ha) qui peut ne pas être suffisamment précise pour détecter les petits parcs et jardins présents dans les zones artificialisées.
+Ce seuil minimum est envisagé pour palier à la résolution des données CITEPA (0,25ha) qui peut ne pas être suffisamment précise pour détecter les petits parcs et jardins présents dans les zones artificialisées.
 
 En outre, chaque territoire pourra modifier ces proportions selon ses caractéristiques et sa connaissance du taux de végétalisation.
 
@@ -42,7 +42,7 @@ Enfin, les résultats de ces deux approches (production/consommation) ne peuvent
 
 ## Comparaison au Bilan GES (hors secteur UTCATF) du Territoire
 
-Il est possible de renseigner le bilan GES d'émissions anthropiques du territoire, hors secteur UTCATF. Il est conseillé d'indiquer le BEGES de l'année de référence 2018, correspondant aux données de stocks et flux estimés dans ALDO (dernier millésime d'occupation des sols).
+Il est possible de renseigner le bilan GES d'émissions anthropiques du territoire, hors secteur UTCATF. Il est conseillé d'indiquer le dernier BEGES réalisé, correspondant aux données de stocks et flux estimés dans ALDO.
 
 Cette valeur peut être comparée à la dynamique actuelle de flux de séquestration ou d'émission des sols et biomasse du territoire. Elle permet d'orienter la stratégie et les objectifs de trajectoire bas carbone pour l'élaboration du PCAET, dans l'objectif de contribution à la neutralité carbone : équilibre entre les émissions anthropiques résiduelles et la séquestration de carbone annuelle, défini dans la Stratégie Nationale Bas Carbone à l'horizon 2050.
 
@@ -52,6 +52,6 @@ Si vous disposez de données locales (sur l'occupation du sol ou sur les changem
 
 * La matrice "Changement d'occupation des sols (ha/an)" se remplit et se lit dans le sens occupation du sol initiale-occupation du sol finale.
 * En général, si une autre base de données d'occupation du sol est utilisée, la nomenclature peut différer. Il faut alors réaffecter les typologies selon la nomenclature ALDO. Vous pouvez vous aider du descriptif des typologies d'[occupation du sol](../introduction/definitions.md#occupation-du-sol-et-changement-doccupation-du-sol). Il n'y a toutefois pas de correspondance exacte.
-* Concernant l'année de référence : si vous souhaitez mettre à jour seulement quelques typologies d'occupation du sol, il faut que ce soit cohérent avec les autres surfaces (2018 pour les surfaces d'occupation des sols, une année moyenne entre 2012 et 2018 pour les surfaces de changements d'occupation des sols).
+* Concernant l'année de référence : si vous souhaitez mettre à jour seulement quelques typologies d'occupation du sol, il faut que ce soit cohérent avec les autres surfaces (2021 pour les surfaces d'occupation des sols, une année moyenne entre 2004 et 2014 pour les surfaces de changements d'occupation des sols).
 * Concernant l'année de référence : si vous souhaitez mettre à jour toutes les surfaces avec une BDD locale dans son intégralité : vous pouvez choisir l'année que vous voulez si plus récente. Veillez à faire correspondre le périmètre de votre territoire s'il a évolué depuis : [#agregation-de-communes](configuration-manuelle.md#agregation-de-communes "mention")
 * Si une seule surface est modifiée, vérifiez la pertinence/cohérence pour que le total des surfaces soit approximativement celui du périmètre étudié.
