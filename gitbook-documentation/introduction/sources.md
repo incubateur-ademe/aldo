@@ -156,15 +156,17 @@ Ces données sont utilisées comme une moyenne nationale. Seules les typologies 
 
 <summary>Stocks de carbone de la biomasse, hors forêts et haies</summary>
 
-Les stocks de référence à l’hectare de la biomasse en forêt sont issus des campagnes de mesure de 2020 à 2024 de l’inventaire forestier national de l’IGN et calculés par typologie de forêt et par sylvo- écorégion et grande région écologique.
+Les stocks de référence pour la biomasse (hors forêts, hors haies) sont issues d'une revue de la littérature :
 
-Les données de biomasse sur pied (vivante) et de bois mort sont obtenues, à l'hectare, par composition (feuillu, conifère, mixte, peupleraie). Ces données sont exprimées par groupement de sylvo- écorégion (SER) lorsque les données sont statistiquement significatives, ou, dans le cas contraire, par Grande Région Ecologique (GRECO).
+* IFN/FCBA/SOLAGRO – Biomasse forestière, populicole et bocagère disponible pour l'énergie à l'horizon 2020, Novembre 2009
 
-Les SER sont des subdivisions des GRECO, comme le montre les cartographies ci-dessous.
+Ces données sont obtenues par inter-régions. Elles sont utilisées pour les typologies de biomasse hors haies et forêts à savoir : vignes, vergers, prairies arbustives, prairies arborées, sols artificiels arbustifs, sols artificiels arborés.
 
-[Réservoir](definitions.md#reservoirs) ALDO -> **Biomasse**
+[Réservoir](definitions.md#reservoirs) ALDO -> Biomasse
 
-[Occupation du sol](definitions.md#typologies-doccupation-du-sol) -> Toutes, hors forêts et haies
+[​Occupation du sol](definitions.md#occupation-du-sol-et-changement-doccupation-du-sol) -> Toutes, hors forêts et haies
+
+
 
 </details>
 
@@ -172,7 +174,7 @@ Les SER sont des subdivisions des GRECO, comme le montre les cartographies ci-de
 
 <summary>Stocks de carbone de la biomasse des forêts</summary>
 
-Les stocks de référence à l’hectare de la biomasse en forêt sont issus de l’inventaire forestier de l’IGN mené entre 2016 et 2020 et calculés par typologie de forêt et par sylvo- écorégion et grande région écologique.
+Les stocks de référence à l’hectare de la biomasse en forêt sont issus de l’inventaire forestier de l’IGN mené entre 2020 et 2024 et calculés par typologie de forêt et par sylvo- écorégion et grande région écologique.
 
 Les données **de biomasse sur pied (vivante) et de bois mort** sont obtenues, à l'hectare, par composition (feuillu, conifère, mixte, peupleraie). Ces données sont exprimées par groupement de sylvo- écorégion (SER) lorsque les données sont statistiquement significatives, ou, dans le cas contraire, par Grande Région Ecologique (GRECO).
 
@@ -282,7 +284,7 @@ Des flux de carbone ont lieux dans les forêts, même à surface constante : il 
 
 Ces flux de carbone de la biomasse vivante (aérienne et racinaire) sont issus de l'inventaire forestier de l'IGN, [décrit ci-dessus.](sources.md#stocks-de-carbone-de-la-biomasse-des-forets)
 
-Les nouvelles campagnes de mesures, menées entre 2016 et 2020 permettent d'obtenir des flux de référence de la biomasse en forêts à partir du bilan entre **les données d’accroissement biologique, de mortalité et de prélèvement.**
+Les nouvelles campagnes de mesures, menées entre 2020 et 2024 permettent d'obtenir des flux de référence de la biomasse en forêts à partir du bilan entre **les données d’accroissement biologique, de mortalité et de prélèvement.**
 
 Comme pour les stocks, ces données sont obtenues, à l'hectare, par composition (feuillu, conifère, mixte, peupleraie) et sont calculées par groupement de sylvo- écorégion (SER) lorsque les données sont statistiquement significatives, ou, dans le cas contraire, par Grande Région Ecologique (GRECO).
 
@@ -328,7 +330,7 @@ Les données obtenues sont l'estimation des **flux** dans les produits bois BO (
 
 <summary>Prélèvements et récolte de bois en forêts</summary>
 
-Comme décrit [ci-dessus](sources.md#flux-de-carbone-de-la-biomasse-en-forets-par-accroissement-net), l'inventaire forestier de l'IGN, par des campagnes de mesures, menées entre 2016 et 2020, fournit des données d’accroissement biologique, de mortalité **et de prélèvement.**
+Comme décrit [ci-dessus](sources.md#flux-de-carbone-de-la-biomasse-en-forets-par-accroissement-net), l'inventaire forestier de l'IGN, par des campagnes de mesures, menées entre 2020 et 2024, fournit des données d’accroissement biologique, de mortalité **et de prélèvement.**
 
 Ces données sont exprimées ici à l'hectare. Elles permettent d'estimer une récolte théorique locale en suivant [la méthode détaillée ici.](../stocks/specificites-produits-bois.md#estimation-theorique-des-quantites-de-produits-bois-recoltees-par-categorie-bo-bi-du-territoire-et-d)
 
@@ -338,7 +340,7 @@ Ces données sont exprimées ici à l'hectare. Elles permettent d'estimer une r�
 
 <summary>Distribution de la récolte entre les différents usages du bois (BO/BI/BE)</summary>
 
-L'AGRESTE fournit des valeurs moyennes annuelles 2016 - 2020 pour :&#x20;
+L'AGRESTE fournit des valeurs moyennes annuelles 2020 - 2024 pour :&#x20;
 
 * La récolte commercialisée de BO/BI/BE dans chacune des 13 régions administratives
 * L'estimation de la récolte non commercialisée de BE à l'échelle de la France<mark style="color:green;">.</mark> La récolte non commercialisée de BE par région administrative est estimée par différence entre la récolte totale par région administrative calculée en soustrayant les pertes d’exploitation aux données de prélèvements moyens fournies par l'IGN et la récolte commercialisée par région administrative issue de la base de donnée AGRESTE.

@@ -50,7 +50,7 @@ D’un point de vue méthodologique, l’estimation des flux de carbone entre le
 
 #### Autres ressources :
 
-* Sommet Virtuel du Climat (janvier 2026) <mark style="color:red;">⏯</mark> [ALDO : un outil au service des territoires, pour stocker du carbone !](https://www.youtube.com/watch?v=53j5ybckvIw)
+* Sommet Virtuel du Climat (janvier 2026) <mark style="color:red;">⏯</mark> [ALDO : un outil au service des territoires, pour stocker du carbone !](https://www.youtube.com/watch?v=A4naCQJ02nI\&t=3s)
 * Tutoriel pratique d'[utilisation de ALDO en ligne](https://www.youtube.com/watch?v=UYFCyIcvWN4) <mark style="color:red;">⏯</mark>&#x20;
 * [<mark style="color:blue;">MOOC ADEME</mark>](https://www.fun-mooc.fr/fr/cours/stocker-du-carbone-dans-les-ecosysteme/) présentant les enjeux de la séquestration carbone dans les sols et les arbres, de la santé des sols mais aussi des pratiques dites “stockantes”.
 
