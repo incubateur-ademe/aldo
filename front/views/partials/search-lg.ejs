@@ -32,29 +32,52 @@
 <script>
   const COMMUNE_INSEE_CODE_LENGTH = 5
   const EPCI_SIREN_LENGTH = 9
+  // Chromium becomes unresponsive for tens of seconds when an <input list="…">
+  // is focused/typed into while its <datalist> holds tens of thousands of
+  // <option>s (we have ~36 000 communes + EPCI combined). Keeping the datalist
+  // capped well under that keeps native autocomplete responsive.
+  const MAX_SUGGESTIONS = 50
 
   let locations
   const searchForm = $('#location-search-form')
+  const locationNames = document.getElementById('location-names')
+
   $(document).ready(() => {
     locations = {}
     $.getJSON("static/data/communes_17122018.csv.json", (data) => {
       data.forEach(loc => {
         locations[loc.insee] = loc.nom
-        $('<option>', {
-          value: loc.insee + " ",
-          text: `${loc.nom} (${loc.insee})`
-        }).appendTo('datalist#location-names')
       })
     })
     $.getJSON("static/data/epci.csv.json", (data) => {
       data.forEach(loc => {
         locations[loc.code] = loc.nom
-        $('<option>', {
-          value: loc.code + " ",
-          text: `${loc.nom} (${loc.code})`
-        }).appendTo('datalist#location-names')
       })
     })
+  })
+
+  function updateSuggestions(query) {
+    locationNames.innerHTML = ''
+    if (!query) return
+    const lowerQuery = query.toLowerCase()
+    const fragment = document.createDocumentFragment()
+    let count = 0
+    for (const code in locations) {
+      if (count >= MAX_SUGGESTIONS) break
+      const name = locations[code]
+      if (name.toLowerCase().includes(lowerQuery) || code.toLowerCase().includes(lowerQuery)) {
+        const option = document.createElement('option')
+        option.value = code + " "
+        option.textContent = `${name} (${code})`
+        fragment.appendChild(option)
+        count++
+      }
+    }
+    locationNames.appendChild(fragment)
+  }
+
+  $('#location-search').on('input', (event) => {
+    updateSuggestions(event.target.value.trim())
   })
 
   function getLocationData(code) {
@@ -143,6 +166,7 @@
     if (locationData) {
       addLocationTag(locationData)
       document.getElementById('location-search').value = ""
+      updateSuggestions('')
       return locationData
     }
   }
