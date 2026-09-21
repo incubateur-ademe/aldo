@@ -2,6 +2,8 @@ const { getAnnualFluxes } = require('./index')
 const { getEpci } = require('../locations')
 const { getCommunes } = require('../../data/communes')
 
+// Reference values below were resynced against the April 2026 Citepa data update
+// (commits fdbded3/2ddb386), which changed per-commune land-use transition figures.
 describe('Flux module integration tests', () => {
   const communes = getCommunes({ epci: getEpci('200007177', true) })
   test('returns expected number of entries for cultures ground changes', () => {
@@ -9,7 +11,7 @@ describe('Flux module integration tests', () => {
     const allFlux = getAnnualFluxes(communes).allFlux
     const culturesFlux = allFlux.filter(f => f.to === 'cultures')
     const cGround = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'sol')
-    expect(cGround.length).toBe(29)
+    expect(cGround.length).toBe(23)
   })
 
   // data-dependent tests
@@ -18,7 +20,7 @@ describe('Flux module integration tests', () => {
     const culturesFlux = allFlux.filter(f => f.to === 'cultures' && f.reservoir === 'sol')
     const prairies = culturesFlux.filter(f => f.from.startsWith('prairies'))
     const cPrairies = prairies.filter(f => f.gas === 'C' && !!f.area)
-    expect(cPrairies.reduce((acc, pFlux) => acc + pFlux.value, 0)).toBeCloseTo(-3081.24, 2)
+    expect(cPrairies.reduce((acc, pFlux) => acc + pFlux.value, 0)).toBeCloseTo(-1274.76, 2)
   })
 
   test('returns expected flux for each prairies -> cultures N2O changes', () => {
@@ -26,31 +28,32 @@ describe('Flux module integration tests', () => {
     const culturesFlux = allFlux.filter(f => f.to === 'cultures')
     const prairies = culturesFlux.filter(f => f.from.startsWith('prairies'))
     const n2oPrairies = prairies.filter(f => f.gas === 'N2O')
-    expect(n2oPrairies.reduce((acc, pFlux) => acc + pFlux.value, 0)).toBeCloseTo(-4.34, 1)
+    expect(n2oPrairies.reduce((acc, pFlux) => acc + pFlux.value, 0)).toBeCloseTo(-1.8, 1)
   })
 
   // TODO: add a forest litter value test if find EPCI with numbers !== 0
 
   test('returns all relevant carbon emissions for cultures', () => {
     const summary = getAnnualFluxes(communes).summary
-    expect(summary.cultures.totalCarbonSequestration).toBeCloseTo(-3334.4, 1)
+    expect(summary.cultures.totalCarbonSequestration).toBeCloseTo(-1345.3, 1)
   })
 
   test('returns correct total for vergers and vignes', () => {
     let summary = getAnnualFluxes(communes).summary
-    expect(summary.vergers.totalSequestration).toBeCloseTo(158.34, 0)
+    expect(summary.vergers.totalSequestration).toBeCloseTo(138.8, 0)
     summary = getAnnualFluxes(getCommunes({ epci: getEpci('200015162', true) })).summary
-    expect(summary.vignes.totalSequestration).toBeCloseTo(-1994.21, 0)
-    // the following value is wrong in the spreadsheet, so my calculations break.
+    expect(summary.vignes.totalSequestration).toBeCloseTo(-1101.59, 0)
+    // this EPCI used to have a bad value in the spreadsheet, causing summary.vignes to be
+    // undefined; the April 2026 Citepa data update fixed the underlying anomaly.
     summary = getAnnualFluxes(getCommunes({ epci: getEpci('200040798', true) })).summary
-    expect(summary.vignes).toBeUndefined()
+    expect(summary.vignes.totalSequestration).toBeCloseTo(-7.38, 1)
   })
 
   test('returns correct total for zones humides', () => {
     let summary = getAnnualFluxes(getCommunes({ epci: getEpci('200042992', true) })).summary
-    expect(summary['zones humides'].totalSequestration).toBeCloseTo(2973.28, 0)
+    expect(summary['zones humides'].totalSequestration).toBeCloseTo(3876.88, 0)
     summary = getAnnualFluxes(getCommunes({ epci: getEpci('200055887', true) })).summary
-    expect(summary['zones humides'].totalSequestration).toBeCloseTo(546.24, 0)
+    expect(summary['zones humides'].totalSequestration).toBeCloseTo(888.49, 0)
   })
 
   test('option to set an area changed to 0', () => {

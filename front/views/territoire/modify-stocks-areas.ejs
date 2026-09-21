@@ -19,7 +19,7 @@
       </label>
       <div class="fr-grid-row">
         <input class="fr-input fr-text--lg fr-col-9 fr-col-md-8" type="number" inputmode="numeric" min="0" placeholder="<%= round(stock.originalArea) %>" value="<%= stock.areaModified ? round(stock.area) : undefined %>" id="all-surface-<%= index %>" name="surface_<%= pascalCase(stocksGroundTypes[index].stocksId) %>">
-        <p class="fr-pt-1w fr-ml-1w">ha</p>
+        <p class="fr-pt-1w fr-ml-1w"><%= groundType.stocksId === 'haies' ? 'km' : 'ha' %></p>
       </div>
     </div>
     <% } %>
