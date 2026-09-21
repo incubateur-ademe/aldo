@@ -2,6 +2,7 @@
 const path = require('path')
 const rootFolder = path.join(__dirname, '../../')
 const { AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
+const { Occupations, PvRows } = require(path.join(rootFolder, './calculations/catenr/constants'))
 const { getEpci, getCommune } = require(path.join(rootFolder, './calculations/locations'))
 
 function parseOptionsFromQuery (query) {
@@ -47,6 +48,46 @@ function parseOptionsFromQuery (query) {
   }
 }
 
+// Les saisies de l'outil CAT'ENR sont portées par l'URL, comme les autres
+// personnalisations d'ALDO. Les paramètres sont préfixés par `cat_` et utilisent
+// des codes courts (cf. calculations/catenr/constants.js) pour limiter leur longueur.
+function parseCatenrFromQuery (query) {
+  const number = (value) => {
+    const parsed = parseFloat(value)
+    return isNaN(parsed) ? undefined : parsed
+  }
+  const percentage = (value) => {
+    const parsed = number(value)
+    return parsed === undefined ? undefined : parsed / 100
+  }
+  const occupation = (code) => Occupations.find((o) => o.code === code)?.id
+
+  const rows = {}
+  let hasModifications = false
+  PvRows.forEach((definition) => {
+    const prefix = `cat_${definition.code}_`
+    const row = {
+      area: number(query[prefix + 's']),
+      wetlandShare: percentage(query[prefix + 'zh']),
+      age: number(query[prefix + 'age']),
+      biomassStock: number(query[prefix + 'bio']),
+      initialOccupation: occupation(query[prefix + 'i']),
+      finalOccupation: occupation(query[prefix + 'f'])
+    }
+    if (Object.values(row).some((value) => value !== undefined)) {
+      hasModifications = true
+    }
+    rows[definition.id] = row
+  })
+
+  return {
+    lifespan: number(query.cat_duree),
+    totalArea: number(query.cat_surface),
+    rows,
+    hasModifications: hasModifications || query.cat_duree !== undefined || query.cat_surface !== undefined
+  }
+}
+
 async function getLocationDetail (req, res) {
   // TODO: remove option for single epci and single commune
   if (req.params.epci) {
@@ -71,5 +112,6 @@ async function getLocationDetail (req, res) {
 
 module.exports = {
   parseOptionsFromQuery,
+  parseCatenrFromQuery,
   getLocationDetail
 }

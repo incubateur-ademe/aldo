@@ -137,3 +137,29 @@ th.flux-surface-col {
     margin-left: 0;
   }
 }
+/* Outil CAT'ENR */
+.catenr-table th[scope="row"] {
+  font-weight: 700;
+  min-width: 16rem;
+}
+
+.catenr-table .catenr-child-row {
+  padding-left: 2rem;
+  font-weight: 400;
+}
+
+.catenr-table .catenr-hint {
+  display: block;
+  font-weight: 400;
+  color: #666;
+}
+
+.catenr-table .fr-input,
+.catenr-table .fr-select {
+  min-width: 7rem;
+}
+
+.catenr-table td:nth-child(4) .fr-select,
+.catenr-table td:nth-child(6) .fr-select {
+  min-width: 14rem;
+}

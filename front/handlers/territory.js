@@ -4,7 +4,9 @@ const { epciList, communeList } = require(path.join(rootFolder, './data'))
 const { getStocks } = require(path.join(rootFolder, './calculations/stocks'))
 const { getAnnualFluxes } = require(path.join(rootFolder, './calculations/flux'))
 const { GroundTypes, Colours, AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
-const { parseOptionsFromQuery, getLocationDetail } = require('./shared')
+const { parseOptionsFromQuery, parseCatenrFromQuery, getLocationDetail } = require('./shared')
+const { getCatenrPv } = require(path.join(rootFolder, './calculations/catenr'))
+const { Occupations: CatenrOccupations, Scenarios: CatenrScenarios } = require(path.join(rootFolder, './calculations/catenr/constants'))
 const { getCommunes } = require(path.join(rootFolder, './data/communes'))
 const { getForestBiomassComparisonByCommune } = require(path.join(rootFolder, './data/flux'))
 
@@ -94,6 +96,18 @@ async function territoryHandler (req, res) {
     })
   }
 
+  // L'outil CAT'ENR raisonne à l'échelle d'une commune (stocks et flux de la ZPC).
+  // Pour un EPCI ou un regroupement, on retient la commune représentative de la
+  // zone pédo-climatique majoritaire du territoire.
+  const catenrCommune = getMajorityZpcCommune(communes)
+  const catenrInputs = parseCatenrFromQuery(req.query)
+  let catenr = null
+  try {
+    catenr = getCatenrPv({ commune: catenrCommune }, catenrInputs)
+  } catch (error) {
+    console.log('Error computing CAT\'ENR results for location', location, error)
+  }
+
   const { fluxDetail, agriculturalPracticeDetail } = formatFluxForDisplay(flux)
   const singleLocation = location.epci || location.commune
 
@@ -126,6 +140,20 @@ async function territoryHandler (req, res) {
   if (params.length) {
     sharingQueryStr = `?${params.join('&')}`
   }
+  // réinitialiser l'outil CAT'ENR ne doit pas effacer les personnalisations des autres onglets.
+  // Les paramètres tableau (communes[], epcis[]) doivent conserver leur forme d'origine.
+  const catenrResetParams = []
+  Object.keys(req.query)
+    .filter((queryParam) => !queryParam.startsWith('cat_'))
+    .forEach((queryParam) => {
+      const value = req.query[queryParam]
+      if (Array.isArray(value)) {
+        value.forEach((item) => catenrResetParams.push(`${queryParam}[]=${item}`))
+      } else {
+        catenrResetParams.push(`${queryParam}=${value}`)
+      }
+    })
+  const catenrResetQueryStr = catenrResetParams.length ? `?${catenrResetParams.join('&')}` : ''
   res.render('territoire', {
     pageTitle,
     tab: req.params.tab || 'stocks',
@@ -189,10 +217,82 @@ async function territoryHandler (req, res) {
       }
       return url + (withQuery ? sharingQueryStr : '')
     },
+    catenr,
+    catenrInputs,
+    catenrCommune,
+    catenrOccupations: CatenrOccupations,
+    catenrResetQueryStr,
+    catenrChart: catenr && catenrChart(catenr, catenrInputs.lifespan),
     beges: req.query.beges,
     perimetre: req.query.perimetre,
     forestBiomassSummaryByType: flux?.biomassSummary,
     ...options
+  })
+}
+
+// Commune représentative de la zone pédo-climatique la plus fréquente du territoire.
+function getMajorityZpcCommune (communes) {
+  if (communes.length === 1) return communes[0]
+  const countByZpc = {}
+  communes.forEach((commune) => {
+    if (!commune.zpc) return
+    countByZpc[commune.zpc] = (countByZpc[commune.zpc] || 0) + 1
+  })
+  const majorityZpc = Object.keys(countByZpc).sort((a, b) => countByZpc[b] - countByZpc[a])[0]
+  return communes.find((commune) => commune.zpc === majorityZpc) || communes[0]
+}
+
+// Évolution des stocks de carbone selon les 6 scénarios CAT'ENR, plus un repère
+// vertical sur la durée de vie de l'installation.
+const CATENR_SCENARIO_STYLES = {
+  referencePessimiste: { borderColor: '#7b7b7b', borderDash: [6, 4] },
+  referenceProbable: { borderColor: '#161616' },
+  referenceOptimiste: { borderColor: '#b5b5b5', borderDash: [2, 3] },
+  projetPessimiste: { borderColor: '#E4794A', borderDash: [6, 4] },
+  projetProbable: { borderColor: '#CE614A' },
+  projetOptimiste: { borderColor: '#E18B76', borderDash: [2, 3] }
+}
+
+function catenrChart (catenr, lifespan) {
+  const years = catenr.trajectories.projetProbable.map((_, year) => year)
+  const datasets = CatenrScenarios.map((scenario) => ({
+    label: scenario.name,
+    data: catenr.trajectories[scenario.id].map((value, year) => ({ x: year, y: round2(value) })),
+    borderWidth: 2,
+    pointRadius: 0,
+    ...CATENR_SCENARIO_STYLES[scenario.id]
+  }))
+  if (lifespan > 0 && lifespan <= years[years.length - 1]) {
+    const allValues = CatenrScenarios.flatMap((scenario) => catenr.trajectories[scenario.id])
+    datasets.push({
+      label: "Durée de vie de l'installation",
+      data: [
+        { x: lifespan, y: Math.min(0, ...allValues) },
+        { x: lifespan, y: Math.max(0, ...allValues) }
+      ],
+      borderColor: '#009081',
+      borderWidth: 2,
+      pointRadius: 0
+    })
+  }
+  return JSON.stringify({
+    type: 'line',
+    data: { datasets },
+    options: {
+      plugins: {
+        datalabels: { display: false },
+        tooltip: { intersect: false, mode: 'index' }
+      },
+      scales: {
+        x: {
+          type: 'linear',
+          title: { display: true, text: 'Année' }
+        },
+        y: {
+          title: { display: true, text: 'Stocks de carbone (tCO2e)' }
+        }
+      }
+    }
   })
 }
 

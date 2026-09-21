@@ -72,7 +72,13 @@
   // - shorten URLs by only including the values that are overridden
   // - handle the case for stocks where there are two inputs that can change the same value
   let queryParams = new URLSearchParams(window.location.search)
-  $('input').change((event) => {
+  // les listes déroulantes de l'onglet CAT'ENR sont aussi portées par l'URL
+  $('input, select').change((event) => {
+    if (!event.target.name) return
+    if (event.target.value === '') {
+      queryParams.delete(event.target.name)
+      return
+    }
     queryParams.set(event.target.name, event.target.value)
   })
 
