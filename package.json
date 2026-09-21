@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Calculer le stock et les flux de carbone sur votre territoire",
   "engines": {
-    "node": "16"
+    "node": "24"
   },
   "scripts": {
     "checkHTML": "site-validator --verbose --url",
