@@ -25,7 +25,7 @@ Conformément à la règlementation, ALDO permet "une estimation de la séquestr
 
 Concernant les potentiels de développement, seules les modifications de pratiques agricoles sont quantifiées.
 
-Les différentes estimations proposées par ALDO sont résumées dans la rubrique [Broken link](/broken/pages/o8LE682olIRPAbnfF5vo "mention")
+Les différentes estimations proposées par ALDO sont résumées dans la rubrique [Introduction](https://app.gitbook.com/s/DicahxGYATCNQCFJUpH9/ "mention")
 
 ## Ce que ne permet pas l'outil ALDO :x:
 

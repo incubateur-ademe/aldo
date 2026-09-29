@@ -4,7 +4,7 @@ description: Flux de carbone du territoire (tCO2eq/an)
 
 # 📊 Méthode générale
 
-En préambule, consultez la définition d'un [flux](/broken/pages/UPj9ly0Mz7vzCiQ7MyT9) de carbone.
+En préambule, consultez la définition d'un [flux](https://app.gitbook.com/s/DicahxGYATCNQCFJUpH9/flux) de carbone.
 
 **La rubrique présente ici la méthode générale utilisée dans l'outil ALDO, étape par étape.** Des spécificités sont relatives à certaines typologies dans des rubriques dédiées :&#x20;
 
