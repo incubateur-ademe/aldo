@@ -34,6 +34,10 @@
 
 * [🔧 Configuration manuelle](configuration/configuration-manuelle.md)
 
+## Outil CAT'ENR
+
+* [📊 Explications méthodologiques](outil-catenr/explications-methodologiques.md)
+
 ## FAQ
 
 * [❔ FAQ ALDO](faq/faq-aldo.md)
