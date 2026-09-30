@@ -250,43 +250,14 @@ function generate (outputPath) {
 
   process.stdout.write(`\r  ${total}/${total}\n`)
 
-  // -------------------------------------------------------------------------
-  // Retirer les colonnes entièrement vides (transitions impossibles)
-  // Le fichier de référence DATA ADEME ne contient que les colonnes avec au
-  // moins une valeur non vide.
-  // -------------------------------------------------------------------------
-  const META_COLS = 12 // colonnes de métadonnées toujours conservées
-  const colCount = headers.length
-  const emptyCols = new Set()
-
-  for (let c = META_COLS; c < colCount; c++) {
-    let allEmpty = true
-    for (const row of rows) {
-      if (row[c] !== '' && row[c] !== undefined && row[c] !== null) {
-        allEmpty = false
-        break
-      }
-    }
-    if (allEmpty) emptyCols.add(c)
-  }
-
-  const keepIndices = []
-  for (let c = 0; c < colCount; c++) {
-    if (!emptyCols.has(c)) keepIndices.push(c)
-  }
-
-  if (emptyCols.size > 0) {
-    console.log(`Colonnes vides retirées : ${emptyCols.size} (${colCount} → ${keepIndices.length})`)
-  }
-
-  const lines = [keepIndices.map((c) => headers[c]).join(',')]
+  const lines = [headers.join(',')]
   for (const row of rows) {
-    lines.push(keepIndices.map((c) => csvValue(row[c] ?? '')).join(','))
+    lines.push(row.map((v) => csvValue(v ?? '')).join(','))
   }
 
   fs.writeFileSync(outputPath, lines.join('\n'), 'utf8')
   console.log(`Fichier généré : ${outputPath}`)
-  console.log(`Lignes : ${rows.length} communes  |  Colonnes : ${keepIndices.length}`)
+  console.log(`Lignes : ${rows.length} communes  |  Colonnes : ${headers.length}`)
 }
 
 // ---------------------------------------------------------------------------

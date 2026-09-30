@@ -8,25 +8,6 @@ const { getEpcis, getEPCIBaseMeta } = require('./generate-epci-utils')
 const fluxGroundTypes = GroundTypes.filter((gt) => gt.altFluxId || gt.fluxId)
 const forestSubtypeIds = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
 
-function parseQuotedHeaders (line) {
-  const matches = line.match(/"((?:[^"]|"")*)"/g) || []
-  return matches.map((m) => m.slice(1, -1).replace(/""/g, '"'))
-}
-
-function getPairsWithCo2eFromReference () {
-  const referencePath = path.join(__dirname, '../flux1.csv')
-  const firstLine = fs.readFileSync(referencePath, 'utf8').split('\n')[0]
-  const headers = parseQuotedHeaders(firstLine)
-  const pairs = new Set()
-  headers.forEach((header) => {
-    if (!header.endsWith('_tCO2e_an-1')) return
-    pairs.add(header.replace(/_tCO2e_an-1$/, ''))
-  })
-  return pairs
-}
-
-const PAIRS_WITH_CO2E = getPairsWithCo2eFromReference()
-
 function buildHeaders () {
   const headers = [
     'insee', 'nom', 'epci', 'departement', 'region', 'zpc',
@@ -39,7 +20,7 @@ function buildHeaders () {
       if (forestSubtypeIds.includes(fromGt.stocksId) && forestSubtypeIds.includes(toGt.stocksId)) return
       const pairKey = `${fromGt.stocksId}_vers_${toGt.stocksId}`
       headers.push(`${pairKey}_surface_ha_an-1`)
-      if (PAIRS_WITH_CO2E.has(pairKey)) headers.push(`${pairKey}_tCO2e_an-1`)
+      headers.push(`${pairKey}_tCO2e_an-1`)
     })
   })
   return headers
@@ -75,13 +56,10 @@ function generate (outputPath) {
       fluxGroundTypes.forEach((toGt) => {
         if (fromGt.stocksId === toGt.stocksId) return
         if (forestSubtypeIds.includes(fromGt.stocksId) && forestSubtypeIds.includes(toGt.stocksId)) return
-        const pairKey = `${fromGt.stocksId}_vers_${toGt.stocksId}`
         const surface = areas[fromGt.stocksId]?.[toGt.stocksId]?.area
         row.push(surface !== undefined && surface !== null ? surface : 0)
-        if (PAIRS_WITH_CO2E.has(pairKey)) {
-          const co2e = fluxCo2eByGroundType[fromGt.stocksId]?.[toGt.stocksId]
-          row.push(co2e ?? '')
-        }
+        const co2e = fluxCo2eByGroundType[fromGt.stocksId]?.[toGt.stocksId]
+        row.push(co2e ?? '')
       })
     })
     lines.push(row.map(csvValue).join(','))

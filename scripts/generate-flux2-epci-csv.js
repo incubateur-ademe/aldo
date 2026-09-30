@@ -4,7 +4,8 @@ const path = require('path')
 const { GroundTypes } = require('../calculations/constants')
 const {
   getFluxReferenceValues,
-  cToCo2e
+  cToCo2e,
+  getAnnualSurfaceChange
 } = require('../data/flux')
 const {
   getBiomassCarbonDensity,
@@ -48,33 +49,70 @@ function buildHeaders () {
   return headers
 }
 
-function computeUnitFluxes (location) {
-  const unitFluxMap = new Map()
-  const refFluxes = getFluxReferenceValues(location)
-  refFluxes.forEach((f) => {
-    if (!f.from || !f.to) return
-    const key = `${f.from}||${f.to}||${f.reservoir}`
-    const unitValue = cToCo2e(f.annualFlux * (f.yearsForFlux || 1))
-    if (unitValue !== undefined && unitValue !== null) {
-      unitFluxMap.set(key, unitValue)
-    }
-  })
+// Accumule un échantillon (valeur unitaire d'une commune) pour une paire de
+// changement. La moyenne pondérée n'utilise que les communes ayant un flux et
+// une surface convertie non nuls — c'est exactement ce que fait Aldo pour
+// afficher le flux unitaire à l'échelle EPCI (front/handlers/territory.js :
+// moyenne de annualFluxEquivalent pondérée par la surface, après exclusion des
+// entrées dont value === 0).
+function addSample (acc, key, value, area) {
+  let sample = acc.get(key)
+  if (!sample) {
+    sample = { weightedSum: 0, areaSum: 0, simpleSum: 0, count: 0 }
+    acc.set(key, sample)
+  }
+  if (value !== 0 && area > 0) {
+    sample.weightedSum += value * area
+    sample.areaSum += area
+  }
+  sample.simpleSum += value
+  sample.count += 1
+}
 
-  const areaData = getForestAreaData(location)
+// Calcule les flux unitaires (tCO2e/ha) à l'échelle d'un EPCI en agrégeant ses
+// communes. Pour chaque paire (from, to, réservoir) on fait la moyenne des
+// valeurs communales pondérée par la surface convertie, reproduisant la valeur
+// affichée par Aldo. Lorsqu'aucune commune de l'EPCI n'a de changement pour la
+// paire, on retombe sur une moyenne simple des valeurs unitaires communales
+// (même logique de repli que replaceWithOverride dans le moteur de calcul).
+function computeUnitFluxes (communes) {
+  const acc = new Map()
   const excludeIds = ['haies', 'produits bois']
   const childGroundTypes = GroundTypes.filter((gt) => !gt.children && !excludeIds.includes(gt.stocksId))
 
-  forestSubtypeIds.forEach((fromId) => {
-    const forestBiomassDensities = getForestBiomassCarbonDensities(location, fromId, areaData)
-    const initialBiomassDensity = forestBiomassDensities.live + forestBiomassDensities.dead
-    childGroundTypes.forEach((toGt) => {
-      const toId = toGt.stocksId
-      if (fromId === toId || forestSubtypeIds.includes(toId)) return
-      const annualFlux = getBiomassCarbonDensity(location, toId) - initialBiomassDensity
-      if (annualFlux !== undefined && annualFlux !== null) {
-        unitFluxMap.set(`${fromId}||${toId}||biomasse`, cToCo2e(annualFlux))
-      }
+  communes.forEach((commune) => {
+    const location = { commune }
+
+    const refFluxes = getFluxReferenceValues(location)
+    refFluxes.forEach((f) => {
+      if (!f.from || !f.to) return
+      const unitValue = cToCo2e(f.annualFlux * (f.yearsForFlux || 1))
+      if (unitValue === undefined || unitValue === null) return
+      const area = getAnnualSurfaceChange(location, {}, f.from, f.to) || 0
+      addSample(acc, `${f.from}||${f.to}||${f.reservoir}`, unitValue, area)
     })
+
+    const areaData = getForestAreaData(location)
+    forestSubtypeIds.forEach((fromId) => {
+      const forestBiomassDensities = getForestBiomassCarbonDensities(location, fromId, areaData)
+      const initialBiomassDensity = forestBiomassDensities.live + forestBiomassDensities.dead
+      childGroundTypes.forEach((toGt) => {
+        const toId = toGt.stocksId
+        if (fromId === toId || forestSubtypeIds.includes(toId)) return
+        const annualFlux = getBiomassCarbonDensity(location, toId) - initialBiomassDensity
+        if (annualFlux === undefined || annualFlux === null) return
+        const area = getAnnualSurfaceChange(location, {}, fromId, toId) || 0
+        addSample(acc, `${fromId}||${toId}||biomasse`, cToCo2e(annualFlux), area)
+      })
+    })
+  })
+
+  const unitFluxMap = new Map()
+  acc.forEach((sample, key) => {
+    const value = sample.areaSum > 0
+      ? sample.weightedSum / sample.areaSum
+      : (sample.count ? sample.simpleSum / sample.count : null)
+    if (value !== null) unitFluxMap.set(key, value)
   })
   return unitFluxMap
 }
@@ -98,8 +136,7 @@ function generate (outputPath) {
   epcis.forEach((epci, index) => {
     if (index % 100 === 0) process.stdout.write(`\r  ${index}/${total}`)
     const communes = getCommunesForEpci(epci)
-    const location = { epci, commune: communes[0] }
-    const unitFluxMap = computeUnitFluxes(location)
+    const unitFluxMap = computeUnitFluxes(communes)
     const meta = getEPCIBaseMeta(epci)
 
     const row = [
@@ -124,27 +161,12 @@ function generate (outputPath) {
   })
   process.stdout.write(`\r  ${total}/${total}\n`)
 
-  const metaCols = 12
-  const emptyCols = new Set()
-  for (let c = metaCols; c < headers.length; c++) {
-    let allEmpty = true
-    for (const row of rows) {
-      if (row[c] !== '' && row[c] !== undefined && row[c] !== null) {
-        allEmpty = false
-        break
-      }
-    }
-    if (allEmpty) emptyCols.add(c)
-  }
-
-  const keepIndices = []
-  for (let c = 0; c < headers.length; c++) if (!emptyCols.has(c)) keepIndices.push(c)
-  const lines = [keepIndices.map((c) => headers[c]).join(',')]
-  rows.forEach((row) => lines.push(keepIndices.map((c) => csvValue(row[c] ?? '')).join(',')))
+  const lines = [headers.join(',')]
+  rows.forEach((row) => lines.push(row.map((v) => csvValue(v ?? '')).join(',')))
 
   fs.writeFileSync(outputPath, lines.join('\n'), 'utf8')
   console.log(`Fichier généré : ${outputPath}`)
-  console.log(`Lignes : ${rows.length} EPCI  |  Colonnes : ${keepIndices.length}`)
+  console.log(`Lignes : ${rows.length} EPCI  |  Colonnes : ${headers.length}`)
 }
 
 const outputFile = process.argv[2] || path.join(process.cwd(), 'flux2-epci.csv')
