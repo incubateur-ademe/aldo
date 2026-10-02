@@ -10,6 +10,7 @@ const fs = require('fs')
 const path = require('path')
 const { getAnnualFluxes } = require('../calculations/flux/index')
 const { GroundTypes } = require('../calculations/constants')
+const { INDICATEUR_HEADERS, getIndicateursSequestration } = require('./flux1-indicateurs')
 
 // ---------------------------------------------------------------------------
 // Codes INSEE des arrondissements (non présents dans le fichier de référence)
@@ -181,6 +182,7 @@ function buildHeaders () {
       }
     })
   })
+  headers.push(...INDICATEUR_HEADERS)
   return headers
 }
 
@@ -219,10 +221,10 @@ function generate (outputPath) {
       fluxResult = getAnnualFluxes([commune])
     } catch (err) {
       console.warn(`\nErreur pour commune ${commune.insee}: ${err.message}`)
-      fluxResult = { fluxCo2eByGroundType: {}, areas: {}, total: 0 }
+      fluxResult = { allFlux: [], fluxCo2eByGroundType: {}, areas: {}, total: 0 }
     }
 
-    const { fluxCo2eByGroundType, areas, total: communeTotal } = fluxResult
+    const { allFlux, fluxCo2eByGroundType, areas, total: communeTotal } = fluxResult
 
     // ------------------------------------------------------------------
     // Métadonnées géographiques
@@ -265,6 +267,8 @@ function generate (outputPath) {
         }
       })
     })
+
+    row.push(...getIndicateursSequestration(allFlux))
 
     lines.push(row.map(csvValue).join(','))
   })
