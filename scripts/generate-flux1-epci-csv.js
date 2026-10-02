@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { getAnnualFluxes } = require('../calculations/flux/index')
 const { GroundTypes } = require('../calculations/constants')
+const { INDICATEUR_HEADERS, getIndicateursSequestration } = require('./flux1-indicateurs')
 const { getCommunes } = require('../data/communes')
 const { getEpcis, getEPCIBaseMeta } = require('./generate-epci-utils')
 
@@ -42,6 +43,7 @@ function buildHeaders () {
       if (PAIRS_WITH_CO2E.has(pairKey)) headers.push(`${pairKey}_tCO2e_an-1`)
     })
   })
+  headers.push(...INDICATEUR_HEADERS)
   return headers
 }
 
@@ -62,7 +64,7 @@ function generate (outputPath) {
     if (index % 100 === 0) process.stdout.write(`\r  ${index}/${total}`)
     const communes = getCommunes({ epci })
     const fluxResult = getAnnualFluxes(communes)
-    const { fluxCo2eByGroundType, areas, total: epciTotal } = fluxResult
+    const { allFlux, fluxCo2eByGroundType, areas, total: epciTotal } = fluxResult
     const meta = getEPCIBaseMeta(epci)
 
     const row = [
@@ -84,6 +86,8 @@ function generate (outputPath) {
         }
       })
     })
+    row.push(...getIndicateursSequestration(allFlux))
+
     lines.push(row.map(csvValue).join(','))
   })
 
