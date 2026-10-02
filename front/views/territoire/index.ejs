@@ -8,22 +8,27 @@
       <nav class="fr-nav territory-nav" role="navigation" aria-label="Navigation des sections du territoire">
         <ul class="fr-nav__list">
           <li class="fr-nav__item">
-            <a class="fr-nav__link" href="<%= getTabUrl('stocks') %>" <%= tab === 'stocks' ? 'aria-current="page"' : '' %>>
+            <a class="fr-nav__link" href="<%= getTabUrl('stocks') %>" <%- tab === 'stocks' ? 'aria-current="page"' : '' %>>
               Stocks
             </a>
           </li>
           <li class="fr-nav__item">
-            <a class="fr-nav__link" href="<%= getTabUrl('flux') %>" <%= tab === 'flux' ? 'aria-current="page"' : '' %>>
+            <a class="fr-nav__link" href="<%= getTabUrl('flux') %>" <%- tab === 'flux' ? 'aria-current="page"' : '' %>>
               Flux
             </a>
           </li>
           <li class="fr-nav__item">
-            <a class="fr-nav__link" href="<%= getTabUrl('agricultural-practices') %>" <%= tab === 'agricultural-practices' ? 'aria-current="page"' : '' %>>
+            <a class="fr-nav__link" href="<%= getTabUrl('agricultural-practices') %>" <%- tab === 'agricultural-practices' ? 'aria-current="page"' : '' %>>
               Pratiques agricoles
             </a>
           </li>
           <li class="fr-nav__item">
-            <a class="fr-nav__link" href="<%= getTabUrl('configuration') %>" <%= tab === 'configuration' ? 'aria-current="page"' : '' %>>
+            <a class="fr-nav__link" href="<%= getTabUrl('cat-enr') %>" <%- tab === 'cat-enr' ? 'aria-current="page"' : '' %>>
+              Outil CAT'ENR
+            </a>
+          </li>
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="<%= getTabUrl('configuration') %>" <%- tab === 'configuration' ? 'aria-current="page"' : '' %>>
               Configuration
             </a>
           </li>
@@ -42,6 +47,9 @@
         </section>
         <section class="territory-section" data-tab="agricultural-practices" <%= tab !== 'agricultural-practices' ? 'hidden' : '' %>>
           <%- include('./agricultural-practices') -%>
+        </section>
+        <section class="territory-section" data-tab="cat-enr" <%= tab !== 'cat-enr' ? 'hidden' : '' %>>
+          <%- include('./catenr') -%>
         </section>
         <section class="territory-section" data-tab="configuration" <%= tab !== 'configuration' ? 'hidden' : '' %>>
           <%- include('./shared-configuration') -%>
@@ -64,8 +72,49 @@
   // - shorten URLs by only including the values that are overridden
   // - handle the case for stocks where there are two inputs that can change the same value
   let queryParams = new URLSearchParams(window.location.search)
-  $('input').change((event) => {
+  // les listes déroulantes de l'onglet CAT'ENR sont aussi portées par l'URL
+  $('input, select').change((event) => {
+    if (!event.target.name) return
+    if (event.target.value === '') {
+      queryParams.delete(event.target.name)
+      return
+    }
     queryParams.set(event.target.name, event.target.value)
+  })
+
+  // Les boutons « Mettre à jour les calculs » et les liens qui modifient les
+  // paramètres de l'URL rechargent la page : on mémorise la position de défilement
+  // pour ne pas renvoyer l'utilisateur en haut de page à chaque recalcul.
+  const scrollStorageKey = 'aldo-territoire-defilement'
+
+  // `target` : identifiant d'un élément vers lequel défiler après le rechargement,
+  // à la place de la position courante.
+  function navigateKeepingScroll(url, target) {
+    try {
+      window.sessionStorage.setItem(scrollStorageKey, target ? `#${target}` : String(window.scrollY))
+    } catch (error) {
+      // sessionStorage indisponible (navigation privée, quota) : on perd seulement
+      // la position de défilement, la navigation doit rester possible
+    }
+    window.location.href = url
+  }
+
+  // La restitution attend l'événement load : la hauteur des images (schémas des
+  // emprises de l'onglet CAT'ENR notamment) n'est connue qu'une fois celles-ci chargées.
+  window.addEventListener('load', () => {
+    let savedScroll = null
+    try {
+      savedScroll = window.sessionStorage.getItem(scrollStorageKey)
+      window.sessionStorage.removeItem(scrollStorageKey)
+    } catch (error) {
+      // cf. ci-dessus
+    }
+    if (savedScroll === null) return
+    if (savedScroll.startsWith('#')) {
+      document.getElementById(savedScroll.slice(1))?.scrollIntoView()
+    } else {
+      window.scrollTo(0, parseFloat(savedScroll))
+    }
   })
 
   function getTabUrl(tabName) {
@@ -118,8 +167,19 @@
   // for being too long
   $('form#territory').submit((event) => {
     const currentTab = $('.territory-nav .fr-nav__link[aria-current="page"]').attr('data-tab') || 'stocks'
-    window.location.href = `${getTabUrl(currentTab)}?${queryParams.toString()}`
+    // l'outil CAT'ENR renvoie l'utilisateur sur ses résultats après un recalcul
+    const target = currentTab === 'cat-enr' ? 'catenr-resultats' : undefined
+    navigateKeepingScroll(`${getTabUrl(currentTab)}?${queryParams.toString()}`, target)
     event.preventDefault()
+  })
+
+  // Liens qui rechargent la page avec d'autres paramètres (réinitialisation,
+  // changement de technologie CAT'ENR) : même traitement que la soumission.
+  $('a.keep-scroll').click((event) => {
+    // les clics « ouvrir dans un nouvel onglet » restent gérés par le navigateur
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.which > 1) return
+    event.preventDefault()
+    navigateKeepingScroll(event.currentTarget.getAttribute('href'))
   })
 
   window.addEventListener('popstate', () => {
