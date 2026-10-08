@@ -119,10 +119,10 @@ describe('outil CAT\'ENR - photovoltaïque', () => {
     }))
     expect(result.referenceStocks.map((stock) => stock.id)).toEqual(result.stocks.map((stock) => stock.id))
     const at20 = result.referenceStocks.find((stock) => stock.id === '20-ans')
-    // cultures conservées : stock constant
+    // cultures conservées : stock constant, sauf pratiques stockantes de l'hypothèse optimiste
     expect(at20.value).toBeCloseTo(50, 6)
     expect(at20.pessimistic).toBeCloseTo(50, 6)
-    expect(at20.optimistic).toBeCloseTo(50, 6)
+    expect(at20.optimistic).toBeCloseTo(50 + 1.39 * 20, 6)
   })
 
   test('des surfaces incohérentes bloquent la présentation des résultats', () => {
@@ -166,6 +166,58 @@ describe('outil CAT\'ENR - photovoltaïque', () => {
       fondations: { area: 1, initialOccupation: 'cultures', finalOccupation: 'sols artificiels imperméabilisés' }
     }))
     expect(result.trajectories.projetProbable).toHaveLength(51)
+  })
+})
+
+describe("outil CAT'ENR - pratiques agricoles stockantes", () => {
+  const fondations = { area: 1, initialOccupation: 'cultures', finalOccupation: 'sols artificiels imperméabilisés' }
+  const prairie = { area: 3, initialOccupation: 'cultures', finalOccupation: 'prairies zones herbacées' }
+  // flux sur 21 ans (années 1 à 21, comme le tableur), en tCO2e/ha/an
+  const stored = (fluxTc, area) => fluxTc * 44 / 12 * area * 21
+
+  test('les surfaces déclarées stockent dans le scénario projet le plus probable', () => {
+    const without = getCatenr(location, inputs({ 'entre-panneaux': prairie }))
+    const withPractice = getCatenr(location, inputs({ 'entre-panneaux': prairie }, {
+      practices: { prairiesHedges: 2 }
+    }))
+    const delta = (year) => withPractice.trajectories.projetProbable[year] - without.trajectories.projetProbable[year]
+    // haies sur prairies : 0,1 (sol) + 0,15 (biomasse) tC/ha/an, dès l'année 1
+    expect(delta(1)).toBeCloseTo(0.25 * 44 / 12 * 2, 6)
+    expect(delta(21)).toBeCloseTo(stored(0.25, 2), 6)
+    expect(delta(50)).toBeCloseTo(delta(21), 6)
+    // le scénario de référence n'est pas concerné par les surfaces déclarées
+    expect(withPractice.trajectories.referenceProbable).toEqual(without.trajectories.referenceProbable)
+  })
+
+  test('la référence optimiste applique les pratiques à toutes les surfaces de cultures', () => {
+    const result = getCatenr(location, inputs({ fondations }))
+    const { referenceProbable, referenceOptimiste } = result.trajectories
+    // semis direct continu + CIPAN + agroforesterie = 1,39 tC/ha/an
+    expect(referenceOptimiste[50] - referenceProbable[50]).toBeCloseTo(stored(1.39, 1), 6)
+  })
+
+  test('une prairie de la référence optimiste devient arborée : pas d\'agroforesterie', () => {
+    const result = getCatenr(location, inputs({
+      'emprises-libres': { area: 1, initialOccupation: 'prairies zones herbacées', finalOccupation: 'prairies zones herbacées' }
+    }))
+    const withPractice = getCatenr(location, inputs({
+      'emprises-libres': { area: 1, initialOccupation: 'prairies zones herbacées', finalOccupation: 'prairies zones herbacées' }
+    }, { practices: { prairiesAgroforestry: 1 } }))
+    expect(withPractice.trajectories.referenceOptimiste).toEqual(result.trajectories.referenceOptimiste)
+  })
+
+  test('le projet optimiste retient, par pratique, le maximum des surfaces déclarées et de l\'occupation finale', () => {
+    // 3 ha finissent en prairies herbacées : agroforesterie en prairies d'office sur 3 ha
+    const auto = getCatenr(location, inputs({ 'entre-panneaux': prairie }))
+    const { projetProbable, projetOptimiste } = auto.trajectories
+    expect(projetOptimiste[50] - projetProbable[50]).toBeCloseTo(stored(1, 3), 6)
+
+    // 5 ha déclarés en agroforesterie > 3 ha d'office ; les haies déclarées s'ajoutent
+    const declared = getCatenr(location, inputs({ 'entre-panneaux': prairie }, {
+      practices: { prairiesAgroforestry: 5, prairiesHedges: 2 }
+    }))
+    expect(declared.trajectories.projetOptimiste[50] - projetProbable[50])
+      .toBeCloseTo(stored(1, 5) + stored(0.25, 2), 6)
   })
 })
 
@@ -259,6 +311,14 @@ describe("lecture des paramètres d'URL de l'outil CAT'ENR", () => {
       initialOccupation: 'forêt mixte',
       finalOccupation: 'sols artificiels imperméabilisés'
     })
+  })
+
+  test('les pratiques agricoles reprennent les identifiants d\'URL de l\'onglet ALDO', () => {
+    const parsed = parseCatenrFromQuery({ cat_ap_cipan: '4', cat_ap_haies_prairies: 'abc' })
+    expect(parsed.practices).toEqual({ catchCrops: 4 })
+    expect(parsed.hasModifications).toBe(true)
+    // les surfaces de l'onglet « Pratiques agricoles » du territoire ne sont pas reprises
+    expect(parseCatenrFromQuery({ ap_cipan: '4' }).practices).toEqual({})
   })
 
   test('un code inconnu est ignoré plutôt que de fausser le calcul', () => {
