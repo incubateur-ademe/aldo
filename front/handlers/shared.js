@@ -86,6 +86,16 @@ function parseCatenrFromQuery (query) {
     rows[definition.id] = row
   })
 
+  // Pratiques agricoles stockantes, avec les identifiants d'URL de l'onglet
+  // « Pratiques agricoles » d'ALDO.
+  const practices = {}
+  AgriculturalPractices.forEach((practice) => {
+    const area = number(query[`cat_ap_${practice.url}`])
+    if (area === undefined) return
+    practices[practice.id] = area
+    hasModifications = true
+  })
+
   // Données descriptives du parc (nombre d'éoliennes, surface au sol des fondations) :
   // elles ne participent pas au calcul de la variation des stocks, comme dans le
   // tableur (cellules F19 et F30 de l'onglet « 2.Eolien Caractéristiques »).
@@ -97,6 +107,7 @@ function parseCatenrFromQuery (query) {
     turbineCount: number(query.cat_nb),
     foundationArea: number(query.cat_fond),
     rows,
+    practices,
     hasModifications: hasModifications || commonFields.some((field) => query[field] !== undefined)
   }
 }

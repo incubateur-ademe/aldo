@@ -7,14 +7,11 @@
 // Les références aux cellules du tableur sont indiquées en commentaire pour
 // faciliter la comparaison des résultats.
 //
-// Hors périmètre de cette version light : les pratiques agricoles stockantes de
-// l'onglet « 4. Exploitation ». Dans le tableur, leurs flux s'ajoutent pendant
-// 20 ans aux scénarios référence optimiste (colonne GH : pratique appliquée à toutes
-// les surfaces de l'occupation concernée), projet le plus probable (GJ : surfaces
-// déclarées) et projet optimiste (GL : maximum des deux). Sans elles, les scénarios
-// projet le plus probable et optimiste sont identiques.
+// Les pratiques agricoles stockantes de l'onglet « 4. Exploitation » reprennent la
+// liste et les flux de l'onglet « Pratiques agricoles » d'ALDO.
 // Les trajectoires sont en tCO2e, les tableaux de synthèse en tC.
 const catenrData = require('../../data/catenr')
+const { getPracticeFlux } = require('../flux/agriculturalPractices')
 const {
   DEFAULT_INITIAL_OCCUPATION,
   DEFAULT_PROJECT,
@@ -23,7 +20,9 @@ const {
   Projects,
   Scenarios,
   LITTER_KINETICS,
-  MAX_YEAR
+  MAX_YEAR,
+  OptimisticPractices,
+  PRACTICES_DURATION
 } = require('./constants')
 
 const C_TO_CO2E = 44 / 12
@@ -181,6 +180,53 @@ function biomassFlux (location, row, stocks, target) {
   return { kinetics, immediate, annual }
 }
 
+// Flux d'une pratique agricole stockante, en tCO2e/ha/an (sol + biomasse).
+function practiceFlux (practice) {
+  return ((getPracticeFlux(practice, 'sol') || 0) + (getPracticeFlux(practice, 'biomasse') || 0)) * C_TO_CO2E
+}
+
+// Surfaces, par pratique, sur lesquelles un scénario optimiste applique d'office une
+// pratique stockante, selon l'occupation retenue dans ce scénario.
+// Tableur : colonnes GG (occupation de la référence optimiste) et GK (occupation finale).
+// NB : dans le tableur v5.3, les SUMIF des couverts et du semis direct continu (GG8 à
+// GG14, GK8 à GK14) ont une plage de sommes décalée par rapport à la plage de critères :
+// ils lisent la surface d'une autre ligne, en pratique vide. Une culture n'y reçoit donc
+// que l'agroforesterie (1 tC/ha/an) au lieu des 1,39 tC/ha/an prévus par l'onglet
+// « Données_Pratiques agricoles ». Ce bug n'est pas reproduit.
+function optimisticPracticeAreas (rows, scenarioId) {
+  const areas = {}
+  rows.forEach((row) => {
+    const practices = OptimisticPractices[targetOccupations(row)[scenarioId]] || []
+    practices.forEach((practice) => { areas[practice] = (areas[practice] || 0) + row.area })
+  })
+  return areas
+}
+
+// Flux annuels des pratiques agricoles stockantes par scénario, en tCO2e/an.
+// Tableur : colonnes GH (référence optimiste), GJ (projet le plus probable : surfaces
+// déclarées) et GL (projet optimiste : maximum, par pratique, des surfaces déclarées
+// et des surfaces de l'occupation concernée).
+function practicesFluxes (rows, declaredAreas) {
+  const sum = (areas) => Object.keys(areas).reduce((total, practice) => total + practiceFlux(practice) * areas[practice], 0)
+  const projectAreas = optimisticPracticeAreas(rows, 'projetOptimiste')
+  const optimisticAreas = { ...declaredAreas }
+  Object.keys(projectAreas).forEach((practice) => {
+    optimisticAreas[practice] = Math.max(optimisticAreas[practice] || 0, projectAreas[practice])
+  })
+  return {
+    referenceOptimiste: sum(optimisticPracticeAreas(rows, 'referenceOptimiste')),
+    projetProbable: sum(declaredAreas),
+    projetOptimiste: sum(optimisticAreas)
+  }
+}
+
+// NB : le tableur ajoute le flux des pratiques dès l'année 1, puis tant que l'année
+// précédente est inférieure ou égale à 20 (W7 : S6<=20), soit 21 années de stockage.
+// Reproduit à l'identique.
+function practicesComponent (annual) {
+  return { kinetics: PRACTICES_DURATION, immediate: annual, annual }
+}
+
 // Trajectoire d'un scénario, en tCO2e, de l'année 0 à MAX_YEAR.
 // Tableur : colonnes U à Z de l'onglet « Calcul - Carbone ».
 function trajectory (initialTotal, components) {
@@ -217,7 +263,8 @@ function surfaceCheck (project, rows, totalArea) {
 }
 
 // inputs: { projectType, lifespan, totalArea, rows: { <rowId>: { area, wetlandShare,
-//           initialOccupation, finalOccupation, age, biomassStock } } }
+//           initialOccupation, finalOccupation, age, biomassStock } },
+//           practices: { <id de pratique ALDO>: surface (ha) } }
 function getCatenr (location, inputs) {
   const project = Projects.find((p) => p.id === inputs.projectType) ||
     Projects.find((p) => p.id === DEFAULT_PROJECT)
@@ -255,6 +302,11 @@ function getCatenr (location, inputs) {
         biomassFlux(location, row, stocks, target)
       )
     })
+  })
+
+  const practices = practicesFluxes(filledRows, inputs.practices || {})
+  Object.keys(practices).forEach((scenarioId) => {
+    if (practices[scenarioId]) componentsByScenario[scenarioId].push(practicesComponent(practices[scenarioId]))
   })
 
   const trajectories = {}

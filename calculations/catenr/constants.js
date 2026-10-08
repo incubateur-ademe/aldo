@@ -288,6 +288,20 @@ const LITTER_KINETICS = 20
 // Nombre d'années du tableau interne de synthèse (onglet « Calcul - Carbone »).
 const MAX_YEAR = 50
 
+// Onglet « Données_Pratiques agricoles », plage A17:D23 : pratiques stockantes
+// appliquées d'office, dans les scénarios optimistes, à toutes les surfaces de
+// l'occupation concernée. Identifiants des pratiques d'ALDO (calculations/constants.js).
+const OptimisticPractices = {
+  cultures: ['directSowingContinuous', 'catchCrops', 'cropsAgroforestry'],
+  'prairies zones herbacées': ['prairiesAgroforestry'],
+  'prairies zones arbustives': ['prairiesAgroforestry'],
+  vergers: ['orchardsInterCoverCropping'],
+  vignes: ['vineyardsInterCoverCropping']
+}
+
+// Durée d'effet des pratiques agricoles stockantes, en années.
+const PRACTICES_DURATION = 20
+
 module.exports = {
   DEFAULT_INITIAL_OCCUPATION,
   DEFAULT_PROJECT,
@@ -300,5 +314,7 @@ module.exports = {
   EolienRows,
   Scenarios,
   LITTER_KINETICS,
-  MAX_YEAR
+  MAX_YEAR,
+  OptimisticPractices,
+  PRACTICES_DURATION
 }

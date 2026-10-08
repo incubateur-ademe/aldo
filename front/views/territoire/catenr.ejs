@@ -173,6 +173,25 @@
     </table>
   </div>
 
+  <h4 class="fr-mt-4w">Pratiques agricoles stockantes</h4>
+  <p class="fr-text--sm">
+    Surfaces du parc sur lesquelles des pratiques agricoles stockantes sont mises en place pendant
+    l'exploitation. Leur stockage s'ajoute pendant 20 ans au scénario projet le plus probable. Les scénarios
+    optimistes appliquent en outre ces pratiques à toutes les surfaces en cultures, prairies, vergers et vignes.
+    <a href="https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/flux/pratiques-agricoles"
+      target="_blank" rel="noopener noreferrer">En savoir plus sur les pratiques agricoles</a>
+  </p>
+  <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
+    <% for (const practice of agriculturalPractices) { %>
+    <div class="fr-col-12 fr-col-md-6">
+      <label class="fr-label" for="cat_ap_<%= practice.url %>"><%= practice.name %> (ha)</label>
+      <input class="fr-input" type="number" step="0.01" min="0"
+        id="cat_ap_<%= practice.url %>" name="cat_ap_<%= practice.url %>"
+        value="<%= catenrInputs.practices[practice.id] !== undefined ? catenrInputs.practices[practice.id] : '' %>">
+    </div>
+    <% } %>
+  </div>
+
   <div class="fr-col-12 fr-mt-2w">
     <button class="fr-btn" type="submit">Mettre à jour les calculs</button>
     <% if (catenrInputs.hasModifications) { %>
