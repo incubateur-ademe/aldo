@@ -1,0 +1,311 @@
+<div class="fr-form-group">
+  <div class="fr-container fr-px-0">
+    <h2>Outil CAT'ENR</h2>
+    <p class="fr-text--sm fr-mt-1w">
+    <a href="https://librairie.ademe.fr/energies/8196-cat-enr-concevoir-et-evaluer-des-projets-photovoltaiques-et-eoliens-a-moindre-impact.html" target="_blank" rel="noopener noreferrer">
+        En savoir plus sur l'outil CAT'ENR
+    </a>
+    </p>
+  </div>
+  <h3>Contexte et objectif de l'outil</h3>
+  <p>
+    Face aux enjeux posés par le changement climatique, deux grandes catégories de mesures doivent être menées en
+    parallèle : atténuation et adaptation. L'atténuation consiste en la décarbonation de notre économie et, en
+    parallèle, l'augmentation de la séquestration du carbone. Cependant, une grande quantité de gaz à effet de
+    serre a déjà et continue d'être émise, et le dérèglement du climat se fait de plus en plus sentir. Il s'agit
+    donc d'anticiper et de s'adapter aux conséquences présentes et à venir du changement climatique.
+  </p>
+  <p>
+    Le développement des productions d'énergies renouvelables peut augmenter les pressions sur la biodiversité et
+    dégrader localement les fonctions écologiques et les services écosystémiques dont la séquestration de carbone.
+    Les installations solaires au sol et les dispositifs connexes associés sont identifiés comme pouvant être la
+    cause de changements d'affectation des terres (directs par défrichement et indirects en cas de perte de
+    production agricole par exemple), d'artificialisation et d'imperméabilisation des sols (via les fondations,
+    voies d'accès, plateformes techniques, ...). Ainsi, le bilan des émissions de gaz à effet de serre d'une
+    centrale photovoltaïque au sol peut doubler avec la prise en compte des émissions liées au changement
+    d'affectation des terres à l'installation de la centrale (par exemple, jusqu'à + 50gCO2/kWh dans le cas d'une
+    implantation impliquant une déforestation sur l'ensemble de l'emprise d'après Van de Ven et al. 2021*). Quant
+    aux parcs éoliens terrestres, ils sont principalement identifiés pour leur impact sur l'avifaune et les
+    chiroptères, mais génèrent aussi de l'artificialisation et des défrichements qu'il s'agit également de
+    considérer lors de l'évaluation des projets.
+  </p>
+  <p>
+    La plupart des projets doivent réaliser une étude d'impact, intégrant une description des incidences du projet
+    sur l'environnement, dont celles résultantes des évolutions de l'affectation des terres sur le climat et la
+    biodiversité. Cet outil a pour objectif d'aider les porteurs de projets à répondre à cette analyse.
+  </p>
+
+  <% if (!catenr) { %>
+  <%- include('../partials/call-out', {
+        accent: 'orange-terre-battue',
+        title: "Outil CAT'ENR indisponible",
+        text: "Les données de référence nécessaires au calcul n'ont pas pu être chargées pour ce territoire."
+      }) -%>
+  <% } else { %>
+
+  <h3 class="fr-mt-6w">Technologie du projet</h3>
+  <ul class="fr-btns-group fr-btns-group--inline-md fr-btns-group--sm">
+    <% for (const project of catenrProjects) { %>
+    <li>
+      <a class="fr-btn keep-scroll <%= catenr.project.id === project.id ? '' : 'fr-btn--secondary' %>"
+        href="<%= getTabUrl('cat-enr') %><%= catenrProjectQueryStrs[project.id] %>"
+        <%- catenr.project.id === project.id ? 'aria-current="true"' : '' %>>
+        <%= project.name %>
+      </a>
+    </li>
+    <% } %>
+  </ul>
+
+  <h3 class="fr-mt-6w">État initial</h3>
+  <p class="fr-text--sm">
+    Décrivez ci-dessous les caractéristiques du projet
+    <%= catenr.project.id === 'eolien' ? 'éolien terrestre' : 'photovoltaïque au sol' %>. Les stocks et flux de
+    référence utilisés sont ceux de la commune de <b><%= catenrCommune.nom %></b>.
+  </p>
+
+  <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
+    <div class="fr-col-12 fr-col-md-4">
+      <label class="fr-label" for="cat_duree">Durée de vie du parc (ans)</label>
+      <input class="fr-input" type="number" step="1" min="0" max="50" id="cat_duree" name="cat_duree"
+        value="<%= catenrInputs.lifespan !== undefined ? catenrInputs.lifespan : '' %>">
+    </div>
+    <% if (catenr.project.id === 'eolien') { %>
+    <div class="fr-col-12 fr-col-md-4">
+      <label class="fr-label" for="cat_nb">Nombre d'éoliennes</label>
+      <input class="fr-input" type="number" step="1" min="0" id="cat_nb" name="cat_nb"
+        value="<%= catenrInputs.turbineCount !== undefined ? catenrInputs.turbineCount : '' %>">
+    </div>
+    <% } else { %>
+    <div class="fr-col-12 fr-col-md-4">
+      <label class="fr-label" for="cat_surface">Superficie totale du parc = surface clôturée (ha)</label>
+      <input class="fr-input" type="number" step="0.01" min="0" id="cat_surface" name="cat_surface"
+        value="<%= catenrInputs.totalArea !== undefined ? catenrInputs.totalArea : '' %>">
+    </div>
+    <% } %>
+    <div class="fr-col-12 fr-col-md-4">
+      <label class="fr-label" for="cat_fond">Surface au sol des fondations (ha)</label>
+      <input class="fr-input" type="number" step="0.01" min="0" id="cat_fond" name="cat_fond"
+        value="<%= catenrInputs.foundationArea !== undefined ? catenrInputs.foundationArea : '' %>">
+      <span class="fr-hint-text">Donnée descriptive du parc : la surface prise en compte dans le calcul est
+        celle saisie sur les lignes « Fondations » du tableau ci-dessous.</span>
+    </div>
+  </div>
+
+  <h4 class="fr-mt-4w"><%= catenr.project.sectionTitle %></h4>
+  <figure class="fr-my-2w catenr-illustration">
+      <% if (catenr.project.id === 'eolien') { %>
+      <img src="/static/images/catenr-emprises-eolien.png"
+        alt="Schéma des emprises considérées pour un parc éolien terrestre : emprise des fondations des éoliennes, emprise des plateformes permanentes, voies et chemins d'accès, emprise voirie et infrastructure, infrastructures annexes (poste de livraison, espace de stockage) et zone d'obligation légale de débroussaillement.">
+      <% } else { %>
+      <img src="/static/images/catenr-emprises-pv.png"
+        alt="Schéma des emprises considérées pour une centrale photovoltaïque au sol : espace sous panneaux (fondations et hors fondations), espace inter-rangées, emprise libre dans l'emprise clôturée, emprise voiries et infrastructures, zone d'obligation légale de débroussaillement et surface sous gestion hors OLD.">
+      <% } %>
+  </figure>
+
+  <div class="fr-table fr-col-12 catenr-table">
+    <table>
+      <caption>Emprises du projet et occupations des sols associées</caption>
+      <thead>
+        <tr>
+          <th scope="col">Éléments constitutifs du projet</th>
+          <th scope="col">Superficie (ha)</th>
+          <th scope="col">Dont zone humide (%)</th>
+          <th scope="col">Occupation des sols initiale</th>
+          <th scope="col">Âge de l'écosystème forestier initial (ans)</th>
+          <th scope="col">Scénario projet - Occupation des sols finale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (const row of catenr.rows) { %>
+        <% const input = catenrInputs.rows[row.id] || {} %>
+        <tr>
+          <th scope="row" class="<%= row.child ? 'catenr-child-row' : '' %>">
+            <%= row.name %>
+            <% if (row.hint) { %>
+            <span class="fr-text--xs catenr-hint"><%= row.hint %></span>
+            <% } %>
+          </th>
+          <td>
+            <input class="fr-input" type="number" step="0.01" min="0"
+              aria-label="Superficie de <%= row.name %> (ha)"
+              id="cat_<%= row.code %>_s" name="cat_<%= row.code %>_s"
+              value="<%= input.area !== undefined ? input.area : '' %>">
+          </td>
+          <td>
+            <input class="fr-input" type="number" step="1" min="0" max="100"
+              aria-label="Part en zone humide de <%= row.name %> (%)"
+              id="cat_<%= row.code %>_zh" name="cat_<%= row.code %>_zh"
+              value="<%= input.wetlandShare !== undefined ? Math.round(input.wetlandShare * 100) : '' %>">
+          </td>
+          <td>
+            <select class="fr-select catenr-initial-occupation"
+              aria-label="Occupation des sols initiale de <%= row.name %>"
+              id="cat_<%= row.code %>_i" name="cat_<%= row.code %>_i"
+              data-age-input="cat_<%= row.code %>_age">
+              <% for (const occupation of catenrOccupations) { %>
+              <option value="<%= occupation.code %>" <%= row.initialOccupation === occupation.id ? 'selected' : '' %>>
+                <%= occupation.name %>
+              </option>
+              <% } %>
+            </select>
+          </td>
+          <td>
+            <input class="fr-input" type="number" step="1" min="0"
+              aria-label="Âge de l'écosystème forestier initial de <%= row.name %> (ans)"
+              id="cat_<%= row.code %>_age" name="cat_<%= row.code %>_age"
+              value="<%= input.age !== undefined ? input.age : '' %>"
+              <%= row.initialOccupation.startsWith('forêt') ? '' : 'disabled' %>>
+          </td>
+          <td>
+            <select class="fr-select"
+              aria-label="Occupation des sols finale de <%= row.name %>"
+              id="cat_<%= row.code %>_f" name="cat_<%= row.code %>_f">
+              <% for (const occupation of catenrOccupations) { %>
+              <option value="<%= occupation.code %>" <%= row.finalOccupation === occupation.id ? 'selected' : '' %>>
+                <%= occupation.name %>
+              </option>
+              <% } %>
+            </select>
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="fr-mt-4w">Pratiques agricoles stockantes</h4>
+  <p class="fr-text--sm">
+    Surfaces du parc sur lesquelles des pratiques agricoles stockantes sont mises en place pendant
+    l'exploitation. Leur stockage s'ajoute pendant 20 ans au scénario projet le plus probable. Les scénarios
+    optimistes appliquent en outre ces pratiques à toutes les surfaces en cultures, prairies, vergers et vignes.
+    <a href="https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/flux/pratiques-agricoles"
+      target="_blank" rel="noopener noreferrer">En savoir plus sur les pratiques agricoles</a>
+  </p>
+  <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
+    <% for (const practice of agriculturalPractices) { %>
+    <div class="fr-col-12 fr-col-md-6">
+      <label class="fr-label" for="cat_ap_<%= practice.url %>"><%= practice.name %> (ha)</label>
+      <input class="fr-input" type="number" step="0.01" min="0"
+        id="cat_ap_<%= practice.url %>" name="cat_ap_<%= practice.url %>"
+        value="<%= catenrInputs.practices[practice.id] !== undefined ? catenrInputs.practices[practice.id] : '' %>">
+    </div>
+    <% } %>
+  </div>
+
+  <div class="fr-col-12 fr-mt-2w">
+    <button class="fr-btn" type="submit">Mettre à jour les calculs</button>
+    <% if (catenrInputs.hasModifications) { %>
+    <a class="fr-btn fr-btn--secondary keep-scroll fr-ml-2w" href="<%= getTabUrl('cat-enr') %><%= catenrResetQueryStr %>">Réinitialiser</a>
+    <% } %>
+  </div>
+
+  <%# cible du défilement après « Mettre à jour les calculs » %>
+  <div id="catenr-resultats">
+  <% if (catenr.surfaceCheck && catenrInputs.hasModifications) { %>
+  <%- include('../partials/call-out', {
+        accent: catenr.surfaceCheck.isValid ? 'green-emeraude' : 'orange-terre-battue',
+        title: 'Contrôle de cohérence',
+        text: catenr.surfaceCheck.message + ' (somme des emprises hors OLD : '
+          + formatNumber(catenr.surfaceCheck.sum, 2) + ' ha, superficie du parc : '
+          + formatNumber(catenr.surfaceCheck.totalArea, 2) + ' ha).'
+          + (catenr.isBlocked ? ' Les calculs ne sont pas lancés tant que les surfaces ne sont pas cohérentes.' : '')
+      }) -%>
+  <% } %>
+
+  <% if (catenr.hasData && !catenr.isBlocked) { %>
+  <h3 class="fr-mt-6w">Résultats</h3>
+
+  <% for (const table of [
+       { stocks: catenr.referenceStocks, scenario: 'scénario de référence' },
+       { stocks: catenr.stocks, scenario: 'scénario projet' }
+     ]) { %>
+  <h4 class="fr-mt-4w">Stocks du <%= table.scenario %> à 5, 10, 20 et 50 ans</h4>
+  <div class="fr-table fr-col-12">
+    <table>
+      <caption>Stocks de carbone du <%= table.scenario %> (tC)</caption>
+      <thead>
+        <tr>
+          <th scope="col">Temporalité</th>
+          <th scope="col">Stock de carbone dans le <%= table.scenario %> (tC)</th>
+          <th scope="col">Hypothèse pessimiste du <%= table.scenario %> (tC)</th>
+          <th scope="col">Hypothèse optimiste du <%= table.scenario %> (tC)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (const stock of table.stocks) { %>
+        <tr>
+          <th scope="row"><%= stock.name %></th>
+          <td style="text-align: right;"><%= formatNumber(stock.value) %></td>
+          <td style="text-align: right;"><%= formatNumber(stock.pessimistic) %></td>
+          <td style="text-align: right;"><%= formatNumber(stock.optimistic) %></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+
+  <h4 class="fr-mt-4w">Variation du stock à 5, 10, 20 et 50 ans</h4>
+  <div class="fr-table fr-col-12">
+    <table>
+      <caption>Variation des stocks de carbone entre le scénario projet et le scénario de référence (tC)</caption>
+      <thead>
+        <tr>
+          <th scope="col">Temporalité</th>
+          <th scope="col">Variation des stocks de carbone entre le scénario projet et le scénario de référence</th>
+          <th scope="col">Minimum</th>
+          <th scope="col">Maximum</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (const variation of catenr.variations) { %>
+        <tr>
+          <th scope="row"><%= variation.name %></th>
+          <td style="text-align: right;"><%= formatNumber(variation.value) %></td>
+          <td style="text-align: right;"><%= formatNumber(variation.minimum) %></td>
+          <td style="text-align: right;"><%= formatNumber(variation.maximum) %></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="fr-mt-4w">Évolution des stocks de carbone selon les scénarios considérés (tC)</h4>
+  <div class="fr-grid-row fr-grid-row--center catenr-chart">
+    <div class="fr-col-12 fr-col-lg-8">
+      <div class="chart-wrapper">
+        <canvas id="chart-catenr"></canvas>
+      </div>
+    </div>
+  </div>
+  <p class="fr-text--sm fr-mt-2w">
+    Les variations de stocks sont estimées pour 6 scénarios : 3 correspondant à la situation de référence, dans
+    laquelle le projet n'est pas réalisé, et 3 correspondant à la situation dans laquelle le projet est mis en
+    place. Pour chacune, une hypothèse pessimiste (non maintien de la végétation), une hypothèse la plus probable
+    et une hypothèse optimiste (la végétation se maintient et évolue spontanément) sont considérées.
+  </p>
+  <p class="fr-text--sm">
+    <a href="https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/outil-catenr/explications-methodologiques"
+      target="_blank" rel="noopener noreferrer">
+      Explications méthodologiques détaillées des résultats de l'outil CAT'ENR
+    </a>
+  </p>
+  <% } %>
+  </div>
+  <% } %>
+</div>
+
+<!-- Chart.js et jQuery sont déjà chargés par l'onglet Stocks et le page-setup -->
+<script>
+  // L'âge de l'écosystème n'est demandé que lorsque l'occupation initiale est une forêt.
+  const catenrForestCodes = ['formix', 'forfeu', 'forcon', 'forpeu'];
+  $('.catenr-initial-occupation').change((event) => {
+    const ageInput = document.getElementById(event.currentTarget.dataset.ageInput);
+    ageInput.disabled = catenrForestCodes.indexOf(event.currentTarget.value) === -1;
+    if (ageInput.disabled) ageInput.value = '';
+  });
+
+  <% if (catenr && catenr.hasData && !catenr.isBlocked && catenrChart) { %>
+  new Chart(document.getElementById('chart-catenr'), JSON.parse(`<%- catenrChart %>`));
+  <% } %>
+</script>

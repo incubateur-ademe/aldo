@@ -69,5 +69,6 @@ function getFluxAgriculturalPractices (areas) {
 }
 
 module.exports = {
+  getPracticeFlux,
   getFluxAgriculturalPractices
 }

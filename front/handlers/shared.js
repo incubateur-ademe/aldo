@@ -2,6 +2,7 @@
 const path = require('path')
 const rootFolder = path.join(__dirname, '../../')
 const { AgriculturalPractices } = require(path.join(rootFolder, './calculations/constants'))
+const { Occupations, Projects, DEFAULT_PROJECT } = require(path.join(rootFolder, './calculations/catenr/constants'))
 const { getEpci, getCommune } = require(path.join(rootFolder, './calculations/locations'))
 
 function parseOptionsFromQuery (query) {
@@ -47,6 +48,70 @@ function parseOptionsFromQuery (query) {
   }
 }
 
+// Les saisies de l'outil CAT'ENR sont portées par l'URL, comme les autres
+// personnalisations d'ALDO. Les paramètres sont préfixés par `cat_` et utilisent
+// des codes courts (cf. calculations/catenr/constants.js) pour limiter leur longueur.
+function parseCatenrFromQuery (query) {
+  const number = (value) => {
+    const parsed = parseFloat(value)
+    return isNaN(parsed) ? undefined : parsed
+  }
+  const percentage = (value) => {
+    const parsed = number(value)
+    return parsed === undefined ? undefined : parsed / 100
+  }
+  const occupation = (code) => Occupations.find((o) => o.code === code)?.id
+
+  // Les codes des lignes sont distincts d'une technologie à l'autre : les saisies
+  // photovoltaïques et éoliennes peuvent donc coexister dans l'URL, seules celles
+  // de la technologie sélectionnée étant lues.
+  const projectType = Projects.some((p) => p.id === query.cat_type) ? query.cat_type : DEFAULT_PROJECT
+  const project = Projects.find((p) => p.id === projectType)
+
+  const rows = {}
+  let hasModifications = false
+  project.rows.forEach((definition) => {
+    const prefix = `cat_${definition.code}_`
+    const row = {
+      area: number(query[prefix + 's']),
+      wetlandShare: percentage(query[prefix + 'zh']),
+      age: number(query[prefix + 'age']),
+      biomassStock: number(query[prefix + 'bio']),
+      initialOccupation: occupation(query[prefix + 'i']),
+      finalOccupation: occupation(query[prefix + 'f'])
+    }
+    if (Object.values(row).some((value) => value !== undefined)) {
+      hasModifications = true
+    }
+    rows[definition.id] = row
+  })
+
+  // Pratiques agricoles stockantes, avec les identifiants d'URL de l'onglet
+  // « Pratiques agricoles » d'ALDO.
+  const practices = {}
+  AgriculturalPractices.forEach((practice) => {
+    const area = number(query[`cat_ap_${practice.url}`])
+    if (area === undefined) return
+    practices[practice.id] = area
+    hasModifications = true
+  })
+
+  // Données descriptives du parc (nombre d'éoliennes, surface au sol des fondations) :
+  // elles ne participent pas au calcul de la variation des stocks, comme dans le
+  // tableur (cellules F19 et F30 de l'onglet « 2.Eolien Caractéristiques »).
+  const commonFields = ['cat_duree', 'cat_surface', 'cat_nb', 'cat_fond']
+  return {
+    projectType,
+    lifespan: number(query.cat_duree),
+    totalArea: number(query.cat_surface),
+    turbineCount: number(query.cat_nb),
+    foundationArea: number(query.cat_fond),
+    rows,
+    practices,
+    hasModifications: hasModifications || commonFields.some((field) => query[field] !== undefined)
+  }
+}
+
 async function getLocationDetail (req, res) {
   // TODO: remove option for single epci and single commune
   if (req.params.epci) {
@@ -71,5 +136,6 @@ async function getLocationDetail (req, res) {
 
 module.exports = {
   parseOptionsFromQuery,
+  parseCatenrFromQuery,
   getLocationDetail
 }
