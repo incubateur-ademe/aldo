@@ -67,104 +67,10 @@ const fluxGroundTypes = GroundTypes.filter((gt) => gt.altFluxId || gt.fluxId)
 // (les 12 paires forêt-vers-forêt sont absentes car traitées via la biomasse)
 const forestSubtypeIds = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
 
-// Paires pour lesquelles une colonne tCO2e existe dans le fichier de référence.
-// Déterminé en analysant le fichier aldo-flux-total-et-surfaces-converties.csv
-// (tous les cas où le flux unitaire n'est pas nul pour au moins une commune).
-const PAIRS_WITH_CO2E = new Set([
-  'cultures_vers_prairies zones herbacées',
-  'cultures_vers_zones humides',
-  'cultures_vers_vergers',
-  'cultures_vers_vignes',
-  'cultures_vers_sols artificiels arbustifs',
-  'cultures_vers_sols artificiels imperméabilisés',
-  'cultures_vers_sols artificiels arborés et buissonants',
-  'cultures_vers_forêt mixte',
-  'cultures_vers_forêt conifere',
-  'prairies zones arborées_vers_cultures',
-  'prairies zones arborées_vers_prairies zones herbacées',
-  'prairies zones arborées_vers_vignes',
-  'prairies zones arborées_vers_sols artificiels arbustifs',
-  'prairies zones arborées_vers_sols artificiels imperméabilisés',
-  'prairies zones arborées_vers_forêt mixte',
-  'prairies zones herbacées_vers_cultures',
-  'prairies zones herbacées_vers_prairies zones arborées',
-  'prairies zones herbacées_vers_prairies zones arbustives',
-  'prairies zones herbacées_vers_zones humides',
-  'prairies zones herbacées_vers_vergers',
-  'prairies zones herbacées_vers_vignes',
-  'prairies zones herbacées_vers_sols artificiels arbustifs',
-  'prairies zones herbacées_vers_sols artificiels imperméabilisés',
-  'prairies zones herbacées_vers_forêt mixte',
-  'prairies zones herbacées_vers_forêt conifere',
-  'prairies zones arbustives_vers_cultures',
-  'prairies zones arbustives_vers_prairies zones herbacées',
-  'prairies zones arbustives_vers_zones humides',
-  'prairies zones arbustives_vers_vignes',
-  'prairies zones arbustives_vers_sols artificiels imperméabilisés',
-  'prairies zones arbustives_vers_forêt mixte',
-  'prairies zones arbustives_vers_forêt feuillu',
-  'prairies zones arbustives_vers_forêt conifere',
-  'zones humides_vers_cultures',
-  'zones humides_vers_prairies zones herbacées',
-  'zones humides_vers_prairies zones arbustives',
-  'zones humides_vers_sols artificiels arbustifs',
-  'zones humides_vers_sols artificiels imperméabilisés',
-  'zones humides_vers_forêt mixte',
-  'vergers_vers_cultures',
-  'vergers_vers_prairies zones herbacées',
-  'vergers_vers_zones humides',
-  'vergers_vers_sols artificiels arbustifs',
-  'vergers_vers_sols artificiels imperméabilisés',
-  'vignes_vers_cultures',
-  'vignes_vers_prairies zones arbustives',
-  'vignes_vers_zones humides',
-  'vignes_vers_vergers',
-  'vignes_vers_sols artificiels arbustifs',
-  'vignes_vers_sols artificiels imperméabilisés',
-  'vignes_vers_forêt conifere',
-  'sols artificiels arbustifs_vers_cultures',
-  'sols artificiels arbustifs_vers_prairies zones herbacées',
-  'sols artificiels arbustifs_vers_zones humides',
-  'sols artificiels arbustifs_vers_vignes',
-  'sols artificiels arbustifs_vers_forêt mixte',
-  'sols artificiels arbustifs_vers_forêt feuillu',
-  'sols artificiels imperméabilisés_vers_prairies zones herbacées',
-  'sols artificiels imperméabilisés_vers_prairies zones arbustives',
-  'sols artificiels imperméabilisés_vers_zones humides',
-  'sols artificiels imperméabilisés_vers_vignes',
-  'sols artificiels imperméabilisés_vers_sols artificiels arborés et buissonants',
-  'sols artificiels imperméabilisés_vers_forêt mixte',
-  'sols artificiels imperméabilisés_vers_forêt feuillu',
-  'sols artificiels arborés et buissonants_vers_sols artificiels arbustifs',
-  'sols artificiels arborés et buissonants_vers_sols artificiels imperméabilisés',
-  'forêt mixte_vers_cultures',
-  'forêt mixte_vers_prairies zones arborées',
-  'forêt mixte_vers_prairies zones herbacées',
-  'forêt mixte_vers_prairies zones arbustives',
-  'forêt mixte_vers_zones humides',
-  'forêt mixte_vers_vignes',
-  'forêt mixte_vers_sols artificiels arbustifs',
-  'forêt mixte_vers_sols artificiels imperméabilisés',
-  'forêt feuillu_vers_cultures',
-  'forêt feuillu_vers_prairies zones herbacées',
-  'forêt feuillu_vers_prairies zones arbustives',
-  'forêt feuillu_vers_zones humides',
-  'forêt feuillu_vers_vergers',
-  'forêt feuillu_vers_sols artificiels arbustifs',
-  'forêt feuillu_vers_sols artificiels imperméabilisés',
-  'forêt conifere_vers_cultures',
-  'forêt conifere_vers_prairies zones herbacées',
-  'forêt conifere_vers_prairies zones arbustives',
-  'forêt conifere_vers_zones humides',
-  'forêt conifere_vers_vignes',
-  'forêt conifere_vers_sols artificiels arbustifs',
-  'forêt conifere_vers_sols artificiels imperméabilisés'
-])
-
 // ---------------------------------------------------------------------------
 // Construction des en-têtes CSV
 // ---------------------------------------------------------------------------
-function buildHeaders () {
+function buildHeaders (pairsWithCo2e) {
   const headers = [
     'insee', 'nom', 'epci', 'departement', 'region', 'zpc',
     'inter_region', 'groupe_ser', 'greco', 'rad_13', 'bassin_populicole',
@@ -177,7 +83,7 @@ function buildHeaders () {
       if (forestSubtypeIds.includes(fromGt.stocksId) && forestSubtypeIds.includes(toGt.stocksId)) return
       const pairKey = `${fromGt.stocksId}_vers_${toGt.stocksId}`
       headers.push(`${pairKey}_surface_ha_an-1`)
-      if (PAIRS_WITH_CO2E.has(pairKey)) {
+      if (pairsWithCo2e.has(pairKey)) {
         headers.push(`${pairKey}_tCO2e_an-1`)
       }
     })
@@ -200,22 +106,25 @@ function csvValue (v) {
 // Génération principale
 // ---------------------------------------------------------------------------
 function generate (outputPath) {
-  const headers = buildHeaders()
   const communes = Object.values(communesData).filter((c) => !ARRONDISSEMENT_CODES.has(String(c.insee).padStart(5, '0')))
   const total = communes.length
 
   console.log(`Traitement de ${total} communes…`)
 
-  const lines = [headers.map((h) => '"' + h + '"').join(',')]
-
-  communes.forEach((commune, index) => {
+  // 1er passage : calcul des flux, et collecte des paires ayant un flux tCO2e
+  // non nul pour au moins une commune (elles seules ont une colonne tCO2e).
+  // Les 3 paires ci-dessous, toujours nulles, sont conservées pour rester
+  // compatible avec le fichier de référence DATA ADEME.
+  const pairsWithCo2e = new Set([
+    'sols artificiels imperméabilisés_vers_sols artificiels arborés et buissonants',
+    'sols artificiels arborés et buissonants_vers_sols artificiels arbustifs',
+    'sols artificiels arborés et buissonants_vers_sols artificiels imperméabilisés'
+  ])
+  const results = communes.map((commune, index) => {
     if (index % 500 === 0) {
       process.stdout.write(`\r  ${index}/${total}`)
     }
 
-    // ------------------------------------------------------------------
-    // Calcul des flux pour cette commune
-    // ------------------------------------------------------------------
     let fluxResult
     try {
       fluxResult = getAnnualFluxes([commune])
@@ -225,6 +134,22 @@ function generate (outputPath) {
     }
 
     const { allFlux, fluxCo2eByGroundType, areas, total: communeTotal } = fluxResult
+    Object.entries(fluxCo2eByGroundType).forEach(([from, tos]) => {
+      Object.entries(tos).forEach(([to, co2e]) => {
+        if (co2e) pairsWithCo2e.add(`${from}_vers_${to}`)
+      })
+    })
+    // allFlux n'est pas conservé pour limiter la mémoire
+    return { fluxCo2eByGroundType, areas, communeTotal, indicateurs: getIndicateursSequestration(allFlux) }
+  })
+  process.stdout.write(`\r  ${total}/${total}\n`)
+
+  // 2e passage : écriture des lignes
+  const headers = buildHeaders(pairsWithCo2e)
+  const lines = [headers.map((h) => '"' + h + '"').join(',')]
+
+  communes.forEach((commune, index) => {
+    const { fluxCo2eByGroundType, areas, communeTotal, indicateurs } = results[index]
 
     // ------------------------------------------------------------------
     // Métadonnées géographiques
@@ -261,19 +186,17 @@ function generate (outputPath) {
         const surface = areas[fromGt.stocksId]?.[toGt.stocksId]?.area
         row.push(surface !== undefined && surface !== null ? surface : 0)
 
-        if (PAIRS_WITH_CO2E.has(pairKey)) {
+        if (pairsWithCo2e.has(pairKey)) {
           const co2e = fluxCo2eByGroundType[fromGt.stocksId]?.[toGt.stocksId]
           row.push(co2e ?? '')
         }
       })
     })
 
-    row.push(...getIndicateursSequestration(allFlux))
+    row.push(...indicateurs)
 
     lines.push(row.map(csvValue).join(','))
   })
-
-  process.stdout.write(`\r  ${total}/${total}\n`)
 
   fs.writeFileSync(outputPath, lines.join('\n'), 'utf8')
   console.log(`Fichier généré : ${outputPath}`)
