@@ -596,6 +596,8 @@ function getForestBiomassComparisonByCommune (location) {
 
 module.exports = {
   getAnnualGroundCarbonFlux,
+  getBiomassFlux,
+  yearMultiplier,
   getFluxReferenceValues,
   getForestLitterFlux,
   getAnnualSurfaceChange,

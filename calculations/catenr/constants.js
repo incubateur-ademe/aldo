@@ -1,0 +1,320 @@
+// Constantes de la version « light » de l'outil CAT'ENR intégrée à ALDO.
+//
+// Source : Outil_CAT_EnR_v5.3.xlsx (ADEME), onglets « 2.PV Caractéristiques »,
+// « 2.Eolien Caractéristiques », « Listes », « Données ALDO_cinétique » et
+// « Calcul - Carbone ».
+// Les noms d'occupation des sols sont ceux de la liste CAT'ENR
+// (plage nommée Occupation_des_sols_Hexagone), qui ne recouvre pas exactement
+// les stocksId d'ALDO : la correspondance est donnée par ALDO_CORRESPONDANCE.
+
+// Onglet « Listes », colonnes B et C (Occupation des sols / Correspondance ALDO).
+// CAT'ENR propose deux entrées de plus qu'ALDO (« sols artificiels enherbés » et
+// « Sols nus ») qui sont toutes deux ramenées aux sols artificiels imperméabilisés.
+const Occupations = [
+  { id: 'cultures', code: 'cult', name: 'Cultures', aldo: 'cultures' },
+  { id: 'prairies zones arborées', code: 'prarbo', name: 'Prairies zones arborées', aldo: 'prairies zones arborées' },
+  { id: 'prairies zones herbacées', code: 'prherb', name: 'Prairies zones herbacées', aldo: 'prairies zones herbacées' },
+  { id: 'prairies zones arbustives', code: 'prarbu', name: 'Prairies zones arbustives', aldo: 'prairies zones arbustives' },
+  { id: 'zones humides', code: 'zh', name: 'Zones humides', aldo: 'zones humides' },
+  { id: 'vergers', code: 'verg', name: 'Vergers', aldo: 'vergers' },
+  { id: 'vignes', code: 'vign', name: 'Vignes', aldo: 'vignes' },
+  { id: 'sols artificiels arbustifs', code: 'saarbu', name: 'Sols artificiels arbustifs', aldo: 'sols artificiels arbustifs' },
+  { id: 'sols artificiels imperméabilisés', code: 'saimp', name: 'Sols artificiels imperméabilisés', aldo: 'sols artificiels imperméabilisés' },
+  { id: 'sols artificiels arborés et buissonants', code: 'saarbo', name: 'Sols artificiels arborés et buissonants', aldo: 'sols artificiels arborés et buissonants' },
+  { id: 'forêt mixte', code: 'formix', name: 'Forêt mixte', aldo: 'forêt mixte' },
+  { id: 'forêt feuillu', code: 'forfeu', name: 'Forêt feuillu', aldo: 'forêt feuillu' },
+  { id: 'forêt conifere', code: 'forcon', name: 'Forêt conifère', aldo: 'forêt conifere' },
+  { id: 'forêt peupleraie', code: 'forpeu', name: 'Forêt peupleraie', aldo: 'forêt peupleraie' },
+  { id: 'sols artificiels enherbés', code: 'saenh', name: 'Sols artificiels enherbés', aldo: 'sols artificiels imperméabilisés' },
+  { id: 'Sols nus', code: 'nus', name: 'Sols nus', aldo: 'sols artificiels imperméabilisés' }
+]
+
+// Onglet « Données ALDO_cinétique », plage B18:D32 : nom de flux -> nom de sol.
+// Le stock dans les sols est mutualisé entre les sous-types de prairies et de forêts.
+const SolNames = {
+  'prairies zones arborées': 'prairies',
+  'prairies zones herbacées': 'prairies',
+  'prairies zones arbustives': 'prairies',
+  'forêt mixte': 'forêt',
+  'forêt feuillu': 'forêt',
+  'forêt conifere': 'forêt',
+  'forêt peupleraie': 'forêt'
+}
+
+// Colonnes de data/dataByCommune/stocks-zpc.csv correspondant à un nom de sol.
+const StocksColumns = {
+  cultures: 'cultures',
+  prairies: 'prairies',
+  forêt: 'forêts',
+  'zones humides': 'zones humides',
+  vergers: 'vergers',
+  vignes: 'vignes',
+  'sols artificiels arbustifs': 'sols artificiels enherbés',
+  'sols artificiels imperméabilisés': 'sols artificiels imperméabilisés',
+  'sols artificiels arborés et buissonants': 'sols artificiels arborés et buissonants'
+}
+
+// Onglet « Listes », colonnes H et I (photovoltaïque) puis K et L (éolien) :
+// occupation retenue dans le scénario projet pessimiste, selon le type de
+// composant. Une valeur absente signifie que le scénario pessimiste reprend
+// l'occupation finale du cas le plus probable. Les deux tables sont fusionnées
+// ici, les types de composants communs aux deux technologies y ayant la même
+// occupation pessimiste.
+const PessimisticProjectOccupations = {
+  'Sol sous panneau': 'Sols nus',
+  'Espaces entre les panneaux': 'Sols nus',
+  'Emprises artificialisées': 'sols artificiels imperméabilisés',
+  'Emprises hors infrastructures': undefined,
+  'Emprises des plateformes': 'Sols nus',
+  Autre: undefined
+}
+
+// Occupation initiale proposée par défaut dans le formulaire. Le tableur laisse
+// la colonne vide ; ALDO pré-remplit la valeur la plus courante pour ce type de projet.
+const DEFAULT_INITIAL_OCCUPATION = 'prairies zones arborées'
+
+// Onglet « 2.PV Caractéristiques », lignes 48 à 60.
+// `inSurfaceCheck` reprend le contrôle de cohérence SOMME(G48:G57)-G57 = F18 :
+// seules les emprises situées dans la clôture y participent, la zone OLD étant
+// retranchée puisqu'elle recouvre les autres emprises.
+const PvRows = [
+  {
+    id: 'fondations',
+    code: 'fo',
+    name: 'Espace sous panneaux - fondations des panneaux',
+    component: 'Emprises artificialisées',
+    finalOccupation: 'sols artificiels imperméabilisés',
+    inSurfaceCheck: true
+  },
+  {
+    id: 'surface-projetee',
+    code: 'sp',
+    name: 'Espace sous panneaux - surface projetée',
+    hint: 'Une distinction entre la végétation sous panneau et la végétation dans les emprises libres est faite dans certains scénarios.',
+    component: 'Sol sous panneau',
+    finalOccupation: 'sols artificiels enherbés',
+    inSurfaceCheck: true
+  },
+  {
+    id: 'entre-panneaux',
+    code: 'ep',
+    name: 'Espace entre les panneaux',
+    component: 'Espaces entre les panneaux',
+    finalOccupation: 'prairies zones herbacées',
+    inSurfaceCheck: true
+  },
+  {
+    id: 'emprises-libres',
+    code: 'el',
+    name: 'Emprises libres',
+    component: 'Emprises hors infrastructures',
+    finalOccupation: 'prairies zones herbacées',
+    inSurfaceCheck: true
+  },
+  {
+    id: 'voiries-infrastructures',
+    code: 'vi',
+    name: 'Emprise voiries et infrastructures',
+    hint: 'Remplir, au choix, cette ligne ou les 4 suivantes selon les informations disponibles.',
+    component: 'Emprises artificialisées',
+    finalOccupation: 'sols artificiels imperméabilisés',
+    inSurfaceCheck: true
+  },
+  {
+    id: 'voiries-permanentes',
+    code: 'vp',
+    name: 'Emprise des voiries permanentes',
+    hint: 'Les infrastructures temporaires de la phase chantier ne sont pas considérées dans cet onglet.',
+    component: 'Emprises artificialisées',
+    finalOccupation: 'sols artificiels imperméabilisés',
+    child: true,
+    inSurfaceCheck: true
+  },
+  {
+    id: 'locaux-techniques',
+    code: 'lt',
+    name: 'Emprise des locaux techniques',
+    component: 'Emprises artificialisées',
+    finalOccupation: 'sols artificiels imperméabilisés',
+    child: true,
+    inSurfaceCheck: true
+  },
+  {
+    id: 'citernes',
+    code: 'ci',
+    name: 'Emprise des citernes',
+    component: 'Emprises artificialisées',
+    finalOccupation: 'sols artificiels imperméabilisés',
+    child: true,
+    inSurfaceCheck: true
+  },
+  {
+    id: 'fondations-clotures',
+    code: 'fc',
+    name: 'Emprise des fondations des clôtures',
+    component: 'Emprises artificialisées',
+    finalOccupation: 'sols artificiels imperméabilisés',
+    child: true,
+    inSurfaceCheck: true
+  },
+  {
+    id: 'old',
+    code: 'old',
+    name: 'Zone Obligation Légale de débroussaillement (OLD)',
+    component: 'Emprises hors infrastructures',
+    finalOccupation: 'sols artificiels enherbés',
+    inSurfaceCheck: true,
+    // retranchée de la somme : la zone OLD recouvre les autres emprises
+    subtractedFromSurfaceCheck: true
+  },
+  {
+    id: 'defrichement-hors-old',
+    code: 'dh',
+    name: 'Défrichement / débroussaillage hors OLD',
+    component: 'Emprises hors infrastructures',
+    finalOccupation: 'prairies zones herbacées'
+  },
+  {
+    id: 'haies-coupees',
+    code: 'hc',
+    name: 'Haies coupées',
+    hint: 'Associer une surface en ha et une occupation des sols de type forêt ou sol artificiel imperméabilisé selon le type de haie.',
+    component: 'Emprises hors infrastructures',
+    finalOccupation: 'prairies zones herbacées'
+  },
+  {
+    id: 'surface-sous-gestion',
+    code: 'sg',
+    name: 'Surface sous gestion (hors OLD)',
+    component: 'Emprises hors infrastructures',
+    finalOccupation: 'prairies zones herbacées'
+  }
+]
+
+// Onglet « 2.Eolien Caractéristiques », lignes 47 à 53 (plage nommée
+// Eol_occ_sol_proj). Contrairement au photovoltaïque, le tableur ne contrôle pas
+// la cohérence entre la somme des emprises et une superficie totale du parc.
+// Les codes sont distincts de ceux du photovoltaïque pour que les saisies des
+// deux technologies puissent coexister dans l'URL.
+const EolienRows = [
+  {
+    id: 'fondations-socle',
+    code: 'efs',
+    name: 'Fondations - Emprise du socle',
+    component: 'Emprises des plateformes',
+    finalOccupation: 'sols artificiels imperméabilisés'
+  },
+  {
+    id: 'fondations-assiette',
+    code: 'efa',
+    name: "Fondations - Emprise de l'assiette",
+    component: 'Emprises des plateformes',
+    finalOccupation: 'sols artificiels enherbés'
+  },
+  {
+    id: 'voiries-infrastructures',
+    code: 'evi',
+    name: 'Emprise voiries et infrastructures permanentes créées pour le projet',
+    hint: "Y compris les voies d'accès. Les infrastructures temporaires de la phase chantier ne sont pas considérées ici.",
+    component: 'Emprises artificialisées',
+    finalOccupation: 'sols artificiels imperméabilisés'
+  },
+  {
+    id: 'raccordement',
+    code: 'erc',
+    name: 'Raccordement',
+    component: 'Autre',
+    finalOccupation: 'sols artificiels arborés et buissonants'
+  },
+  {
+    id: 'defavorabilisation',
+    code: 'ezd',
+    name: 'Zones de défavorabilisation des habitats',
+    hint: "Zones sur lesquelles des actions visant à réduire l'attractivité pour la faune sont mises en place.",
+    component: 'Emprises artificialisées',
+    finalOccupation: 'sols artificiels imperméabilisés'
+  },
+  {
+    id: 'old',
+    code: 'eold',
+    name: 'Zone Obligation Légale de débroussaillement (OLD)',
+    component: 'Autre',
+    finalOccupation: 'sols artificiels imperméabilisés'
+  },
+  {
+    id: 'surface-sous-gestion',
+    code: 'esg',
+    name: 'Surface sous gestion (hors OLD)',
+    component: 'Autre',
+    finalOccupation: 'sols artificiels imperméabilisés'
+  }
+]
+
+// Les deux technologies couvertes par cette version « light ». Le tableur les
+// traite avec le même onglet de calcul (« Calcul - Carbone », cellule A1) : seule
+// la description des emprises change.
+const Projects = [
+  {
+    id: 'pv',
+    name: 'Photovoltaïque au sol',
+    sectionTitle: 'Photovoltaïque caractéristique',
+    rows: PvRows,
+    hasSurfaceCheck: true
+  },
+  {
+    id: 'eolien',
+    name: 'Éolien terrestre',
+    sectionTitle: 'Éolien caractéristique',
+    rows: EolienRows,
+    hasSurfaceCheck: false
+  }
+]
+
+const DEFAULT_PROJECT = 'pv'
+
+// Onglet « Calcul - Carbone », colonnes U à Z.
+const Scenarios = [
+  { id: 'referencePessimiste', group: 'reference', name: 'Référence - Pessimiste' },
+  { id: 'referenceProbable', group: 'reference', name: 'Référence - La plus probable' },
+  { id: 'referenceOptimiste', group: 'reference', name: 'Référence - Optimiste' },
+  { id: 'projetPessimiste', group: 'projet', name: 'Projet - Pessimiste' },
+  { id: 'projetProbable', group: 'projet', name: 'Projet - Le plus probable' },
+  { id: 'projetOptimiste', group: 'projet', name: 'Projet - Optimiste' }
+]
+
+// Onglet « Données ALDO_cinétique », cellule nommée cinétique_litière.
+const LITTER_KINETICS = 20
+
+// Nombre d'années du tableau interne de synthèse (onglet « Calcul - Carbone »).
+const MAX_YEAR = 50
+
+// Onglet « Données_Pratiques agricoles », plage A17:D23 : pratiques stockantes
+// appliquées d'office, dans les scénarios optimistes, à toutes les surfaces de
+// l'occupation concernée. Identifiants des pratiques d'ALDO (calculations/constants.js).
+const OptimisticPractices = {
+  cultures: ['directSowingContinuous', 'catchCrops', 'cropsAgroforestry'],
+  'prairies zones herbacées': ['prairiesAgroforestry'],
+  'prairies zones arbustives': ['prairiesAgroforestry'],
+  vergers: ['orchardsInterCoverCropping'],
+  vignes: ['vineyardsInterCoverCropping']
+}
+
+// Durée d'effet des pratiques agricoles stockantes, en années.
+const PRACTICES_DURATION = 20
+
+module.exports = {
+  DEFAULT_INITIAL_OCCUPATION,
+  DEFAULT_PROJECT,
+  Occupations,
+  SolNames,
+  StocksColumns,
+  PessimisticProjectOccupations,
+  Projects,
+  PvRows,
+  EolienRows,
+  Scenarios,
+  LITTER_KINETICS,
+  MAX_YEAR,
+  OptimisticPractices,
+  PRACTICES_DURATION
+}
