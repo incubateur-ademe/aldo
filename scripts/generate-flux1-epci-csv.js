@@ -26,9 +26,7 @@ function getPairsWithCo2eFromReference () {
   return pairs
 }
 
-const PAIRS_WITH_CO2E = getPairsWithCo2eFromReference()
-
-function buildHeaders () {
+function buildHeaders (pairsWithCo2e) {
   const headers = [
     'insee', 'nom', 'epci', 'departement', 'region', 'zpc',
     'inter_region', 'groupe_ser', 'greco', 'rad_13', 'bassin_populicole',
@@ -40,7 +38,7 @@ function buildHeaders () {
       if (forestSubtypeIds.includes(fromGt.stocksId) && forestSubtypeIds.includes(toGt.stocksId)) return
       const pairKey = `${fromGt.stocksId}_vers_${toGt.stocksId}`
       headers.push(`${pairKey}_surface_ha_an-1`)
-      if (PAIRS_WITH_CO2E.has(pairKey)) headers.push(`${pairKey}_tCO2e_an-1`)
+      if (pairsWithCo2e.has(pairKey)) headers.push(`${pairKey}_tCO2e_an-1`)
     })
   })
   headers.push(...INDICATEUR_HEADERS)
@@ -54,17 +52,31 @@ function csvValue (v) {
 }
 
 function generate (outputPath) {
-  const headers = buildHeaders()
   const epcis = getEpcis()
   const total = epcis.length
+
+  // 1er passage : colonnes tCO2e du fichier communal, complétées par les
+  // paires ayant un flux non nul pour au moins un EPCI.
+  const pairsWithCo2e = getPairsWithCo2eFromReference()
+  console.log(`Traitement de ${total} EPCI…`)
+  const results = epcis.map((epci, index) => {
+    if (index % 100 === 0) process.stdout.write(`\r  ${index}/${total}`)
+    const { allFlux, fluxCo2eByGroundType, areas, total: epciTotal } = getAnnualFluxes(getCommunes({ epci }))
+    Object.entries(fluxCo2eByGroundType).forEach(([from, tos]) => {
+      Object.entries(tos).forEach(([to, co2e]) => {
+        if (co2e) pairsWithCo2e.add(`${from}_vers_${to}`)
+      })
+    })
+    return { fluxCo2eByGroundType, areas, epciTotal, indicateurs: getIndicateursSequestration(allFlux) }
+  })
+  process.stdout.write(`\r  ${total}/${total}\n`)
+
+  // 2e passage : écriture des lignes
+  const headers = buildHeaders(pairsWithCo2e)
   const lines = [headers.map((h) => '"' + h + '"').join(',')]
 
-  console.log(`Traitement de ${total} EPCI…`)
   epcis.forEach((epci, index) => {
-    if (index % 100 === 0) process.stdout.write(`\r  ${index}/${total}`)
-    const communes = getCommunes({ epci })
-    const fluxResult = getAnnualFluxes(communes)
-    const { allFlux, fluxCo2eByGroundType, areas, total: epciTotal } = fluxResult
+    const { fluxCo2eByGroundType, areas, epciTotal, indicateurs } = results[index]
     const meta = getEPCIBaseMeta(epci)
 
     const row = [
@@ -80,18 +92,17 @@ function generate (outputPath) {
         const pairKey = `${fromGt.stocksId}_vers_${toGt.stocksId}`
         const surface = areas[fromGt.stocksId]?.[toGt.stocksId]?.area
         row.push(surface !== undefined && surface !== null ? surface : 0)
-        if (PAIRS_WITH_CO2E.has(pairKey)) {
+        if (pairsWithCo2e.has(pairKey)) {
           const co2e = fluxCo2eByGroundType[fromGt.stocksId]?.[toGt.stocksId]
           row.push(co2e ?? '')
         }
       })
     })
-    row.push(...getIndicateursSequestration(allFlux))
+    row.push(...indicateurs)
 
     lines.push(row.map(csvValue).join(','))
   })
 
-  process.stdout.write(`\r  ${total}/${total}\n`)
   fs.writeFileSync(outputPath, lines.join('\n'), 'utf8')
   console.log(`Fichier généré : ${outputPath}`)
   console.log(`Lignes : ${lines.length - 1} EPCI  |  Colonnes : ${headers.length}`)
