@@ -22,11 +22,13 @@
               Pratiques agricoles
             </a>
           </li>
+          <% if (showCatenr) { %>
           <li class="fr-nav__item">
             <a class="fr-nav__link" href="<%= getTabUrl('cat-enr') %>" <%- tab === 'cat-enr' ? 'aria-current="page"' : '' %>>
               Outil CAT'ENR
             </a>
           </li>
+          <% } %>
           <li class="fr-nav__item">
             <a class="fr-nav__link" href="<%= getTabUrl('configuration') %>" <%- tab === 'configuration' ? 'aria-current="page"' : '' %>>
               Configuration
@@ -48,9 +50,11 @@
         <section class="territory-section" data-tab="agricultural-practices" <%= tab !== 'agricultural-practices' ? 'hidden' : '' %>>
           <%- include('./agricultural-practices') -%>
         </section>
+        <% if (showCatenr) { %>
         <section class="territory-section" data-tab="cat-enr" <%= tab !== 'cat-enr' ? 'hidden' : '' %>>
           <%- include('./catenr') -%>
         </section>
+        <% } %>
         <section class="territory-section" data-tab="configuration" <%= tab !== 'configuration' ? 'hidden' : '' %>>
           <%- include('./shared-configuration') -%>
         </section>
