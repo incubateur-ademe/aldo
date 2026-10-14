@@ -162,9 +162,10 @@
   <%- include('fluxCalculations/ign-comparison', { forestComparison }) -%>
   <% } %>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<!-- Chart.js est déjà chargé par l'onglet Stocks, rendu avant celui-ci -->
 <script>
+  // Bloc : ce script est ré-exécuté après chaque recalcul (voir index.ejs), les const ne doivent pas être globales.
+  {
   Chart.register(ChartDataLabels);
   Chart.defaults.set('plugins.datalabels', {
     anchor: 'center',
@@ -183,4 +184,5 @@
   const forestComparisonData = JSON.parse(`<%- forestComparisonChartConfig %>`);
   new Chart(forestComparisonCtx, forestComparisonData);
   <% } %>
+  }
 </script>
