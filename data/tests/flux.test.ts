@@ -1,0 +1,414 @@
+import { buildCommuneMap } from '../communes.ts'
+import {
+  getAnnualSurfaceChange,
+  getAnnualSurfaceChangeFromDataOptimized,
+  getForestLitterFlux
+} from '../flux.ts'
+import type { CitepaChangeRow } from '../csv.ts'
+
+// Les mocks de JSON ne s'appliquent qu'aux modules importés après vi.doMock :
+// les tests qui en dépendent rechargent le module testé.
+const load = () => import('../flux.ts')
+
+// TODO: a flux entry has a good format:
+// has a from
+// has a to
+// has a area
+// has a originalArea
+// has a areaModified
+// has a reservoir
+// has a gas
+// has a flux
+// has a fluxEquivalent
+// has a value
+// has a co2e
+
+describe('The flux data module', () => {
+  beforeEach(() => {
+    vi.resetModules()
+  })
+
+  describe('the fetching of ground carbon flux in tC/(ha.year)', () => {
+    const commune = { insee: '1001', zpc: '1_1' }
+    // Mocke flux-zpc.csv avec une seule ZPC 1_1 et recharge le module
+    async function withZpcFlux (columns: Record<string, string>) {
+      vi.doMock('../dataByCommune/flux-zpc.csv.json', () => ({ default: [{ zpc: '1_1', ...columns }] }))
+      return await load()
+    }
+
+    it('given a commune, initial ground and final ground, returns the carbon flux in tC/(ha.year) from data file', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({ prai_cult: '-2' })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'prairies zones arborées', 'cultures')).toBe(-2)
+    })
+
+    // the exceptions
+    it('returns 0 for cultures -> vignes and cultures -> vergers', async () => {
+      // testing both if data is present (not expected) and when it isn't
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({ cult_vign: '-2' })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'cultures', 'vignes')).toBe(0)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'cultures', 'vergers')).toBe(0)
+    })
+
+    it('for prairies -> sols art arborés return prairies -> forêts', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({ prai_for: '2' })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'prairies zones herbacées', 'sols artificiels arborés et buissonants')).toBe(2)
+    })
+
+    it('for forêt subtypes -> sols art arborés return 0', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({})
+      expect(getAnnualGroundCarbonFlux({ commune }, 'forêt conifere', 'sols artificiels arborés et buissonants')).toBe(0)
+    })
+
+    it('for zones humides -> vergers/vignes return as if -> cultures', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({ zh_cult: '2' })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'zones humides', 'vignes')).toBe(2)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'zones humides', 'vergers')).toBe(2)
+    })
+
+    it('for zones humides -> sols art imp return sum of (zh -> cult + cult -> sa imp)', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({ cult_art_imp: '2', zh_cult: '3' })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'zones humides', 'sols artificiels imperméabilisés')).toBe(5)
+    })
+
+    it('for zones humides -> sa enh return as if -> prairies', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({ zh_prai: '2' })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'zones humides', 'sols artificiels arbustifs')).toBe(2)
+    })
+
+    it('for zones humides -> sa arborés return as if -> forêt', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({ zh_for: '2' })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'zones humides', 'sols artificiels arborés et buissonants')).toBe(2)
+    })
+
+    it('for vergers -> cultures return 0', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({})
+      expect(getAnnualGroundCarbonFlux({ commune }, 'vergers', 'cultures')).toBe(0)
+    })
+
+    it('for vergers -> zones humides return cultures -> zh', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({ cult_zh: '2' })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'vergers', 'zones humides')).toBe(2)
+    })
+
+    it('for vergers -> vignes return 0', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({})
+      expect(getAnnualGroundCarbonFlux({ commune }, 'vergers', 'vignes')).toBe(0)
+    })
+
+    it('for vergers to any sols art, return the equivalent using an initial occupation of cultures', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({ cult_art_imp: '2', cult_art_arb: '3', cult_art_enh: '4' })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'vergers', 'sols artificiels imperméabilisés')).toBe(2)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'vergers', 'sols artificiels arborés et buissonants')).toBe(3)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'vergers', 'sols artificiels arbustifs')).toBe(4)
+    })
+
+    it('for vignes -> cultures return 0', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({})
+      expect(getAnnualGroundCarbonFlux({ commune }, 'vignes', 'cultures')).toBe(0)
+    })
+
+    it('for vignes -> zones humides return cultures -> zh', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({ cult_zh: '2' })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'vignes', 'zones humides')).toBe(2)
+    })
+
+    it('for vignes -> vergers return 0', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({})
+      expect(getAnnualGroundCarbonFlux({ commune }, 'vignes', 'vergers')).toBe(0)
+    })
+
+    it('for vignes to any sols art, return the equivalent using an initial occupation of cultures', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({ cult_art_imp: '2', cult_art_arb: '3', cult_art_enh: '4' })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'vignes', 'sols artificiels imperméabilisés')).toBe(2)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'vignes', 'sols artificiels arborés et buissonants')).toBe(3)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'vignes', 'sols artificiels arbustifs')).toBe(4)
+    })
+
+    it('replaces an inital occupation of sols art imp with cultures for all', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({
+        cult_prai: '1',
+        cult_for: '2',
+        cult_zh: '3',
+        cult_art_arb: '4',
+        cult_art_enh: '5'
+      })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels imperméabilisés', 'cultures')).toBe(0)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels imperméabilisés', 'prairies zones arbustives')).toBe(1)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels imperméabilisés', 'forêt mixte')).toBe(2)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels imperméabilisés', 'zones humides')).toBe(3)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels imperméabilisés', 'sols artificiels imperméabilisés')).toBe(0)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels imperméabilisés', 'sols artificiels arborés et buissonants')).toBe(4)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels imperméabilisés', 'sols artificiels arbustifs')).toBe(5)
+      // takes into account cultures exceptions
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels imperméabilisés', 'vignes')).toBe(0)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels imperméabilisés', 'vergers')).toBe(0)
+    })
+
+    it('replaces an inital occupation of sols art enh with prairies for all', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({
+        prai_cult: '1',
+        prai_for: '2',
+        prai_zh: '3',
+        prai_vign: '4',
+        prai_verg: '5',
+        prai_art_imp: '6'
+      })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arbustifs', 'cultures')).toBe(1)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arbustifs', 'prairies zones arbustives')).toBe(0)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arbustifs', 'forêt mixte')).toBe(2)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arbustifs', 'zones humides')).toBe(3)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arbustifs', 'vignes')).toBe(4)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arbustifs', 'vergers')).toBe(5)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arbustifs', 'sols artificiels imperméabilisés')).toBe(6)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arbustifs', 'sols artificiels arbustifs')).toBe(0)
+      // takes into account prairie subtype exceptions too
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arbustifs', 'sols artificiels arborés et buissonants')).toBe(2)
+    })
+
+    it('replaces an inital occupation of sols art arboré with forêt for all', async () => {
+      const { getAnnualGroundCarbonFlux } = await withZpcFlux({
+        for_cult: '1',
+        for_prai: '2',
+        for_zh: '3',
+        for_vign: '4',
+        for_verg: '5',
+        for_art_imp: '6',
+        for_art_enh: '7'
+      })
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arborés et buissonants', 'cultures')).toBe(1)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arborés et buissonants', 'prairies zones arbustives')).toBe(2)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arborés et buissonants', 'forêt mixte')).toBe(0)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arborés et buissonants', 'zones humides')).toBe(3)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arborés et buissonants', 'vignes')).toBe(4)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arborés et buissonants', 'vergers')).toBe(5)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arborés et buissonants', 'sols artificiels imperméabilisés')).toBe(6)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arborés et buissonants', 'sols artificiels arbustifs')).toBe(7)
+      expect(getAnnualGroundCarbonFlux({ commune }, 'sols artificiels arborés et buissonants', 'sols artificiels arborés et buissonants')).toBe(0)
+    })
+
+    it('returns all carbon flux in tc/(ha.year) for ground cultures', async () => {
+      const { getFluxReferenceValues } = await withZpcFlux({ zh_cult: '3', for_cult: '-10' })
+      const fluxes = getFluxReferenceValues({ commune: { insee: '1001', zpc: '1_1', epci: '200007177' } })
+      const groundFluxes = fluxes.filter(f => f.reservoir === 'sol')
+      const cultureFluxes = groundFluxes.filter(f => f.to === 'cultures')
+      // 1 zones humides + 4 forest subtypes + 3 0s (exceptions covered in above tests) + 1 SA arb which uses forest
+      expect(cultureFluxes.length).toBe(9)
+    })
+  })
+
+  it('returns change in surface area for given ground types from data file divided by 10, the number of years between studies (2013-2023)', () => {
+    const mockCitepaData = [
+      { insee_com: '01234', siren_epci: '200007177', usage_2013: 'P_a', usage_2023: 'C', surfaces_converties: '5,0' },
+      { insee_com: '01234', siren_epci: '200007177', usage_2013: 'P_a', usage_2023: 'C', surfaces_converties: '7,0' },
+      { insee_com: '01234', siren_epci: '200007177', usage_2013: 'P_a', usage_2023: 'X_x', surfaces_converties: '100,0' },
+      { insee_com: '09999', siren_epci: '200007188', usage_2013: 'P_a', usage_2023: 'C', surfaces_converties: '100,0' }
+    ] as CitepaChangeRow[]
+    const citepaDataByCommuneMap = buildCommuneMap({ communesRawData: mockCitepaData })
+
+    expect(getAnnualSurfaceChangeFromDataOptimized({ commune: { insee: '01234' }, from: 'prairies zones arborées', to: 'cultures', citepaDataByCommuneMap })).toBe(1.2) // (5+7)/10 = 1.2
+    expect(getAnnualSurfaceChangeFromDataOptimized({ commune: { insee: '01234' }, from: 'prairies zones arbustives', to: 'cultures', citepaDataByCommuneMap })).toBe(0)
+  })
+
+  describe('sols artificiels area changes', () => {
+    // NB: in constants arbustifs and impermeable are the same codes
+    describe('when final occupation is impermeable', () => {
+      it('always returns 0 when initial occupation is shrubby', () => {
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              'sols artificiels arbustifs': {
+                'sols artificiels imperméabilisés': 50
+              }
+            }
+          }
+        }
+        const fromShrubby = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'sols artificiels arbustifs', 'sols artificiels imperméabilisés')
+        expect(fromShrubby).toBe(0)
+      })
+
+      it('returns CLC change data when, for the same initial occupation, there is a large change to sols art with trees', () => {
+        const from = 'cultures'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arborés et buissonants': 100
+              }
+            }
+          }
+        }
+        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, {}, from, 'sols artificiels imperméabilisés')
+        expect(fromCultures).toBe(50)
+      })
+
+      it('returns direct Citepa value for imperméabilisés when data provides A_i separately', () => {
+        const from = 'cultures'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arborés et buissonants': 100
+              }
+            }
+          }
+        }
+        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, {}, from, 'sols artificiels imperméabilisés')
+        expect(fromCultures).toBe(50)
+      })
+    })
+    // TODO: test if doubling up on changes to shrubby and impermeable since they use the same CLC codes
+    describe('when final occupation is shrubby', () => {
+      it('always returns 0 when initial occupation is impermeable', () => {
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                // these two share CLC codes so will always have the same value
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arbustifs': 50
+              }
+            }
+          }
+        }
+        const toShrubby = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'sols artificiels imperméabilisés', 'sols artificiels arbustifs')
+        expect(toShrubby).toBe(0)
+      })
+      // TODO: what about if has data overrides?
+
+      it('returns direct Citepa value for arbustifs when data provides A_h separately', () => {
+        const from = 'forêt mixte'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              'forêt mixte': {
+                'sols artificiels arborés et buissonants': 1,
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arbustifs': 50
+              }
+            }
+          }
+        }
+        const fromForestMixed = getAnnualSurfaceChange(communeLocationWithChanges, {}, from, 'sols artificiels arbustifs')
+        expect(fromForestMixed).toBe(50)
+      })
+
+      it('returns direct Citepa value for arbustifs when data provides A_h separately (cultures)', () => {
+        const from = 'cultures'
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                'sols artificiels arborés et buissonants': 1,
+                'sols artificiels imperméabilisés': 50,
+                'sols artificiels arbustifs': 50
+              }
+            }
+          }
+        }
+        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, {}, from, 'sols artificiels arbustifs')
+        expect(fromCultures).toBe(50)
+      })
+    })
+
+    describe('when final occupation is sols art trees', () => {
+      it('returns 0 if the initial area is sols art arbustifs, prairies arborés, prairies arbustifs, vergers, vignes, or zones humides', () => {
+        const toObj = {
+          'sols artificiels arborés et buissonants': 10
+        }
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              'sols artificiels imperméabilisés': toObj,
+              'prairies zones arborées': toObj,
+              'prairies zones arbustives': toObj,
+              vergers: toObj,
+              vignes: toObj,
+              'zones humides': toObj
+            }
+          }
+        }
+        const to = 'sols artificiels arborés et buissonants'
+        const fromSolsArtArbustifs = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'sols artificiels arbustifs', to)
+        expect(fromSolsArtArbustifs).toBe(0)
+        const fromPraiArbo = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'prairies zones arborées', to)
+        expect(fromPraiArbo).toBe(0)
+        const fromPraiArbu = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'prairies zones arbustives', to)
+        expect(fromPraiArbu).toBe(0)
+        const fromVergers = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'vergers', to)
+        expect(fromVergers).toBe(0)
+        const fromVignes = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'vignes', to)
+        expect(fromVignes).toBe(0)
+        const fromZonesHumides = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'zones humides', to)
+        expect(fromZonesHumides).toBe(0)
+      })
+
+      it('returns CLC yearly change for remaining initial types', () => {
+        const communeLocationWithChanges = {
+          commune: {
+            insee: '01234',
+            changes: {
+              cultures: {
+                'sols artificiels arborés et buissonants': 10
+              }
+            }
+          }
+        }
+        const fromCultures = getAnnualSurfaceChange(communeLocationWithChanges, {}, 'cultures', 'sols artificiels arborés et buissonants')
+        expect(fromCultures).toBe(10)
+      })
+    })
+  })
+
+  describe('for forests', () => {
+    it('provides data per-subtype', async () => {
+      vi.doMock('../dataByCommune/flux-zpc.csv.json', () => ({
+        default: [
+          {
+            zpc: '1_1',
+            for_vign: '-2',
+            cult_for: '3'
+          }
+        ]
+      }))
+      const { getFluxReferenceValues } = await load()
+      const fluxes = getFluxReferenceValues({ commune: { insee: '1001', zpc: '1_1', epci: '200007177' } })
+      const forestFlux = fluxes.find((f) => f.from === 'forêts' && f.to === 'vignes' && f.reservoir === 'sol')
+      expect(forestFlux).toBeUndefined()
+      const mixedFlux = fluxes.find((f) => f.from === 'forêt mixte' && f.to === 'vignes' && f.reservoir === 'sol')
+      expect(mixedFlux).toBeDefined()
+      expect(mixedFlux?.annualFlux).toBe(-2)
+      const coniferFlux = fluxes.find((f) => f.from === 'forêt conifere' && f.to === 'vignes' && f.reservoir === 'sol')
+      expect(coniferFlux).toBeDefined()
+      const leafyFlux = fluxes.find((f) => f.from === 'forêt feuillu' && f.to === 'vignes' && f.reservoir === 'sol')
+      expect(leafyFlux).toBeDefined()
+      const poplarFlux = fluxes.find((f) => f.from === 'forêt peupleraie' && f.to === 'vignes' && f.reservoir === 'sol')
+      expect(poplarFlux).toBeDefined()
+    })
+
+    it('adds litter changes for forest subtype -> other ground type changes', async () => {
+      const { getFluxReferenceValues } = await load()
+      const allFlux = getFluxReferenceValues({ commune: { insee: '1001', zpc: '1_1', epci: '200007177' } })
+      const culturesFlux = allFlux.filter(f => f.to === 'cultures')
+      const litter = culturesFlux.filter(f => f.gas === 'C' && f.reservoir === 'litière')
+      expect(litter.length).toBe(4)
+    })
+
+    it('returns expected value for forest litter flux', () => {
+      expect(getForestLitterFlux('cultures', 'forêt mixte')).toBe(9)
+      expect(getForestLitterFlux('forêt feuillu', 'cultures')).toBe(-9)
+      expect(getForestLitterFlux('zones humides', 'cultures')).toBeUndefined()
+      expect(getForestLitterFlux('cultures', 'sols artificiels arborés et buissonants')).toBe(9)
+      // TODO: ask if the following should be the case - the spreadsheet is malformed w/ repeated impermeabilise row
+      expect(getForestLitterFlux('sols artificiels arborés et buissonants', 'cultures')).toBeUndefined()
+    })
+  })
+})
