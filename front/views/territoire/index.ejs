@@ -76,10 +76,18 @@
   // - shorten URLs by only including the values that are overridden
   // - handle the case for stocks where there are two inputs that can change the same value
   let queryParams = new URLSearchParams(window.location.search)
+
   // Les gestionnaires sont délégués au document : le contenu de <main> est remplacé
   // à chaque recalcul (voir `navigate`), les éléments d'origine disparaissent.
+  function on(eventName, selector, handler) {
+    document.addEventListener(eventName, (event) => {
+      const element = event.target.closest(selector)
+      if (element) handler(event, element)
+    })
+  }
+
   // les listes déroulantes de l'onglet CAT'ENR sont aussi portées par l'URL
-  $(document).on('change', '#territory input, #territory select', (event) => {
+  on('change', '#territory input, #territory select', (event) => {
     if (!event.target.name) return
     if (event.target.value === '') {
       queryParams.delete(event.target.name)
@@ -140,10 +148,10 @@
   }
 
   function switchTerritoryTab(tabName, shouldPushState = true) {
-    $('.territory-section').each((_, section) => {
+    document.querySelectorAll('.territory-section').forEach((section) => {
       section.hidden = section.dataset.tab !== tabName
     })
-    $('.territory-nav .fr-nav__link').each((_, link) => {
+    document.querySelectorAll('.territory-nav .fr-nav__link').forEach((link) => {
       if (tabOf(link) === tabName) {
         link.setAttribute('aria-current', 'page')
       } else {
@@ -156,18 +164,18 @@
     }
   }
 
-  $(document).on('click', '.territory-nav .fr-nav__link', (event) => {
+  on('click', '.territory-nav .fr-nav__link', (event, link) => {
     event.preventDefault()
-    switchTerritoryTab(tabOf(event.currentTarget))
+    switchTerritoryTab(tabOf(link))
   })
 
-  $(document).on('click', 'button.to-stocks', () => switchTerritoryTab('stocks'))
-  $(document).on('click', 'button.to-flux', () => switchTerritoryTab('flux'))
-  $(document).on('click', 'button.to-config', () => switchTerritoryTab('configuration'))
+  on('click', 'button.to-stocks', () => switchTerritoryTab('stocks'))
+  on('click', 'button.to-flux', () => switchTerritoryTab('flux'))
+  on('click', 'button.to-config', () => switchTerritoryTab('configuration'))
 
   // handle URL here so that only relevant params are sent and we avoid URLs that get cut off
   // for being too long
-  $(document).on('submit', 'form#territory', (event) => {
+  on('submit', 'form#territory', (event) => {
     event.preventDefault()
     const tab = currentTab()
     // l'outil CAT'ENR renvoie l'utilisateur sur ses résultats après un recalcul
@@ -177,11 +185,11 @@
 
   // Liens qui changent les paramètres de l'URL (réinitialisation, changement de
   // technologie CAT'ENR) : même traitement que la soumission.
-  $(document).on('click', 'a.keep-scroll', (event) => {
+  on('click', 'a.keep-scroll', (event, link) => {
     // les clics « ouvrir dans un nouvel onglet » restent gérés par le navigateur
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.which > 1) return
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return
     event.preventDefault()
-    navigate(event.currentTarget.getAttribute('href'))
+    navigate(link.getAttribute('href'))
   })
 
   // Retour arrière : simple changement d'onglet si seuls le chemin a changé,
