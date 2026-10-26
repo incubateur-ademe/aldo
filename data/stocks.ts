@@ -83,17 +83,20 @@ export function getSignificantCarbonData () {
   return forestCarbonData.filter((data) => data.surface_ic === 's')
 }
 
+// TODO: fix file to append 0 to all the codes that are just 4 characters long
+function forestInseeCode (insee: string) {
+  return insee.startsWith('0') ? insee.slice(1) : insee
+}
+
 export function getForestAreaData (location: Location): SurfaceForetRow[] {
   if (location.epci) {
     const code = location.epci.code
     return forestAreaData.filter(data => data.CODE_EPCI === code)
   } else if (location.commune) {
-    // TODO: fix file to append 0 to all the codes that are just 4 characters long
-    let code = location.commune.insee
-    if (code.startsWith('0')) code = code.slice(1)
+    const code = forestInseeCode(location.commune.insee)
     return forestAreaData.filter(data => data.INSEE_COM === code)
   }
-  const communeCodes = (location.communes ?? []).map((c) => c.insee)
+  const communeCodes = (location.communes ?? []).map((c) => forestInseeCode(c.insee))
   const epciCodes = (location.epcis ?? []).map((e) => e.code)
   return forestAreaData.filter(data => communeCodes.includes(data.INSEE_COM) || epciCodes.includes(data.CODE_EPCI))
 }

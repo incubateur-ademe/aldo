@@ -395,7 +395,11 @@ export type CatenrResult = ReturnType<typeof getCatenr>
 // tCO2e comme dans le tableur, mais les stocks sont présentés en tC comme dans le reste
 // d'ALDO.
 function summaries (trajectories: Trajectories, lifespan: number | undefined) {
-  const at = (scenario: ScenarioId, year: number | undefined) => (year === undefined ? undefined : (trajectories[scenario][year] ?? 0) / C_TO_CO2E)
+  // année hors trajectoire (durée de vie non entière ou négative) : pas de valeur
+  const at = (scenario: ScenarioId, year: number | undefined) => {
+    const point = year === undefined ? undefined : trajectories[scenario][year]
+    return point === undefined ? undefined : point / C_TO_CO2E
+  }
   const temporalities = [
     { id: 'etat-initial', name: 'État initial', year: 0 },
     { id: 'post-travaux', name: 'État post travaux', year: 1 },
