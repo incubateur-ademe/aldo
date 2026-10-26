@@ -297,8 +297,6 @@
 
 <!-- Chart.js est déjà chargé par l'onglet Stocks -->
 <script>
-  // Bloc : ce script est ré-exécuté après chaque recalcul (voir index.ejs), les const ne doivent pas être globales.
-  {
   // L'âge de l'écosystème n'est demandé que lorsque l'occupation initiale est une forêt.
   const catenrForestCodes = ['formix', 'forfeu', 'forcon', 'forpeu'];
   document.querySelectorAll('.catenr-initial-occupation').forEach((select) => {
@@ -312,5 +310,4 @@
   <% if (catenr && catenr.hasData && !catenr.isBlocked && catenrChart) { %>
   new Chart(document.getElementById('chart-catenr'), JSON.parse(`<%- catenrChart %>`));
   <% } %>
-  }
 </script>

@@ -9,16 +9,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { getAnnualFluxes, type AnnualFluxes } from '../calculations/flux/index.ts'
-import { GroundTypes, has, type StocksId } from '../calculations/constants.ts'
-import { FOREST_SUBTYPES } from '../data/shared.ts'
 import { INDICATEUR_HEADERS, getIndicateursSequestration } from './flux1-indicateurs.ts'
-import { communeMeta, communesToExport, csvValue, errorMessage, type CsvCell } from './shared.ts'
-
-// ---------------------------------------------------------------------------
-// Types de sol utilisés pour les flux (même logique que l'export Excel)
-// Ordre identique à la référence DATA ADEME
-// ---------------------------------------------------------------------------
-const fluxGroundTypes = GroundTypes.filter((gt) => gt.altFluxId || gt.fluxId)
+import { FLUX_PAIRS, communeMeta, communesToExport, csvValue, errorMessage, type CsvCell } from './shared.ts'
 
 // Ce qu'on garde d'un calcul de flux pour écrire une ligne
 // (allFlux n'est pas conservé pour limiter la mémoire).
@@ -40,20 +32,6 @@ export function flux1Result ({ allFlux, fluxCo2eByGroundType, areas, total }: An
   return { fluxCo2eByGroundType, areas, total, indicateurs: getIndicateursSequestration(allFlux) }
 }
 
-// Paires (from, to) exportées, hors forêt -> forêt
-// (les 12 paires forêt-vers-forêt sont absentes car traitées via la biomasse)
-export function fluxPairs (): [StocksId, StocksId][] {
-  const pairs: [StocksId, StocksId][] = []
-  fluxGroundTypes.forEach((fromGt) => {
-    fluxGroundTypes.forEach((toGt) => {
-      if (fromGt.stocksId === toGt.stocksId) return
-      if (has(FOREST_SUBTYPES, fromGt.stocksId) && has(FOREST_SUBTYPES, toGt.stocksId)) return
-      pairs.push([fromGt.stocksId, toGt.stocksId])
-    })
-  })
-  return pairs
-}
-
 // ---------------------------------------------------------------------------
 // Construction des en-têtes CSV
 // ---------------------------------------------------------------------------
@@ -63,7 +41,7 @@ export function buildFlux1Headers (pairsWithCo2e: Set<string>) {
     'inter_region', 'groupe_ser', 'greco', 'rad_13', 'bassin_populicole',
     'population', 'flux_tCO2e_an-1'
   ]
-  fluxPairs().forEach(([from, to]) => {
+  FLUX_PAIRS.forEach(([from, to]) => {
     const pairKey = `${from}_vers_${to}`
     headers.push(`${pairKey}_surface_ha_an-1`)
     if (pairsWithCo2e.has(pairKey)) {
@@ -77,7 +55,7 @@ export function buildFlux1Headers (pairsWithCo2e: Set<string>) {
 // Colonnes de flux (après les métadonnées)
 export function flux1Columns ({ fluxCo2eByGroundType, areas, total, indicateurs }: Flux1Result, pairsWithCo2e: Set<string>): CsvCell[] {
   const row: CsvCell[] = [total ?? '']
-  fluxPairs().forEach(([from, to]) => {
+  FLUX_PAIRS.forEach(([from, to]) => {
     const pairKey = `${from}_vers_${to}`
     row.push(areas[from]?.[to]?.area ?? 0)
     if (pairsWithCo2e.has(pairKey)) {

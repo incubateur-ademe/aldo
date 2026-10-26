@@ -217,6 +217,7 @@ export function getAnnualWoodProductsHarvest (location: Location) {
   const areaDataByCommune = getForestAreaData(location)
   const significantCarbonData = getSignificantCarbonData()
   areaDataByCommune.forEach((communeData) => {
+    // ordre de sommation conservé : il fixe les dernières décimales des exports DATA ADEME
     (['forêt conifere', 'forêt feuillu', 'forêt mixte', 'forêt peupleraie'] as const).forEach((forestSubtype) => {
       const areaCompositionColumnName = FOREST_AREA_COLUMN[forestSubtype]
       const area = +communeData[areaCompositionColumnName]

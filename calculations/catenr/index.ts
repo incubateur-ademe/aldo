@@ -237,7 +237,7 @@ function biomassFlux (location: Location, row: Row, stocks: InitialStocks, targe
 
 // Flux d'une pratique agricole stockante, en tCO2e/ha/an (sol + biomasse).
 function practiceFlux (practice: PracticeId) {
-  return ((getPracticeFlux(practice, 'sol') || 0) + (getPracticeFlux(practice, 'biomasse') || 0)) * C_TO_CO2E
+  return (getPracticeFlux(practice, 'sol') + getPracticeFlux(practice, 'biomasse')) * C_TO_CO2E
 }
 
 // Surfaces, par pratique, sur lesquelles un scénario optimiste applique d'office une

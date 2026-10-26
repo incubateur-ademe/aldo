@@ -5,7 +5,7 @@ import {
   type FluxOptions,
   type Reservoir
 } from '../../data/flux.ts'
-import { GroundTypes, groundType, has, type ForestSubtype, type StocksId } from '../constants.ts'
+import { LEAF_GROUND_TYPES, groundType, has, type ForestSubtype, type StocksId } from '../constants.ts'
 import { getFluxWoodProducts } from './woodProducts.ts'
 import { getFluxAgriculturalPractices } from './agriculturalPractices.ts'
 import { getBiomassCarbonDensity, getForestBiomassCarbonDensities, getForestAreaData } from '../../data/stocks.ts'
@@ -324,14 +324,11 @@ export function forestBiomassGrowthSummary (allFlux: Flux[], options: FluxOption
 function areaChangesByGroundType (communes: Commune[], options: FluxOptions) {
   const areas: FluxAreas = {}
   const changePairs: Record<string, { from: StocksId, to: StocksId }> = {}
-  const excludeIds = ['haies', 'produits bois']
-  const childGroundTypes = GroundTypes
-    .filter((gt) => !gt.children && !has(excludeIds, gt.stocksId))
   communes.forEach((commune) => {
-    childGroundTypes.forEach((from) => {
+    LEAF_GROUND_TYPES.forEach((from) => {
       const fromGt = from.stocksId
       const areasFrom = areas[fromGt] ??= {}
-      childGroundTypes.forEach((to) => {
+      LEAF_GROUND_TYPES.forEach((to) => {
         const toGt = to.stocksId
         if (fromGt === toGt) return
 
@@ -359,21 +356,16 @@ function areaChangesByGroundType (communes: Commune[], options: FluxOptions) {
 
 function deforestationFlux (location: Location, options: FluxOptions) {
   const deforestationFluxes: Flux[] = []
-  const forestSubtypes = groundType('forêts').children ?? []
-  const excludeIds = ['haies', 'produits bois']
-  const childGroundTypes = GroundTypes
-    .filter((gt) => !gt.children && !has(excludeIds, gt.stocksId))
   const areaData = getForestAreaData(location)
-  for (const from of forestSubtypes) {
-    if (!has(FOREST_SUBTYPES, from)) continue
+  for (const from of FOREST_SUBTYPES) {
     const forestBiomassDensities = getForestBiomassCarbonDensities(location, from, areaData)
     const initialBiomassDensity = forestBiomassDensities.live + forestBiomassDensities.dead
 
-    for (const toGt of childGroundTypes) {
+    for (const toGt of LEAF_GROUND_TYPES) {
       const to = toGt.stocksId
       if (from === to) {
         continue
-      } else if (forestSubtypes.includes(to)) {
+      } else if (has(FOREST_SUBTYPES, to)) {
         // ignore reforestation and changes between forest subtypes since that biomass should
         // be taken into account by the growth of biomass based on area used by stocks
         continue

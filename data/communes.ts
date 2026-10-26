@@ -1,6 +1,6 @@
 import communesData from './dataByCommune/communes.json' with { type: 'json' }
 import zpcByCommune from './dataByCommune/zpc.csv.json' with { type: 'json' }
-import { GroundTypes, has, type StocksId } from '../calculations/constants.ts'
+import { LEAF_GROUND_TYPES, type StocksId } from '../calculations/constants.ts'
 import { getAreaFromDataOptimized } from './stocks.ts'
 import { getAnnualSurfaceChangeFromDataOptimized } from './flux.ts'
 import type { CitepaChangeRow, CitepaSurfaceRow } from './csv.ts'
@@ -82,9 +82,6 @@ export function completeData (communes: Commune[], citepa: { areas: CitepaSurfac
     }
   })
   const allCommunes = communes.concat(arrondissementsToAdd)
-  const excludeIds = ['haies', 'produits bois']
-  const childGroundTypes = GroundTypes
-    .filter((gt) => !gt.children && !has(excludeIds, gt.stocksId))
 
   // Progress indicator every 100 communes instead of every commune
   const totalCommunes = allCommunes.length
@@ -94,11 +91,11 @@ export function completeData (communes: Commune[], citepa: { areas: CitepaSurfac
     }
     const changes: Commune['changes'] = {}
     const citepa2021: Commune['citepa2021'] = {}
-    childGroundTypes.forEach((fromGt) => {
+    LEAF_GROUND_TYPES.forEach((fromGt) => {
       const changesFrom: Partial<Record<StocksId, number>> = {}
       changes[fromGt.stocksId] = changesFrom
       citepa2021[fromGt.stocksId] = getAreaFromDataOptimized({ commune, groundType: fromGt.stocksId, areasByCommuneMap })
-      childGroundTypes.forEach((toGt) => {
+      LEAF_GROUND_TYPES.forEach((toGt) => {
         if (fromGt.stocksId === toGt.stocksId) return
         const area = getAnnualSurfaceChangeFromDataOptimized({ commune, from: fromGt.stocksId, to: toGt.stocksId, citepaDataByCommuneMap })
         if (area) changesFrom[toGt.stocksId] = area

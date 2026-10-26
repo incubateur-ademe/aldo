@@ -31,7 +31,8 @@ import {
 } from '../data/stocks.ts'
 import { getPopulationTotal } from '../data/index.ts'
 import { communeMeta, communesToExport, csvValue, errorMessage, type CsvCell } from './shared.ts'
-import type { StocksId } from '../calculations/constants.ts'
+import { LEAF_GROUND_TYPES, has, type StocksId } from '../calculations/constants.ts'
+import { FOREST_SUBTYPES } from '../data/shared.ts'
 
 // Constantes produits bois
 const FRANCE_HARVEST = getAnnualFranceWoodProductsHarvest()
@@ -41,25 +42,8 @@ const FRANCE_POPULATION = getPopulationTotal()
 // ---------------------------------------------------------------------------
 // Structures de colonnes
 // ---------------------------------------------------------------------------
-export const NON_FOREST_TYPES: StocksId[] = [
-  'cultures',
-  'prairies zones arborées',
-  'prairies zones herbacées',
-  'prairies zones arbustives',
-  'zones humides',
-  'vergers',
-  'vignes',
-  'sols artificiels arbustifs',
-  'sols artificiels imperméabilisés',
-  'sols artificiels arborés et buissonants'
-]
-
-export const FOREST_TYPES: StocksId[] = [
-  'forêt mixte',
-  'forêt feuillu',
-  'forêt conifere',
-  'forêt peupleraie'
-]
+export const NON_FOREST_TYPES = LEAF_GROUND_TYPES.map((gt) => gt.stocksId).filter((id) => !has(FOREST_SUBTYPES, id))
+export const FOREST_TYPES = FOREST_SUBTYPES
 
 export const HAIES_GT_KEYS: [StocksId, string][] = [
   ['cultures', 'cultures_haies_km'],

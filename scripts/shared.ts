@@ -3,6 +3,15 @@ import communesData from '../data/dataByCommune/communes.json' with { type: 'jso
 import forestAreaRaw from '../data/dataByCommune/surface-foret.csv.json' with { type: 'json' }
 import regionToInterRegion from '../data/dataByCommune/region-to-inter-region.json' with { type: 'json' }
 import type { Commune } from '../data/types.ts'
+import { GroundTypes, has, type StocksId } from '../calculations/constants.ts'
+import { FOREST_SUBTYPES } from '../data/shared.ts'
+
+// Paires (from, to) des fichiers flux1/flux2, dans l'ordre de la référence DATA ADEME :
+// occupations ayant un identifiant de flux, hors forêt -> forêt (traité via la biomasse).
+const fluxGroundTypes = GroundTypes.filter((gt) => gt.altFluxId || gt.fluxId)
+export const FLUX_PAIRS: readonly [StocksId, StocksId][] = fluxGroundTypes.flatMap((fromGt) => fluxGroundTypes
+  .filter((toGt) => fromGt.stocksId !== toGt.stocksId && !(has(FOREST_SUBTYPES, fromGt.stocksId) && has(FOREST_SUBTYPES, toGt.stocksId)))
+  .map((toGt): [StocksId, StocksId] => [fromGt.stocksId, toGt.stocksId]))
 
 // Codes INSEE des arrondissements (absents des fichiers de référence)
 export const ARRONDISSEMENT_CODES = new Set([

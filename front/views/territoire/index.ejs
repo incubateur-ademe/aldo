@@ -121,8 +121,9 @@
     main.replaceWith(next.querySelector('main'))
     // Les <script> insérés via DOMParser ne s'exécutent pas : on les recrée.
     // Les scripts externes (Chart.js) sont déjà chargés, on ne reprend que les scripts inline.
+    // Chaque script est enveloppé dans un bloc : ses const ne redéclarent pas celles du chargement initial.
     document.querySelectorAll('main script:not([src])').forEach((script) => {
-      script.replaceWith(Object.assign(document.createElement('script'), { textContent: script.textContent }))
+      script.replaceWith(Object.assign(document.createElement('script'), { textContent: `{${script.textContent}}` }))
     })
     if (pushState) window.history.pushState({}, '', url)
     queryParams = new URLSearchParams(window.location.search)

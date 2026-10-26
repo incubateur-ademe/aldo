@@ -33,12 +33,8 @@ const BIOMASS_FLUX: Record<PracticeId, number> = {
 }
 
 // if the flux data changes to be area-specific or fetched from an API in the future, move to /data
-export function getPracticeFlux (practice: PracticeId, reservoir: 'sol' | 'biomasse'): number | undefined {
-  if (reservoir === 'sol') {
-    return GROUND_FLUX[practice]
-  } else if (reservoir === 'biomasse') {
-    return BIOMASS_FLUX[practice]
-  }
+export function getPracticeFlux (practice: PracticeId, reservoir: 'sol' | 'biomasse'): number {
+  return (reservoir === 'sol' ? GROUND_FLUX : BIOMASS_FLUX)[practice]
 }
 
 export function getFluxAgriculturalPractices (areas?: Partial<Record<PracticeId, number>>) {
@@ -50,7 +46,7 @@ export function getFluxAgriculturalPractices (areas?: Partial<Record<PracticeId,
     if (area === undefined) return
     const reservoirs = ['sol', 'biomasse'] as const
     reservoirs.forEach(reservoir => {
-      const flux = getPracticeFlux(practice, reservoir) ?? 0
+      const flux = getPracticeFlux(practice, reservoir)
       const value = flux * area
       if (value) {
         fluxes.push({

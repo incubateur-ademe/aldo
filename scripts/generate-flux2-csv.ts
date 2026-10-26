@@ -18,7 +18,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { GroundTypes, has, type StocksId } from '../calculations/constants.ts'
+import { LEAF_GROUND_TYPES, has, type StocksId } from '../calculations/constants.ts'
 import { getFluxReferenceValues, cToCo2e } from '../data/flux.ts'
 import {
   getBiomassCarbonDensity,
@@ -27,12 +27,7 @@ import {
 } from '../data/stocks.ts'
 import { FOREST_SUBTYPES } from '../data/shared.ts'
 import type { Location } from '../data/types.ts'
-import { communeMeta, communesToExport, csvValue, errorMessage, type CsvCell } from './shared.ts'
-
-// ---------------------------------------------------------------------------
-// Types de sol utilisés pour les flux
-// ---------------------------------------------------------------------------
-const fluxGroundTypes = GroundTypes.filter((gt) => gt.altFluxId || gt.fluxId)
+import { FLUX_PAIRS, communeMeta, communesToExport, csvValue, errorMessage, type CsvCell } from './shared.ts'
 
 // ---------------------------------------------------------------------------
 // Construction des en-têtes (même structure que le fichier de référence DATA ADEME)
@@ -52,20 +47,6 @@ function hasLitiere (fromId: StocksId, toId: StocksId) {
   return fromIsForet !== toIsForet
 }
 
-export function flux2Pairs (): [StocksId, StocksId][] {
-  const pairs: [StocksId, StocksId][] = []
-  fluxGroundTypes.forEach((fromGt) => {
-    fluxGroundTypes.forEach((toGt) => {
-      const fromId = fromGt.stocksId
-      const toId = toGt.stocksId
-      if (fromId === toId) return
-      if (has(FOREST_SUBTYPES, fromId) && has(FOREST_SUBTYPES, toId)) return
-      pairs.push([fromId, toId])
-    })
-  })
-  return pairs
-}
-
 export const FLUX2_META_COLS = 12 // colonnes de métadonnées toujours conservées
 
 export function buildFlux2Headers () {
@@ -73,7 +54,7 @@ export function buildFlux2Headers () {
     'insee', 'nom', 'epci', 'departement', 'region', 'zpc',
     'inter_region', 'groupe_ser', 'greco', 'rad_13', 'bassin_populicole', 'population'
   ]
-  flux2Pairs().forEach(([fromId, toId]) => {
+  FLUX_PAIRS.forEach(([fromId, toId]) => {
     const pairKey = `${fromId}_vers_${toId}`
     headers.push(`${pairKey}_sol_tCO2e_ha-1`)
     headers.push(`${pairKey}_biomasse_tCO2e_ha-1`)
@@ -101,14 +82,12 @@ export function computeUnitFluxes (location: Location) {
 
   // --- Biomasse déforestation (forêt → non-forêt) via données IGN ---
   const areaData = getForestAreaData(location)
-  const excludeIds = ['haies', 'produits bois']
-  const childGroundTypes = GroundTypes.filter((gt) => !gt.children && !has(excludeIds, gt.stocksId))
 
   FOREST_SUBTYPES.forEach((fromId) => {
     const forestBiomassDensities = getForestBiomassCarbonDensities(location, fromId, areaData)
     const initialBiomassDensity = forestBiomassDensities.live + forestBiomassDensities.dead
 
-    childGroundTypes.forEach((toGt) => {
+    LEAF_GROUND_TYPES.forEach((toGt) => {
       const toId = toGt.stocksId
       if (has(FOREST_SUBTYPES, toId)) return
 
@@ -124,7 +103,7 @@ export function computeUnitFluxes (location: Location) {
 // Colonnes de flux unitaires (après les métadonnées)
 export function flux2Columns (unitFluxMap: Map<string, number>): CsvCell[] {
   const row: CsvCell[] = []
-  flux2Pairs().forEach(([fromId, toId]) => {
+  FLUX_PAIRS.forEach(([fromId, toId]) => {
     row.push(unitFluxMap.get(`${fromId}||${toId}||sol`) ?? '')
     row.push(unitFluxMap.get(`${fromId}||${toId}||biomasse`) ?? '')
     if (hasLitiere(fromId, toId)) {

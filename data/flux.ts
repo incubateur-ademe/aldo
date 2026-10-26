@@ -137,11 +137,10 @@ export function getAnnualGroundCarbonFlux (location: Location, from: StocksId, t
 }
 
 export function getForestLitterFlux (from: StocksId, to: StocksId): number | undefined {
-  const forestChildTypes: StocksId[] = ['forêt mixte', 'forêt feuillu', 'forêt conifere', 'forêt peupleraie']
   // TODO: why the addition of impermeabilisés?
-  const fromTypes = forestChildTypes.concat(['sols artificiels arborés et buissonants', 'sols artificiels imperméabilisés'])
-  const toTypes = forestChildTypes.concat(['sols artificiels arborés et buissonants'])
-  if (forestChildTypes.includes(from) && !toTypes.includes(to)) {
+  const fromTypes: StocksId[] = [...FOREST_SUBTYPES, 'sols artificiels arborés et buissonants', 'sols artificiels imperméabilisés']
+  const toTypes: StocksId[] = [...FOREST_SUBTYPES, 'sols artificiels arborés et buissonants']
+  if (has(FOREST_SUBTYPES, from) && !toTypes.includes(to)) {
     return -9
   } else if (!fromTypes.includes(from) && toTypes.includes(to)) {
     return 9
@@ -399,13 +398,11 @@ export function getForestBiomassFluxesByCommune (location: Location): Flux[] {
   // level. Remove these lines because they are not used.
   const significantCarbonData = carbonData2026.filter((data) => data.surface_ic === 's')
   const areaDataByCommune = getForestAreaData(location)
-  const forestSubtypes = groundType('forêts').children ?? []
   const fluxes: Flux[] = []
   areaDataByCommune.forEach((communeData) => {
     // for each line of data by commune + localisationCode, we need to add a flux
     //   for each of the four forest subtypes
-    forestSubtypes.forEach((forestSubtype) => {
-      if (!has(FOREST_SUBTYPES, forestSubtype)) return
+    FOREST_SUBTYPES.forEach((forestSubtype) => {
       const subtype = FOREST_COMPOSITION[forestSubtype]
       const compositionCarbonData =
         significantCarbonData.filter((data) => data.composition === subtype)

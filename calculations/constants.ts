@@ -271,6 +271,11 @@ export interface GroundType {
 export const GroundTypes: readonly GroundType[] = groundTypes
 export const StocksIds: readonly StocksId[] = GroundTypes.map((gt) => gt.stocksId)
 
+// Occupations « feuilles » entre lesquelles s'opèrent les changements de surface
+// (ni parents, ni haies, ni produits bois).
+export const LEAF_GROUND_TYPES: readonly GroundType[] = GroundTypes
+  .filter((gt) => !gt.children && gt.stocksId !== 'haies' && gt.stocksId !== 'produits bois')
+
 // Toutes les occupations sont décrites dans GroundTypes : l'absence est un bug de code.
 export function groundType (stocksId: StocksId): GroundType {
   const found = GroundTypes.find((gt) => gt.stocksId === stocksId)
