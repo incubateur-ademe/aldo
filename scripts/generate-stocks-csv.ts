@@ -186,9 +186,10 @@ function generate (outputPath: string) {
     }
 
     // inseeCode padded pour les lookups internes ; inseeOutput non-paddé pour le CSV
-    // (le fichier de référence DATA ADEME stocke les codes comme entiers : 01001 → 1001)
+    // (le fichier de référence DATA ADEME stocke les codes comme entiers : 01001 → 1001 ;
+    // les codes corses 2A/2B restent tels quels)
     const inseeCode = String(commune.insee).padStart(5, '0')
-    const inseeOutput = String(parseInt(commune.insee, 10))
+    const inseeOutput = /^\d+$/.test(commune.insee) ? String(Number(commune.insee)) : commune.insee
     const population = commune.population || 0
     const ratioPopFrance = population / FRANCE_POPULATION
 
@@ -198,7 +199,7 @@ function generate (outputPath: string) {
       stocks = getStocks([commune], {})
     } catch (err) {
       console.warn(`\nErreur stocks pour ${inseeCode}: ${errorMessage(err)}`)
-      return
+      throw err
     }
 
     // --- Produits bois récolte ---
@@ -207,7 +208,7 @@ function generate (outputPath: string) {
       woodHarvest = getAnnualWoodProductsHarvest({ commune })
     } catch (err) {
       console.warn(`\nErreur wood harvest pour ${inseeCode}: ${errorMessage(err)}`)
-      woodHarvest = { bo: 0, bi: 0 }
+      throw err
     }
 
     const row = [

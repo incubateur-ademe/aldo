@@ -186,7 +186,7 @@ function generate (outputPath: string) {
       unitFluxMap = computeUnitFluxes(location)
     } catch (err) {
       console.warn(`\nErreur pour commune ${commune.insee}: ${errorMessage(err)}`)
-      unitFluxMap = new Map<string, number>()
+      throw err
     }
 
     const inseeCode = String(commune.insee).padStart(5, '0')

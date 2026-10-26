@@ -99,16 +99,23 @@
   // Recalcul sans rechargement : on demande la même page au serveur et on remplace
   // <main>. La position de défilement est conservée puisqu'il n'y a pas de navigation.
   // `target` : identifiant d'un élément vers lequel défiler une fois le contenu remplacé.
+  let navigation = null
   async function navigate(url, { target, pushState = true } = {}) {
     const main = document.querySelector('main')
     main.setAttribute('aria-busy', 'true')
-    const response = await fetch(url).catch(() => null)
+    // une navigation plus récente annule la précédente : sa réponse est ignorée
+    navigation?.abort()
+    const controller = navigation = new AbortController()
+    const response = await fetch(url, { signal: controller.signal }).catch(() => null)
+    if (controller.signal.aborted) return
     if (!response?.ok) {
       // erreur réseau ou page d'erreur : on laisse le navigateur l'afficher
       window.location.href = url
       return
     }
-    const next = new DOMParser().parseFromString(await response.text(), 'text/html')
+    const html = await response.text()
+    if (controller.signal.aborted) return
+    const next = new DOMParser().parseFromString(html, 'text/html')
     // ponytail: les anciens graphiques restent enregistrés dans Chart.js si on ne les détruit pas
     main.querySelectorAll('canvas').forEach((canvas) => window.Chart?.getChart(canvas)?.destroy())
     main.replaceWith(next.querySelector('main'))
@@ -196,8 +203,10 @@
   // nouveau calcul si les paramètres ont changé.
   window.addEventListener('popstate', () => {
     if (new URLSearchParams(window.location.search).toString() === queryParams.toString()) {
-      const pathParts = window.location.pathname.split('/')
-      switchTerritoryTab(pathParts[pathParts.length - 1] || 'stocks', false)
+      // sans onglet dans l'URL (/epci/123, /regroupement), le dernier segment n'est pas un onglet
+      const lastPart = window.location.pathname.split('/').pop()
+      const knownTabs = [...document.querySelectorAll('.territory-nav .fr-nav__link')].map(tabOf)
+      switchTerritoryTab(knownTabs.includes(lastPart) ? lastPart : 'stocks', false)
     } else {
       navigate(window.location.href, { pushState: false })
     }

@@ -29,8 +29,6 @@ export interface Flux1Result {
   indicateurs: [number, number, number]
 }
 
-export const EMPTY_FLUX1_RESULT: Flux1Result = { fluxCo2eByGroundType: {}, areas: {}, total: 0, indicateurs: [0, 0, 0] }
-
 // Réduit le résultat de getAnnualFluxes et collecte dans `pairsWithCo2e` les
 // paires ayant un flux tCO2e non nul (elles seules ont une colonne tCO2e).
 export function flux1Result ({ allFlux, fluxCo2eByGroundType, areas, total }: AnnualFluxes, pairsWithCo2e: Set<string>): Flux1Result {
@@ -116,7 +114,7 @@ function generate (outputPath: string) {
       return flux1Result(getAnnualFluxes([commune]), pairsWithCo2e)
     } catch (err) {
       console.warn(`\nErreur pour commune ${commune.insee}: ${errorMessage(err)}`)
-      return EMPTY_FLUX1_RESULT
+      throw err
     }
   })
   process.stdout.write(`\r  ${total}/${total}\n`)

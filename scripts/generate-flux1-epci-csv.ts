@@ -12,8 +12,7 @@ function parseQuotedHeaders (line: string) {
 }
 
 // Les paires avec colonne tCO2e sont lues dans le fichier flux1.csv déjà généré
-function getPairsWithCo2eFromReference () {
-  const referencePath = path.join(import.meta.dirname, '../flux1.csv')
+function getPairsWithCo2eFromReference (referencePath: string) {
   const firstLine = fs.readFileSync(referencePath, 'utf8').split('\n')[0] ?? ''
   const headers = parseQuotedHeaders(firstLine)
   const pairs = new Set<string>()
@@ -24,13 +23,13 @@ function getPairsWithCo2eFromReference () {
   return pairs
 }
 
-function generate (outputPath: string) {
+function generate (outputPath: string, referencePath: string) {
   const epcis = getEpcis()
   const total = epcis.length
 
   // 1er passage : colonnes tCO2e du fichier communal, complétées par les
   // paires ayant un flux non nul pour au moins un EPCI.
-  const pairsWithCo2e = getPairsWithCo2eFromReference()
+  const pairsWithCo2e = getPairsWithCo2eFromReference(referencePath)
   console.log(`Traitement de ${total} EPCI…`)
   const results = epcis.map((epci, index) => {
     if (index % 100 === 0) process.stdout.write(`\r  ${index}/${total}`)
@@ -54,4 +53,8 @@ function generate (outputPath: string) {
   console.log(`Lignes : ${lines.length - 1} EPCI  |  Colonnes : ${headers.length}`)
 }
 
-generate(process.argv[2] || path.join(process.cwd(), 'flux1-epci.csv'))
+// Usage : node scripts/generate-flux1-epci-csv.ts [chemin-de-sortie] [chemin-flux1.csv]
+generate(
+  process.argv[2] || path.join(process.cwd(), 'flux1-epci.csv'),
+  process.argv[3] || path.join(process.cwd(), 'flux1.csv')
+)

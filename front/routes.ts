@@ -51,6 +51,11 @@ router.get('/contact', (req, res) => {
 
 router.post('/contact', (req, res) => {
   const { name, email, subject, message } = req.body
+  const recipient = process.env.ALDO_EMAIL
+  if (!recipient) {
+    console.error('Error sending contact form: ALDO_EMAIL is not set')
+    return res.redirect('/contact?statut=500')
+  }
 
   // Format the message with sender information
   const formattedMessage = `
@@ -67,9 +72,7 @@ ${message}
       email: 'no-reply@territoiresentransitions.fr',
       name: 'Contact ALDO'
     },
-    to: [{
-      email: process.env.ALDO_EMAIL
-    }],
+    to: [{ email: recipient }],
     replyTo: { email },
     subject: `[Contact ALDO] ${subject}`,
     textContent: formattedMessage

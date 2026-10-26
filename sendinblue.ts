@@ -9,7 +9,7 @@ const api = new SibApiV3Sdk.TransactionalEmailsApi()
 
 export interface SendSmtpEmail {
   sender: { email: string, name: string }
-  to: { email: string | undefined }[]
+  to: { email: string }[]
   replyTo: { email: string }
   subject: string
   textContent: string

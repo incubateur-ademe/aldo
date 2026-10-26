@@ -113,10 +113,6 @@ export function aggregateForestBiomass (location: Location): Record<ForestSubtyp
   return result
 }
 
-export function emptyForestBiomass (): Record<ForestSubtype, ForestBiomass> {
-  return Object.fromEntries(FOREST_SUBTYPES.map((ft) => [ft, { ...EMPTY_FOREST_BIOMASS }])) as Record<ForestSubtype, ForestBiomass>
-}
-
 // Colonnes biomasse forêt (après les métadonnées)
 export function forestColumns (forestBiomass: Record<ForestSubtype, ForestBiomass>): CsvCell[] {
   const row: CsvCell[] = []
@@ -162,7 +158,7 @@ function generate (outputPath: string) {
       forestBiomass = aggregateForestBiomass(location)
     } catch (err) {
       console.warn(`\nErreur biomasse pour ${inseeCode}: ${errorMessage(err)}`)
-      forestBiomass = emptyForestBiomass()
+      throw err
     }
 
     let wood: CsvCell[]
@@ -170,7 +166,7 @@ function generate (outputPath: string) {
       wood = woodColumns(location)
     } catch (err) {
       console.warn(`\nErreur produits bois pour ${inseeCode}: ${errorMessage(err)}`)
-      wood = [0, 0, 0, 0, 0, 0]
+      throw err
     }
 
     lines.push([...communeMeta(commune, inseeCode), ...forestColumns(forestBiomass), ...wood].map((v) => csvValue(v)).join(','))
