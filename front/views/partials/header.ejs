@@ -30,6 +30,11 @@
             <div class="fr-header__operator fr-responsive-img">
               <%- include('ademe-logo') -%>
             </div>
+            <div class="fr-header__navbar">
+              <button class="fr-btn--menu fr-btn" data-fr-opened="false" aria-controls="header-menu" aria-haspopup="menu" id="header-menu-btn" title="Menu">
+                Menu
+              </button>
+            </div>
           </div>
           <div class="fr-header__service">
             <a href="/" title="Accueil - <%= appName %>">
@@ -40,5 +45,22 @@
       </div>
     </div>
   </div>
-
+  <div class="fr-header__menu fr-modal" id="header-menu" aria-labelledby="header-menu-btn">
+    <div class="fr-container">
+      <button class="fr-btn--close fr-btn" aria-controls="header-menu" title="Fermer">Fermer</button>
+      <div class="fr-header__menu-links"></div>
+      <nav class="fr-nav" id="header-navigation" role="navigation" aria-label="Menu principal">
+        <ul class="fr-nav__list">
+          <% [['/', 'Accueil'], ['/fiches-actions', 'Fiches actions']].forEach(([href, label]) => { %>
+            <li class="fr-nav__item">
+              <a class="fr-nav__link" href="<%= href %>" target="_self"<% if (page === href) { %> aria-current="page"<% } %>><%= label %></a>
+            </li>
+          <% }) %>
+        </ul>
+      </nav>
+    </div>
+  </div>
 </header>
+<div class="aldo-banner">
+  <p class="fr-container">L’outil des collectivités pour stocker du carbone dans les écosystèmes</p>
+</div>

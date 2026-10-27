@@ -70,3 +70,29 @@ span.tofill::before {
   cursor: not-allowed;
   opacity: 0.7;
 }
+
+/* Bandeau sous le header (#206) */
+.aldo-banner {
+  background-color: var(--background-alt-green-emeraude);
+  color: var(--text-title-grey);
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-align: center;
+  padding: 1.5rem 0;
+}
+.aldo-banner p {
+  margin: 0;
+}
+
+/* Mots surlignés du titre d'accueil (#206) */
+.aldo-hl {
+  color: inherit;
+  padding: 0 .25rem;
+  background-color: var(--background-contrast-green-bourgeon);
+}
+.aldo-hl--blue {
+  background-color: var(--background-contrast-blue-cumulus);
+}
+.aldo-hl--emeraude {
+  background-color: var(--background-contrast-green-emeraude);
+}

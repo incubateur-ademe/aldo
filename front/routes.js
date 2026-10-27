@@ -43,6 +43,10 @@ router.get('/commune/:commune', territoryHandler)
 router.get('/commune/:commune/tableur', excelExportHandler)
 router.get('/commune/:commune/:tab', territoryHandler)
 
+router.get('/fiches-actions', (req, res) => {
+  res.render('fiches-actions', { pageTitle: 'Fiches actions' })
+})
+
 router.get('/contact', (req, res) => {
   res.render('contact', {
     pageTitle: 'Contact',
@@ -107,6 +111,7 @@ router.get('/sitemap.txt', (req, res) => {
   }
   const content = [
     url('/'),
+    url('/fiches-actions'),
     url('/contact'),
     url('/accessibilite'),
     url('/mentions-legales')
