@@ -1,5 +1,5 @@
 <%- include('../partials/header') -%>
-<main role="main" id="contenu">
+<main role="main" id="contenu" tabindex="-1">
   <div class="fr-container fr-pb-6w fr-px-2w">
     <%- include('../partials/ariane', { items: [ { label: 'Accueil', url: '/' }, { label: singleLocation?.nom || 'Regroupement', }, ], }) -%>
     <%- include('./warnings') -%>
@@ -76,8 +76,18 @@
   // - shorten URLs by only including the values that are overridden
   // - handle the case for stocks where there are two inputs that can change the same value
   let queryParams = new URLSearchParams(window.location.search)
+
+  // Les gestionnaires sont délégués au document : le contenu de <main> est remplacé
+  // à chaque recalcul (voir `navigate`), les éléments d'origine disparaissent.
+  function on(eventName, selector, handler) {
+    document.addEventListener(eventName, (event) => {
+      const element = event.target.closest(selector)
+      if (element) handler(event, element)
+    })
+  }
+
   // les listes déroulantes de l'onglet CAT'ENR sont aussi portées par l'URL
-  $('input, select').change((event) => {
+  on('change', '#territory input, #territory select', (event) => {
     if (!event.target.name) return
     if (event.target.value === '') {
       queryParams.delete(event.target.name)
@@ -86,40 +96,45 @@
     queryParams.set(event.target.name, event.target.value)
   })
 
-  // Les boutons « Mettre à jour les calculs » et les liens qui modifient les
-  // paramètres de l'URL rechargent la page : on mémorise la position de défilement
-  // pour ne pas renvoyer l'utilisateur en haut de page à chaque recalcul.
-  const scrollStorageKey = 'aldo-territoire-defilement'
-
-  // `target` : identifiant d'un élément vers lequel défiler après le rechargement,
-  // à la place de la position courante.
-  function navigateKeepingScroll(url, target) {
-    try {
-      window.sessionStorage.setItem(scrollStorageKey, target ? `#${target}` : String(window.scrollY))
-    } catch (error) {
-      // sessionStorage indisponible (navigation privée, quota) : on perd seulement
-      // la position de défilement, la navigation doit rester possible
+  // Recalcul sans rechargement : on demande la même page au serveur et on remplace
+  // <main>. La position de défilement est conservée puisqu'il n'y a pas de navigation.
+  // `target` : identifiant d'un élément vers lequel défiler une fois le contenu remplacé.
+  let navigation = null
+  async function navigate(url, { target, pushState = true } = {}) {
+    const main = document.querySelector('main')
+    main.setAttribute('aria-busy', 'true')
+    // une navigation plus récente annule la précédente : sa réponse est ignorée
+    navigation?.abort()
+    const controller = navigation = new AbortController()
+    const response = await fetch(url, { signal: controller.signal }).catch(() => null)
+    if (controller.signal.aborted) return
+    if (!response?.ok) {
+      // erreur réseau ou page d'erreur : on laisse le navigateur l'afficher
+      window.location.href = url
+      return
     }
-    window.location.href = url
+    const html = await response.text()
+    if (controller.signal.aborted) return
+    const next = new DOMParser().parseFromString(html, 'text/html')
+    // ponytail: les anciens graphiques restent enregistrés dans Chart.js si on ne les détruit pas
+    main.querySelectorAll('canvas').forEach((canvas) => window.Chart?.getChart(canvas)?.destroy())
+    main.replaceWith(next.querySelector('main'))
+    // Les <script> insérés via DOMParser ne s'exécutent pas : on les recrée.
+    // Les scripts externes (Chart.js) sont déjà chargés, on ne reprend que les scripts inline.
+    // Chaque script est enveloppé dans un bloc : ses const ne redéclarent pas celles du chargement initial.
+    document.querySelectorAll('main script:not([src])').forEach((script) => {
+      script.replaceWith(Object.assign(document.createElement('script'), { textContent: `{${script.textContent}}` }))
+    })
+    if (pushState) window.history.pushState({}, '', url)
+    queryParams = new URLSearchParams(window.location.search)
+    if (target) {
+      document.getElementById(target)?.scrollIntoView()
+    }
+    // le focus était sur un bouton qui n'existe plus : on le replace sur le contenu
+    document.querySelector('main').focus({ preventScroll: true })
+    window._paq?.push(['setCustomUrl', url])
+    window._paq?.push(['trackPageView'])
   }
-
-  // La restitution attend l'événement load : la hauteur des images (schémas des
-  // emprises de l'onglet CAT'ENR notamment) n'est connue qu'une fois celles-ci chargées.
-  window.addEventListener('load', () => {
-    let savedScroll = null
-    try {
-      savedScroll = window.sessionStorage.getItem(scrollStorageKey)
-      window.sessionStorage.removeItem(scrollStorageKey)
-    } catch (error) {
-      // cf. ci-dessus
-    }
-    if (savedScroll === null) return
-    if (savedScroll.startsWith('#')) {
-      document.getElementById(savedScroll.slice(1))?.scrollIntoView()
-    } else {
-      window.scrollTo(0, parseFloat(savedScroll))
-    }
-  })
 
   function getTabUrl(tabName) {
     const pathParts = window.location.pathname.split('/')
@@ -131,12 +146,21 @@
     return `/${locationType}/${locationCode}/${tabName}`
   }
 
+  function tabOf(link) {
+    return link.getAttribute('href').split('?')[0].split('/').pop()
+  }
+
+  function currentTab() {
+    const link = document.querySelector('.territory-nav .fr-nav__link[aria-current="page"]')
+    return link ? tabOf(link) : 'stocks'
+  }
+
   function switchTerritoryTab(tabName, shouldPushState = true) {
-    $('.territory-section').each((_, section) => {
+    document.querySelectorAll('.territory-section').forEach((section) => {
       section.hidden = section.dataset.tab !== tabName
     })
-    $('.territory-nav .fr-nav__link').each((_, link) => {
-      if (link.getAttribute('data-tab') === tabName) {
+    document.querySelectorAll('.territory-nav .fr-nav__link').forEach((link) => {
+      if (tabOf(link) === tabName) {
         link.setAttribute('aria-current', 'page')
       } else {
         link.removeAttribute('aria-current')
@@ -148,48 +172,45 @@
     }
   }
 
-  $('.territory-nav .fr-nav__link').each((_, link) => {
-    link.setAttribute('data-tab', link.getAttribute('href').split('/').pop())
-  })
-  $('.territory-nav .fr-nav__link').click((event) => {
+  on('click', '.territory-nav .fr-nav__link', (event, link) => {
     event.preventDefault()
-    const tabName = event.currentTarget.getAttribute('data-tab')
-    switchTerritoryTab(tabName)
+    switchTerritoryTab(tabOf(link))
   })
 
-  $('button.to-stocks').click(() => {
-    switchTerritoryTab('stocks')
-  })
-  $('button.to-flux').click(() => {
-    switchTerritoryTab('flux')
-  })
-  $('button.to-config').click(() => {
-    switchTerritoryTab('configuration')
-  })
+  on('click', 'button.to-stocks', () => switchTerritoryTab('stocks'))
+  on('click', 'button.to-flux', () => switchTerritoryTab('flux'))
+  on('click', 'button.to-config', () => switchTerritoryTab('configuration'))
 
   // handle URL here so that only relevant params are sent and we avoid URLs that get cut off
   // for being too long
-  $('form#territory').submit((event) => {
-    const currentTab = $('.territory-nav .fr-nav__link[aria-current="page"]').attr('data-tab') || 'stocks'
+  on('submit', 'form#territory', (event) => {
+    event.preventDefault()
+    const tab = currentTab()
     // l'outil CAT'ENR renvoie l'utilisateur sur ses résultats après un recalcul
-    const target = currentTab === 'cat-enr' ? 'catenr-resultats' : undefined
-    navigateKeepingScroll(`${getTabUrl(currentTab)}?${queryParams.toString()}`, target)
-    event.preventDefault()
+    const target = tab === 'cat-enr' ? 'catenr-resultats' : undefined
+    navigate(`${getTabUrl(tab)}?${queryParams.toString()}`, { target })
   })
 
-  // Liens qui rechargent la page avec d'autres paramètres (réinitialisation,
-  // changement de technologie CAT'ENR) : même traitement que la soumission.
-  $('a.keep-scroll').click((event) => {
+  // Liens qui changent les paramètres de l'URL (réinitialisation, changement de
+  // technologie CAT'ENR) : même traitement que la soumission.
+  on('click', 'a.keep-scroll', (event, link) => {
     // les clics « ouvrir dans un nouvel onglet » restent gérés par le navigateur
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.which > 1) return
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return
     event.preventDefault()
-    navigateKeepingScroll(event.currentTarget.getAttribute('href'))
+    navigate(link.getAttribute('href'))
   })
 
+  // Retour arrière : simple changement d'onglet si seuls le chemin a changé,
+  // nouveau calcul si les paramètres ont changé.
   window.addEventListener('popstate', () => {
-    const pathParts = window.location.pathname.split('/')
-    const tabName = pathParts[pathParts.length - 1] || 'stocks'
-    switchTerritoryTab(tabName, false)
+    if (new URLSearchParams(window.location.search).toString() === queryParams.toString()) {
+      // sans onglet dans l'URL (/epci/123, /regroupement), le dernier segment n'est pas un onglet
+      const lastPart = window.location.pathname.split('/').pop()
+      const knownTabs = [...document.querySelectorAll('.territory-nav .fr-nav__link')].map(tabOf)
+      switchTerritoryTab(knownTabs.includes(lastPart) ? lastPart : 'stocks', false)
+    } else {
+      navigate(window.location.href, { pushState: false })
+    }
   })
 </script>
 <%- include('../partials/footer') -%>

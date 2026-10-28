@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "vitest"],
+  "env": { "node": true, "es2024": true },
+  "ignorePatterns": ["node_modules", "data/dataByCommune", "data/dataByEpci", "front/static"],
+  "overrides": [
+    { "files": ["**/*.test.ts"], "env": { "vitest": true } }
+  ]
+}

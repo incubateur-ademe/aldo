@@ -295,14 +295,16 @@
   <% } %>
 </div>
 
-<!-- Chart.js et jQuery sont déjà chargés par l'onglet Stocks et le page-setup -->
+<!-- Chart.js est déjà chargé par l'onglet Stocks -->
 <script>
   // L'âge de l'écosystème n'est demandé que lorsque l'occupation initiale est une forêt.
   const catenrForestCodes = ['formix', 'forfeu', 'forcon', 'forpeu'];
-  $('.catenr-initial-occupation').change((event) => {
-    const ageInput = document.getElementById(event.currentTarget.dataset.ageInput);
-    ageInput.disabled = catenrForestCodes.indexOf(event.currentTarget.value) === -1;
-    if (ageInput.disabled) ageInput.value = '';
+  document.querySelectorAll('.catenr-initial-occupation').forEach((select) => {
+    select.addEventListener('change', () => {
+      const ageInput = document.getElementById(select.dataset.ageInput);
+      ageInput.disabled = catenrForestCodes.indexOf(select.value) === -1;
+      if (ageInput.disabled) ageInput.value = '';
+    });
   });
 
   <% if (catenr && catenr.hasData && !catenr.isBlocked && catenrChart) { %>

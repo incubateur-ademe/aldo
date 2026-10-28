@@ -38,21 +38,20 @@
   // capped well under that keeps native autocomplete responsive.
   const MAX_SUGGESTIONS = 50
 
-  let locations
-  const searchForm = $('#location-search-form')
+  let locations = {}
+  const searchForm = document.getElementById('location-search-form')
+  const searchInput = document.getElementById('location-search')
   const locationNames = document.getElementById('location-names')
+  const locationTags = document.getElementById('locations')
 
-  $(document).ready(() => {
-    locations = {}
-    $.getJSON("static/data/communes_17122018.csv.json", (data) => {
-      data.forEach(loc => {
-        locations[loc.insee] = loc.nom
-      })
+  fetch('/static/data/communes_17122018.csv.json').then(r => r.json()).then((data) => {
+    data.forEach(loc => {
+      locations[loc.insee] = loc.nom
     })
-    $.getJSON("static/data/epci.csv.json", (data) => {
-      data.forEach(loc => {
-        locations[loc.code] = loc.nom
-      })
+  })
+  fetch('/static/data/epci.csv.json').then(r => r.json()).then((data) => {
+    data.forEach(loc => {
+      locations[loc.code] = loc.nom
     })
   })
 
@@ -76,7 +75,7 @@
     locationNames.appendChild(fragment)
   }
 
-  $('#location-search').on('input', (event) => {
+  searchInput.addEventListener('input', (event) => {
     updateSuggestions(event.target.value.trim())
   })
 
@@ -97,29 +96,28 @@
 
   function addLocationTag(location) {
     const id = codeToId(location)
-    if ($(`#${id}`).length) return
+    if (document.getElementById(id)) return
 
-    $('ul#locations').append($('<li>', {
-      id: location.code
-    }))
-    $('<button>', {
-        "class": "fr-tag fr-tag--dismiss",
-        text: `${location.name} (${location.code})`,
-        value: location.code,
-        ariaLabel: `Retirer ${location.name}`,
-        click: removeTag
-      })
-      .appendTo(`li#${location.code}`)
+    const item = document.createElement('li')
+    item.id = location.code
+    const button = document.createElement('button')
+    button.className = 'fr-tag fr-tag--dismiss'
+    button.textContent = `${location.name} (${location.code})`
+    button.value = location.code
+    button.setAttribute('aria-label', `Retirer ${location.name}`)
+    button.addEventListener('click', removeTag)
+    item.appendChild(button)
+    locationTags.appendChild(item)
     // add as hidden input for form submission and tracking
-    $('<input>', {
-      type: 'hidden',
-      name: location.code.length === COMMUNE_INSEE_CODE_LENGTH ? 'communes[]' : 'epcis[]',
-      value: location.code,
-      id
-    }).appendTo(searchForm)
+    const hidden = document.createElement('input')
+    hidden.type = 'hidden'
+    hidden.name = location.code.length === COMMUNE_INSEE_CODE_LENGTH ? 'communes[]' : 'epcis[]'
+    hidden.value = location.code
+    hidden.id = id
+    searchForm.appendChild(hidden)
   }
 
-  $('#location-search').on('change input', (event) => {
+  const onSearchValue = (event) => {
     let code = event.target.value
     // it isn't possible to add an event handler on option select so I've set the option values
     // to end in a space as a hacky workaround for detecting datalist selections
@@ -129,15 +127,17 @@
     let isPotentialCode = code.length === COMMUNE_INSEE_CODE_LENGTH || code.length === EPCI_SIREN_LENGTH || ['1', '2', '3', '4'].includes(code)
     if (!dataEntryCompleted || !isPotentialCode) return
     handleInputChange(code)
-  })
+  }
+  searchInput.addEventListener('change', onSearchValue)
+  searchInput.addEventListener('input', onSearchValue)
 
   // monitor pressing enter key
-  $("#location-search").keypress((event) => {
-    if (event.which == 13) {
+  searchInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
       const searchTerm = event.target.value
       if (searchTerm) {
         event.preventDefault()
-        locationData = handleInputChange(searchTerm)
+        const locationData = handleInputChange(searchTerm)
         if (!locationData && searchTerm) {
           const relevantOptions = Object.entries(locations).filter(([code, lName]) => {
             const nameMatch = lName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -148,15 +148,15 @@
             handleInputChange(relevantOptions.shift()[0])
           }
         }
-      } else if ($('#locations')[0].children.length) {
-        searchForm.submit()
+      } else if (locationTags.children.length) {
+        searchForm.requestSubmit()
       }
     }
   })
 
-  $("button#add-tag").click((event) => {
+  document.getElementById('add-tag').addEventListener('click', (event) => {
     event.preventDefault()
-    handleInputChange($('#location-search')[0].value)
+    handleInputChange(searchInput.value)
   })
 
   function handleInputChange(value) {
@@ -165,7 +165,7 @@
     const locationData = getLocationData(code)
     if (locationData) {
       addLocationTag(locationData)
-      document.getElementById('location-search').value = ""
+      searchInput.value = ""
       updateSuggestions('')
       return locationData
     }
@@ -173,14 +173,14 @@
 
   function removeTag(event) {
     event.preventDefault()
-    $(`#${codeToId(event.target.value)}`).remove()
-    event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+    document.getElementById(codeToId(event.target.value))?.remove()
+    event.target.parentNode.remove()
   }
 
-  searchForm.on("submit", (event) => {
-    if ($('#locations')[0].children.length === 0) {
-      $("#default-search").addClass("fr-input-group fr-input-group--error")
-      $("#location-search-error").show()
+  searchForm.addEventListener('submit', (event) => {
+    if (locationTags.children.length === 0) {
+      document.getElementById('default-search').classList.add('fr-input-group', 'fr-input-group--error')
+      document.getElementById('location-search-error').style.display = ''
       event.preventDefault()
     }
   })
