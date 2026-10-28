@@ -46,24 +46,16 @@ export type BiomassTransitionColumn = `${StocksId} vers ${StocksId}`
 export type BiomassRow = { INTER_REG: string } & Partial<Record<StocksId | BiomassTransitionColumn, string>>
 
 // dataByCommune/surface-foret.csv : surfaces forestières (ha) et localisations IGN
+// (seules ces colonnes sont converties en JSON, cf. csvtojson.sh)
 export type IgnLocalisationLevel = 'groupeser' | 'greco' | 'rad13' | 'bassin_populicole'
 export interface SurfaceForetRow {
   INSEE_COM: string
-  NOM_COM_M: string
   CODE_EPCI: string
-  NOM_EPCI: string
   code_greco: string
-  code_ser: string
-  NomSER: string
-  INSEE_DEP: string
-  NOM_DEP: string
-  SUR_TOTAL_TERRITOIRE: string
-  SUR_FORET: string
   SUR_FEUILLUS: string
   SUR_RESINEUX: string
   SUR_MIXTES: string
   SUR_PEUPLERAIES: string
-  'SUR_HORS.FORET': string
   code_groupeser: string
   code_rad13: string
   code_bassin_populicole: string
@@ -120,15 +112,11 @@ export interface HedgerowCarbonRow {
 }
 
 // dataByCommune/haie-clc18.csv : km de haies par commune et par code CLC
-export interface HedgerowLengthRow extends Record<`CLC_${string}`, string> {
-  fid: string
-  ID: string
-  NOM_COM_M: string
+// (seules ces colonnes sont converties en JSON, et les CLC_* nuls sont retirés, cf. csvtojson.sh)
+export interface HedgerowLengthRow extends Partial<Record<`CLC_${string}`, string>> {
   INSEE_COM: string
   INSEE_DEP: string
-  INSEE_REG: string
   TOTKM_HAIE: string
-  PRESENCE_HAIE: string
 }
 
 // dataByCommune/citepa-surfaces-2023.csv

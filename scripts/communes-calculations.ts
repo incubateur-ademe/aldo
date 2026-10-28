@@ -38,7 +38,10 @@ extendedCommunes.forEach((commune) => {
     }
   }
 })
+// Les caractères hors Latin-1 (œ) sont échappés : sinon V8 lit tout le fichier
+// comme une chaîne sur 2 octets par caractère, ce qui double la mémoire au démarrage.
 const stringifiedCommuneData = JSON.stringify(communeDict, null, 2)
+  .replace(/[\u0100-\uffff]/g, (c) => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'))
 const stringifiedEpciData = JSON.stringify(epciDict, null, 2)
 
 try {
