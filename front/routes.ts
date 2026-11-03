@@ -4,6 +4,7 @@ import sendinblue from '../sendinblue.ts'
 import { territoryHandler } from './handlers/territory.ts'
 import { excelExportHandler } from './handlers/excelExport.ts'
 import { newsletterHandler } from './handlers/newsletter.ts'
+import { fichesActions, filtrerFiches, optionsFiltres, type FiltresFiches } from './fiches-actions.ts'
 
 const router = express.Router()
 
@@ -12,6 +13,21 @@ router.get('/', async (req, res) => {
     epcis: epciList(),
     communes: communeList(),
     isHomepage: true
+  })
+})
+
+router.get('/fiches-actions', (req, res) => {
+  const filtres: FiltresFiches = {}
+  for (const cle of ['type', 'secteur', 'objectif', 'modalite'] as const) {
+    const valeur = req.query[cle]
+    if (typeof valeur === 'string' && valeur) filtres[cle] = valeur
+  }
+  res.render('fiches-actions', {
+    pageTitle: 'Fiches actions',
+    fiches: filtrerFiches(fichesActions, filtres),
+    total: fichesActions.length,
+    filtres,
+    options: optionsFiltres
   })
 })
 
@@ -109,6 +125,7 @@ router.get('/sitemap.txt', (req, res) => {
   }
   const content = [
     url('/'),
+    url('/fiches-actions'),
     url('/contact'),
     url('/accessibilite'),
     url('/mentions-legales')

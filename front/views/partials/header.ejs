@@ -17,7 +17,7 @@
 
 <header role="banner" class="fr-header">
   <div class="fr-header__body">
-    <div class="fr-container">
+    <div class="fr-container aldo-header__conteneur">
       <div class="fr-header__body-row">
         <div class="fr-header__brand fr-enlarge-link">
           <div class="fr-header__brand-top">
@@ -30,15 +30,57 @@
             <div class="fr-header__operator fr-responsive-img">
               <%- include('ademe-logo') -%>
             </div>
+            <div class="fr-header__navbar">
+              <button class="fr-btn--menu fr-btn" data-fr-opened="false" aria-controls="modal-menu" aria-haspopup="menu" id="button-menu" title="Menu">
+                Menu
+              </button>
+            </div>
           </div>
           <div class="fr-header__service">
             <a href="/" title="Accueil - <%= appName %>">
-              <img src="/static/images/logo_ALDO.png" class="aldo-logo" alt="ALDO : évaluez vos stocks et puits de carbone" />
+              <img src="/static/images/logo_ALDO_texte.png" class="aldo-logo" alt="ALDO" />
             </a>
           </div>
         </div>
       </div>
     </div>
   </div>
-
+  <%
+    const onglet = (page === '/' || page.startsWith('/?')) ? 'accueil'
+      : page.startsWith('/fiches-actions') ? 'fiches-actions'
+      : null
+  %>
+  <% if (onglet) { %>
+    <div class="aldo-bandeau">
+      <svg class="aldo-bandeau__colline aldo-bandeau__colline--gauche" aria-hidden="true" viewBox="0 0 360 240" preserveAspectRatio="none">
+        <path d="M0 0 H250 C290 50 230 100 280 160 C310 200 300 230 310 240 H0 Z" fill="#FBD3BC"></path>
+        <path d="M0 240 V95 C60 65 140 95 180 150 C210 195 245 222 275 240 Z" fill="#7CC49A"></path>
+        <path d="M110 240 C145 165 215 150 258 182 C282 200 302 226 335 240 Z" fill="#F59A6C"></path>
+        <path d="M0 240 V172 C55 142 120 160 155 240 Z" fill="#2F8F5B"></path>
+      </svg>
+      <svg class="aldo-bandeau__colline aldo-bandeau__colline--droite" aria-hidden="true" viewBox="0 0 360 240" preserveAspectRatio="none">
+        <path d="M360 0 H120 C80 45 150 105 95 165 C65 205 80 230 70 240 H360 Z" fill="#FBD3BC"></path>
+        <path d="M360 240 V100 C300 70 220 110 190 160 C165 200 130 225 100 240 Z" fill="#7CC49A"></path>
+        <path d="M360 240 V178 C295 148 225 168 190 240 Z" fill="#2F8F5B"></path>
+        <path d="M60 240 C94 232 110 150 152 147 C188 145 201 190 212 240 Z" fill="#81D2FB"></path>
+      </svg>
+      <p class="aldo-bandeau__texte">L’outil des collectivités pour stocker du carbone dans les écosystèmes</p>
+    </div>
+  <% } %>
+  <div class="fr-header__menu fr-modal" id="modal-menu" aria-labelledby="button-menu">
+    <div class="fr-container">
+      <button class="fr-btn--close fr-btn" aria-controls="modal-menu" title="Fermer">Fermer</button>
+      <div class="fr-header__menu-links"></div>
+      <nav class="fr-nav" id="header-navigation" role="navigation" aria-label="Menu principal">
+        <ul class="fr-nav__list">
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="/" <%- onglet === 'accueil' ? 'aria-current="page"' : '' %>>Accueil</a>
+          </li>
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="/fiches-actions" <%- onglet === 'fiches-actions' ? 'aria-current="page"' : '' %>>Fiches actions</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
 </header>
