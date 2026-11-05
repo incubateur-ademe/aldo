@@ -173,5 +173,6 @@ th.flux-surface-col {
 }
 
 .catenr-chart .chart-wrapper {
+  max-width: 100%;
   margin: 0 auto;
 }

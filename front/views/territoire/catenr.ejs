@@ -5,6 +5,10 @@
     <a href="https://librairie.ademe.fr/energies/8196-cat-enr-concevoir-et-evaluer-des-projets-photovoltaiques-et-eoliens-a-moindre-impact.html" target="_blank" rel="noopener noreferrer">
         En savoir plus sur l'outil CAT'ENR
     </a>
+    <br>
+    <a href="https://academie.ademe.fr/parcours-thematiques/energies/eolien/les-changements-d-affectation-des-terres-dans-les-photovoltaiques-ou-eoliens-enjeux-et-bonnes-pratiques/pr617" target="_blank" rel="noopener noreferrer">
+        Vidéo : les changements d'affectation des terres dans les projets photovoltaïques ou éoliens, enjeux et bonnes pratiques
+    </a>
     </p>
   </div>
   <h3>Contexte et objectif de l'outil</h3>
@@ -63,6 +67,19 @@
     référence utilisés sont ceux de la commune de <b><%= catenrCommune.nom %></b>.
   </p>
 
+  <% if (catenrCommunes.length > 1) { %>
+  <div class="fr-select-group fr-col-12 fr-col-md-6">
+    <label class="fr-label" for="cat_commune">Commune d'implantation du projet
+      <span class="fr-hint-text">Par défaut, une commune représentative de la zone pédo-climatique majoritaire du territoire.</span>
+    </label>
+    <select class="fr-select" id="cat_commune" name="cat_commune">
+      <% for (const commune of catenrCommunes) { %>
+      <option value="<%= commune.insee %>" <%= commune.insee === catenrCommune.insee ? 'selected' : '' %>><%= commune.nom || commune.insee %></option>
+      <% } %>
+    </select>
+  </div>
+  <% } %>
+
   <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
     <div class="fr-col-12 fr-col-md-4">
       <label class="fr-label" for="cat_duree">Durée de vie du parc (ans)</label>
@@ -82,6 +99,17 @@
         value="<%= catenrInputs.totalArea !== undefined ? catenrInputs.totalArea : '' %>">
     </div>
     <% } %>
+    <div class="fr-col-12 fr-col-md-4">
+      <label class="fr-label" for="cat_puis">Puissance installée (<%= catenr.project.id === 'eolien' ? 'MW' : 'MWc' %>)</label>
+      <input class="fr-input" type="number" step="0.01" min="0" id="cat_puis" name="cat_puis"
+        value="<%= catenrInputs.installedPower !== undefined ? catenrInputs.installedPower : '' %>">
+    </div>
+    <div class="fr-col-12 fr-col-md-4">
+      <label class="fr-label" for="cat_prod">Production d'énergie annuelle (GWh/an)</label>
+      <input class="fr-input" type="number" step="0.01" min="0" id="cat_prod" name="cat_prod"
+        value="<%= catenrInputs.annualProduction !== undefined ? catenrInputs.annualProduction : '' %>">
+      <span class="fr-hint-text">Nécessaire au calcul de la perte de carbone ramenée à la production (gCO2e/kWh).</span>
+    </div>
     <div class="fr-col-12 fr-col-md-4">
       <label class="fr-label" for="cat_fond">Surface au sol des fondations (ha)</label>
       <input class="fr-input" type="number" step="0.01" min="0" id="cat_fond" name="cat_fond"
@@ -214,12 +242,61 @@
 
   <% if (catenr.hasData && !catenr.isBlocked) { %>
   <h3 class="fr-mt-6w">Résultats</h3>
+  <% const { variation, intensity } = catenr.lifetime %>
+  <div class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-col-12 fr-col-md-6">
+      <div class="fr-callout">
+        <p class="fr-callout__title">
+          <%= variation === undefined ? '-' : formatNumber(Math.abs(variation)) + ' tCO2e' %>
+        </p>
+        <p class="fr-callout__text fr-text--sm">
+          <%= variation !== undefined && variation > 0 ? 'Gain' : 'Perte' %> de carbone sur la durée de vie du projet
+          (scénario projet le plus probable par rapport au scénario de référence le plus probable)
+          <% if (variation === undefined) { %><br>Renseignez la durée de vie du parc.<% } %>
+        </p>
+      </div>
+    </div>
+    <div class="fr-col-12 fr-col-md-6">
+      <div class="fr-callout">
+        <p class="fr-callout__title">
+          <%= intensity === undefined ? '-' : formatNumber(Math.abs(intensity), 1) + ' gCO2e/kWh' %>
+        </p>
+        <p class="fr-callout__text fr-text--sm">
+          <%= intensity !== undefined && intensity < 0 ? 'Gain' : 'Perte' %> de carbone ramenée à l'énergie produite sur la durée de vie du projet
+          <% if (intensity === undefined) { %><br>Renseignez la durée de vie du parc et la production d'énergie annuelle.<% } %>
+        </p>
+      </div>
+    </div>
+  </div>
 
+  <h4 class="fr-mt-4w">Évolution des stocks de carbone selon les scénarios considérés (tCO2e)</h4>
+  <div class="fr-grid-row fr-grid-row--center catenr-chart">
+    <div class="fr-col-12">
+      <div class="chart-wrapper">
+        <canvas id="chart-catenr"></canvas>
+      </div>
+    </div>
+  </div>
+  <p class="fr-text--sm fr-mt-2w">
+    Les variations de stocks sont estimées pour 6 scénarios : 3 correspondant à la situation de référence, dans
+    laquelle le projet n'est pas réalisé, et 3 correspondant à la situation dans laquelle le projet est mis en
+    place. Pour chacune, une hypothèse pessimiste (non maintien de la végétation), une hypothèse la plus probable
+    et une hypothèse optimiste (la végétation se maintient et évolue spontanément) sont considérées.
+  </p>
+  <ul class="fr-accordions-group fr-mt-4w">
+    <li>
+      <section class="fr-accordion">
+        <h4 class="fr-accordion__title">
+          <button type="button" class="fr-accordion__btn" aria-expanded="false" aria-controls="catenr-tableaux">
+            Afficher les tableaux de résultats
+          </button>
+        </h4>
+        <div class="fr-collapse" id="catenr-tableaux">
   <% for (const table of [
        { stocks: catenr.referenceStocks, scenario: 'scénario de référence' },
        { stocks: catenr.stocks, scenario: 'scénario projet' }
      ]) { %>
-  <h4 class="fr-mt-4w">Stocks du <%= table.scenario %> à 5, 10, 20 et 50 ans</h4>
+  <h5 class="fr-mt-2w">Stocks du <%= table.scenario %> à 5, 10, 20 et 50 ans</h5>
   <div class="fr-table fr-col-12">
     <table>
       <caption>Stocks de carbone du <%= table.scenario %> (tC)</caption>
@@ -245,7 +322,7 @@
   </div>
   <% } %>
 
-  <h4 class="fr-mt-4w">Variation du stock à 5, 10, 20 et 50 ans</h4>
+  <h5 class="fr-mt-2w">Variation du stock à 5, 10, 20 et 50 ans</h5>
   <div class="fr-table fr-col-12">
     <table>
       <caption>Variation des stocks de carbone entre le scénario projet et le scénario de référence (tC)</caption>
@@ -270,20 +347,21 @@
     </table>
   </div>
 
-  <h4 class="fr-mt-4w">Évolution des stocks de carbone selon les scénarios considérés (tC)</h4>
-  <div class="fr-grid-row fr-grid-row--center catenr-chart">
-    <div class="fr-col-12 fr-col-lg-8">
-      <div class="chart-wrapper">
-        <canvas id="chart-catenr"></canvas>
-      </div>
-    </div>
-  </div>
-  <p class="fr-text--sm fr-mt-2w">
-    Les variations de stocks sont estimées pour 6 scénarios : 3 correspondant à la situation de référence, dans
-    laquelle le projet n'est pas réalisé, et 3 correspondant à la situation dans laquelle le projet est mis en
-    place. Pour chacune, une hypothèse pessimiste (non maintien de la végétation), une hypothèse la plus probable
-    et une hypothèse optimiste (la végétation se maintient et évolue spontanément) sont considérées.
+        </div>
+      </section>
+    </li>
+  </ul>
+
+  <h4 class="fr-mt-4w">Aller plus loin avec l'outil CAT'ENR complet</h4>
+  <p class="fr-text--sm">
+    L'outil CAT'ENR complet permet d'affiner l'évaluation du projet, notamment en intégrant les aspects
+    biodiversité. Le fichier ci-dessous contient vos saisies, placées aux mêmes cellules que dans l'outil
+    complet pour pouvoir les y copier-coller, ainsi que l'ensemble des résultats et tableaux de données.
   </p>
+  <a class="fr-btn fr-btn--secondary" download href="<%= getTabUrl('tableur-catenr') %><%= catenrExportQueryStr %>">
+    Télécharger les saisies et les résultats (Excel)
+  </a>
+
   <p class="fr-text--sm">
     <a href="https://aldo-documentation.territoiresentransitions.fr/aldo-documentation/outil-catenr/explications-methodologiques"
       target="_blank" rel="noopener noreferrer">
