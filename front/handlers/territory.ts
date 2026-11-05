@@ -160,13 +160,10 @@ export async function territoryHandler (req: Request, res: Response) {
       { cat_type: project.id }
     )
   })
-  // ponytail: onglet CAT'ENR masqué tant qu'il n'est pas public, visible avec `?catenr` dans l'URL
-  const showCatenr = req.query.catenr !== undefined
-  const tab = req.params.tab === 'cat-enr' && !showCatenr ? 'stocks' : req.params.tab || 'stocks'
+  const tab = req.params.tab || 'stocks'
   res.render('territoire', {
     pageTitle,
     tab,
-    showCatenr,
     singleLocation,
     location,
     communes,
