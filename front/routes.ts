@@ -3,6 +3,7 @@ import { epciList, communeList } from '../data/index.ts'
 import sendinblue from '../sendinblue.ts'
 import { territoryHandler } from './handlers/territory.ts'
 import { excelExportHandler } from './handlers/excelExport.ts'
+import { catenrExportHandler } from './handlers/catenrExport.ts'
 import { newsletterHandler } from './handlers/newsletter.ts'
 import { baseUrl } from './handlers/shared.ts'
 import { fichesActions, filtrerFiches, optionsFiltres, type FiltresFiches } from './fiches-actions.ts'
@@ -49,14 +50,17 @@ async function groupingHandler (req: Request, res: Response) {
 
 router.get('/regroupement', groupingHandler)
 // router.get('/regroupement/tableur', excelExportHandler)
+router.get('/regroupement/tableur-catenr', catenrExportHandler)
 router.get('/regroupement/:tab', groupingHandler)
 
 router.get('/epci/:epci', territoryHandler)
 router.get('/epci/:epci/tableur', excelExportHandler)
+router.get('/epci/:epci/tableur-catenr', catenrExportHandler)
 router.get('/epci/:epci/:tab', territoryHandler)
 
 router.get('/commune/:commune', territoryHandler)
 router.get('/commune/:commune/tableur', excelExportHandler)
+router.get('/commune/:commune/tableur-catenr', catenrExportHandler)
 router.get('/commune/:commune/:tab', territoryHandler)
 
 router.get('/contact', (req, res) => {

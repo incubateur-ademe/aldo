@@ -4,7 +4,7 @@ import { getStocks, groundTypeKeys, type Stocks } from '../../calculations/stock
 import { getAnnualFluxes, type AnnualFluxes } from '../../calculations/flux/index.ts'
 import { GroundTypes, Colours, AgriculturalPractices, groundType, type ColourName, type StocksId } from '../../calculations/constants.ts'
 import { parseOptionsFromQuery, parseCatenrFromQuery, getLocationDetail, type Options, type Query } from './shared.ts'
-import { getCatenr, C_TO_CO2E as CATENR_C_TO_CO2E, type CatenrResult } from '../../calculations/catenr/index.ts'
+import { getCatenr, type CatenrResult } from '../../calculations/catenr/index.ts'
 import {
   Occupations as CatenrOccupations,
   Projects as CatenrProjects,
@@ -102,9 +102,7 @@ export async function territoryHandler (req: Request, res: Response) {
   }
 
   // L'outil CAT'ENR raisonne à l'échelle d'une commune (stocks et flux de la ZPC).
-  // Pour un EPCI ou un regroupement, on retient la commune représentative de la
-  // zone pédo-climatique majoritaire du territoire.
-  const catenrCommune = getMajorityZpcCommune(communes)
+  const catenrCommune = getCatenrCommune(communes, req.query)
   const catenrInputs = parseCatenrFromQuery(req.query)
   let catenr: CatenrResult | null = null
   try {
@@ -232,10 +230,13 @@ export async function territoryHandler (req: Request, res: Response) {
     catenr,
     catenrInputs,
     catenrCommune,
+    catenrCommunes: [...communes].sort((a, b) => (a.nom ?? a.insee).localeCompare(b.nom ?? b.insee, 'fr')),
     catenrOccupations: CatenrOccupations,
     catenrProjects: CatenrProjects,
     catenrProjectQueryStrs,
     catenrResetQueryStr,
+    // buildQueryStr conserve les paramètres tableau (communes[], epcis[]) d'un regroupement
+    catenrExportQueryStr: buildQueryStr(req.query, () => true),
     catenrChart: catenr && catenrChart(catenr, catenrInputs.lifespan),
     beges: req.query.beges,
     perimetre: req.query.perimetre,
@@ -262,6 +263,14 @@ function buildQueryStr (query: Query, keepParam: (param: string) => boolean, ext
   return params.length ? `?${params.join('&')}` : ''
 }
 
+// Commune d'implantation du projet CAT'ENR : celle choisie par l'utilisateur
+// (paramètre `cat_commune`, code INSEE) parmi les communes du territoire, sinon,
+// pour un EPCI ou un regroupement, la commune représentative de la zone
+// pédo-climatique majoritaire.
+export function getCatenrCommune (communes: Commune[], query: Query): Commune | undefined {
+  return communes.find((commune) => commune.insee === query.cat_commune) || getMajorityZpcCommune(communes)
+}
+
 // Commune représentative de la zone pédo-climatique la plus fréquente du territoire.
 function getMajorityZpcCommune (communes: Commune[]): Commune | undefined {
   if (communes.length === 1) return communes[0]
@@ -275,28 +284,27 @@ function getMajorityZpcCommune (communes: Commune[]): Commune | undefined {
 }
 
 // Évolution des stocks de carbone selon les 6 scénarios CAT'ENR, plus un repère
-// vertical sur la durée de vie de l'installation. Les trajectoires sont calculées
-// en tCO2e mais affichées en tC, comme les autres stocks d'ALDO.
-const CATENR_SCENARIO_STYLES: Record<ScenarioId, { borderColor: string, borderDash?: number[] }> = {
-  referencePessimiste: { borderColor: '#7b7b7b', borderDash: [6, 4] },
-  referenceProbable: { borderColor: '#161616' },
-  referenceOptimiste: { borderColor: '#b5b5b5', borderDash: [2, 3] },
-  projetPessimiste: { borderColor: '#E4794A', borderDash: [6, 4] },
-  projetProbable: { borderColor: '#CE614A' },
-  projetOptimiste: { borderColor: '#E18B76', borderDash: [2, 3] }
+// vertical sur la durée de vie de l'installation, en tCO2e comme dans le tableur.
+// Pour chaque groupe (référence, projet), la zone entre les hypothèses pessimiste
+// et optimiste est remplie et le cas le plus probable est tracé en trait plein.
+// `fill` désigne l'index du jeu de données pessimiste (ordre de Scenarios).
+const CATENR_SCENARIO_STYLES: Record<ScenarioId, object> = {
+  referencePessimiste: { borderColor: '#929292', borderWidth: 1, borderDash: [4, 3] },
+  referenceProbable: { borderColor: '#161616', borderWidth: 3 },
+  referenceOptimiste: { borderColor: '#929292', borderWidth: 1, borderDash: [4, 3], fill: 0, backgroundColor: 'rgba(146, 146, 146, 0.15)' },
+  projetPessimiste: { borderColor: '#E18B76', borderWidth: 1, borderDash: [4, 3] },
+  projetProbable: { borderColor: '#CE614A', borderWidth: 3 },
+  projetOptimiste: { borderColor: '#E18B76', borderWidth: 1, borderDash: [4, 3], fill: 3, backgroundColor: 'rgba(206, 97, 74, 0.15)' }
 }
 
 function catenrChart (catenr: CatenrResult, lifespan: number | undefined) {
-  const trajectories = {} as Record<ScenarioId, number[]>
-  CatenrScenarios.forEach((scenario) => {
-    trajectories[scenario.id] = catenr.trajectories[scenario.id].map((value) => value / CATENR_C_TO_CO2E)
-  })
+  const trajectories = catenr.trajectories
   const years = trajectories.projetProbable.map((_, year) => year)
   const datasets: object[] = CatenrScenarios.map((scenario) => ({
     label: scenario.name,
     data: trajectories[scenario.id].map((value, year) => ({ x: year, y: round2(value) })),
-    borderWidth: 2,
     pointRadius: 0,
+    fill: false,
     ...CATENR_SCENARIO_STYLES[scenario.id]
   }))
   const lastYear = years[years.length - 1] ?? 0
@@ -305,8 +313,8 @@ function catenrChart (catenr: CatenrResult, lifespan: number | undefined) {
     datasets.push({
       label: "Durée de vie de l'installation",
       data: [
-        { x: lifespan, y: Math.min(0, ...allValues) },
-        { x: lifespan, y: Math.max(0, ...allValues) }
+        { x: lifespan, y: Math.min(...allValues) },
+        { x: lifespan, y: Math.max(...allValues) }
       ],
       borderColor: '#009081',
       borderWidth: 2,
@@ -317,8 +325,10 @@ function catenrChart (catenr: CatenrResult, lifespan: number | undefined) {
     type: 'line',
     data: { datasets },
     options: {
+      aspectRatio: 2.2,
       plugins: {
         datalabels: { display: false },
+        legend: { position: 'bottom' },
         tooltip: { intersect: false, mode: 'index' }
       },
       scales: {
@@ -327,7 +337,7 @@ function catenrChart (catenr: CatenrResult, lifespan: number | undefined) {
           title: { display: true, text: 'Année' }
         },
         y: {
-          title: { display: true, text: 'Stocks de carbone (tC)' }
+          title: { display: true, text: 'Stocks de carbone (tCO2e)' }
         }
       }
     }
