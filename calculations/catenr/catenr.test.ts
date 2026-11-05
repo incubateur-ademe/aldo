@@ -372,3 +372,26 @@ describe("lecture des paramètres d'URL de l'outil CAT'ENR", () => {
     expect(parseCatenrFromQuery({ cat_type: 'eolien', cat_nb: '6' }).hasModifications).toBe(true)
   })
 })
+
+describe('outil CAT\'ENR - bilan sur la durée de vie', () => {
+  const fondations: CatenrRowInput = { area: 1, initialOccupation: 'cultures', finalOccupation: 'sols artificiels imperméabilisés' }
+
+  test('perte ramenée à la production, en gCO2e/kWh (cellule N6 du tableur)', () => {
+    const result = getCatenr(location, inputs({ fondations }, { lifespan: 25, annualProduction: 2 }))
+    const variation = result.trajectories.projetProbable[25]! - result.trajectories.referenceProbable[25]!
+    expect(variation).toBeLessThan(0)
+    expect(result.lifetime.variation).toBeCloseTo(variation, 6)
+    // tCO2e / GWh = gCO2e / kWh ; une perte de stock donne une intensité positive
+    expect(result.lifetime.intensity).toBeCloseTo(-variation / (2 * 25), 6)
+  })
+
+  test('sans production ou durée de vie, pas d\'intensité', () => {
+    expect(getCatenr(location, inputs({ fondations })).lifetime.intensity).toBeUndefined()
+    expect(getCatenr(location, inputs({ fondations }, { lifespan: undefined, annualProduction: 2 })).lifetime).toEqual({ variation: undefined, intensity: undefined })
+  })
+
+  test('puissance et production lues depuis l\'URL', () => {
+    const parsed = parseCatenrFromQuery({ cat_puis: '5', cat_prod: '6.5' })
+    expect(parsed).toMatchObject({ installedPower: 5, annualProduction: 6.5, hasModifications: true })
+  })
+})

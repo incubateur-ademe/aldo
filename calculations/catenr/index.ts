@@ -50,6 +50,8 @@ export interface CatenrInputs {
   totalArea?: number
   turbineCount?: number
   foundationArea?: number
+  installedPower?: number
+  annualProduction?: number
   rows?: Record<string, CatenrRowInput | undefined>
   practices?: Partial<Record<PracticeId, number>>
   hasModifications?: boolean
@@ -384,7 +386,8 @@ export function getCatenr (location: Location & { commune: Commune }, inputs: Ca
     initialTotal,
     trajectories,
     surfaceCheck: check,
-    ...summaries(trajectories, inputs.lifespan)
+    ...summaries(trajectories, inputs.lifespan),
+    lifetime: lifetimeSummary(trajectories, inputs.lifespan, inputs.annualProduction)
   }
 }
 
@@ -443,4 +446,18 @@ function summaries (trajectories: Trajectories, lifespan: number | undefined) {
 function difference (a: number | undefined, b: number | undefined) {
   if (a === undefined || b === undefined) return undefined
   return a - b
+}
+
+// Bilan sur la durée de vie de l'installation, en tCO2e, scénario le plus probable.
+// Tableur : cellules J25 (variation) et N6 (perte de carbone ramenée à la production)
+// de l'onglet « Indicateurs quantitatifs ». Une perte de stock donne une intensité
+// positive : tCO2e / GWh = gCO2e / kWh.
+function lifetimeSummary (trajectories: Trajectories, lifespan: number | undefined, annualProduction: number | undefined) {
+  const variation = lifespan === undefined
+    ? undefined
+    : difference(trajectories.projetProbable[lifespan], trajectories.referenceProbable[lifespan])
+  const intensity = variation !== undefined && lifespan && annualProduction
+    ? -variation / (annualProduction * lifespan)
+    : undefined
+  return { variation, intensity }
 }

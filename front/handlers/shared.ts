@@ -119,16 +119,19 @@ export function parseCatenrFromQuery (query: Query): CatenrInputs & { projectTyp
     hasModifications = true
   })
 
-  // Données descriptives du parc (nombre d'éoliennes, surface au sol des fondations) :
-  // elles ne participent pas au calcul de la variation des stocks, comme dans le
-  // tableur (cellules F19 et F30 de l'onglet « 2.Eolien Caractéristiques »).
-  const commonFields = ['cat_duree', 'cat_surface', 'cat_nb', 'cat_fond']
+  // Données descriptives du parc (nombre d'éoliennes, surface au sol des fondations,
+  // puissance installée) : elles ne participent pas au calcul de la variation des
+  // stocks, comme dans le tableur (onglets « 2.PV / 2.Eolien Caractéristiques »).
+  // La production annuelle sert à ramener la variation à l'énergie produite.
+  const commonFields = ['cat_duree', 'cat_surface', 'cat_nb', 'cat_fond', 'cat_puis', 'cat_prod']
   return {
     projectType,
     lifespan: number(query.cat_duree),
     totalArea: number(query.cat_surface),
     turbineCount: number(query.cat_nb),
     foundationArea: number(query.cat_fond),
+    installedPower: number(query.cat_puis),
+    annualProduction: number(query.cat_prod),
     rows,
     practices,
     hasModifications: hasModifications || commonFields.some((field) => query[field] !== undefined)
