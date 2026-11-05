@@ -150,7 +150,12 @@ function fluxComponent (kinetics: number, flux: number, immediateValue: number, 
 }
 
 // Flux dans les sols, hors et en zone humide. Tableur : colonnes AJ à AQ.
-function soilFluxes (location: Location, row: Row, stocks: InitialStocks, target: Occupation): FluxComponent[] {
+// NB : le tableur v5.3 applique aussi le passage zone humide -> occupation cible dans
+// les scénarios de référence, où le projet n'est pas réalisé : le surplus de carbone de
+// la zone humide y est perdu dès l'année 1 et sa destruction par le projet n'apparaît
+// pas dans la variation projet - référence. Erreur confirmée par l'ADEME, non
+// reproduite : la zone humide est conservée dans les scénarios de référence.
+function soilFluxes (location: Location, row: Row, stocks: InitialStocks, target: Occupation, keepsWetland: boolean): FluxComponent[] {
   const components: FluxComponent[] = []
 
   const dryKinetics = catenrData.getKinetics(row.initialOccupation, target, 'Sol')
@@ -162,7 +167,7 @@ function soilFluxes (location: Location, row: Row, stocks: InitialStocks, target
     Math.max(dryKinetics / 20, 1)
   components.push(fluxComponent(dryKinetics, dryFlux, dryFlux * stocks.dryArea, dryFlux * stocks.dryArea))
 
-  if (row.wetlandShare) {
+  if (row.wetlandShare && !keepsWetland) {
     const wetKinetics = catenrData.getKinetics('zones humides', target, 'Sol')
     const wetFlux =
       catenrData.getSoilFluxReference(location, 'zones humides', target) / Math.max(wetKinetics, 1)
@@ -356,7 +361,7 @@ export function getCatenr (location: Location & { commune: Commune }, inputs: Ca
       const target = targets[scenario.id]
       if (!target) return
       componentsByScenario[scenario.id].push(
-        ...soilFluxes(location, row, stocks, target),
+        ...soilFluxes(location, row, stocks, target, scenario.group === 'reference'),
         litterFlux(row, stocks, target),
         biomassFlux(location, row, stocks, target)
       )
