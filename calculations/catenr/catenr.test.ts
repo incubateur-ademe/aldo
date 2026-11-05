@@ -77,6 +77,22 @@ describe('outil CAT\'ENR - photovoltaïque', () => {
     expect(wet.initialTotal).toBeGreaterThan(dry.initialTotal)
   })
 
+  test('la zone humide est conservée en référence et sa destruction compte comme un impact du projet', () => {
+    const row = { area: 1, initialOccupation: 'cultures' as const, finalOccupation: 'sols artificiels imperméabilisés' as const }
+    const dry = getCatenr(location, inputs({ fondations: row }))
+    const wet = getCatenr(location, inputs({ fondations: { ...row, wetlandShare: 1 } }))
+    // référence : la zone humide garde son stock (cultures -> cultures : aucun flux)
+    for (const id of ['referencePessimiste', 'referenceProbable'] as const) {
+      expect(wet.trajectories[id][50]).toBeCloseTo(wet.initialTotal, 6)
+    }
+    // en optimiste, seules les pratiques stockantes s'ajoutent, comme hors zone humide
+    expect((wet.trajectories.referenceOptimiste[50] ?? NaN) - wet.initialTotal)
+      .toBeCloseTo((dry.trajectories.referenceOptimiste[50] ?? NaN) - dry.initialTotal, 6)
+    // projet : la perte du surplus de la zone humide creuse la variation
+    const at20 = (r: typeof wet) => r.variations.find((v) => v.id === '20-ans')?.value ?? NaN
+    expect(at20(wet)).toBeLessThan(at20(dry))
+  })
+
   test('contrôle de cohérence des surfaces : somme hors OLD contre surface du parc', () => {
     const rows = {
       fondations: { area: 1 },
