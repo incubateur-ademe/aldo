@@ -1,0 +1,85 @@
+<%
+  // Palette de la charte (bandeau d'accueil, section des étapes)
+  const c = {
+    fond: '#f3f8f4', vertFonce: '#1f6b45', vert: '#2F8F5B', vertClair: '#7CC49A', vertPale: '#c9eed3',
+    peche: '#FBD3BC', orange: '#F59A6C', bleu: '#81D2FB', gris: '#d5d9dc', ardoise: '#3d4f5c'
+  }
+  const eolien = projectId === 'eolien'
+  const legende = eolien ? [
+    { couleur: c.ardoise, texte: 'Fondations des éoliennes', aide: 'socle et assiette' },
+    { couleur: c.peche, texte: 'Plateformes permanentes' },
+    { couleur: c.gris, texte: "Voies et chemins d'accès" },
+    { couleur: c.orange, texte: 'Infrastructures annexes', aide: 'poste de livraison, espace de stockage…' },
+    { couleur: c.bleu, texte: 'Raccordement au réseau' },
+    { couleur: c.vertPale, texte: "Zone d'obligation légale de débroussaillement (OLD)", aide: 'co-usage possible' },
+  ] : [
+    { couleur: c.ardoise, texte: 'Espace sous panneaux', aide: 'fondations et surface projetée' },
+    { couleur: c.peche, texte: 'Espace entre les panneaux' },
+    { couleur: c.vertClair, texte: 'Emprises libres', aide: 'dans la clôture, hors panneaux' },
+    { couleur: c.gris, texte: 'Voiries et infrastructures', aide: 'locaux techniques, citernes, clôtures' },
+    { couleur: c.vertPale, texte: "Zone d'obligation légale de débroussaillement (OLD)" },
+    { couleur: c.vert, texte: 'Surface sous gestion hors OLD', aide: 'hors emprise clôturée' },
+  ]
+  const pastille = (n, x, y) => `<g><circle cx="${x}" cy="${y}" r="13" fill="${c.vertFonce}" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y + 5}" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="Marianne, arial, sans-serif">${n}</text></g>`
+  const eolienne = (x, y, bas) => `
+    <circle cx="${x}" cy="${y}" r="62" fill="${c.vertPale}" stroke="${c.vert}" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <rect x="${x - 9}" y="${bas ? 186 : y}" width="18" height="${bas ? y - 186 : 164 - y}" fill="${c.gris}"/>
+    <rect x="${x + 14}" y="${y - 22}" width="64" height="44" rx="4" fill="${c.peche}"/>
+    <circle cx="${x}" cy="${y}" r="15" fill="${c.ardoise}"/>
+    <g stroke="#fff" stroke-width="3.5" stroke-linecap="round">
+      <line x1="${x}" y1="${y}" x2="${x}" y2="${y - 13}"/>
+      <line x1="${x}" y1="${y}" x2="${x + 11}" y2="${y + 7}"/>
+      <line x1="${x}" y1="${y}" x2="${x - 11}" y2="${y + 7}"/>
+    </g>`
+%>
+<figure class="fr-my-3w catenr-illustration">
+  <% if (eolien) { %>
+  <svg viewBox="0 0 800 350" aria-hidden="true">
+    <rect width="800" height="350" rx="16" fill="<%= c.fond %>"/>
+    <rect x="20" y="164" width="620" height="22" rx="11" fill="<%= c.gris %>"/>
+    <% for (const x of [130, 310, 490]) { %><%- eolienne(x, 95) %><%- eolienne(x, 255, true) %><% } %>
+    <path d="M673 200 V325 H780" fill="none" stroke="<%= c.bleu %>" stroke-width="4" stroke-dasharray="10 6" stroke-linecap="round"/>
+    <rect x="640" y="150" width="66" height="50" rx="4" fill="<%= c.orange %>"/>
+    <rect x="716" y="160" width="54" height="30" rx="4" fill="<%= c.orange %>" opacity=".7"/>
+    <line x1="283" y1="68" x2="300" y2="85" stroke="<%= c.vertFonce %>" stroke-width="2"/>
+    <%- pastille(1, 275, 60) %>
+    <%- pastille(2, 356, 95) %>
+    <%- pastille(3, 220, 175) %>
+    <%- pastille(4, 673, 175) %>
+    <%- pastille(5, 730, 325) %>
+    <%- pastille(6, 450, 300) %>
+  </svg>
+  <% } else { %>
+  <svg viewBox="0 0 800 350" aria-hidden="true">
+    <rect width="800" height="350" rx="16" fill="<%= c.fond %>"/>
+    <rect x="575" y="50" width="205" height="250" rx="24" fill="#e2f3e7"/>
+    <% for (const [x, y] of [[620, 95], [690, 80], [750, 110], [640, 250], [720, 265], [760, 230], [615, 215]]) { %>
+    <circle cx="<%= x %>" cy="<%= y %>" r="16" fill="<%= c.vert %>"/><% } %>
+    <rect x="20" y="20" width="530" height="310" rx="24" fill="<%= c.vertPale %>" stroke="<%= c.vert %>" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <rect x="52" y="52" width="466" height="246" rx="12" fill="<%= c.vertClair %>" stroke="<%= c.vertFonce %>" stroke-width="2.5" stroke-dasharray="2 5" stroke-linecap="round"/>
+    <rect x="340" y="164" width="460" height="22" fill="<%= c.gris %>"/>
+    <rect x="80" y="80" width="260" height="190" rx="8" fill="<%= c.peche %>"/>
+    <% for (let i = 0; i < 7; i++) { %>
+    <rect x="<%= 95 + i * 34 %>" y="92" width="20" height="166" rx="3" fill="<%= c.ardoise %>"/><% } %>
+    <rect x="395" y="205" width="44" height="62" rx="4" fill="<%= c.orange %>"/>
+    <circle cx="474" cy="236" r="18" fill="<%= c.bleu %>"/>
+    <%- pastille(1, 139, 130) %>
+    <%- pastille(2, 156, 220) %>
+    <%- pastille(3, 455, 95) %>
+    <%- pastille(4, 380, 175) %>
+    <%- pastille(5, 36, 175) %>
+    <%- pastille(6, 690, 140) %>
+  </svg>
+  <% } %>
+  <figcaption>
+    <ol class="catenr-legende">
+      <% legende.forEach((item, i) => { %>
+      <li>
+        <span class="catenr-pastille" aria-hidden="true"><%= i + 1 %></span>
+        <span class="catenr-swatch" style="background:<%= item.couleur %>" aria-hidden="true"></span>
+        <span><%= item.texte %><% if (item.aide) { %> <span class="catenr-aide">(<%= item.aide %>)</span><% } %></span>
+      </li>
+      <% }) %>
+    </ol>
+  </figcaption>
+</figure>

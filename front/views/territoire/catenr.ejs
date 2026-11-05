@@ -120,15 +120,7 @@
   </div>
 
   <h4 class="fr-mt-4w"><%= catenr.project.sectionTitle %></h4>
-  <figure class="fr-my-2w catenr-illustration">
-      <% if (catenr.project.id === 'eolien') { %>
-      <img src="/static/images/catenr-emprises-eolien.png"
-        alt="Schéma des emprises considérées pour un parc éolien terrestre : emprise des fondations des éoliennes, emprise des plateformes permanentes, voies et chemins d'accès, emprise voirie et infrastructure, infrastructures annexes (poste de livraison, espace de stockage) et zone d'obligation légale de débroussaillement.">
-      <% } else { %>
-      <img src="/static/images/catenr-emprises-pv.png"
-        alt="Schéma des emprises considérées pour une centrale photovoltaïque au sol : espace sous panneaux (fondations et hors fondations), espace inter-rangées, emprise libre dans l'emprise clôturée, emprise voiries et infrastructures, zone d'obligation légale de débroussaillement et surface sous gestion hors OLD.">
-      <% } %>
-  </figure>
+  <%- include('catenr-schema', { projectId: catenr.project.id }) -%>
 
   <div class="fr-table fr-col-12 catenr-table">
     <table>
