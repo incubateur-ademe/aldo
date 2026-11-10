@@ -17,6 +17,9 @@ app.use(express.json())
 app.set('view engine', 'ejs')
 app.set('views', path.join(import.meta.dirname, './front/views'))
 
+// Les données sont importées avant listen() : répondre suffit à prouver qu'elles sont chargées.
+app.get('/healthz', (req, res) => res.sendStatus(200))
+
 app.use('/static', express.static('./front/static'))
 // Hack for importing css from npm package
 app.use('/~', express.static(path.join(import.meta.dirname, 'node_modules')))
