@@ -4,6 +4,7 @@ import sendinblue from '../sendinblue.ts'
 import { territoryHandler } from './handlers/territory.ts'
 import { excelExportHandler } from './handlers/excelExport.ts'
 import { newsletterHandler } from './handlers/newsletter.ts'
+import { baseUrl } from './handlers/shared.ts'
 
 const router = express.Router()
 
@@ -105,7 +106,7 @@ router.get('/mentions-legales', (req, res) => {
 
 router.get('/sitemap.txt', (req, res) => {
   function url (path: string) {
-    return `${(process.env.PROTOCOL ?? 'http').toLowerCase()}://${process.env.HOSTNAME}${path}`
+    return baseUrl(req) + path
   }
   const content = [
     url('/'),

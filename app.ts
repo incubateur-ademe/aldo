@@ -8,6 +8,9 @@ const appDescription = 'Calculer le stock et les flux de carbone sur votre terri
 const appRepo = 'https://github.com/datagir/aldo'
 
 const app = express()
+// Derrière un reverse proxy (Traefik sur Coolify) : req.protocol lit X-Forwarded-Proto,
+// mais seulement si la requête vient d'une adresse locale ou privée (réseau Docker).
+app.set('trust proxy', 'loopback, uniquelocal')
 
 app.use(express.urlencoded({
   extended: true

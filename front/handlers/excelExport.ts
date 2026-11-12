@@ -3,7 +3,7 @@ import xl from 'excel4node'
 import { getStocks } from '../../calculations/stocks/index.ts'
 import { getAnnualFluxes } from '../../calculations/flux/index.ts'
 import { GroundTypes, AgriculturalPractices, entries } from '../../calculations/constants.ts'
-import { parseOptionsFromQuery, getLocationDetail } from './shared.ts'
+import { parseOptionsFromQuery, getLocationDetail, baseUrl } from './shared.ts'
 import { getCommunes } from '../../data/communes.ts'
 
 export async function excelExportHandler (req: Request, res: Response) {
@@ -83,7 +83,7 @@ export async function excelExportHandler (req: Request, res: Response) {
     }
     ws.cell(row, secondColumn)
       .string('Lien')
-    let pageUrl = `${(process.env.PROTOCOL ?? 'http').toLowerCase()}://${process.env.HOSTNAME}`
+    let pageUrl = baseUrl(req)
     if (location.epci) pageUrl += `/epci/${location.epci.code}`
     else if (location.commune) pageUrl += `/commune/${location.commune.insee}`
     const search = req.originalUrl.split('?')[1]
