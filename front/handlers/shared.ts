@@ -8,6 +8,12 @@ import type { Location } from '../../data/types.ts'
 
 export type Query = Request['query']
 
+// Base des liens absolus (sitemap, tableur) : BASE_URL fixe l'URL canonique en
+// production, sinon elle est déduite de la requête (développement, préproduction).
+export function baseUrl (req: Request): string {
+  return process.env.BASE_URL?.replace(/\/+$/, '') || `${req.protocol}://${req.get('host') ?? 'localhost'}`
+}
+
 // Un paramètre d'URL peut être absent, répété (tableau) ou imbriqué : seules les
 // valeurs simples sont retenues.
 function queryString (value: Query[string]): string | undefined {
